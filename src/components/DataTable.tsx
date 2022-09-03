@@ -1,9 +1,15 @@
+import { TCriteria } from "../types/criteria";
+import { TProduct } from "../types/product";
+import { TProductWithCriteria } from "../types/productWithCriteria";
+
 type DataTableProps = {};
 
 const DataTable = (props: DataTableProps) => {
-  const criteriaList = [];
+  const criteriaList: TCriteria[] = [];
 
-  const productList = [];
+  const productsList: TProduct[] = [];
+
+  const productsWithCriteriaList: TProductWithCriteria[] = [];
 
   return <></>;
 };
