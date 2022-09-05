@@ -3,4 +3,5 @@ export type TCriteria = {
   name: string;
   weight: number;
   unit: string;
+  higherTheBetter: boolean;
 };
