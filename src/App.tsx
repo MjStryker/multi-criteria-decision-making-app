@@ -2,8 +2,16 @@ import DataTable from "./components/DataTable";
 
 function App() {
   return (
-    <div className="App">
-      MCDMA
+    <div
+      className="App"
+      style={{
+        width: "100%",
+        height: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <DataTable />
     </div>
   );
