@@ -1,5 +1,6 @@
 import { TCriteria } from "../types/criteria";
 import { TProduct } from "../types/product";
+import { TProductWithCriteria } from "../types/productWithCriteria";
 import cordlessVacuumCleaner from "../data/cordlessVacuumCleaner";
 import { nanoid } from "nanoid";
 import { useState } from "react";
@@ -18,16 +19,26 @@ const DataTable = (props: DataTableProps) => {
 
   const createEmptyCriteria = (): TCriteria => ({
     id: nanoid(),
-    name: "",
+    name: undefined,
     weight: 1,
-    unit: "",
-    higherTheBetter: true,
+    unit: undefined,
+    higherTheBetter: undefined,
   });
 
   const createEmptyProduct = (): TProduct => ({
     id: nanoid(),
-    name: "",
-    reference: "",
+    name: undefined,
+    reference: undefined,
+  });
+
+  const createEmptyProductWithCriteriaValue = (
+    { id: productId }: TProduct,
+    { id: criteriaId }: TCriteria
+  ): TProductWithCriteria => ({
+    id: nanoid(),
+    productId,
+    criteriaId,
+    value: undefined,
   });
 
   const addCriteria = (Criteria: TCriteria) =>
@@ -41,6 +52,24 @@ const DataTable = (props: DataTableProps) => {
 
   const removeProduct = ({ id }: TProduct) =>
     setProducts((prev) => prev.filter((p) => p.id !== id));
+
+  const setProductCriteriaValue = (
+    { id: productId }: TProduct,
+    { id: criteriaId }: TCriteria,
+    value: number | null
+  ) => {
+    const productWithCriteria = productsWithCriteria.find(
+      (e) => e.productId === productId && e.criteriaId === criteriaId
+    );
+
+    if (!productWithCriteria) {
+      return;
+    }
+
+    productWithCriteria.value = value ?? undefined;
+
+    setProductsWithCriteria((prev) => [...prev, productWithCriteria]);
+  };
 
   const tdStyle = {
     border: "1px solid #7c7c7c",
@@ -84,14 +113,31 @@ const DataTable = (props: DataTableProps) => {
           <td style={tdStyle}>{c.weight}</td>
 
           {products.map((p) => {
-            const v = productsWithCriteria.find(
-              ({ criteriaId, productId }) =>
-                criteriaId === c.id && productId === p.id
-            );
+            const v =
+              productsWithCriteria.find(
+                ({ criteriaId, productId }) =>
+                  criteriaId === c.id && productId === p.id
+              ) ?? createEmptyProductWithCriteriaValue(p, c);
 
             return (
-              <td key={v?.id} style={tdStyle}>
-                {v?.value ?? "-"}
+              <td key={v.id} style={tdStyle}>
+                {/*
+                 * TODO: Replace by real input (only when td selected ?)
+                 */}
+                <div
+                  contentEditable={true}
+                  onBlur={(e) => {
+                    const value = e.currentTarget.textContent;
+                    setProductCriteriaValue(
+                      p,
+                      c,
+                      value && value.length > 0 ? Number(value) : null
+                    );
+                  }}
+                  style={{ margin: -8, padding: 8 }}
+                >
+                  {v?.value ?? "-"}
+                </div>
               </td>
             );
           })}

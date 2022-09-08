@@ -1,6 +1,6 @@
 export type TProduct = {
   id: string;
-  name: string;
-  reference: string;
+  name: string | undefined;
+  reference: string | undefined;
   // picture: string;
 };
