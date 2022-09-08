@@ -1,4 +1,6 @@
+import { TProduct } from "../types/product";
 import cordlessVacuumCleaner from "../data/cordlessVacuumCleaner";
+import { nanoid } from "nanoid";
 import { useState } from "react";
 
 type DataTableProps = {};
@@ -12,6 +14,18 @@ const DataTable = (props: DataTableProps) => {
 
   const nbCriteria = criteria.length;
   const nbProducts = products.length;
+
+  const createEmptyProduct = (): TProduct => ({
+    id: nanoid(),
+    name: "",
+    reference: "",
+  });
+
+  const addProduct = (product: TProduct) =>
+    setProducts((prev) => [...prev, product]);
+
+  const removeProduct = ({ id }: TProduct) =>
+    setProducts((prev) => prev.filter((p) => p.id !== id));
 
   const tdStyle = {
     border: "1px solid #7c7c7c",
@@ -28,11 +42,11 @@ const DataTable = (props: DataTableProps) => {
         <td />
         {products.map((p) => (
           <td key={p.id} style={tdStyle}>
-            {p.name}
+            {p.name} <button onClick={() => removeProduct(p)}>x</button>
           </td>
         ))}
         <td>
-          <button>Produit (+)</button>
+          <button onClick={() => addProduct(createEmptyProduct())}>+</button>
         </td>
       </tr>
 
@@ -60,7 +74,7 @@ const DataTable = (props: DataTableProps) => {
 
       <tr>
         <td colSpan={2}>
-          <button>Critère (+)</button>
+          <button>+</button>
         </td>
         <td colSpan={nbProducts + 1} />
       </tr>
