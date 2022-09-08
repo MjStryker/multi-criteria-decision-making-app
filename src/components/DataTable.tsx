@@ -1,3 +1,4 @@
+import { TCriteria } from "../types/criteria";
 import { TProduct } from "../types/product";
 import cordlessVacuumCleaner from "../data/cordlessVacuumCleaner";
 import { nanoid } from "nanoid";
@@ -15,14 +16,28 @@ const DataTable = (props: DataTableProps) => {
   const nbCriteria = criteria.length;
   const nbProducts = products.length;
 
+  const createEmptyCriteria = (): TCriteria => ({
+    id: nanoid(),
+    name: "",
+    weight: 1,
+    unit: "",
+    higherTheBetter: true,
+  });
+
   const createEmptyProduct = (): TProduct => ({
     id: nanoid(),
     name: "",
     reference: "",
   });
 
+  const addCriteria = (Criteria: TCriteria) =>
+    setCriteria((prev) => [...prev, Criteria]);
+
   const addProduct = (product: TProduct) =>
     setProducts((prev) => [...prev, product]);
+
+  const removeCriteria = ({ id }: TCriteria) =>
+    setCriteria((prev) => prev.filter((c) => c.id !== id));
 
   const removeProduct = ({ id }: TProduct) =>
     setProducts((prev) => prev.filter((p) => p.id !== id));
@@ -42,7 +57,7 @@ const DataTable = (props: DataTableProps) => {
         <td />
         {products.map((p) => (
           <td key={p.id} style={tdStyle}>
-            {p.name} <button onClick={() => removeProduct(p)}>x</button>
+            {p.name} <button onClick={() => removeProduct(p)}>-</button>
           </td>
         ))}
         <td>
@@ -53,7 +68,18 @@ const DataTable = (props: DataTableProps) => {
       {criteria.map((c) => (
         <tr key={c.id}>
           <td style={tdStyle}>
-            {c.name} ({c.unit})
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}
+            >
+              <div style={{ marginRight: 8 }}>
+                {c.name} {c.unit && `(${c.unit})`}{" "}
+              </div>
+              <button onClick={() => removeCriteria(c)}>-</button>
+            </div>
           </td>
           <td style={tdStyle}>{c.weight}</td>
 
@@ -74,7 +100,7 @@ const DataTable = (props: DataTableProps) => {
 
       <tr>
         <td colSpan={2}>
-          <button>+</button>
+          <button onClick={() => addCriteria(createEmptyCriteria())}>+</button>
         </td>
         <td colSpan={nbProducts + 1} />
       </tr>
