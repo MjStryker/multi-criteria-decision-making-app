@@ -88,6 +88,50 @@ const productsWithCriteria: TProductWithCriteria[] = [
     productId: "rowenta123",
     value: 0.8,
   },
+
+  /**
+   * Nb accessoires
+   */
+  {
+    id: "nbAccessoiresDyson123",
+    criteriaId: "nbAccessoires123",
+    productId: "dyson123",
+    value: 4,
+  },
+  {
+    id: "nbAccessoiresDreame123",
+    criteriaId: "nbAccessoires123",
+    productId: "dreame123",
+    value: 7,
+  },
+  {
+    id: "nbAccessoiresRowenta123",
+    criteriaId: "nbAccessoires123",
+    productId: "rowenta123",
+    value: 6,
+  },
+
+  /**
+   * Batterie amovible
+   */
+  {
+    id: "batterieAmovibleDyson123",
+    criteriaId: "batterieAmovible123",
+    productId: "dyson123",
+    value: 0,
+  },
+  {
+    id: "batterieAmovibleDreame123",
+    criteriaId: "batterieAmovible123",
+    productId: "dreame123",
+    value: undefined,
+  },
+  {
+    id: "batterieAmovibleRowenta123",
+    criteriaId: "batterieAmovible123",
+    productId: "rowenta123",
+    value: 1,
+  },
 ];
 
 export default productsWithCriteria;

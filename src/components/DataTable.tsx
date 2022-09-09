@@ -1,70 +1,80 @@
+import {
+  createEmptyCriteria,
+  createEmptyProduct,
+  createEmptyProductCriteriaValue,
+} from "../utils/utils";
+import { useRef, useState } from "react";
+
 import { TCriteria } from "../types/criteria";
 import { TProduct } from "../types/product";
 import { TProductWithCriteria } from "../types/productWithCriteria";
 import cordlessVacuumCleaner from "../data/cordlessVacuumCleaner";
-import { nanoid } from "nanoid";
-import { useState } from "react";
+import useClickOutside from "../hooks/useClickOutside";
+
+const width = 120;
 
 type DataTableProps = {};
 
 const DataTable = (props: DataTableProps) => {
-  const [criteria, setCriteria] = useState(cordlessVacuumCleaner.criteria);
+  const inputRef = useRef(null);
+
+  const [criterias, setCriterias] = useState(cordlessVacuumCleaner.criteria);
   const [products, setProducts] = useState(cordlessVacuumCleaner.products);
   const [productsWithCriteria, setProductsWithCriteria] = useState(
     cordlessVacuumCleaner.productsWithCriteria
   );
 
-  const nbCriteria = criteria.length;
+  const [cellId, setCellId] = useState<string | null>(null);
+  const [cellValue, setCellValue] = useState<number | null>(null);
+
+  useClickOutside(inputRef, () => {
+    console.log(`[ Cell ] Clicked away from ${cellId}..`);
+    setCellId(null);
+    setCellValue(null);
+  });
+
+  const nbCriteria = criterias.length;
   const nbProducts = products.length;
 
-  const createEmptyCriteria = (): TCriteria => ({
-    id: nanoid(),
-    name: undefined,
-    weight: 1,
-    unit: undefined,
-    higherTheBetter: undefined,
-  });
+  const addCriteria = (criteria: TCriteria) => {
+    setCriterias((prev) => [...prev, criteria]);
+    products.forEach((product) => {
+      addProductWithCriteria(
+        createEmptyProductCriteriaValue(product, criteria)
+      );
+    });
+  };
 
-  const createEmptyProduct = (): TProduct => ({
-    id: nanoid(),
-    name: undefined,
-    reference: undefined,
-  });
-
-  const createEmptyProductWithCriteriaValue = (
-    { id: productId }: TProduct,
-    { id: criteriaId }: TCriteria
-  ): TProductWithCriteria => ({
-    id: nanoid(),
-    productId,
-    criteriaId,
-    value: undefined,
-  });
-
-  const addCriteria = (Criteria: TCriteria) =>
-    setCriteria((prev) => [...prev, Criteria]);
-
-  const addProduct = (product: TProduct) =>
+  const addProduct = (product: TProduct) => {
     setProducts((prev) => [...prev, product]);
+    criterias.forEach((criteria) => {
+      addProductWithCriteria(
+        createEmptyProductCriteriaValue(product, criteria)
+      );
+    });
+  };
+
+  const addProductWithCriteria = (
+    productWithCriteria: TProductWithCriteria
+  ) => {
+    setProductsWithCriteria((prev) => [...prev, productWithCriteria]);
+  };
 
   const removeCriteria = ({ id }: TCriteria) =>
-    setCriteria((prev) => prev.filter((c) => c.id !== id));
+    setCriterias((prev) => prev.filter((c) => c.id !== id));
 
   const removeProduct = ({ id }: TProduct) =>
     setProducts((prev) => prev.filter((p) => p.id !== id));
 
   const setProductCriteriaValue = (
-    { id: productId }: TProduct,
-    { id: criteriaId }: TCriteria,
+    product: TProduct,
+    criteria: TCriteria,
     value: number | null
   ) => {
-    const productWithCriteria = productsWithCriteria.find(
-      (e) => e.productId === productId && e.criteriaId === criteriaId
-    );
-
-    if (!productWithCriteria) {
-      return;
-    }
+    const productWithCriteria =
+      productsWithCriteria.find(
+        (e) => e.productId === product.id && e.criteriaId === criteria.id
+      ) ?? createEmptyProductCriteriaValue(product, criteria);
 
     productWithCriteria.value = value ?? undefined;
 
@@ -72,6 +82,7 @@ const DataTable = (props: DataTableProps) => {
   };
 
   const tdStyle = {
+    width,
     border: "1px solid #7c7c7c",
   };
 
@@ -81,75 +92,121 @@ const DataTable = (props: DataTableProps) => {
       cellPadding={8}
       style={{ height: "fit-content", borderCollapse: "collapse" }}
     >
-      <tr>
-        <td />
-        <td />
-        {products.map((p) => (
-          <td key={p.id} style={tdStyle}>
-            {p.name} <button onClick={() => removeProduct(p)}>-</button>
-          </td>
-        ))}
-        <td>
-          <button onClick={() => addProduct(createEmptyProduct())}>+</button>
-        </td>
-      </tr>
-
-      {criteria.map((c) => (
-        <tr key={c.id}>
-          <td style={tdStyle}>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-              }}
-            >
-              <div style={{ marginRight: 8 }}>
-                {c.name} {c.unit && `(${c.unit})`}{" "}
+      <thead>
+        <tr>
+          <td />
+          <td />
+          {products.map((p) => (
+            <td key={p.id} style={tdStyle}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <span>{p.name}</span>
+                <button onClick={() => removeProduct(p)}>-</button>
               </div>
-              <button onClick={() => removeCriteria(c)}>-</button>
-            </div>
+            </td>
+          ))}
+          <td>
+            <button onClick={() => addProduct(createEmptyProduct())}>+</button>
           </td>
-          <td style={tdStyle}>{c.weight}</td>
-
-          {products.map((p) => {
-            const v =
-              productsWithCriteria.find(
-                ({ criteriaId, productId }) =>
-                  criteriaId === c.id && productId === p.id
-              ) ?? createEmptyProductWithCriteriaValue(p, c);
-
-            return (
-              <td key={v.id} style={tdStyle}>
-                {/*
-                 * TODO: Replace by real input (only when td selected ?)
-                 */}
-                <div
-                  contentEditable={true}
-                  onBlur={(e) => {
-                    const value = e.currentTarget.textContent;
-                    setProductCriteriaValue(
-                      p,
-                      c,
-                      value && value.length > 0 ? Number(value) : null
-                    );
-                  }}
-                  style={{ margin: -8, padding: 8 }}
-                >
-                  {v?.value ?? "-"}
-                </div>
-              </td>
-            );
-          })}
         </tr>
-      ))}
+      </thead>
 
-      <tr>
-        <td colSpan={2}>
-          <button onClick={() => addCriteria(createEmptyCriteria())}>+</button>
-        </td>
-        <td colSpan={nbProducts + 1} />
-      </tr>
+      <tbody>
+        {criterias.map((c) => (
+          <tr key={c.id}>
+            <td style={{ ...tdStyle, width: "fit-content", minWidth: 200 }}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <div style={{ marginRight: 8 }}>
+                  {c.name} {c.unit && `(${c.unit})`}{" "}
+                </div>
+                <button onClick={() => removeCriteria(c)}>-</button>
+              </div>
+            </td>
+
+            <td style={{ ...tdStyle, width: 20 }}>{c.weight}</td>
+
+            {products.map((p) => {
+              const v =
+                productsWithCriteria.find(
+                  ({ criteriaId, productId }) =>
+                    criteriaId === c.id && productId === p.id
+                ) ?? createEmptyProductCriteriaValue(p, c);
+
+              const isCellInEditMode = v.id === cellId;
+
+              return (
+                <td key={v.id} style={tdStyle}>
+                  <div
+                    ref={isCellInEditMode ? inputRef : undefined}
+                    onClick={() => {
+                      if (isCellInEditMode) {
+                        return;
+                      }
+                      console.log(`[ Cell ] Selected ${v.id}`);
+                      setCellId(v.id);
+                      setCellValue(v.value ?? null);
+                    }}
+                    onBlur={() => {
+                      setProductCriteriaValue(p, c, cellValue);
+                      setCellId(null);
+                      setCellValue(null);
+                    }}
+                    style={{
+                      margin: -8,
+                      padding: isCellInEditMode ? 0 : 8,
+                    }}
+                  >
+                    {isCellInEditMode ? (
+                      <input
+                        value={cellValue ?? ""}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          const newValue =
+                            value && value.length > 0 ? Number(value) : null;
+
+                          setCellValue(newValue);
+                          setProductCriteriaValue(p, c, newValue);
+                        }}
+                        onKeyUp={(e) => {
+                          if (e.key === "Enter") {
+                            setProductCriteriaValue(p, c, cellValue);
+                            setCellId(null);
+                            setCellValue(null);
+                          }
+                        }}
+                        style={{ width, fontSize: 16, padding: "7px 6px" }}
+                      />
+                    ) : (
+                      v?.value ?? "-"
+                    )}
+                  </div>
+                </td>
+              );
+            })}
+          </tr>
+        ))}
+
+        <tr>
+          <td colSpan={2}>
+            <button onClick={() => addCriteria(createEmptyCriteria())}>
+              +
+            </button>
+          </td>
+          <td colSpan={nbProducts + 1} />
+        </tr>
+      </tbody>
     </table>
   );
 };

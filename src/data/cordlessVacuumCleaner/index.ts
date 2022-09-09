@@ -1,4 +1,4 @@
-import criteria from "./criteria";
+import criteria from "./criterias";
 import products from "./products";
 import productsWithCriteria from "./productsWithCriteria";
 
