@@ -1,8 +1,8 @@
+import { CSSProperties, useRef, useState } from "react";
 import {
   compareProductsByDefaultIdxFn,
   createEmptyProduct,
 } from "../utils/products/products";
-import { useRef, useState } from "react";
 
 import { SORT_BY } from "../constants/arrays";
 import { TCriteria } from "../types/criterias";
@@ -10,10 +10,44 @@ import { TProduct } from "../types/products";
 import { TProductWithCriteria } from "../types/productsWithCriterias";
 import cordlessVacuumCleaner from "../data/cordlessVacuumCleaner";
 import { createEmptyCriteria } from "../utils/criterias/criterias";
-import { createEmptyProductCriteriaValue } from "../utils/prductsWithCriterias/productWithCriteria";
+import { createEmptyProductCriteriaValue } from "../utils/productsWithCriterias/productsWithCriterias";
 import useClickOutside from "../hooks/useClickOutside";
 
 const width = 120;
+const border = "1px solid #7c7c7c";
+
+type TNestedStyles = Record<string, CSSProperties>;
+
+const STYLES: Record<string, TNestedStyles> = {
+  TD: {
+    BORDER: {
+      border,
+    },
+    PRODUCT: {
+      width: "fit-content",
+      minWidth: width,
+      border,
+    },
+    CRITERIA: {
+      width: "fit-content",
+      minWidth: 200,
+      border,
+    },
+    WEIGHT: {
+      border,
+      width: 20,
+    },
+    CELL_VALUE: {
+      border,
+      textAlign: "right",
+    },
+    RES_ARRAY_POS: {
+      border,
+      textAlign: "right",
+      fontWeight: "bold",
+    },
+  },
+};
 
 type DataTableProps = {};
 
@@ -87,11 +121,6 @@ const DataTable = (props: DataTableProps) => {
     setProductsWithCriteria((prev) => [...prev, productWithCriteria]);
   };
 
-  const tdStyle = {
-    width,
-    border: "1px solid #7c7c7c",
-  };
-
   return (
     <table
       cellSpacing={0}
@@ -103,7 +132,7 @@ const DataTable = (props: DataTableProps) => {
           <td />
           <td />
           {products.map((p) => (
-            <td key={p.id} style={tdStyle}>
+            <td key={p.id} style={STYLES.TD.PRODUCT}>
               <div
                 style={{
                   display: "flex",
@@ -112,7 +141,7 @@ const DataTable = (props: DataTableProps) => {
                   justifyContent: "space-between",
                 }}
               >
-                <span>{p.name}</span>
+                <span style={{ marginRight: 8 }}>{p.name}</span>
                 <button onClick={() => removeProduct(p)}>-</button>
               </div>
             </td>
@@ -128,7 +157,7 @@ const DataTable = (props: DataTableProps) => {
       <tbody>
         {criterias.map((c) => (
           <tr key={c.id}>
-            <td style={{ ...tdStyle, width: "fit-content", minWidth: 200 }}>
+            <td style={STYLES.TD.CRITERIA}>
               <div
                 style={{
                   display: "flex",
@@ -143,7 +172,7 @@ const DataTable = (props: DataTableProps) => {
               </div>
             </td>
 
-            <td style={{ ...tdStyle, width: 20 }}>{c.weight}</td>
+            <td style={STYLES.TD.WEIGHT}>{c.weight}</td>
 
             {productsSorted.map((p) => {
               const v =
@@ -155,7 +184,7 @@ const DataTable = (props: DataTableProps) => {
               const isCellInEditMode = v.id === cellId;
 
               return (
-                <td key={v.id} style={tdStyle}>
+                <td key={v.id} style={STYLES.TD.CELL_VALUE}>
                   <div
                     ref={isCellInEditMode ? inputRef : undefined}
                     onClick={() => {
@@ -214,7 +243,7 @@ const DataTable = (props: DataTableProps) => {
           </td>
 
           {productsSorted.map((p) => (
-            <td key={p.id} style={tdStyle}>
+            <td key={p.id} style={STYLES.TD.RES_ARRAY_POS}>
               #{p.resArrayIdx ?? " -"}
             </td>
           ))}
