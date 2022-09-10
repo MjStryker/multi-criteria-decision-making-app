@@ -8,9 +8,11 @@ import { SORT_BY } from "../constants/arrays";
 import { TCriteria } from "../types/criterias";
 import { TProduct } from "../types/products";
 import { TProductWithCriteria } from "../types/productsWithCriterias";
+import { capitalize } from "../utils/strings";
 import cordlessVacuumCleaner from "../data/cordlessVacuumCleaner";
 import { createEmptyCriteria } from "../utils/criterias/criterias";
 import { createEmptyProductCriteriaValue } from "../utils/productsWithCriterias/productsWithCriterias";
+import { isDefined } from "../utils/objects";
 import useClickOutside from "../hooks/useClickOutside";
 
 const width = 120;
@@ -19,6 +21,12 @@ const border = "1px solid #7c7c7c";
 type TNestedStyles = Record<string, CSSProperties>;
 
 const STYLES: Record<string, TNestedStyles> = {
+  INPUT: {
+    TEXT: {
+      fontSize: 16,
+      textAlign: "inherit",
+    },
+  },
   TD: {
     BORDER: {
       border,
@@ -26,6 +34,7 @@ const STYLES: Record<string, TNestedStyles> = {
     PRODUCT: {
       width: "fit-content",
       minWidth: width,
+      maxWidth: width,
       border,
     },
     CRITERIA: {
@@ -53,7 +62,7 @@ const STYLES: Record<string, TNestedStyles> = {
       fontWeight: "bold",
     },
   },
-};
+} as const;
 
 type DataTableProps = {};
 
@@ -67,7 +76,7 @@ const DataTable = (props: DataTableProps) => {
   );
 
   const [cellId, setCellId] = useState<string | null>(null);
-  const [cellValue, setCellValue] = useState<number | null>(null);
+  const [cellValue, setCellValue] = useState<string | number | null>(null);
 
   useClickOutside(inputRef, () => {
     console.log(`[ Cell ] Clicked away from ${cellId}..`);
@@ -106,6 +115,20 @@ const DataTable = (props: DataTableProps) => {
     setProductsWithCriteria((prev) => [...prev, productWithCriteria]);
   };
 
+  const updateProduct = (product: TProduct) =>
+    setProducts((prev) => {
+      const newProductIdx = prev.findIndex((p) => product.id === p.id);
+      prev[newProductIdx] = product;
+      return [...prev];
+    });
+
+  const updateCriteria = (criteria: TCriteria) =>
+    setCriterias((prev) => {
+      const newCriteriaIdx = prev.findIndex((p) => criteria.id === p.id);
+      prev[newCriteriaIdx] = criteria;
+      return [...prev];
+    });
+
   const removeCriteria = ({ id }: TCriteria) =>
     setCriterias((prev) => prev.filter((c) => c.id !== id));
 
@@ -137,21 +160,87 @@ const DataTable = (props: DataTableProps) => {
         <tr>
           <td />
           <td />
-          {products.map((p) => (
-            <td key={p.id} style={STYLES.TD.PRODUCT}>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <span style={{ marginRight: 8 }}>{p.name}</span>
-                <button onClick={() => removeProduct(p)}>-</button>
-              </div>
-            </td>
-          ))}
+          {products.map((p, idx) => {
+            const isCellInEditMode = p.id === cellId;
+
+            return (
+              <td key={p.id} style={STYLES.TD.PRODUCT}>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <div
+                    ref={isCellInEditMode ? inputRef : undefined}
+                    onClick={() => {
+                      if (isCellInEditMode) {
+                        return;
+                      }
+                      console.log(`[ Cell ] Selected ${p.id}`);
+                      setCellId(p.id);
+                      setCellValue(p.name ?? null);
+                    }}
+                    onBlur={() => {
+                      updateProduct({
+                        ...p,
+                        name: cellValue ? `${cellValue}` : undefined,
+                      });
+                      setCellId(null);
+                      setCellValue(null);
+                    }}
+                    style={{
+                      margin: -8,
+                      padding: isCellInEditMode ? 0 : 8,
+                      width: "100%",
+                    }}
+                  >
+                    {isCellInEditMode ? (
+                      <input
+                        value={cellValue ?? ""}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          const newValue =
+                            value && value.length > 0 ? value : null;
+
+                          setCellValue(newValue);
+                          updateProduct({
+                            ...p,
+                            name: newValue ? `${newValue}` : undefined,
+                          });
+                        }}
+                        onKeyUp={(e) => {
+                          if (e.key === "Enter") {
+                            updateProduct({
+                              ...p,
+                              name: cellValue ? `${cellValue}` : undefined,
+                            });
+                            setCellId(null);
+                            setCellValue(null);
+                          }
+                        }}
+                        style={{
+                          ...STYLES.INPUT.TEXT,
+                          width,
+                          padding: "7px 6px",
+                        }}
+                      />
+                    ) : (
+                      <div style={{ marginRight: 8 }}>
+                        {p.name ?? `Produit ${idx + 1}`}
+                      </div>
+                    )}
+                  </div>
+
+                  {!isCellInEditMode && (
+                    <button onClick={() => removeProduct(p)}>-</button>
+                  )}
+                </div>
+              </td>
+            );
+          })}
           <td>
             <button onClick={() => addProduct(createEmptyProduct(nbProducts))}>
               +
@@ -161,87 +250,216 @@ const DataTable = (props: DataTableProps) => {
       </thead>
 
       <tbody>
-        {criterias.map((c) => (
-          <tr key={c.id}>
-            <td style={STYLES.TD.CRITERIA}>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                }}
-              >
-                <div style={{ marginRight: 8 }}>
-                  {c.name} {c.unit && `(${c.unit})`}{" "}
-                </div>
-                <button onClick={() => removeCriteria(c)}>-</button>
-              </div>
-            </td>
+        {criterias.map((c, idx) => {
+          const isCriteriaNameCellInEditMode = `${c.id}-name` === cellId;
+          const isCriteriaWeightCellInEditMode = `${c.id}-weight` === cellId;
 
-            <td style={STYLES.TD.CRITERIA_WEIGHT}>{c.weight}</td>
-
-            {productsSorted.map((p) => {
-              const v =
-                productsWithCriteria.find(
-                  ({ criteriaId, productId }) =>
-                    criteriaId === c.id && productId === p.id
-                ) ?? createEmptyProductCriteriaValue(p, c);
-
-              const isCellInEditMode = v.id === cellId;
-
-              return (
-                <td key={v.id} style={STYLES.TD.CELL_VALUE}>
+          return (
+            <tr key={c.id}>
+              <td style={STYLES.TD.CRITERIA}>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
                   <div
-                    ref={isCellInEditMode ? inputRef : undefined}
+                    ref={isCriteriaNameCellInEditMode ? inputRef : undefined}
                     onClick={() => {
-                      if (isCellInEditMode) {
+                      if (isCriteriaNameCellInEditMode) {
                         return;
                       }
-                      console.log(`[ Cell ] Selected ${v.id}`);
-                      setCellId(v.id);
-                      setCellValue(v.value ?? null);
+                      console.log(`[ Cell ] Selected ${c.id}-name`);
+                      setCellId(`${c.id}-name`);
+                      setCellValue(c.name ?? null);
                     }}
                     onBlur={() => {
-                      setProductCriteriaValue(p, c, cellValue);
+                      updateCriteria({ ...c, name: `${cellValue}` });
                       setCellId(null);
                       setCellValue(null);
                     }}
                     style={{
                       margin: -8,
-                      padding: isCellInEditMode ? 0 : 8,
+                      padding: isCriteriaNameCellInEditMode ? 0 : 8,
+                      width: "100%",
                     }}
                   >
-                    {isCellInEditMode ? (
+                    {isCriteriaNameCellInEditMode ? (
                       <input
                         value={cellValue ?? ""}
                         onChange={(e) => {
                           const value = e.target.value;
                           const newValue =
-                            value && value.length > 0 ? Number(value) : null;
+                            value && value.length > 0 ? value : null;
 
                           setCellValue(newValue);
-                          setProductCriteriaValue(p, c, newValue);
+                          updateCriteria({ ...c, name: `${newValue}` });
                         }}
                         onKeyUp={(e) => {
                           if (e.key === "Enter") {
-                            setProductCriteriaValue(p, c, cellValue);
+                            updateCriteria({ ...c, name: `${cellValue}` });
                             setCellId(null);
                             setCellValue(null);
                           }
                         }}
-                        style={{ width, fontSize: 16, padding: "7px 6px" }}
+                        style={{
+                          ...STYLES.INPUT.TEXT,
+                          width: "100%",
+                          padding: "7px 6px",
+                        }}
                       />
                     ) : (
-                      v?.value ?? "-"
+                      <div style={{ marginRight: 8 }}>
+                        {c.name ? capitalize(c.name) : `Critère ${idx + 1}`}{" "}
+                        {c.unit && `(${c.unit})`}
+                      </div>
                     )}
                   </div>
-                </td>
-              );
-            })}
 
-            <td />
-          </tr>
-        ))}
+                  {!isCriteriaNameCellInEditMode && (
+                    <button onClick={() => removeCriteria(c)}>-</button>
+                  )}
+                </div>
+              </td>
+
+              <td style={STYLES.TD.CRITERIA_WEIGHT}>
+                <div
+                  ref={isCriteriaWeightCellInEditMode ? inputRef : undefined}
+                  onClick={() => {
+                    if (isCriteriaWeightCellInEditMode) {
+                      return;
+                    }
+                    console.log(`[ Cell ] Selected ${c.id}-weight`);
+                    setCellId(`${c.id}-weight`);
+                    setCellValue(c.weight ?? null);
+                  }}
+                  onBlur={() => {
+                    updateCriteria({ ...c, weight: Number(cellValue) });
+                    setCellId(null);
+                    setCellValue(null);
+                  }}
+                  style={{
+                    margin: -8,
+                    padding: isCriteriaWeightCellInEditMode ? 0 : 8,
+                    width: "100%",
+                  }}
+                >
+                  {isCriteriaWeightCellInEditMode ? (
+                    <input
+                      value={
+                        isDefined(cellValue) &&
+                        typeof cellValue === "number" &&
+                        !isNaN(cellValue)
+                          ? cellValue
+                          : ""
+                      }
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        const newValue =
+                          value && value.length > 0 ? Number(value) : null;
+
+                        setCellValue(newValue);
+                        updateCriteria({ ...c, weight: newValue ?? undefined });
+                      }}
+                      onKeyUp={(e) => {
+                        if (e.key === "Enter") {
+                          updateCriteria({ ...c, weight: Number(cellValue) });
+                          setCellId(null);
+                          setCellValue(null);
+                        }
+                      }}
+                      style={{
+                        ...STYLES.INPUT.TEXT,
+                        width: "100%",
+                        padding: "7px 6px",
+                      }}
+                    />
+                  ) : (
+                    <div>
+                      {isDefined(c.weight) && !isNaN(c.weight) ? c.weight : "-"}
+                    </div>
+                  )}
+                </div>
+              </td>
+
+              {productsSorted.map((p) => {
+                const v =
+                  productsWithCriteria.find(
+                    ({ criteriaId, productId }) =>
+                      criteriaId === c.id && productId === p.id
+                  ) ?? createEmptyProductCriteriaValue(p, c);
+
+                const isCellInEditMode = v.id === cellId;
+
+                return (
+                  <td key={v.id} style={STYLES.TD.CELL_VALUE}>
+                    <div
+                      ref={isCellInEditMode ? inputRef : undefined}
+                      onClick={() => {
+                        if (isCellInEditMode) {
+                          return;
+                        }
+                        console.log(`[ Cell ] Selected ${v.id}`);
+                        setCellId(v.id);
+                        setCellValue(v.value ?? null);
+                      }}
+                      onBlur={() => {
+                        setProductCriteriaValue(p, c, Number(cellValue));
+                        setCellId(null);
+                        setCellValue(null);
+                      }}
+                      style={{
+                        margin: -8,
+                        padding: isCellInEditMode ? 0 : 8,
+                      }}
+                    >
+                      {isCellInEditMode ? (
+                        <input
+                          value={
+                            isDefined(cellValue) &&
+                            typeof cellValue === "number" &&
+                            !isNaN(cellValue)
+                              ? cellValue
+                              : ""
+                          }
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            const newValue =
+                              value && value.length > 0 ? Number(value) : null;
+
+                            setCellValue(newValue);
+                            setProductCriteriaValue(p, c, newValue);
+                          }}
+                          onKeyUp={(e) => {
+                            if (e.key === "Enter") {
+                              setProductCriteriaValue(p, c, Number(cellValue));
+                              setCellId(null);
+                              setCellValue(null);
+                            }
+                          }}
+                          style={{
+                            ...STYLES.INPUT.TEXT,
+                            width,
+                            padding: "7px 6px",
+                          }}
+                        />
+                      ) : (
+                        <div>
+                          {isDefined(v.value) && !isNaN(v.value)
+                            ? v.value
+                            : "-"}
+                        </div>
+                      )}
+                    </div>
+                  </td>
+                );
+              })}
+
+              <td />
+            </tr>
+          );
+        })}
 
         <tr>
           <td>
