@@ -33,13 +33,19 @@ const STYLES: Record<string, TNestedStyles> = {
       minWidth: 200,
       border,
     },
-    WEIGHT: {
-      border,
-      width: 20,
-    },
     CELL_VALUE: {
       border,
       textAlign: "right",
+    },
+    CRITERIA_WEIGHT: {
+      border,
+      textAlign: "right",
+      width: 20,
+    },
+    CRITERIA_WEIGHT_TOTAL: {
+      border,
+      textAlign: "right",
+      fontWeight: "bold",
     },
     RES_ARRAY_POS: {
       border,
@@ -172,7 +178,7 @@ const DataTable = (props: DataTableProps) => {
               </div>
             </td>
 
-            <td style={STYLES.TD.WEIGHT}>{c.weight}</td>
+            <td style={STYLES.TD.CRITERIA_WEIGHT}>{c.weight}</td>
 
             {productsSorted.map((p) => {
               const v =
@@ -232,14 +238,22 @@ const DataTable = (props: DataTableProps) => {
                 </td>
               );
             })}
+
+            <td />
           </tr>
         ))}
 
         <tr>
-          <td colSpan={2}>
+          <td>
             <button onClick={() => addCriteria(createEmptyCriteria())}>
               +
             </button>
+          </td>
+
+          <td style={STYLES.TD.CRITERIA_WEIGHT_TOTAL}>
+            {criterias
+              .map((c) => c.weight ?? 0)
+              .reduce((prev, current) => prev + current, 0)}
           </td>
 
           {productsSorted.map((p) => (
