@@ -1,4 +1,4 @@
-import { TProductWithCriteria } from "../../types/productWithCriteria";
+import { TProductWithCriteria } from "../../types/productsWithCriterias";
 
 const productsWithCriteria: TProductWithCriteria[] = [
   /**

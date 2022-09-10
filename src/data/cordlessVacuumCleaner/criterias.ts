@@ -1,4 +1,4 @@
-import { TCriteria } from "../../types/criteria";
+import { TCriteria } from "../../types/criterias";
 
 const criteria: TCriteria[] = [
   {

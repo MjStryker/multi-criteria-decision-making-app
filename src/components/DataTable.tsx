@@ -1,14 +1,16 @@
 import {
-  createEmptyCriteria,
+  compareProductsByDefaultIdxFn,
   createEmptyProduct,
-  createEmptyProductCriteriaValue,
-} from "../utils/utils";
+} from "../utils/products/products";
 import { useRef, useState } from "react";
 
-import { TCriteria } from "../types/criteria";
-import { TProduct } from "../types/product";
-import { TProductWithCriteria } from "../types/productWithCriteria";
+import { SORT_BY } from "../constants/arrays";
+import { TCriteria } from "../types/criterias";
+import { TProduct } from "../types/products";
+import { TProductWithCriteria } from "../types/productsWithCriterias";
 import cordlessVacuumCleaner from "../data/cordlessVacuumCleaner";
+import { createEmptyCriteria } from "../utils/criterias/criterias";
+import { createEmptyProductCriteriaValue } from "../utils/prductsWithCriterias/productWithCriteria";
 import useClickOutside from "../hooks/useClickOutside";
 
 const width = 120;
@@ -18,10 +20,10 @@ type DataTableProps = {};
 const DataTable = (props: DataTableProps) => {
   const inputRef = useRef(null);
 
-  const [criterias, setCriterias] = useState(cordlessVacuumCleaner.criteria);
+  const [criterias, setCriterias] = useState(cordlessVacuumCleaner.criterias);
   const [products, setProducts] = useState(cordlessVacuumCleaner.products);
   const [productsWithCriteria, setProductsWithCriteria] = useState(
-    cordlessVacuumCleaner.productsWithCriteria
+    cordlessVacuumCleaner.productsWithCriterias
   );
 
   const [cellId, setCellId] = useState<string | null>(null);
@@ -35,6 +37,10 @@ const DataTable = (props: DataTableProps) => {
 
   const nbCriteria = criterias.length;
   const nbProducts = products.length;
+
+  const productsSorted = products.sort(
+    compareProductsByDefaultIdxFn(SORT_BY.ASC)
+  );
 
   const addCriteria = (criteria: TCriteria) => {
     setCriterias((prev) => [...prev, criteria]);
@@ -112,7 +118,9 @@ const DataTable = (props: DataTableProps) => {
             </td>
           ))}
           <td>
-            <button onClick={() => addProduct(createEmptyProduct())}>+</button>
+            <button onClick={() => addProduct(createEmptyProduct(nbProducts))}>
+              +
+            </button>
           </td>
         </tr>
       </thead>
@@ -137,7 +145,7 @@ const DataTable = (props: DataTableProps) => {
 
             <td style={{ ...tdStyle, width: 20 }}>{c.weight}</td>
 
-            {products.map((p) => {
+            {productsSorted.map((p) => {
               const v =
                 productsWithCriteria.find(
                   ({ criteriaId, productId }) =>
@@ -204,7 +212,14 @@ const DataTable = (props: DataTableProps) => {
               +
             </button>
           </td>
-          <td colSpan={nbProducts + 1} />
+
+          {productsSorted.map((p) => (
+            <td key={p.id} style={tdStyle}>
+              #{p.resArrayIdx ?? " -"}
+            </td>
+          ))}
+
+          <td />
         </tr>
       </tbody>
     </table>
