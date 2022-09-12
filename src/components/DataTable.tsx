@@ -1,16 +1,20 @@
 import { CSSProperties, useRef, useState } from "react";
 import {
+  clampCriteriaWeightValue,
+  createEmptyCriteria,
+} from "../utils/criterias/criterias";
+import {
   compareProductsByDefaultIdxFn,
   createEmptyProduct,
 } from "../utils/products/products";
 
+import { CRITERIA } from "../constants/criterias";
 import { SORT_BY } from "../constants/arrays";
 import { TCriteria } from "../types/criterias";
 import { TProduct } from "../types/products";
 import { TProductWithCriteria } from "../types/productsWithCriterias";
 import { capitalize } from "../utils/strings";
 import cordlessVacuumCleaner from "../data/cordlessVacuumCleaner";
-import { createEmptyCriteria } from "../utils/criterias/criterias";
 import { createEmptyProductCriteriaValue } from "../utils/productsWithCriterias/productsWithCriterias";
 import { isDefined } from "../utils/objects";
 import useClickOutside from "../hooks/useClickOutside";
@@ -49,7 +53,7 @@ const STYLES: Record<string, TNestedStyles> = {
     CRITERIA_WEIGHT: {
       border,
       textAlign: "right",
-      width: 20,
+      width: 40,
     },
     CRITERIA_WEIGHT_TOTAL: {
       border,
@@ -199,6 +203,7 @@ const DataTable = (props: DataTableProps) => {
                   >
                     {isCellInEditMode ? (
                       <input
+                        type="text"
                         value={cellValue ?? ""}
                         onChange={(e) => {
                           const value = e.target.value;
@@ -287,6 +292,7 @@ const DataTable = (props: DataTableProps) => {
                   >
                     {isCriteriaNameCellInEditMode ? (
                       <input
+                        type="text"
                         value={cellValue ?? ""}
                         onChange={(e) => {
                           const value = e.target.value;
@@ -335,7 +341,10 @@ const DataTable = (props: DataTableProps) => {
                     setCellValue(c.weight ?? null);
                   }}
                   onBlur={() => {
-                    updateCriteria({ ...c, weight: Number(cellValue) });
+                    updateCriteria({
+                      ...c,
+                      weight: clampCriteriaWeightValue(Number(cellValue)),
+                    });
                     setCellId(null);
                     setCellValue(null);
                   }}
@@ -347,6 +356,9 @@ const DataTable = (props: DataTableProps) => {
                 >
                   {isCriteriaWeightCellInEditMode ? (
                     <input
+                      type="number"
+                      min={CRITERIA.WEIGHT.MIN}
+                      max={CRITERIA.WEIGHT.MAX}
                       value={
                         isDefined(cellValue) &&
                         typeof cellValue === "number" &&
@@ -357,14 +369,22 @@ const DataTable = (props: DataTableProps) => {
                       onChange={(e) => {
                         const value = e.target.value;
                         const newValue =
-                          value && value.length > 0 ? Number(value) : null;
+                          value && value.length > 0
+                            ? clampCriteriaWeightValue(Number(value))
+                            : null;
 
                         setCellValue(newValue);
-                        updateCriteria({ ...c, weight: newValue ?? undefined });
+                        updateCriteria({
+                          ...c,
+                          weight: newValue ?? undefined,
+                        });
                       }}
                       onKeyUp={(e) => {
                         if (e.key === "Enter") {
-                          updateCriteria({ ...c, weight: Number(cellValue) });
+                          updateCriteria({
+                            ...c,
+                            weight: clampCriteriaWeightValue(Number(cellValue)),
+                          });
                           setCellId(null);
                           setCellValue(null);
                         }
@@ -416,6 +436,7 @@ const DataTable = (props: DataTableProps) => {
                     >
                       {isCellInEditMode ? (
                         <input
+                          type="number"
                           value={
                             isDefined(cellValue) &&
                             typeof cellValue === "number" &&
