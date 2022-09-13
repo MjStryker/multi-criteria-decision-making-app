@@ -415,7 +415,7 @@ const DataTable = (props: DataTableProps) => {
                         ? "+"
                         : c.beneficial === false
                         ? "-"
-                        : ""}
+                        : "??"}
                     </div>
                   )}
                 </div>
@@ -511,7 +511,7 @@ const DataTable = (props: DataTableProps) => {
                         }}
                       >
                         {isDefined(c.weight) && !isNaN(c.weight)
-                          ? (c.weight / weightTotal).toFixed(2)
+                          ? `(${(c.weight / weightTotal).toFixed(2)})`
                           : "-"}
                       </div>
                     </div>
