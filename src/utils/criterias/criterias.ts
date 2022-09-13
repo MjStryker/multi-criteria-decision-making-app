@@ -8,7 +8,7 @@ export const createEmptyCriteria = (): TCriteria => ({
   name: undefined,
   weight: 1,
   unit: undefined,
-  higherTheBetter: undefined,
+  beneficial: undefined,
 });
 
 export const clampCriteriaWeightValue = (value: number) =>

@@ -3,5 +3,5 @@ export type TCriteria = {
   name: string | undefined;
   weight: number | undefined;
   unit: string | undefined;
-  higherTheBetter: boolean | undefined;
+  beneficial: boolean | undefined;
 };

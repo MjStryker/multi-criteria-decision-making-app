@@ -8,6 +8,7 @@ import {
   createEmptyProduct,
 } from "../utils/products/products";
 
+import { COLORS } from "../constants/colors";
 import { CRITERIA } from "../constants/criterias";
 import { SORT_BY } from "../constants/arrays";
 import { TCriteria } from "../types/criterias";
@@ -16,6 +17,7 @@ import { TProductWithCriteria } from "../types/productsWithCriterias";
 import { capitalize } from "../utils/strings";
 import cordlessVacuumCleaner from "../data/cordlessVacuumCleaner";
 import { createEmptyProductCriteriaValue } from "../utils/productsWithCriterias/productsWithCriterias";
+import criteria from "../data/cordlessVacuumCleaner/criterias";
 import { isDefined } from "../utils/objects";
 import useClickOutside from "../hooks/useClickOutside";
 
@@ -35,6 +37,10 @@ const STYLES: Record<string, TNestedStyles> = {
     BORDER: {
       border,
     },
+    CELL_VALUE: {
+      border,
+      textAlign: "right",
+    },
     PRODUCT: {
       width: "fit-content",
       minWidth: width,
@@ -46,9 +52,9 @@ const STYLES: Record<string, TNestedStyles> = {
       minWidth: 200,
       border,
     },
-    CELL_VALUE: {
+    CRITERIA_BENEFICIAL: {
+      minWidth: 36,
       border,
-      textAlign: "right",
     },
     CRITERIA_WEIGHT: {
       border,
@@ -80,7 +86,9 @@ const DataTable = (props: DataTableProps) => {
   );
 
   const [cellId, setCellId] = useState<string | null>(null);
-  const [cellValue, setCellValue] = useState<string | number | null>(null);
+  const [cellValue, setCellValue] = useState<string | number | boolean | null>(
+    null
+  );
 
   useClickOutside(inputRef, () => {
     console.log(`[ Cell ] Clicked away from ${cellId}..`);
@@ -168,6 +176,7 @@ const DataTable = (props: DataTableProps) => {
       <thead>
         <tr>
           <td />
+          <td />
           <td>
             <div
               style={{
@@ -176,7 +185,7 @@ const DataTable = (props: DataTableProps) => {
                 alignItems: "flex-end",
                 justifyContent: "center",
                 fontSize: 14,
-                color: "rgba(0, 0, 0, 0.5)",
+                color: COLORS.GREY,
               }}
             >{`${CRITERIA.WEIGHT.MIN} - ${CRITERIA.WEIGHT.MAX}`}</div>
           </td>
@@ -220,7 +229,7 @@ const DataTable = (props: DataTableProps) => {
                     {isCellInEditMode ? (
                       <input
                         type="text"
-                        value={cellValue ?? ""}
+                        value={cellValue ? `${cellValue}` : ""}
                         onChange={(e) => {
                           const value = e.target.value;
                           const newValue =
@@ -273,10 +282,15 @@ const DataTable = (props: DataTableProps) => {
       <tbody>
         {criterias.map((c, idx) => {
           const isCriteriaNameCellInEditMode = `${c.id}-name` === cellId;
+          const isCriteriaBeneficialCellInEditMode =
+            `${c.id}-beneficial` === cellId;
           const isCriteriaWeightCellInEditMode = `${c.id}-weight` === cellId;
 
           return (
             <tr key={c.id}>
+              {/*
+               * CRITERIA - NAME
+               */}
               <td style={STYLES.TD.CRITERIA}>
                 <div
                   style={{
@@ -309,7 +323,7 @@ const DataTable = (props: DataTableProps) => {
                     {isCriteriaNameCellInEditMode ? (
                       <input
                         type="text"
-                        value={cellValue ?? ""}
+                        value={cellValue ? `${cellValue}` : ""}
                         onChange={(e) => {
                           const value = e.target.value;
                           const newValue =
@@ -345,6 +359,71 @@ const DataTable = (props: DataTableProps) => {
                 </div>
               </td>
 
+              {/*
+               * CRITERIA - BENEFICIAL
+               */}
+              <td style={STYLES.TD.CRITERIA_BENEFICIAL}>
+                <div
+                  ref={
+                    isCriteriaBeneficialCellInEditMode ? inputRef : undefined
+                  }
+                  onClick={() => {
+                    if (isCriteriaBeneficialCellInEditMode) {
+                      return;
+                    }
+                    console.log(`[ Cell ] Selected ${c.id}-beneficial`);
+                    setCellId(`${c.id}-beneficial`);
+                    setCellValue(c.beneficial ?? null);
+                  }}
+                  onBlur={() => {
+                    updateCriteria({ ...c, beneficial: cellValue === true });
+                    setCellId(null);
+                    setCellValue(null);
+                  }}
+                  style={{
+                    ...STYLES.INPUT.TEXT,
+                    width: "100%",
+                    margin: -8,
+                    padding: 8,
+                  }}
+                >
+                  {isCriteriaBeneficialCellInEditMode ? (
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      <div style={{ marginRight: 4, fontSize: 14 }}>
+                        Bénéfique (
+                        {c.beneficial === true
+                          ? "oui"
+                          : c.beneficial === false
+                          ? "non"
+                          : "??"}
+                        )
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={c.beneficial === true}
+                        onChange={(e) => {
+                          const checked = e.target.checked;
+
+                          setCellValue(checked);
+                          updateCriteria({ ...c, beneficial: checked });
+                        }}
+                      />
+                    </div>
+                  ) : (
+                    <div style={{ textAlign: "center" }}>
+                      {c.beneficial === true
+                        ? "+"
+                        : c.beneficial === false
+                        ? "-"
+                        : ""}
+                    </div>
+                  )}
+                </div>
+              </td>
+
+              {/*
+               * CRITERIA - WEIGHT
+               */}
               <td style={STYLES.TD.CRITERIA_WEIGHT}>
                 <div
                   ref={isCriteriaWeightCellInEditMode ? inputRef : undefined}
@@ -427,8 +506,8 @@ const DataTable = (props: DataTableProps) => {
                       <div
                         style={{
                           marginLeft: 8,
-                          fontSize: 14,
-                          color: "rgba(0, 0, 0, 0.6)",
+                          fontSize: 12,
+                          color: COLORS.GREY,
                         }}
                       >
                         {isDefined(c.weight) && !isNaN(c.weight)
@@ -525,6 +604,8 @@ const DataTable = (props: DataTableProps) => {
               +
             </button>
           </td>
+
+          <td />
 
           <td style={STYLES.TD.CRITERIA_WEIGHT_TOTAL}>{weightTotal}</td>
 
