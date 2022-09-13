@@ -91,6 +91,11 @@ const DataTable = (props: DataTableProps) => {
   const nbCriteria = criterias.length;
   const nbProducts = products.length;
 
+  const weightTotal = criterias.reduce(
+    (total, criteria) => total + (criteria.weight ?? 0),
+    0
+  );
+
   const productsSorted = products.sort(
     compareProductsByDefaultIdxFn(SORT_BY.ASC)
   );
@@ -163,7 +168,18 @@ const DataTable = (props: DataTableProps) => {
       <thead>
         <tr>
           <td />
-          <td />
+          <td>
+            <div
+              style={{
+                height: "100%",
+                display: "flex",
+                alignItems: "flex-end",
+                justifyContent: "center",
+                fontSize: 14,
+                color: "rgba(0, 0, 0, 0.5)",
+              }}
+            >{`${CRITERIA.WEIGHT.MIN} - ${CRITERIA.WEIGHT.MAX}`}</div>
+          </td>
           {products.map((p, idx) => {
             const isCellInEditMode = p.id === cellId;
 
@@ -396,8 +412,29 @@ const DataTable = (props: DataTableProps) => {
                       }}
                     />
                   ) : (
-                    <div>
-                      {isDefined(c.weight) && !isNaN(c.weight) ? c.weight : "-"}
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        alignItems: "center",
+                      }}
+                    >
+                      <div>
+                        {isDefined(c.weight) && !isNaN(c.weight)
+                          ? c.weight
+                          : "-"}
+                      </div>
+                      <div
+                        style={{
+                          marginLeft: 8,
+                          fontSize: 14,
+                          color: "rgba(0, 0, 0, 0.6)",
+                        }}
+                      >
+                        {isDefined(c.weight) && !isNaN(c.weight)
+                          ? (c.weight / weightTotal).toFixed(2)
+                          : "-"}
+                      </div>
                     </div>
                   )}
                 </div>
@@ -489,11 +526,7 @@ const DataTable = (props: DataTableProps) => {
             </button>
           </td>
 
-          <td style={STYLES.TD.CRITERIA_WEIGHT_TOTAL}>
-            {criterias
-              .map((c) => c.weight ?? 0)
-              .reduce((prev, current) => prev + current, 0)}
-          </td>
+          <td style={STYLES.TD.CRITERIA_WEIGHT_TOTAL}>{weightTotal}</td>
 
           {productsSorted.map((p) => (
             <td key={p.id} style={STYLES.TD.RES_ARRAY_POS}>
