@@ -6,6 +6,7 @@ import {
 import {
   compareProductsByDefaultIdxFn,
   createEmptyProduct,
+  sumAllProductsCriteriasValues,
 } from "../utils/products/products";
 
 import { COLORS } from "../constants/colors";
@@ -17,7 +18,6 @@ import { TProductWithCriteria } from "../types/productsWithCriterias";
 import { capitalize } from "../utils/strings";
 import cordlessVacuumCleaner from "../data/cordlessVacuumCleaner";
 import { createEmptyProductCriteriaValue } from "../utils/productsWithCriterias/productsWithCriterias";
-import criteria from "../data/cordlessVacuumCleaner/criterias";
 import { isDefined } from "../utils/objects";
 import useClickOutside from "../hooks/useClickOutside";
 
@@ -27,6 +27,18 @@ const border = "1px solid #7c7c7c";
 type TNestedStyles = Record<string, CSSProperties>;
 
 const STYLES: Record<string, TNestedStyles> = {
+  TEXT: {
+    MORE_INFO_CONTAINER: {
+      display: "flex",
+      justifyContent: "flex-end",
+      alignItems: "center",
+    },
+    MORE_INFO: {
+      marginLeft: 8,
+      fontSize: 12,
+      color: COLORS.GREY,
+    },
+  },
   INPUT: {
     TEXT: {
       fontSize: 16,
@@ -81,7 +93,7 @@ const DataTable = (props: DataTableProps) => {
 
   const [criterias, setCriterias] = useState(cordlessVacuumCleaner.criterias);
   const [products, setProducts] = useState(cordlessVacuumCleaner.products);
-  const [productsWithCriteria, setProductsWithCriteria] = useState(
+  const [productsWithCriterias, setProductsWithCriterias] = useState(
     cordlessVacuumCleaner.productsWithCriterias
   );
 
@@ -108,6 +120,12 @@ const DataTable = (props: DataTableProps) => {
     compareProductsByDefaultIdxFn(SORT_BY.ASC)
   );
 
+  const productsWithSumCriteriaValues = sumAllProductsCriteriasValues(
+    productsSorted,
+    criterias,
+    productsWithCriterias
+  );
+
   const addCriteria = (criteria: TCriteria) => {
     setCriterias((prev) => [...prev, criteria]);
     products.forEach((product) => {
@@ -129,7 +147,7 @@ const DataTable = (props: DataTableProps) => {
   const addProductWithCriteria = (
     productWithCriteria: TProductWithCriteria
   ) => {
-    setProductsWithCriteria((prev) => [...prev, productWithCriteria]);
+    setProductsWithCriterias((prev) => [...prev, productWithCriteria]);
   };
 
   const updateProduct = (product: TProduct) =>
@@ -158,13 +176,13 @@ const DataTable = (props: DataTableProps) => {
     value: number | null
   ) => {
     const productWithCriteria =
-      productsWithCriteria.find(
+      productsWithCriterias.find(
         (e) => e.productId === product.id && e.criteriaId === criteria.id
       ) ?? createEmptyProductCriteriaValue(product, criteria);
 
     productWithCriteria.value = value ?? undefined;
 
-    setProductsWithCriteria((prev) => [...prev, productWithCriteria]);
+    setProductsWithCriterias((prev) => [...prev, productWithCriteria]);
   };
 
   return (
@@ -491,25 +509,13 @@ const DataTable = (props: DataTableProps) => {
                       }}
                     />
                   ) : (
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        alignItems: "center",
-                      }}
-                    >
+                    <div style={STYLES.TEXT.MORE_INFO_CONTAINER}>
                       <div>
                         {isDefined(c.weight) && !isNaN(c.weight)
                           ? c.weight
                           : "-"}
                       </div>
-                      <div
-                        style={{
-                          marginLeft: 8,
-                          fontSize: 12,
-                          color: COLORS.GREY,
-                        }}
-                      >
+                      <div style={STYLES.TEXT.MORE_INFO}>
                         {isDefined(c.weight) && !isNaN(c.weight)
                           ? `(${(c.weight / weightTotal).toFixed(2)})`
                           : "-"}
@@ -519,14 +525,23 @@ const DataTable = (props: DataTableProps) => {
                 </div>
               </td>
 
-              {productsSorted.map((p) => {
+              {productsSorted.map((p, idx) => {
                 const v =
-                  productsWithCriteria.find(
+                  productsWithCriterias.find(
                     ({ criteriaId, productId }) =>
                       criteriaId === c.id && productId === p.id
                   ) ?? createEmptyProductCriteriaValue(p, c);
 
                 const isCellInEditMode = v.id === cellId;
+
+                const value =
+                  isDefined(v.value) && !isNaN(v.value)
+                    ? Number(v.value)
+                    : null;
+
+                const weightedValue = isDefined(value)
+                  ? value / productsWithSumCriteriaValues[idx].total
+                  : null;
 
                 return (
                   <td key={v.id} style={STYLES.TD.CELL_VALUE}>
@@ -582,10 +597,13 @@ const DataTable = (props: DataTableProps) => {
                           }}
                         />
                       ) : (
-                        <div>
-                          {isDefined(v.value) && !isNaN(v.value)
-                            ? v.value
-                            : "-"}
+                        <div style={STYLES.TEXT.MORE_INFO_CONTAINER}>
+                          <div>{value ?? "-"}</div>
+                          {isDefined(weightedValue) ? (
+                            <div style={STYLES.TEXT.MORE_INFO}>
+                              ({weightedValue?.toFixed(3) ?? "-"})
+                            </div>
+                          ) : null}
                         </div>
                       )}
                     </div>
@@ -597,6 +615,21 @@ const DataTable = (props: DataTableProps) => {
             </tr>
           );
         })}
+
+        <tr>
+          <td />
+          <td />
+          <td />
+
+          {productsWithSumCriteriaValues.map(({ product, total }) => (
+            <td
+              key={product.id}
+              style={{ textAlign: "right", fontWeight: "bold" }}
+            >
+              {total}
+            </td>
+          ))}
+        </tr>
 
         <tr>
           <td>
