@@ -5,15 +5,15 @@ import { TSortBy } from "../../types/arrays";
 import { compareFn } from "../arrays";
 import { nanoid } from "nanoid";
 
-export const createEmptyProduct = (defaultCellIdx: number): TProduct => ({
+export const createEmptyProduct = (defaultColumnIdx: number): TProduct => ({
   id: nanoid(),
   name: undefined,
   reference: undefined,
   resArrayIdx: undefined,
-  defaultColumnIdx: defaultCellIdx,
+  defaultColumnIdx,
 });
 
-export const compareProductsByDefaultIdxFn =
+export const compareProductsByDefaultColumnIdxFn =
   (sortBy: TSortBy) => (a: TProduct, b: TProduct) =>
     compareFn(sortBy)(a.defaultColumnIdx, b.defaultColumnIdx);
 
@@ -21,37 +21,27 @@ export const compareProductsByResArrayIdxFn =
   (sortBy: TSortBy) => (a: TProduct, b: TProduct) =>
     compareFn(sortBy)(a.resArrayIdx, b.resArrayIdx);
 
-export const getProductValuesForEachCriteria = (
-  product: TProduct,
-  criterias: TCriteria[],
+export const sumProductsCriteriaValues = (
+  products: TProduct[],
+  criteria: TCriteria,
   productsWithCriterias: TProductWithCriteria[]
 ) =>
-  criterias.map((c) => ({
-    criteria: c,
-    value:
+  products.reduce((total, product) => {
+    const value =
       productsWithCriterias.find(
         ({ productId, criteriaId }) =>
-          product.id === productId && c.id === criteriaId
-      )?.value ?? 0,
-  }));
+          product.id === productId && criteria.id === criteriaId
+      )?.value ?? 0;
 
-export const sumProductValues = (
-  product: TProduct,
-  criterias: TCriteria[],
-  productsWithCriterias: TProductWithCriteria[]
-) =>
-  getProductValuesForEachCriteria(
-    product,
-    criterias,
-    productsWithCriterias
-  ).reduce((total, current) => total + current.value, 0);
+    return total + value;
+  }, 0);
 
-export const sumAllProductsCriteriasValues = (
+export const sumAllProductsWithCriteriasValues = (
   products: TProduct[],
   criterias: TCriteria[],
   productsWithCriterias: TProductWithCriteria[]
 ) =>
-  products.map((product) => ({
-    product,
-    total: sumProductValues(product, criterias, productsWithCriterias),
+  criterias.map((criteria) => ({
+    criteria,
+    total: sumProductsCriteriaValues(products, criteria, productsWithCriterias),
   }));

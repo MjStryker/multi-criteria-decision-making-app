@@ -1,12 +1,14 @@
 import { CSSProperties, useRef, useState } from "react";
+import { areDefined, isDefined } from "../utils/objects";
 import {
   clampCriteriaWeightValue,
+  compareCriteriaByDefaultRowIdxFn,
   createEmptyCriteria,
 } from "../utils/criterias/criterias";
 import {
-  compareProductsByDefaultIdxFn,
+  compareProductsByDefaultColumnIdxFn,
   createEmptyProduct,
-  sumAllProductsCriteriasValues,
+  sumAllProductsWithCriteriasValues,
 } from "../utils/products/products";
 
 import { COLORS } from "../constants/colors";
@@ -18,21 +20,18 @@ import { TProductWithCriteria } from "../types/productsWithCriterias";
 import { capitalize } from "../utils/strings";
 import cordlessVacuumCleaner from "../data/cordlessVacuumCleaner";
 import { createEmptyProductCriteriaValue } from "../utils/productsWithCriterias/productsWithCriterias";
-import { isDefined } from "../utils/objects";
 import useClickOutside from "../hooks/useClickOutside";
 
 const width = 120;
 const border = "1px solid #7c7c7c";
 
-type TNestedStyles = Record<string, CSSProperties>;
-
-const STYLES: Record<string, TNestedStyles> = {
+const STYLES = {
   TEXT: {
     MORE_INFO_CONTAINER: {
       display: "flex",
       justifyContent: "flex-end",
       alignItems: "center",
-    },
+    } as CSSProperties,
     MORE_INFO: {
       marginLeft: 8,
       fontSize: 12,
@@ -43,46 +42,51 @@ const STYLES: Record<string, TNestedStyles> = {
     TEXT: {
       fontSize: 16,
       textAlign: "inherit",
-    },
+    } as CSSProperties,
   },
   TD: {
     BORDER: {
       border,
-    },
+    } as CSSProperties,
     CELL_VALUE: {
       border,
       textAlign: "right",
-    },
+    } as CSSProperties,
     PRODUCT: {
       width: "fit-content",
       minWidth: width,
       maxWidth: width,
       border,
-    },
+    } as CSSProperties,
+    PRODUCTS_VALUE_TOTAL: {
+      textAlign: "right",
+      fontWeight: "bold",
+      border,
+    } as CSSProperties,
     CRITERIA: {
       width: "fit-content",
       minWidth: 200,
       border,
-    },
+    } as CSSProperties,
     CRITERIA_BENEFICIAL: {
       minWidth: 36,
       border,
-    },
+    } as CSSProperties,
     CRITERIA_WEIGHT: {
       border,
       textAlign: "right",
       width: 40,
-    },
+    } as CSSProperties,
     CRITERIA_WEIGHT_TOTAL: {
       border,
       textAlign: "right",
       fontWeight: "bold",
-    },
+    } as CSSProperties,
     RES_ARRAY_POS: {
       border,
       textAlign: "right",
       fontWeight: "bold",
-    },
+    } as CSSProperties,
   },
 } as const;
 
@@ -117,14 +121,20 @@ const DataTable = (props: DataTableProps) => {
   );
 
   const productsSorted = products.sort(
-    compareProductsByDefaultIdxFn(SORT_BY.ASC)
+    compareProductsByDefaultColumnIdxFn(SORT_BY.ASC)
   );
 
-  const productsWithSumCriteriaValues = sumAllProductsCriteriasValues(
+  const criteriasSorted = criterias.sort(
+    compareCriteriaByDefaultRowIdxFn(SORT_BY.ASC)
+  );
+
+  const criteriasWithSumProductsValues = sumAllProductsWithCriteriasValues(
     productsSorted,
-    criterias,
+    criteriasSorted,
     productsWithCriterias
   );
+
+  console.log(criteriasWithSumProductsValues);
 
   const addCriteria = (criteria: TCriteria) => {
     setCriterias((prev) => [...prev, criteria]);
@@ -193,8 +203,19 @@ const DataTable = (props: DataTableProps) => {
     >
       <thead>
         <tr>
+          {/*
+           * --------
+           */}
           <td />
+
+          {/*
+           * --------
+           */}
           <td />
+
+          {/*
+           * CRITERIAS - MIN/MAX WEIGHT INFO
+           */}
           <td>
             <div
               style={{
@@ -207,6 +228,10 @@ const DataTable = (props: DataTableProps) => {
               }}
             >{`${CRITERIA.WEIGHT.MIN} - ${CRITERIA.WEIGHT.MAX}`}</div>
           </td>
+
+          {/*
+           * PRODUCTS
+           */}
           {products.map((p, idx) => {
             const isCellInEditMode = p.id === cellId;
 
@@ -289,6 +314,10 @@ const DataTable = (props: DataTableProps) => {
               </td>
             );
           })}
+
+          {/*
+           * PRODUCTS - ADD BUTTON
+           */}
           <td>
             <button onClick={() => addProduct(createEmptyProduct(nbProducts))}>
               +
@@ -298,7 +327,10 @@ const DataTable = (props: DataTableProps) => {
       </thead>
 
       <tbody>
-        {criterias.map((c, idx) => {
+        {/*
+         * CRITERIAS
+         */}
+        {criteriasSorted.map((c, criteriaRowIdx) => {
           const isCriteriaNameCellInEditMode = `${c.id}-name` === cellId;
           const isCriteriaBeneficialCellInEditMode =
             `${c.id}-beneficial` === cellId;
@@ -365,7 +397,9 @@ const DataTable = (props: DataTableProps) => {
                       />
                     ) : (
                       <div style={{ marginRight: 8 }}>
-                        {c.name ? capitalize(c.name) : `Critère ${idx + 1}`}{" "}
+                        {c.name
+                          ? capitalize(c.name)
+                          : `Critère ${criteriaRowIdx + 1}`}{" "}
                         {c.unit && `(${c.unit})`}
                       </div>
                     )}
@@ -518,14 +552,17 @@ const DataTable = (props: DataTableProps) => {
                       <div style={STYLES.TEXT.MORE_INFO}>
                         {isDefined(c.weight) && !isNaN(c.weight)
                           ? `(${(c.weight / weightTotal).toFixed(2)})`
-                          : "-"}
+                          : ""}
                       </div>
                     </div>
                   )}
                 </div>
               </td>
 
-              {productsSorted.map((p, idx) => {
+              {/*
+               * PRODUCTS - CRITERIA VALUES
+               */}
+              {productsSorted.map((p, productColumnIdx) => {
                 const v =
                   productsWithCriterias.find(
                     ({ criteriaId, productId }) =>
@@ -539,8 +576,12 @@ const DataTable = (props: DataTableProps) => {
                     ? Number(v.value)
                     : null;
 
-                const weightedValue = isDefined(value)
-                  ? value / productsWithSumCriteriaValues[idx].total
+                const normalizedValue = isDefined(value)
+                  ? value / criteriasWithSumProductsValues[criteriaRowIdx].total
+                  : null;
+
+                const weightedValue = areDefined([c.weight, normalizedValue])
+                  ? Number(normalizedValue) * Number(c.weight)
                   : null;
 
                 return (
@@ -599,9 +640,9 @@ const DataTable = (props: DataTableProps) => {
                       ) : (
                         <div style={STYLES.TEXT.MORE_INFO_CONTAINER}>
                           <div>{value ?? "-"}</div>
-                          {isDefined(weightedValue) ? (
+                          {isDefined(normalizedValue) ? (
                             <div style={STYLES.TEXT.MORE_INFO}>
-                              ({weightedValue?.toFixed(3) ?? "-"})
+                              ({normalizedValue?.toFixed(3) ?? "-"})
                             </div>
                           ) : null}
                         </div>
@@ -611,43 +652,50 @@ const DataTable = (props: DataTableProps) => {
                 );
               })}
 
-              <td />
+              {/*
+               * CRITERIA - PRODUCTS VALUES TOTAL
+               */}
+              <td style={STYLES.TD.PRODUCTS_VALUE_TOTAL}>
+                {criteriasWithSumProductsValues[criteriaRowIdx].total}
+              </td>
             </tr>
           );
         })}
 
         <tr>
-          <td />
-          <td />
-          <td />
-
-          {productsWithSumCriteriaValues.map(({ product, total }) => (
-            <td
-              key={product.id}
-              style={{ textAlign: "right", fontWeight: "bold" }}
-            >
-              {total}
-            </td>
-          ))}
-        </tr>
-
-        <tr>
+          {/*
+           * CRITERIA - ADD BUTTON
+           */}
           <td>
-            <button onClick={() => addCriteria(createEmptyCriteria())}>
+            <button
+              onClick={() => addCriteria(createEmptyCriteria(nbCriteria))}
+            >
               +
             </button>
           </td>
 
+          {/*
+           * --------
+           */}
           <td />
 
+          {/*
+           * CRITERIA - WEIGHT TOTAL
+           */}
           <td style={STYLES.TD.CRITERIA_WEIGHT_TOTAL}>{weightTotal}</td>
 
+          {/*
+           * PRODUCTS - POS
+           */}
           {productsSorted.map((p) => (
             <td key={p.id} style={STYLES.TD.RES_ARRAY_POS}>
               #{p.resArrayIdx ?? " -"}
             </td>
           ))}
 
+          {/*
+           * --------
+           */}
           <td />
         </tr>
       </tbody>

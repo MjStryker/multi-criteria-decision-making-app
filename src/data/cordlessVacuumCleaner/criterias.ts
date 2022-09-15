@@ -7,6 +7,7 @@ const criteria: TCriteria[] = [
     unit: "€",
     weight: 1,
     beneficial: false,
+    defaultRowIdx: 0,
   },
   {
     id: "puissanceAspiration123",
@@ -14,6 +15,7 @@ const criteria: TCriteria[] = [
     unit: "AW",
     weight: 1,
     beneficial: true,
+    defaultRowIdx: 1,
   },
   {
     id: "autonomie123",
@@ -21,6 +23,7 @@ const criteria: TCriteria[] = [
     unit: "min",
     weight: 1,
     beneficial: true,
+    defaultRowIdx: 2,
   },
   {
     id: "capaciteReservoir123",
@@ -28,6 +31,7 @@ const criteria: TCriteria[] = [
     unit: "L",
     weight: 1,
     beneficial: true,
+    defaultRowIdx: 3,
   },
   {
     id: "nbAccessoires123",
@@ -35,6 +39,7 @@ const criteria: TCriteria[] = [
     unit: "-",
     weight: 1,
     beneficial: true,
+    defaultRowIdx: 4,
   },
   {
     id: "batterieAmovible123",
@@ -42,6 +47,7 @@ const criteria: TCriteria[] = [
     unit: "-",
     weight: 1,
     beneficial: true,
+    defaultRowIdx: 5,
   },
 ];
 

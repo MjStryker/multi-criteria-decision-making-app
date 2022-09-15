@@ -4,4 +4,5 @@ export type TCriteria = {
   weight: number | undefined;
   unit: string | undefined;
   beneficial: boolean | undefined;
+  defaultRowIdx: number;
 };
