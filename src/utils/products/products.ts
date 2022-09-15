@@ -21,7 +21,7 @@ export const compareProductsByResArrayIdxFn =
   (sortBy: TSortBy) => (a: TProduct, b: TProduct) =>
     compareFn(sortBy)(a.resArrayIdx, b.resArrayIdx);
 
-export const sumProductsCriteriaValues = (
+export const sumCriteriaProductsValues = (
   products: TProduct[],
   criteria: TCriteria,
   productsWithCriterias: TProductWithCriteria[]
@@ -43,5 +43,40 @@ export const sumAllProductsWithCriteriasValues = (
 ) =>
   criterias.map((criteria) => ({
     criteria,
-    total: sumProductsCriteriaValues(products, criteria, productsWithCriterias),
+    total: sumCriteriaProductsValues(products, criteria, productsWithCriterias),
   }));
+
+export const sumAllProductsBeneficialAndCostWeightedValues = () => 0;
+
+export const calculateProductsData = (
+  products: TProduct[],
+  criterias: TCriteria[],
+  productsWithCriterias: TProductWithCriteria[]
+) => {
+  criterias.map((criteria) => {
+    let productsValuesTotal = 0;
+
+    const productsWithValue = products.map((product) => {
+      const value =
+        productsWithCriterias.find(
+          ({ productId, criteriaId }) =>
+            product.id === productId && criteria.id === criteriaId
+        )?.value ?? 0;
+
+      productsValuesTotal += value;
+
+      return { product, value };
+    });
+
+    const productsWithNormalizedAndWeightedValues = productsWithValue.map(
+      ({ product, value }) => {
+        const normalizedValue = value / productsValuesTotal;
+        const weightedValue = normalizedValue * (criteria.weight ?? 1);
+
+        return { product, value, normalizedValue, weightedValue };
+      }
+    );
+
+    return { criteria, productsWithNormalizedAndWeightedValues };
+  });
+};

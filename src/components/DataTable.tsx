@@ -134,8 +134,6 @@ const DataTable = (props: DataTableProps) => {
     productsWithCriterias
   );
 
-  console.log(criteriasWithSumProductsValues);
-
   const addCriteria = (criteria: TCriteria) => {
     setCriterias((prev) => [...prev, criteria]);
     products.forEach((product) => {
@@ -551,7 +549,7 @@ const DataTable = (props: DataTableProps) => {
                       </div>
                       <div style={STYLES.TEXT.MORE_INFO}>
                         {isDefined(c.weight) && !isNaN(c.weight)
-                          ? `(${(c.weight / weightTotal).toFixed(2)})`
+                          ? `(${(c.weight / weightTotal).toFixed(3)})`
                           : ""}
                       </div>
                     </div>

@@ -10,7 +10,7 @@ export const createEmptyCriteria = (defaultRowIdx: number): TCriteria => ({
   name: undefined,
   weight: 1,
   unit: undefined,
-  beneficial: undefined,
+  beneficial: true,
   defaultRowIdx,
 });
 
