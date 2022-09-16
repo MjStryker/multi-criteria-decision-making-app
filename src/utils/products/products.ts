@@ -80,3 +80,50 @@ export const calculateProductsData = (
     return { criteria, productsWithNormalizedAndWeightedValues };
   });
 };
+
+export const getProductsNormalizedAndWeightedValues = (
+  products: TProduct[],
+  criterias: TCriteria[],
+  productsWithCriterias: TProductWithCriteria[]
+): {
+  product: TProduct;
+  value: number | undefined;
+  normalizedValue: number | undefined;
+  weightedValue: number | undefined;
+}[] => {
+  const productsWithNormalizedAndWeightedValues = products.map((product) => ({
+    product,
+    value: undefined,
+    normalizedValue: undefined,
+    weightedValue: undefined,
+  }));
+
+  criterias.forEach((criteria) => {
+    let productsValuesTotal = 0;
+
+    productsWithNormalizedAndWeightedValues.map(({ product }) => {
+      const value =
+        productsWithCriterias.find(
+          ({ productId, criteriaId }) =>
+            product.id === productId && criteria.id === criteriaId
+        )?.value ?? 0;
+
+      productsValuesTotal += value;
+
+      return { product, value };
+    });
+
+    productsWithNormalizedAndWeightedValues.map(({ product, value }) => {
+      const normalizedValue = value ? value / productsValuesTotal : undefined;
+      const weightedValue = normalizedValue
+        ? normalizedValue * (criteria.weight ?? 1)
+        : undefined;
+
+      return { product, value, normalizedValue, weightedValue };
+    });
+
+    return productsWithNormalizedAndWeightedValues;
+  });
+
+  return productsWithNormalizedAndWeightedValues;
+};
