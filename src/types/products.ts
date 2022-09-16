@@ -3,6 +3,6 @@ export type TProduct = {
   name: string | undefined;
   reference: string | undefined;
   // picture: string;
-  resArrayIdx: number | undefined;
+  rank: number | undefined;
   defaultColumnIdx: number;
 };

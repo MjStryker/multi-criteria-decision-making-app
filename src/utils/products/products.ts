@@ -9,7 +9,7 @@ export const createEmptyProduct = (defaultColumnIdx: number): TProduct => ({
   id: nanoid(),
   name: undefined,
   reference: undefined,
-  resArrayIdx: undefined,
+  rank: undefined,
   defaultColumnIdx,
 });
 
@@ -17,9 +17,9 @@ export const compareProductsByDefaultColumnIdxFn =
   (sortBy: TSortBy) => (a: TProduct, b: TProduct) =>
     compareFn(sortBy)(a.defaultColumnIdx, b.defaultColumnIdx);
 
-export const compareProductsByResArrayIdxFn =
+export const compareProductsByrankFn =
   (sortBy: TSortBy) => (a: TProduct, b: TProduct) =>
-    compareFn(sortBy)(a.resArrayIdx, b.resArrayIdx);
+    compareFn(sortBy)(a.rank, b.rank);
 
 export const sumCriteriaProductsValues = (
   products: TProduct[],

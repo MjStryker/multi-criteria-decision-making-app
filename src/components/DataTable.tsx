@@ -687,7 +687,7 @@ const DataTable = (props: DataTableProps) => {
            */}
           {productsSorted.map((p) => (
             <td key={p.id} style={STYLES.TD.RES_ARRAY_POS}>
-              #{p.resArrayIdx ?? " -"}
+              #{p.rank ?? " -"}
             </td>
           ))}
 
