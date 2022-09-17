@@ -11,4 +11,6 @@ export const createEmptyProductCriteriaValue = (
   productId,
   criteriaId,
   value: undefined,
+  normalizedValue: undefined,
+  weightedValue: undefined,
 });

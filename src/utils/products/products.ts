@@ -81,32 +81,38 @@ export const calculateProductsData = (
   });
 };
 
-export const getProductsNormalizedAndWeightedValues = (
+const defaultProductsWithNormalizedAndWeightedValues = (product: TProduct) => ({
+  product,
+  value: undefined,
+  normalizedValue: undefined,
+  weightedValue: undefined,
+});
+
+export const getProductsWeightedNormalizedValues = (
   products: TProduct[],
   criterias: TCriteria[],
   productsWithCriterias: TProductWithCriteria[]
 ): {
-  product: TProduct;
-  value: number | undefined;
-  normalizedValue: number | undefined;
-  weightedValue: number | undefined;
-}[] => {
-  const productsWithNormalizedAndWeightedValues = products.map((product) => ({
-    product,
-    value: undefined,
-    normalizedValue: undefined,
-    weightedValue: undefined,
-  }));
+  productsWithNormalizedAndWeightedValues: ReturnType<
+    typeof defaultProductsWithNormalizedAndWeightedValues
+  >[];
+  productsWithCriteriasInfo: TProductWithCriteria[];
+} => {
+  const productsWithNormalizedAndWeightedValues = products.map(
+    defaultProductsWithNormalizedAndWeightedValues
+  );
+  const productsWithCriteriasInfo = productsWithCriterias;
 
   criterias.forEach((criteria) => {
     let productsValuesTotal = 0;
 
     productsWithNormalizedAndWeightedValues.map(({ product }) => {
-      const value =
-        productsWithCriterias.find(
-          ({ productId, criteriaId }) =>
-            product.id === productId && criteria.id === criteriaId
-        )?.value ?? 0;
+      const productWithCriteriaInfo = productsWithCriteriasInfo.find(
+        ({ productId, criteriaId }) =>
+          product.id === productId && criteria.id === criteriaId
+      );
+
+      const value = productWithCriteriaInfo?.value ?? 0;
 
       productsValuesTotal += value;
 
@@ -114,16 +120,31 @@ export const getProductsNormalizedAndWeightedValues = (
     });
 
     productsWithNormalizedAndWeightedValues.map(({ product, value }) => {
+      const productWithCriteriaInfo = productsWithCriteriasInfo.find(
+        ({ productId, criteriaId }) =>
+          product.id === productId && criteria.id === criteriaId
+      );
+
       const normalizedValue = value ? value / productsValuesTotal : undefined;
       const weightedValue = normalizedValue
         ? normalizedValue * (criteria.weight ?? 1)
         : undefined;
 
-      return { product, value, normalizedValue, weightedValue };
+      if (productWithCriteriaInfo) {
+        productWithCriteriaInfo.normalizedValue = normalizedValue;
+        productWithCriteriaInfo.weightedValue = weightedValue;
+      }
+
+      return {
+        product,
+        value,
+        normalizedValue,
+        weightedValue,
+      };
     });
 
     return productsWithNormalizedAndWeightedValues;
   });
 
-  return productsWithNormalizedAndWeightedValues;
+  return { productsWithNormalizedAndWeightedValues, productsWithCriteriasInfo };
 };

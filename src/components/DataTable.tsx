@@ -21,6 +21,7 @@ import { capitalize } from "../utils/strings";
 import cordlessVacuumCleaner from "../data/cordlessVacuumCleaner";
 import { createEmptyProductCriteriaValue } from "../utils/productsWithCriterias/productsWithCriterias";
 import useClickOutside from "../hooks/useClickOutside";
+import useRankProducts from "../hooks/data/useRankProducts";
 
 const width = 120;
 const border = "1px solid #7c7c7c";
@@ -99,6 +100,12 @@ const DataTable = (props: DataTableProps) => {
   const [products, setProducts] = useState(cordlessVacuumCleaner.products);
   const [productsWithCriterias, setProductsWithCriterias] = useState(
     cordlessVacuumCleaner.productsWithCriterias
+  );
+
+  const { rankedProducts, productsWithCriteriasInfo } = useRankProducts(
+    products,
+    criterias,
+    productsWithCriterias
   );
 
   const [cellId, setCellId] = useState<string | null>(null);
