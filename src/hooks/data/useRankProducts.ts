@@ -5,7 +5,7 @@ import { TCriteria } from "../../types/criterias";
 import { TProduct } from "../../types/products";
 import { TProductWithCriteria } from "../../types/productsWithCriterias";
 import { compareFn } from "../../utils/arrays";
-import { getProductsWeightedNormalizedValues } from "../../utils/products/products";
+import { getCriteriasProductsWithNormalizedWeightedValues } from "../../utils/products/products";
 
 const useRankProducts = (
   products: TProduct[],
@@ -13,57 +13,62 @@ const useRankProducts = (
   productsWithCriterias: TProductWithCriteria[]
 ) => {
   const [rankedProducts, setRankedProducts] = useState(products);
-  const [productsWithCriteriasInfo, setProductsWithCriterias] = useState(
-    productsWithCriterias
-  );
 
   useEffect(() => {
-    const {
-      productsWithNormalizedAndWeightedValues,
-      productsWithCriteriasInfo,
-    } = getProductsWeightedNormalizedValues(
-      products,
-      criterias,
-      productsWithCriterias
-    );
+    /**
+     * STEP 1 - Get normalized and weighted values for all products
+     */
+    const criteriasWithValues =
+      getCriteriasProductsWithNormalizedWeightedValues(
+        products,
+        criterias,
+        productsWithCriterias
+      );
 
-    setProductsWithCriterias(productsWithCriteriasInfo);
-
+    /**
+     * STEP 2 - Get total beneficial and non-beneficial values (with min)
+     */
     let allProductsTotalNonBeneficialValues = 0;
     let allProductsMinNonBeneficialValue: number | undefined = undefined;
 
     const productsWithTotalBeneficialAndNonBeneficialValues =
-      productsWithNormalizedAndWeightedValues.map((product) => {
+      criteriasWithValues.map(({ criteria, products }) => {
         let totalBeneficialValues = 0;
         let totalNonBeneficialValues = 0;
 
-        const weightedValueOrZero = product.weightedValue ?? 0;
+        products.forEach(({ product, weightedValue }) => {
+          const weightedValueOrZero = weightedValue ?? 0;
 
-        allProductsTotalNonBeneficialValues += weightedValueOrZero;
+          allProductsTotalNonBeneficialValues += weightedValueOrZero;
 
-        if (
-          allProductsMinNonBeneficialValue &&
-          product.weightedValue &&
-          product.weightedValue < allProductsMinNonBeneficialValue
-        ) {
-          allProductsMinNonBeneficialValue = product.weightedValue;
-        }
-
-        criterias.forEach((criteria) => {
+          // Get totals
           if (criteria.beneficial === true) {
             totalBeneficialValues += weightedValueOrZero;
           } else if (criteria.beneficial === false) {
             totalNonBeneficialValues += weightedValueOrZero;
           }
+
+          // Get min
+          if (
+            allProductsMinNonBeneficialValue &&
+            weightedValue &&
+            weightedValue < allProductsMinNonBeneficialValue
+          ) {
+            allProductsMinNonBeneficialValue = weightedValue;
+          }
         });
 
         return {
-          ...product,
+          criteria,
+          products,
           totalBeneficialValues,
           totalNonBeneficialValues,
         };
       });
 
+    /**
+     * STEP 3 -
+     */
     let allProductsTotalNonBeneficialValuesRelatedToMin = 0;
 
     const productsWithValuesRelativeToMinBeneficial =

@@ -17,134 +17,75 @@ export const compareProductsByDefaultColumnIdxFn =
   (sortBy: TSortBy) => (a: TProduct, b: TProduct) =>
     compareFn(sortBy)(a.defaultColumnIdx, b.defaultColumnIdx);
 
-export const compareProductsByrankFn =
+export const compareProductsByRankFn =
   (sortBy: TSortBy) => (a: TProduct, b: TProduct) =>
     compareFn(sortBy)(a.rank, b.rank);
 
-export const sumCriteriaProductsValues = (
-  products: TProduct[],
+const getProductWithCriteria = (
+  product: TProduct,
   criteria: TCriteria,
   productsWithCriterias: TProductWithCriteria[]
 ) =>
-  products.reduce((total, product) => {
-    const value =
-      productsWithCriterias.find(
-        ({ productId, criteriaId }) =>
-          product.id === productId && criteria.id === criteriaId
-      )?.value ?? 0;
+  productsWithCriterias.find(
+    ({ productId, criteriaId }) =>
+      product.id === productId && criteria.id === criteriaId
+  );
 
-    return total + value;
-  }, 0);
-
-export const sumAllProductsWithCriteriasValues = (
+const getCriteriaWithProductsValues = (
+  criteria: TCriteria,
   products: TProduct[],
+  productsWithCriterias: TProductWithCriteria[]
+) => ({
+  criteria,
+  products: products.map((product) => ({
+    product,
+    value: getProductWithCriteria(product, criteria, productsWithCriterias)
+      ?.value,
+  })),
+});
+
+const getAllCriteriasWithProductsValues = (
   criterias: TCriteria[],
+  products: TProduct[],
   productsWithCriterias: TProductWithCriteria[]
 ) =>
-  criterias.map((criteria) => ({
-    criteria,
-    total: sumCriteriaProductsValues(products, criteria, productsWithCriterias),
-  }));
+  criterias.map((criteria) =>
+    getCriteriaWithProductsValues(criteria, products, productsWithCriterias)
+  );
 
-export const sumAllProductsBeneficialAndCostWeightedValues = () => 0;
-
-export const calculateProductsData = (
+export const getCriteriasProductsWithNormalizedWeightedValues = (
   products: TProduct[],
   criterias: TCriteria[],
   productsWithCriterias: TProductWithCriteria[]
 ) => {
-  criterias.map((criteria) => {
-    let productsValuesTotal = 0;
+  const criteriasWithValues = getAllCriteriasWithProductsValues(
+    criterias,
+    products,
+    productsWithCriterias
+  );
 
-    const productsWithValue = products.map((product) => {
-      const value =
-        productsWithCriterias.find(
-          ({ productId, criteriaId }) =>
-            product.id === productId && criteria.id === criteriaId
-        )?.value ?? 0;
+  return criteriasWithValues.map(({ criteria, products }) => {
+    const productsValuesTotal = products.reduce(
+      (total, product) => total + (product?.value ?? 0),
+      0
+    );
 
-      productsValuesTotal += value;
-
-      return { product, value };
-    });
-
-    const productsWithNormalizedAndWeightedValues = productsWithValue.map(
+    const productsWithNormalizedWeightedValues = products.map(
       ({ product, value }) => {
-        const normalizedValue = value / productsValuesTotal;
-        const weightedValue = normalizedValue * (criteria.weight ?? 1);
+        const normalizedValue = value ? value / productsValuesTotal : undefined;
+        const weightedValue = normalizedValue
+          ? normalizedValue * (criteria.weight ?? 1)
+          : undefined;
 
-        return { product, value, normalizedValue, weightedValue };
+        return {
+          product,
+          value,
+          normalizedValue,
+          weightedValue,
+        };
       }
     );
 
-    return { criteria, productsWithNormalizedAndWeightedValues };
+    return { criteria, products: productsWithNormalizedWeightedValues };
   });
-};
-
-const defaultProductsWithNormalizedAndWeightedValues = (product: TProduct) => ({
-  product,
-  value: undefined,
-  normalizedValue: undefined,
-  weightedValue: undefined,
-});
-
-export const getProductsWeightedNormalizedValues = (
-  products: TProduct[],
-  criterias: TCriteria[],
-  productsWithCriterias: TProductWithCriteria[]
-): {
-  productsWithNormalizedAndWeightedValues: ReturnType<
-    typeof defaultProductsWithNormalizedAndWeightedValues
-  >[];
-  productsWithCriteriasInfo: TProductWithCriteria[];
-} => {
-  const productsWithNormalizedAndWeightedValues = products.map(
-    defaultProductsWithNormalizedAndWeightedValues
-  );
-  const productsWithCriteriasInfo = productsWithCriterias;
-
-  criterias.forEach((criteria) => {
-    let productsValuesTotal = 0;
-
-    productsWithNormalizedAndWeightedValues.map(({ product }) => {
-      const productWithCriteriaInfo = productsWithCriteriasInfo.find(
-        ({ productId, criteriaId }) =>
-          product.id === productId && criteria.id === criteriaId
-      );
-
-      const value = productWithCriteriaInfo?.value ?? 0;
-
-      productsValuesTotal += value;
-
-      return { product, value };
-    });
-
-    productsWithNormalizedAndWeightedValues.map(({ product, value }) => {
-      const productWithCriteriaInfo = productsWithCriteriasInfo.find(
-        ({ productId, criteriaId }) =>
-          product.id === productId && criteria.id === criteriaId
-      );
-
-      const normalizedValue = value ? value / productsValuesTotal : undefined;
-      const weightedValue = normalizedValue
-        ? normalizedValue * (criteria.weight ?? 1)
-        : undefined;
-
-      if (productWithCriteriaInfo) {
-        productWithCriteriaInfo.normalizedValue = normalizedValue;
-        productWithCriteriaInfo.weightedValue = weightedValue;
-      }
-
-      return {
-        product,
-        value,
-        normalizedValue,
-        weightedValue,
-      };
-    });
-
-    return productsWithNormalizedAndWeightedValues;
-  });
-
-  return { productsWithNormalizedAndWeightedValues, productsWithCriteriasInfo };
 };

@@ -1,5 +1,4 @@
 import { CSSProperties, useRef, useState } from "react";
-import { areDefined, isDefined } from "../utils/objects";
 import {
   clampCriteriaWeightValue,
   compareCriteriaByDefaultRowIdxFn,
@@ -8,7 +7,6 @@ import {
 import {
   compareProductsByDefaultColumnIdxFn,
   createEmptyProduct,
-  sumAllProductsWithCriteriasValues,
 } from "../utils/products/products";
 
 import { COLORS } from "../constants/colors";
@@ -20,6 +18,7 @@ import { TProductWithCriteria } from "../types/productsWithCriterias";
 import { capitalize } from "../utils/strings";
 import cordlessVacuumCleaner from "../data/cordlessVacuumCleaner";
 import { createEmptyProductCriteriaValue } from "../utils/productsWithCriterias/productsWithCriterias";
+import { isDefined } from "../utils/objects";
 import useClickOutside from "../hooks/useClickOutside";
 import useRankProducts from "../hooks/data/useRankProducts";
 
@@ -96,16 +95,21 @@ type DataTableProps = {};
 const DataTable = (props: DataTableProps) => {
   const inputRef = useRef(null);
 
-  const [criterias, setCriterias] = useState(cordlessVacuumCleaner.criterias);
-  const [products, setProducts] = useState(cordlessVacuumCleaner.products);
-  const [productsWithCriterias, setProductsWithCriterias] = useState(
-    cordlessVacuumCleaner.productsWithCriterias
-  );
+  const criteriasFromDB = cordlessVacuumCleaner.criterias;
+  const productsFromDB = cordlessVacuumCleaner.products;
+  const productsWithCriteriasFromDB =
+    cordlessVacuumCleaner.productsWithCriterias;
 
   const { rankedProducts, productsWithCriteriasInfo } = useRankProducts(
-    products,
-    criterias,
-    productsWithCriterias
+    productsFromDB,
+    criteriasFromDB,
+    productsWithCriteriasFromDB
+  );
+
+  const [criterias, setCriterias] = useState(criteriasFromDB);
+  const [products, setProducts] = useState(rankedProducts);
+  const [productsWithCriterias, setProductsWithCriterias] = useState(
+    productsWithCriteriasInfo
   );
 
   const [cellId, setCellId] = useState<string | null>(null);
@@ -133,12 +137,6 @@ const DataTable = (props: DataTableProps) => {
 
   const criteriasSorted = criterias.sort(
     compareCriteriaByDefaultRowIdxFn(SORT_BY.ASC)
-  );
-
-  const criteriasWithSumProductsValues = sumAllProductsWithCriteriasValues(
-    productsSorted,
-    criteriasSorted,
-    productsWithCriterias
   );
 
   const addCriteria = (criteria: TCriteria) => {
@@ -581,14 +579,6 @@ const DataTable = (props: DataTableProps) => {
                     ? Number(v.value)
                     : null;
 
-                const normalizedValue = isDefined(value)
-                  ? value / criteriasWithSumProductsValues[criteriaRowIdx].total
-                  : null;
-
-                const weightedValue = areDefined([c.weight, normalizedValue])
-                  ? Number(normalizedValue) * Number(c.weight)
-                  : null;
-
                 return (
                   <td key={v.id} style={STYLES.TD.CELL_VALUE}>
                     <div
@@ -645,9 +635,9 @@ const DataTable = (props: DataTableProps) => {
                       ) : (
                         <div style={STYLES.TEXT.MORE_INFO_CONTAINER}>
                           <div>{value ?? "-"}</div>
-                          {isDefined(normalizedValue) ? (
+                          {isDefined(v.normalizedValue) ? (
                             <div style={STYLES.TEXT.MORE_INFO}>
-                              ({normalizedValue?.toFixed(3) ?? "-"})
+                              ({v.normalizedValue?.toFixed(3) ?? "-"})
                             </div>
                           ) : null}
                         </div>
@@ -656,13 +646,6 @@ const DataTable = (props: DataTableProps) => {
                   </td>
                 );
               })}
-
-              {/*
-               * CRITERIA - PRODUCTS VALUES TOTAL
-               */}
-              <td style={STYLES.TD.PRODUCTS_VALUE_TOTAL}>
-                {criteriasWithSumProductsValues[criteriaRowIdx].total}
-              </td>
             </tr>
           );
         })}
@@ -690,7 +673,7 @@ const DataTable = (props: DataTableProps) => {
           <td style={STYLES.TD.CRITERIA_WEIGHT_TOTAL}>{weightTotal}</td>
 
           {/*
-           * PRODUCTS - POS
+           * PRODUCTS - RANK
            */}
           {productsSorted.map((p) => (
             <td key={p.id} style={STYLES.TD.RES_ARRAY_POS}>
