@@ -24,7 +24,7 @@ const productsWithCriteria: TProductWithCriteria[] = [
     id: "prixRowenta123",
     criteriaId: "prix123",
     productId: "rowenta123",
-    value: 400,
+    value: 500,
     normalizedValue: undefined,
     weightedValue: undefined,
   },
@@ -36,7 +36,7 @@ const productsWithCriteria: TProductWithCriteria[] = [
     id: "puissanceAspirationDyson123",
     criteriaId: "puissanceAspiration123",
     productId: "dyson123",
-    value: 210,
+    value: 180,
     normalizedValue: undefined,
     weightedValue: undefined,
   },
@@ -44,7 +44,7 @@ const productsWithCriteria: TProductWithCriteria[] = [
     id: "puissanceAspirationDreame123",
     criteriaId: "puissanceAspiration123",
     productId: "dreame123",
-    value: 180,
+    value: 210,
     normalizedValue: undefined,
     weightedValue: undefined,
   },
@@ -52,7 +52,7 @@ const productsWithCriteria: TProductWithCriteria[] = [
     id: "puissanceAspirationRowenta123",
     criteriaId: "puissanceAspiration123",
     productId: "rowenta123",
-    value: 160,
+    value: 200,
     normalizedValue: undefined,
     weightedValue: undefined,
   },
@@ -72,7 +72,7 @@ const productsWithCriteria: TProductWithCriteria[] = [
     id: "autonomieDreame123",
     criteriaId: "autonomie123",
     productId: "dreame123",
-    value: 60,
+    value: 80,
     normalizedValue: undefined,
     weightedValue: undefined,
   },
@@ -85,89 +85,89 @@ const productsWithCriteria: TProductWithCriteria[] = [
     weightedValue: undefined,
   },
 
-  /**
-   * Capacité réservoir
-   */
-  {
-    id: "capaciteReservoirDyson123",
-    criteriaId: "capaciteReservoir123",
-    productId: "dyson123",
-    value: 0.75,
-    normalizedValue: undefined,
-    weightedValue: undefined,
-  },
-  {
-    id: "capaciteReservoirDreame123",
-    criteriaId: "capaciteReservoir123",
-    productId: "dreame123",
-    value: 0.7,
-    normalizedValue: undefined,
-    weightedValue: undefined,
-  },
-  {
-    id: "capaciteReservoirRowenta123",
-    criteriaId: "capaciteReservoir123",
-    productId: "rowenta123",
-    value: 0.8,
-    normalizedValue: undefined,
-    weightedValue: undefined,
-  },
+  // /**
+  //  * Capacité réservoir
+  //  */
+  // {
+  //   id: "capaciteReservoirDyson123",
+  //   criteriaId: "capaciteReservoir123",
+  //   productId: "dyson123",
+  //   value: 0.75,
+  //   normalizedValue: undefined,
+  //   weightedValue: undefined,
+  // },
+  // {
+  //   id: "capaciteReservoirDreame123",
+  //   criteriaId: "capaciteReservoir123",
+  //   productId: "dreame123",
+  //   value: 0.7,
+  //   normalizedValue: undefined,
+  //   weightedValue: undefined,
+  // },
+  // {
+  //   id: "capaciteReservoirRowenta123",
+  //   criteriaId: "capaciteReservoir123",
+  //   productId: "rowenta123",
+  //   value: 0.8,
+  //   normalizedValue: undefined,
+  //   weightedValue: undefined,
+  // },
 
-  /**
-   * Nb accessoires
-   */
-  {
-    id: "nbAccessoiresDyson123",
-    criteriaId: "nbAccessoires123",
-    productId: "dyson123",
-    value: 4,
-    normalizedValue: undefined,
-    weightedValue: undefined,
-  },
-  {
-    id: "nbAccessoiresDreame123",
-    criteriaId: "nbAccessoires123",
-    productId: "dreame123",
-    value: 7,
-    normalizedValue: undefined,
-    weightedValue: undefined,
-  },
-  {
-    id: "nbAccessoiresRowenta123",
-    criteriaId: "nbAccessoires123",
-    productId: "rowenta123",
-    value: 6,
-    normalizedValue: undefined,
-    weightedValue: undefined,
-  },
+  // /**
+  //  * Nb accessoires
+  //  */
+  // {
+  //   id: "nbAccessoiresDyson123",
+  //   criteriaId: "nbAccessoires123",
+  //   productId: "dyson123",
+  //   value: 4,
+  //   normalizedValue: undefined,
+  //   weightedValue: undefined,
+  // },
+  // {
+  //   id: "nbAccessoiresDreame123",
+  //   criteriaId: "nbAccessoires123",
+  //   productId: "dreame123",
+  //   value: 7,
+  //   normalizedValue: undefined,
+  //   weightedValue: undefined,
+  // },
+  // {
+  //   id: "nbAccessoiresRowenta123",
+  //   criteriaId: "nbAccessoires123",
+  //   productId: "rowenta123",
+  //   value: 6,
+  //   normalizedValue: undefined,
+  //   weightedValue: undefined,
+  // },
 
-  /**
-   * Batterie amovible
-   */
-  {
-    id: "batterieAmovibleDyson123",
-    criteriaId: "batterieAmovible123",
-    productId: "dyson123",
-    value: 0,
-    normalizedValue: undefined,
-    weightedValue: undefined,
-  },
-  {
-    id: "batterieAmovibleDreame123",
-    criteriaId: "batterieAmovible123",
-    productId: "dreame123",
-    value: undefined,
-    normalizedValue: undefined,
-    weightedValue: undefined,
-  },
-  {
-    id: "batterieAmovibleRowenta123",
-    criteriaId: "batterieAmovible123",
-    productId: "rowenta123",
-    value: 1,
-    normalizedValue: undefined,
-    weightedValue: undefined,
-  },
+  // /**
+  //  * Batterie amovible
+  //  */
+  // {
+  //   id: "batterieAmovibleDyson123",
+  //   criteriaId: "batterieAmovible123",
+  //   productId: "dyson123",
+  //   value: 0,
+  //   normalizedValue: undefined,
+  //   weightedValue: undefined,
+  // },
+  // {
+  //   id: "batterieAmovibleDreame123",
+  //   criteriaId: "batterieAmovible123",
+  //   productId: "dreame123",
+  //   value: undefined,
+  //   normalizedValue: undefined,
+  //   weightedValue: undefined,
+  // },
+  // {
+  //   id: "batterieAmovibleRowenta123",
+  //   criteriaId: "batterieAmovible123",
+  //   productId: "rowenta123",
+  //   value: 1,
+  //   normalizedValue: undefined,
+  //   weightedValue: undefined,
+  // },
 ];
 
 export default productsWithCriteria;

@@ -7,6 +7,7 @@ import {
 import {
   compareProductsByDefaultColumnIdxFn,
   createEmptyProduct,
+  getProductsWithCriteriasNormalizedWeightedValues,
 } from "../utils/products/products";
 
 import { COLORS } from "../constants/colors";
@@ -104,6 +105,13 @@ const DataTable = (props: DataTableProps) => {
   const [productsWithCriteriasFromDB, setProductsWithCriteriasFromDB] =
     useState(cordlessVacuumCleaner.productsWithCriterias);
 
+  const { productsWithCriteriasNormalizedWeightedValues } =
+    getProductsWithCriteriasNormalizedWeightedValues(
+      productsFromDB,
+      criteriasFromDB,
+      productsWithCriteriasFromDB
+    );
+
   const { rankedProducts } = useRankProducts(
     productsFromDB,
     criteriasFromDB,
@@ -112,7 +120,7 @@ const DataTable = (props: DataTableProps) => {
 
   const criterias = criteriasFromDB;
   const products = rankedProducts;
-  const productsWithCriterias = productsWithCriteriasFromDB;
+  const productsWithCriterias = productsWithCriteriasNormalizedWeightedValues;
 
   const [cellId, setCellId] = useState<string | null>(null);
   const [cellValue, setCellValue] = useState<string | number | boolean | null>(
@@ -637,9 +645,9 @@ const DataTable = (props: DataTableProps) => {
                       ) : (
                         <div style={STYLES.TEXT.MORE_INFO_CONTAINER}>
                           <div>{value ?? "-"}</div>
-                          {isDefined(v.normalizedValue) ? (
+                          {isDefined(v.weightedValue) ? (
                             <div style={STYLES.TEXT.MORE_INFO}>
-                              ({v.normalizedValue?.toFixed(3) ?? "-"})
+                              ({v.weightedValue?.toFixed(3) ?? "-"})
                             </div>
                           ) : null}
                         </div>

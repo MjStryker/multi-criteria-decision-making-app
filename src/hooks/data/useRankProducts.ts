@@ -1,7 +1,3 @@
-import {
-  findProductWithCriteria,
-  getProductsWithCriteriasNormalizedWeightedValues,
-} from "../../utils/products/products";
 import { useEffect, useState } from "react";
 
 import { SORT_BY } from "../../constants/arrays";
@@ -9,6 +5,8 @@ import { TCriteria } from "../../types/criterias";
 import { TProduct } from "../../types/products";
 import { TProductWithCriteria } from "../../types/productsWithCriterias";
 import { compareFn } from "../../utils/arrays";
+import { findProductWithCriteria } from "../../utils/products/products";
+import { isDefined } from "../../utils/objects";
 
 const useRankProducts = (
   products: TProduct[],
@@ -21,12 +19,12 @@ const useRankProducts = (
     /**
      * STEP 1 - Get normalized and weighted values for all products
      */
-    const { productsWithCriteriasNormalizedWeightedValues } =
-      getProductsWithCriteriasNormalizedWeightedValues(
-        products,
-        criterias,
-        productsWithCriterias
-      );
+    // const { productsWithCriteriasNormalizedWeightedValues } =
+    //   getProductsWithCriteriasNormalizedWeightedValues(
+    //     products,
+    //     criterias,
+    //     productsWithCriterias
+    //   );
 
     /**
      * STEP 2 - Get total beneficial (Bi) and non-beneficial (Ci) values (with min)
@@ -43,7 +41,7 @@ const useRankProducts = (
           const productWithCriteria = findProductWithCriteria(
             product,
             criteria,
-            productsWithCriteriasNormalizedWeightedValues
+            productsWithCriterias
           );
 
           const weightedValueOrZero = productWithCriteria?.value ?? 0;
@@ -138,9 +136,9 @@ const useRankProducts = (
      */
     const productsRank = productsUi
       .sort((p1, p2) => compareFn(SORT_BY.ASC)(p1.ui, p2.ui))
-      .map(({ product }, idx) => ({
+      .map(({ product, ui }, idx) => ({
         ...product,
-        rank: idx + 1,
+        rank: isDefined(ui) ? idx + 1 : undefined,
       }));
 
     setRankedProducts(productsRank);
