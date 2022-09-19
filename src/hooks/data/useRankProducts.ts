@@ -5,7 +5,7 @@ import { TCriteria } from "../../types/criterias";
 import { TProduct } from "../../types/products";
 import { TProductWithCriteria } from "../../types/productsWithCriterias";
 import { compareFn } from "../../utils/arrays";
-import { getCriteriasProductsWithNormalizedWeightedValues } from "../../utils/products/products";
+import { getProductsWithCriteriasNormalizedWeightedValues } from "../../utils/products/products";
 
 const useRankProducts = (
   products: TProduct[],
@@ -18,25 +18,31 @@ const useRankProducts = (
     /**
      * STEP 1 - Get normalized and weighted values for all products
      */
-    const criteriasWithValues =
-      getCriteriasProductsWithNormalizedWeightedValues(
+    const { productsWithCriteriasNormalizedWeightedValues } =
+      getProductsWithCriteriasNormalizedWeightedValues(
         products,
         criterias,
         productsWithCriterias
       );
+    // const criteriasWithValues =
+    //   getProductsWithCriteriasNormalizedWeightedValues(
+    // products,
+    // criterias,
+    // productsWithCriterias
+    //   );
 
     /**
-     * STEP 2 - Get total beneficial and non-beneficial values (with min)
+     * STEP 2 - Get total beneficial (Bi) and non-beneficial (Ci) values (with min)
      */
     let allProductsTotalNonBeneficialValues = 0;
     let allProductsMinNonBeneficialValue: number | undefined = undefined;
 
-    const productsWithTotalBeneficialAndNonBeneficialValues =
-      criteriasWithValues.map(({ criteria, products }) => {
+    const criteriasWithProductsTotalBeneficialAndNonBeneficialValues =
+      criteriasWithValues.map(({ criteria, products, ...rest }) => {
         let totalBeneficialValues = 0;
         let totalNonBeneficialValues = 0;
 
-        products.forEach(({ product, weightedValue }) => {
+        products.forEach(({ weightedValue }) => {
           const weightedValueOrZero = weightedValue ?? 0;
 
           allProductsTotalNonBeneficialValues += weightedValueOrZero;
@@ -61,77 +67,117 @@ const useRankProducts = (
         return {
           criteria,
           products,
+          ...rest,
           totalBeneficialValues,
           totalNonBeneficialValues,
         };
       });
 
     /**
-     * STEP 3 -
+     * STEP 3 - Get beneficial and non-beneficial values relative to  min ((min Ci)/Ci)
      */
     let allProductsTotalNonBeneficialValuesRelatedToMin = 0;
 
     const productsWithValuesRelativeToMinBeneficial =
-      productsWithTotalBeneficialAndNonBeneficialValues.map((product) => {
-        const minNonBeneficialValueRelativeToGlobalMin =
-          allProductsMinNonBeneficialValue
-            ? allProductsMinNonBeneficialValue /
-              product.totalNonBeneficialValues
-            : undefined;
+      criteriasWithProductsTotalBeneficialAndNonBeneficialValues.map(
+        ({ criteria, products, ...criteriaRest }) => {
+          const productsWithRelativeValues = products.map(
+            ({ product, ...productRest }) => {
+              const minNonBeneficialValueRelativeToGlobalMin =
+                allProductsMinNonBeneficialValue
+                  ? allProductsMinNonBeneficialValue /
+                    criteriaRest.totalNonBeneficialValues
+                  : undefined;
 
-        allProductsTotalNonBeneficialValuesRelatedToMin +=
-          minNonBeneficialValueRelativeToGlobalMin ?? 0;
+              allProductsTotalNonBeneficialValuesRelatedToMin +=
+                minNonBeneficialValueRelativeToGlobalMin ?? 0;
 
-        return { ...product, minNonBeneficialValueRelativeToGlobalMin };
-      });
+              return {
+                product,
+                ...productRest,
+                minNonBeneficialValueRelativeToGlobalMin,
+              };
+            }
+          );
 
+          return {
+            criteria,
+            products: productsWithRelativeValues,
+            ...criteriaRest,
+          };
+        }
+      );
+
+    /**
+     * STEP 4 - Get all products Qi value
+     */
     let allProductsMaxQi: number | undefined = undefined;
 
     const productsQi = productsWithValuesRelativeToMinBeneficial.map(
-      (product) => {
-        const qi =
-          allProductsMinNonBeneficialValue &&
-          allProductsTotalNonBeneficialValuesRelatedToMin
-            ? // If variables are defined
-              product.totalBeneficialValues +
-              (allProductsMinNonBeneficialValue *
-                allProductsTotalNonBeneficialValues) /
-                (product.totalNonBeneficialValues *
-                  allProductsTotalNonBeneficialValuesRelatedToMin)
-            : undefined;
+      ({ criteria, products, ...criteriaRest }) => {
+        const productsQiRes = products.map(({ product, ...productRest }) => {
+          const qi =
+            allProductsMinNonBeneficialValue &&
+            allProductsTotalNonBeneficialValuesRelatedToMin
+              ? // If variables are defined
+                criteriaRest.totalBeneficialValues +
+                (allProductsMinNonBeneficialValue *
+                  allProductsTotalNonBeneficialValues) /
+                  (criteriaRest.totalNonBeneficialValues *
+                    allProductsTotalNonBeneficialValuesRelatedToMin)
+              : undefined;
 
-        if (allProductsMaxQi && qi && qi > allProductsMaxQi) {
-          allProductsMaxQi = qi;
-        }
+          if (allProductsMaxQi && qi && qi > allProductsMaxQi) {
+            allProductsMaxQi = qi;
+          }
 
-        return { ...product, qi };
+          return { product, ...productRest, qi };
+        });
+
+        return { criteria, products: productsQiRes, ...criteriaRest };
       }
     );
 
-    const productsUi = productsQi.map((product) => {
-      const ui =
-        product.qi && allProductsMaxQi
-          ? product.qi / allProductsMaxQi
-          : undefined;
+    /**
+     * STEP 5 - Get products Ui (rank in percentage)
+     */
+    const productsUi = productsQi.map(
+      ({ criteria, products, ...criteriaRest }) => {
+        const productsUiRes = products.map((product) => {
+          const ui =
+            product.qi && allProductsMaxQi
+              ? product.qi / allProductsMaxQi
+              : undefined;
 
-      return { ...product, ui };
+          return { ...product, ui };
+        });
+
+        return { criteria, products: productsUiRes, ...criteriaRest };
+      }
+    );
+
+    /**
+     * STEP 6 - Get products rank (+ sort by rank)
+     */
+    const productsRank = productsUi.map(({ criteria, products }) => {
+      const productsRankRes = products
+        .sort((p1, p2) => compareFn(SORT_BY.ASC)(p1.ui, p2.ui))
+        .map(({ product }, idx) => ({
+          ...product,
+          rank: idx + 1,
+        }));
+
+      return { criteria, products: productsRankRes };
     });
 
-    const productRank = productsUi
-      .sort((p1, p2) => compareFn(SORT_BY.ASC)(p1.ui, p2.ui))
-      .map((productWithCalculatedData, idx) => ({
-        ...productWithCalculatedData.product,
-        rank: idx,
-      }));
-
-    setRankedProducts(productRank);
+    setRankedProducts(productsRank[0].products);
 
     return () => {
       console.log("[ useEffect ] useRankProducts -> cleanup()");
     };
   }, [products, criterias, productsWithCriterias]);
 
-  return { rankedProducts, productsWithCriteriasInfo };
+  return { rankedProducts };
 };
 
 export default useRankProducts;

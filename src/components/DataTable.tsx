@@ -95,22 +95,24 @@ type DataTableProps = {};
 const DataTable = (props: DataTableProps) => {
   const inputRef = useRef(null);
 
-  const criteriasFromDB = cordlessVacuumCleaner.criterias;
-  const productsFromDB = cordlessVacuumCleaner.products;
-  const productsWithCriteriasFromDB =
-    cordlessVacuumCleaner.productsWithCriterias;
+  const [criteriasFromDB, setCriteriasFromDB] = useState(
+    cordlessVacuumCleaner.criterias
+  );
+  const [productsFromDB, setProductsFromDB] = useState(
+    cordlessVacuumCleaner.products
+  );
+  const [productsWithCriteriasFromDB, setProductsWithCriteriasFromDB] =
+    useState(cordlessVacuumCleaner.productsWithCriterias);
 
-  const { rankedProducts, productsWithCriteriasInfo } = useRankProducts(
+  const { rankedProducts } = useRankProducts(
     productsFromDB,
     criteriasFromDB,
     productsWithCriteriasFromDB
   );
 
-  const [criterias, setCriterias] = useState(criteriasFromDB);
-  const [products, setProducts] = useState(rankedProducts);
-  const [productsWithCriterias, setProductsWithCriterias] = useState(
-    productsWithCriteriasInfo
-  );
+  const criterias = criteriasFromDB;
+  const products = rankedProducts;
+  const productsWithCriterias = productsWithCriteriasFromDB;
 
   const [cellId, setCellId] = useState<string | null>(null);
   const [cellValue, setCellValue] = useState<string | number | boolean | null>(
@@ -140,7 +142,7 @@ const DataTable = (props: DataTableProps) => {
   );
 
   const addCriteria = (criteria: TCriteria) => {
-    setCriterias((prev) => [...prev, criteria]);
+    setCriteriasFromDB((prev) => [...prev, criteria]);
     products.forEach((product) => {
       addProductWithCriteria(
         createEmptyProductCriteriaValue(product, criteria)
@@ -149,7 +151,7 @@ const DataTable = (props: DataTableProps) => {
   };
 
   const addProduct = (product: TProduct) => {
-    setProducts((prev) => [...prev, product]);
+    setProductsFromDB((prev) => [...prev, product]);
     criterias.forEach((criteria) => {
       addProductWithCriteria(
         createEmptyProductCriteriaValue(product, criteria)
@@ -160,28 +162,28 @@ const DataTable = (props: DataTableProps) => {
   const addProductWithCriteria = (
     productWithCriteria: TProductWithCriteria
   ) => {
-    setProductsWithCriterias((prev) => [...prev, productWithCriteria]);
+    setProductsWithCriteriasFromDB((prev) => [...prev, productWithCriteria]);
   };
 
   const updateProduct = (product: TProduct) =>
-    setProducts((prev) => {
+    setProductsFromDB((prev) => {
       const newProductIdx = prev.findIndex((p) => product.id === p.id);
       prev[newProductIdx] = product;
       return [...prev];
     });
 
   const updateCriteria = (criteria: TCriteria) =>
-    setCriterias((prev) => {
+    setCriteriasFromDB((prev) => {
       const newCriteriaIdx = prev.findIndex((p) => criteria.id === p.id);
       prev[newCriteriaIdx] = criteria;
       return [...prev];
     });
 
   const removeCriteria = ({ id }: TCriteria) =>
-    setCriterias((prev) => prev.filter((c) => c.id !== id));
+    setCriteriasFromDB((prev) => prev.filter((c) => c.id !== id));
 
   const removeProduct = ({ id }: TProduct) =>
-    setProducts((prev) => prev.filter((p) => p.id !== id));
+    setProductsFromDB((prev) => prev.filter((p) => p.id !== id));
 
   const setProductCriteriaValue = (
     product: TProduct,
@@ -195,7 +197,7 @@ const DataTable = (props: DataTableProps) => {
 
     productWithCriteria.value = value ?? undefined;
 
-    setProductsWithCriterias((prev) => [...prev, productWithCriteria]);
+    setProductsWithCriteriasFromDB((prev) => [...prev, productWithCriteria]);
   };
 
   return (

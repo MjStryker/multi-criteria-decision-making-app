@@ -3,6 +3,7 @@ import { TProduct } from "../../types/products";
 import { TProductWithCriteria } from "../../types/productsWithCriterias";
 import { TSortBy } from "../../types/arrays";
 import { compareFn } from "../arrays";
+import { isDefined } from "../objects";
 import { nanoid } from "nanoid";
 
 export const createEmptyProduct = (defaultColumnIdx: number): TProduct => ({
@@ -21,7 +22,7 @@ export const compareProductsByRankFn =
   (sortBy: TSortBy) => (a: TProduct, b: TProduct) =>
     compareFn(sortBy)(a.rank, b.rank);
 
-const getProductWithCriteria = (
+const findProductWithCriteria = (
   product: TProduct,
   criteria: TCriteria,
   productsWithCriterias: TProductWithCriteria[]
@@ -39,7 +40,7 @@ const getCriteriaWithProductsValues = (
   criteria,
   products: products.map((product) => ({
     product,
-    value: getProductWithCriteria(product, criteria, productsWithCriterias)
+    value: findProductWithCriteria(product, criteria, productsWithCriterias)
       ?.value,
   })),
 });
@@ -53,7 +54,44 @@ const getAllCriteriasWithProductsValues = (
     getCriteriaWithProductsValues(criteria, products, productsWithCriterias)
   );
 
-export const getCriteriasProductsWithNormalizedWeightedValues = (
+// export const getProductsWithCriteriasNormalizedWeightedValues = (
+//   products: TProduct[],
+//   criterias: TCriteria[],
+//   productsWithCriterias: TProductWithCriteria[]
+// ) => {
+//   const criteriasWithValues = getAllCriteriasWithProductsValues(
+//     criterias,
+//     products,
+//     productsWithCriterias
+//   );
+
+//   return criteriasWithValues.map(({ criteria, products }) => {
+//     const productsValuesTotal = products.reduce(
+//       (total, product) => total + (product?.value ?? 0),
+//       0
+//     );
+
+//     const productsWithNormalizedWeightedValues = products.map(
+//       ({ product, value }) => {
+//         const normalizedValue = value ? value / productsValuesTotal : undefined;
+//         const weightedValue = normalizedValue
+//           ? normalizedValue * (criteria.weight ?? 1)
+//           : undefined;
+
+//         return {
+//           product,
+//           value,
+//           normalizedValue,
+//           weightedValue,
+//         };
+//       }
+//     );
+
+//     return { criteria, products: productsWithNormalizedWeightedValues };
+//   });
+// };
+
+export const getProductsWithCriteriasNormalizedWeightedValues = (
   products: TProduct[],
   criterias: TCriteria[],
   productsWithCriterias: TProductWithCriteria[]
@@ -64,28 +102,32 @@ export const getCriteriasProductsWithNormalizedWeightedValues = (
     productsWithCriterias
   );
 
-  return criteriasWithValues.map(({ criteria, products }) => {
+  const productsWithCriteriasNormalizedWeightedValues = productsWithCriterias;
+
+  criteriasWithValues.forEach(({ criteria, products }) => {
     const productsValuesTotal = products.reduce(
       (total, product) => total + (product?.value ?? 0),
       0
     );
 
-    const productsWithNormalizedWeightedValues = products.map(
-      ({ product, value }) => {
-        const normalizedValue = value ? value / productsValuesTotal : undefined;
-        const weightedValue = normalizedValue
-          ? normalizedValue * (criteria.weight ?? 1)
-          : undefined;
+    products.forEach(({ product, value }) => {
+      const normalizedValue = value ? value / productsValuesTotal : undefined;
+      const weightedValue = normalizedValue
+        ? normalizedValue * (criteria.weight ?? 1)
+        : undefined;
 
-        return {
-          product,
-          value,
-          normalizedValue,
-          weightedValue,
-        };
+      const e = findProductWithCriteria(
+        product,
+        criteria,
+        productsWithCriteriasNormalizedWeightedValues
+      );
+
+      if (isDefined(e)) {
+        e.normalizedValue = normalizedValue;
+        e.weightedValue = weightedValue;
       }
-    );
-
-    return { criteria, products: productsWithNormalizedWeightedValues };
+    });
   });
+
+  return { productsWithCriteriasNormalizedWeightedValues };
 };
