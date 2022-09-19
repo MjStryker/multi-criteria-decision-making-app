@@ -22,7 +22,7 @@ export const compareProductsByRankFn =
   (sortBy: TSortBy) => (a: TProduct, b: TProduct) =>
     compareFn(sortBy)(a.rank, b.rank);
 
-const findProductWithCriteria = (
+export const findProductWithCriteria = (
   product: TProduct,
   criteria: TCriteria,
   productsWithCriterias: TProductWithCriteria[]
