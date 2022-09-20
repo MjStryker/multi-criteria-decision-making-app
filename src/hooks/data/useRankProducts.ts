@@ -72,8 +72,6 @@ const useRankProducts = (
       }
     );
 
-    console.log({ allProductsMinNonBeneficialValue });
-
     /**
      * STEP 3 - Get beneficial and non-beneficial values relative to  min ((min Ci)/Ci)
      */
@@ -115,7 +113,10 @@ const useRankProducts = (
                   allProductsTotalNonBeneficialValuesRelatedToMin)
             : undefined;
 
-        if (allProductsMaxQi && qi && qi > allProductsMaxQi) {
+        if (
+          !allProductsMaxQi ||
+          (allProductsMaxQi && qi && qi > allProductsMaxQi)
+        ) {
           allProductsMaxQi = qi;
         }
 
@@ -139,7 +140,7 @@ const useRankProducts = (
      * STEP 6 - Get products rank (+ sort by rank)
      */
     const productsRank = productsUi
-      .sort((p1, p2) => compareFn(SORT_BY.ASC)(p1.ui, p2.ui))
+      .sort((p1, p2) => compareFn(SORT_BY.DESC)(p1.ui, p2.ui))
       .map(({ product, ui }, idx) => ({
         ...product,
         rank: isDefined(ui) ? idx + 1 : undefined,
