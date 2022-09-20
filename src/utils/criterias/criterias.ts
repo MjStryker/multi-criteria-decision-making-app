@@ -20,3 +20,6 @@ export const clampCriteriaWeightValue = (value: number) =>
 export const compareCriteriaByDefaultRowIdxFn =
   (sortBy: TSortBy) => (a: TCriteria, b: TCriteria) =>
     compareFn(sortBy)(a.defaultRowIdx, b.defaultRowIdx);
+
+export const sumCriteriasWeight = (criterias: TCriteria[]) =>
+  criterias.reduce((total, criteria) => total + (criteria.weight ?? 0), 0);

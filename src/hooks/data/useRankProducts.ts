@@ -70,6 +70,8 @@ const useRankProducts = (
       }
     );
 
+    console.log(productsWithBeneficialAndNonBeneficialValues);
+
     /**
      * STEP 3 - Get beneficial and non-beneficial values relative to  min ((min Ci)/Ci)
      */

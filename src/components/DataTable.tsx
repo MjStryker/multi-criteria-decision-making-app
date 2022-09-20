@@ -3,6 +3,7 @@ import {
   clampCriteriaWeightValue,
   compareCriteriaByDefaultRowIdxFn,
   createEmptyCriteria,
+  sumCriteriasWeight,
 } from "../utils/criterias/criterias";
 import {
   compareProductsByDefaultColumnIdxFn,
@@ -136,10 +137,7 @@ const DataTable = (props: DataTableProps) => {
   const nbCriteria = criterias.length;
   const nbProducts = products.length;
 
-  const weightTotal = criterias.reduce(
-    (total, criteria) => total + (criteria.weight ?? 0),
-    0
-  );
+  const weightTotal = sumCriteriasWeight(criterias);
 
   const productsSorted = products.sort(
     compareProductsByDefaultColumnIdxFn(SORT_BY.ASC)
