@@ -53,16 +53,18 @@ const useRankProducts = (
             totalBeneficialValues += weightedValueOrZero;
           } else if (criteria.beneficial === false) {
             totalNonBeneficialValues += weightedValueOrZero;
-          }
 
-          // Get min
-          if (
-            allProductsMinNonBeneficialValue &&
-            productWithCriteria?.weightedValue &&
-            productWithCriteria.weightedValue < allProductsMinNonBeneficialValue
-          ) {
-            allProductsMinNonBeneficialValue =
-              productWithCriteria.weightedValue;
+            // Get min
+            if (
+              !allProductsMinNonBeneficialValue ||
+              (allProductsMinNonBeneficialValue &&
+                productWithCriteria?.weightedValue &&
+                productWithCriteria.weightedValue <
+                  allProductsMinNonBeneficialValue)
+            ) {
+              allProductsMinNonBeneficialValue =
+                productWithCriteria?.weightedValue ?? undefined;
+            }
           }
         });
 
@@ -70,7 +72,7 @@ const useRankProducts = (
       }
     );
 
-    console.log({ productsWithBeneficialAndNonBeneficialValues });
+    console.log({ allProductsMinNonBeneficialValue });
 
     /**
      * STEP 3 - Get beneficial and non-beneficial values relative to  min ((min Ci)/Ci)
