@@ -2,12 +2,10 @@ import { CSSProperties, useRef, useState } from "react";
 import {
   clampCriteriaWeightValue,
   compareCriteriaByDefaultRowIdxFn,
-  createEmptyCriteria,
   sumCriteriasWeight,
 } from "../utils/criterias/criterias";
 import {
   compareProductsByDefaultColumnIdxFn,
-  createEmptyProduct,
   getProductsWithCriteriasNormalizedWeightedValues,
 } from "../utils/products/products";
 
@@ -17,6 +15,7 @@ import { SORT_BY } from "../constants/arrays";
 import { TCriteria } from "../types/criterias";
 import { TProduct } from "../types/products";
 import { TProductWithCriteria } from "../types/productsWithCriterias";
+import { border } from "../styles/tables/tableCell";
 import { capitalize } from "../utils/strings";
 import cordlessVacuumCleaner from "../data/cordlessVacuumCleaner";
 import { createEmptyProductCriteriaValue } from "../utils/productsWithCriterias/productsWithCriterias";
@@ -25,7 +24,6 @@ import useClickOutside from "../hooks/useClickOutside";
 import useRankProducts from "../hooks/data/useRankProducts";
 
 const width = 120;
-const border = "1px solid #7c7c7c";
 
 const STYLES = {
   TEXT: {
@@ -84,11 +82,6 @@ const STYLES = {
       textAlign: "right",
       fontWeight: "bold",
     } as CSSProperties,
-    RES_ARRAY_POS: {
-      border,
-      textAlign: "right",
-      fontWeight: "bold",
-    } as CSSProperties,
   },
 } as const;
 
@@ -134,9 +127,6 @@ const DataTable = (props: DataTableProps) => {
     setCellValue(null);
   });
 
-  const nbCriteria = criterias.length;
-  const nbProducts = products.length;
-
   const weightTotal = sumCriteriasWeight(criterias);
 
   const productsSorted = products.sort(
@@ -147,196 +137,12 @@ const DataTable = (props: DataTableProps) => {
     compareCriteriaByDefaultRowIdxFn(SORT_BY.ASC)
   );
 
-  const addCriteria = (criteria: TCriteria) => {
-    setCriteriasFromDB((prev) => [...prev, criteria]);
-    products.forEach((product) => {
-      addProductWithCriteria(
-        createEmptyProductCriteriaValue(product, criteria)
-      );
-    });
-  };
-
-  const addProduct = (product: TProduct) => {
-    setProductsFromDB((prev) => [...prev, product]);
-    criterias.forEach((criteria) => {
-      addProductWithCriteria(
-        createEmptyProductCriteriaValue(product, criteria)
-      );
-    });
-  };
-
-  const addProductWithCriteria = (
-    productWithCriteria: TProductWithCriteria
-  ) => {
-    setProductsWithCriteriasFromDB((prev) => [...prev, productWithCriteria]);
-  };
-
-  const updateProduct = (product: TProduct) =>
-    setProductsFromDB((prev) => {
-      const newProductIdx = prev.findIndex((p) => product.id === p.id);
-      prev[newProductIdx] = product;
-      return [...prev];
-    });
-
-  const updateCriteria = (criteria: TCriteria) =>
-    setCriteriasFromDB((prev) => {
-      const newCriteriaIdx = prev.findIndex((p) => criteria.id === p.id);
-      prev[newCriteriaIdx] = criteria;
-      return [...prev];
-    });
-
-  const removeCriteria = ({ id }: TCriteria) =>
-    setCriteriasFromDB((prev) => prev.filter((c) => c.id !== id));
-
-  const removeProduct = ({ id }: TProduct) =>
-    setProductsFromDB((prev) => prev.filter((p) => p.id !== id));
-
-  const setProductCriteriaValue = (
-    product: TProduct,
-    criteria: TCriteria,
-    value: number | null
-  ) => {
-    const productWithCriteria =
-      productsWithCriterias.find(
-        (e) => e.productId === product.id && e.criteriaId === criteria.id
-      ) ?? createEmptyProductCriteriaValue(product, criteria);
-
-    productWithCriteria.value = value ?? undefined;
-
-    setProductsWithCriteriasFromDB((prev) => [...prev, productWithCriteria]);
-  };
-
   return (
     <table
       cellSpacing={0}
       cellPadding={8}
       style={{ height: "fit-content", borderCollapse: "collapse" }}
     >
-      <thead>
-        <tr>
-          {/*
-           * --------
-           */}
-          <td />
-
-          {/*
-           * --------
-           */}
-          <td />
-
-          {/*
-           * CRITERIAS - MIN/MAX WEIGHT INFO
-           */}
-          <td>
-            <div
-              style={{
-                height: "100%",
-                display: "flex",
-                alignItems: "flex-end",
-                justifyContent: "center",
-                fontSize: 14,
-                color: COLORS.GREY,
-              }}
-            >{`${CRITERIA.WEIGHT.MIN} - ${CRITERIA.WEIGHT.MAX}`}</div>
-          </td>
-
-          {/*
-           * PRODUCTS
-           */}
-          {products.map((p, idx) => {
-            const isCellInEditMode = p.id === cellId;
-
-            return (
-              <td key={p.id} style={STYLES.TD.PRODUCT}>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <div
-                    ref={isCellInEditMode ? inputRef : undefined}
-                    onClick={() => {
-                      if (isCellInEditMode) {
-                        return;
-                      }
-                      console.log(`[ Cell ] Selected ${p.id}`);
-                      setCellId(p.id);
-                      setCellValue(p.name ?? null);
-                    }}
-                    onBlur={() => {
-                      updateProduct({
-                        ...p,
-                        name: cellValue ? `${cellValue}` : undefined,
-                      });
-                      setCellId(null);
-                      setCellValue(null);
-                    }}
-                    style={{
-                      margin: -8,
-                      padding: isCellInEditMode ? 0 : 8,
-                      width: "100%",
-                    }}
-                  >
-                    {isCellInEditMode ? (
-                      <input
-                        type="text"
-                        value={cellValue ? `${cellValue}` : ""}
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          const newValue =
-                            value && value.length > 0 ? value : null;
-
-                          setCellValue(newValue);
-                          updateProduct({
-                            ...p,
-                            name: newValue ? `${newValue}` : undefined,
-                          });
-                        }}
-                        onKeyUp={(e) => {
-                          if (e.key === "Enter") {
-                            updateProduct({
-                              ...p,
-                              name: cellValue ? `${cellValue}` : undefined,
-                            });
-                            setCellId(null);
-                            setCellValue(null);
-                          }
-                        }}
-                        style={{
-                          ...STYLES.INPUT.TEXT,
-                          width,
-                          padding: "7px 6px",
-                        }}
-                      />
-                    ) : (
-                      <div style={{ marginRight: 8 }}>
-                        {p.name ?? `Produit ${idx + 1}`}
-                      </div>
-                    )}
-                  </div>
-
-                  {!isCellInEditMode && (
-                    <button onClick={() => removeProduct(p)}>-</button>
-                  )}
-                </div>
-              </td>
-            );
-          })}
-
-          {/*
-           * PRODUCTS - ADD BUTTON
-           */}
-          <td>
-            <button onClick={() => addProduct(createEmptyProduct(nbProducts))}>
-              +
-            </button>
-          </td>
-        </tr>
-      </thead>
-
       <tbody>
         {/*
          * CRITERIAS
@@ -657,43 +463,6 @@ const DataTable = (props: DataTableProps) => {
             </tr>
           );
         })}
-
-        <tr>
-          {/*
-           * CRITERIA - ADD BUTTON
-           */}
-          <td>
-            <button
-              onClick={() => addCriteria(createEmptyCriteria(nbCriteria))}
-            >
-              +
-            </button>
-          </td>
-
-          {/*
-           * --------
-           */}
-          <td />
-
-          {/*
-           * CRITERIA - WEIGHT TOTAL
-           */}
-          <td style={STYLES.TD.CRITERIA_WEIGHT_TOTAL}>{weightTotal}</td>
-
-          {/*
-           * PRODUCTS - RANK
-           */}
-          {productsSorted.map((p) => (
-            <td key={p.id} style={STYLES.TD.RES_ARRAY_POS}>
-              #{p.rank ?? " -"}
-            </td>
-          ))}
-
-          {/*
-           * --------
-           */}
-          <td />
-        </tr>
       </tbody>
     </table>
   );
