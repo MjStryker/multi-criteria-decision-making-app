@@ -14,3 +14,13 @@ export const createEmptyProductCriteriaValue = (
   normalizedValue: undefined,
   weightedValue: undefined,
 });
+
+export const findProductWithCriteria = (
+  product: TProduct,
+  criteria: TCriteria,
+  productsWithCriterias: TProductWithCriteria[]
+) =>
+  productsWithCriterias.find(
+    ({ productId, criteriaId }) =>
+      product.id === productId && criteria.id === criteriaId
+  );

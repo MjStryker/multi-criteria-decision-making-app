@@ -1,7 +1,24 @@
+import { CSSProperties } from "react";
+import { TCriteria } from "../../../types/criterias";
+import { TProduct } from "../../../types/products";
+import { border } from "../../../styles/tables/tableCell";
 import { createEmptyCriteria } from "../../../utils/criterias/criterias";
-import useHandleCriterias from "../../../hooks/data/useHandleCriterias";
 
-type TableFooterProps = {};
+const STYLES = {
+  TD: {
+    PRODUCT_RANK: {
+      border,
+      textAlign: "right",
+      fontWeight: "bold",
+    } as CSSProperties,
+  },
+};
+
+type TableFooterProps = {
+  criterias: TCriteria[];
+  products: TProduct[];
+  addCriteria: Function;
+};
 
 const TableFooter = (props: TableFooterProps) => {
   return (
@@ -10,7 +27,11 @@ const TableFooter = (props: TableFooterProps) => {
        * CRITERIA - ADD BUTTON
        */}
       <td>
-        <button onClick={() => addCriteria(createEmptyCriteria(nbCriteria))}>
+        <button
+          onClick={() =>
+            props.addCriteria(createEmptyCriteria(props.criterias.length))
+          }
+        >
           +
         </button>
       </td>
@@ -21,15 +42,15 @@ const TableFooter = (props: TableFooterProps) => {
       <td />
 
       {/*
-       * CRITERIA - WEIGHT TOTAL
+       * --------
        */}
-      <td style={STYLES.TD.CRITERIA_WEIGHT_TOTAL}>{weightTotal}</td>
+      <td />
 
       {/*
        * PRODUCTS - RANK
        */}
-      {productsSorted.map((p) => (
-        <td key={p.id} style={STYLES.TD.RES_ARRAY_POS}>
+      {props.products.map((p) => (
+        <td key={p.id} style={STYLES.TD.PRODUCT_RANK}>
           #{p.rank ?? " -"}
         </td>
       ))}

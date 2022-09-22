@@ -3,6 +3,7 @@ import { TProduct } from "../../types/products";
 import { TProductWithCriteria } from "../../types/productsWithCriterias";
 import { TSortBy } from "../../types/arrays";
 import { compareFn } from "../arrays";
+import { findProductWithCriteria } from "../productsWithCriterias/productsWithCriterias";
 import { isDefined } from "../objects";
 import { nanoid } from "nanoid";
 import { sumCriteriasWeight } from "../criterias/criterias";
@@ -22,29 +23,6 @@ export const compareProductsByDefaultColumnIdxFn =
 export const compareProductsByRankFn =
   (sortBy: TSortBy) => (a: TProduct, b: TProduct) =>
     compareFn(sortBy)(a.rank, b.rank);
-
-export const findProductWithCriteria = (
-  product: TProduct,
-  criteria: TCriteria,
-  productsWithCriterias: TProductWithCriteria[]
-) =>
-  productsWithCriterias.find(
-    ({ productId, criteriaId }) =>
-      product.id === productId && criteria.id === criteriaId
-  );
-
-const getCriteriaWithProductsValues = (
-  criteria: TCriteria,
-  products: TProduct[],
-  productsWithCriterias: TProductWithCriteria[]
-) => ({
-  criteria,
-  products: products.map((product) => ({
-    product,
-    value: findProductWithCriteria(product, criteria, productsWithCriterias)
-      ?.value,
-  })),
-});
 
 export const getProductsWithCriteriasNormalizedWeightedValues = (
   products: TProduct[],

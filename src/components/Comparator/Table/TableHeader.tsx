@@ -1,13 +1,43 @@
+import { CSSProperties, useRef, useState } from "react";
+import { border, minWidth } from "../../../styles/tables/tableCell";
+
 import { COLORS } from "../../../constants/colors";
 import { CRITERIA } from "../../../constants/criterias";
 import { TProduct } from "../../../types/products";
 import { createEmptyProduct } from "../../../utils/products/products";
 
+const STYLES = {
+  INPUT: {
+    TEXT: {
+      fontSize: 16,
+      textAlign: "inherit",
+    } as CSSProperties,
+  },
+  TD: {
+    PRODUCT: {
+      width: "fit-content",
+      minWidth: minWidth,
+      maxWidth: minWidth,
+      border,
+    } as CSSProperties,
+  },
+} as const;
+
 type TableHeaderProps = {
   products: TProduct[];
+  addProduct: Function;
+  updateProduct: Function;
+  removeProduct: Function;
 };
 
 const TableHeader = (props: TableHeaderProps) => {
+  const inputRef = useRef(null);
+
+  const [cellId, setCellId] = useState<string | null>(null);
+  const [cellValue, setCellValue] = useState<string | number | boolean | null>(
+    null
+  );
+
   return (
     <thead>
       <tr>
@@ -64,7 +94,7 @@ const TableHeader = (props: TableHeaderProps) => {
                     setCellValue(p.name ?? null);
                   }}
                   onBlur={() => {
-                    updateProduct({
+                    props.updateProduct({
                       ...p,
                       name: cellValue ? `${cellValue}` : undefined,
                     });
@@ -87,14 +117,14 @@ const TableHeader = (props: TableHeaderProps) => {
                           value && value.length > 0 ? value : null;
 
                         setCellValue(newValue);
-                        updateProduct({
+                        props.updateProduct({
                           ...p,
                           name: newValue ? `${newValue}` : undefined,
                         });
                       }}
                       onKeyUp={(e) => {
                         if (e.key === "Enter") {
-                          updateProduct({
+                          props.updateProduct({
                             ...p,
                             name: cellValue ? `${cellValue}` : undefined,
                           });
@@ -104,7 +134,7 @@ const TableHeader = (props: TableHeaderProps) => {
                       }}
                       style={{
                         ...STYLES.INPUT.TEXT,
-                        width,
+                        width: minWidth,
                         padding: "7px 6px",
                       }}
                     />
@@ -116,7 +146,7 @@ const TableHeader = (props: TableHeaderProps) => {
                 </div>
 
                 {!isCellInEditMode && (
-                  <button onClick={() => removeProduct(p)}>-</button>
+                  <button onClick={() => props.removeProduct(p)}>-</button>
                 )}
               </div>
             </td>
@@ -127,7 +157,11 @@ const TableHeader = (props: TableHeaderProps) => {
          * PRODUCTS - ADD BUTTON
          */}
         <td>
-          <button onClick={() => addProduct(createEmptyProduct(nbProducts))}>
+          <button
+            onClick={() =>
+              props.addProduct(createEmptyProduct(props.products.length))
+            }
+          >
             +
           </button>
         </td>

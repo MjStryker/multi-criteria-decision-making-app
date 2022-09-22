@@ -5,7 +5,7 @@ import { TCriteria } from "../../types/criterias";
 import { TProduct } from "../../types/products";
 import { TProductWithCriteria } from "../../types/productsWithCriterias";
 import { compareFn } from "../../utils/arrays";
-import { findProductWithCriteria } from "../../utils/products/products";
+import { findProductWithCriteria } from "../../utils/productsWithCriterias/productsWithCriterias";
 import { isDefined } from "../../utils/objects";
 
 const useRankProducts = (

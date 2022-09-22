@@ -1,120 +1,62 @@
-import { CSSProperties, useRef, useState } from "react";
 import {
   clampCriteriaWeightValue,
   compareCriteriaByDefaultRowIdxFn,
   sumCriteriasWeight,
-} from "../utils/criterias/criterias";
-import {
-  compareProductsByDefaultColumnIdxFn,
-  getProductsWithCriteriasNormalizedWeightedValues,
-} from "../utils/products/products";
+} from "../../utils/criterias/criterias";
+import { useRef, useState } from "react";
 
-import { COLORS } from "../constants/colors";
-import { CRITERIA } from "../constants/criterias";
-import { SORT_BY } from "../constants/arrays";
-import { TCriteria } from "../types/criterias";
-import { TProduct } from "../types/products";
-import { TProductWithCriteria } from "../types/productsWithCriterias";
-import { border } from "../styles/tables/tableCell";
-import { capitalize } from "../utils/strings";
-import cordlessVacuumCleaner from "../data/cordlessVacuumCleaner";
-import { createEmptyProductCriteriaValue } from "../utils/productsWithCriterias/productsWithCriterias";
-import { isDefined } from "../utils/objects";
-import useClickOutside from "../hooks/useClickOutside";
-import useRankProducts from "../hooks/data/useRankProducts";
+import { CRITERIA } from "../../constants/criterias";
+import { DATA_TABLE_STYLES } from "./DataTable.styles";
+import { SORT_BY } from "../../constants/arrays";
+import TableFooter from "./Table/TableFooter";
+import TableHeader from "./Table/TableHeader";
+import { capitalize } from "../../utils/strings";
+import { compareProductsByDefaultColumnIdxFn } from "../../utils/products/products";
+import cordlessVacuumCleaner from "../../data/cordlessVacuumCleaner";
+import { createEmptyProductCriteriaValue } from "../../utils/productsWithCriterias/productsWithCriterias";
+import { isDefined } from "../../utils/objects";
+import { minWidth } from "../../styles/tables/tableCell";
+import useClickOutside from "../../hooks/useClickOutside";
+import useHandleCriterias from "../../hooks/data/useHandleCriterias";
+import useHandleProducts from "../../hooks/data/useHandleProducts";
+import useHandleProductsWithCriterias from "../../hooks/data/useHandleProductsWithCriterias";
 
-const width = 120;
-
-const STYLES = {
-  TEXT: {
-    MORE_INFO_CONTAINER: {
-      display: "flex",
-      justifyContent: "flex-end",
-      alignItems: "center",
-    } as CSSProperties,
-    MORE_INFO: {
-      marginLeft: 8,
-      fontSize: 12,
-      color: COLORS.GREY,
-    },
-  },
-  INPUT: {
-    TEXT: {
-      fontSize: 16,
-      textAlign: "inherit",
-    } as CSSProperties,
-  },
-  TD: {
-    BORDER: {
-      border,
-    } as CSSProperties,
-    CELL_VALUE: {
-      border,
-      textAlign: "right",
-    } as CSSProperties,
-    PRODUCT: {
-      width: "fit-content",
-      minWidth: width,
-      maxWidth: width,
-      border,
-    } as CSSProperties,
-    PRODUCTS_VALUE_TOTAL: {
-      textAlign: "right",
-      fontWeight: "bold",
-      border,
-    } as CSSProperties,
-    CRITERIA: {
-      width: "fit-content",
-      minWidth: 200,
-      border,
-    } as CSSProperties,
-    CRITERIA_BENEFICIAL: {
-      minWidth: 36,
-      border,
-    } as CSSProperties,
-    CRITERIA_WEIGHT: {
-      border,
-      textAlign: "right",
-      width: 40,
-    } as CSSProperties,
-    CRITERIA_WEIGHT_TOTAL: {
-      border,
-      textAlign: "right",
-      fontWeight: "bold",
-    } as CSSProperties,
-  },
-} as const;
+const criteriasFromDB = cordlessVacuumCleaner.criterias;
+const productsFromDB = cordlessVacuumCleaner.products;
+const productsWithCriteriasFromDB = cordlessVacuumCleaner.productsWithCriterias;
 
 type DataTableProps = {};
 
 const DataTable = (props: DataTableProps) => {
   const inputRef = useRef(null);
 
-  const [criteriasFromDB, setCriteriasFromDB] = useState(
-    cordlessVacuumCleaner.criterias
-  );
-  const [productsFromDB, setProductsFromDB] = useState(
-    cordlessVacuumCleaner.products
-  );
-  const [productsWithCriteriasFromDB, setProductsWithCriteriasFromDB] =
-    useState(cordlessVacuumCleaner.productsWithCriterias);
-
-  const { productsWithCriteriasNormalizedWeightedValues } =
-    getProductsWithCriteriasNormalizedWeightedValues(
-      productsFromDB,
-      criteriasFromDB,
-      productsWithCriteriasFromDB
-    );
-
-  const { rankedProducts } = useRankProducts(
-    productsFromDB,
-    criteriasFromDB,
+  const [criterias, setCriterias] = useState(criteriasFromDB);
+  const [products, setProducts] = useState(productsFromDB);
+  const [productsWithCriterias, setProductsWithCriterias] = useState(
     productsWithCriteriasFromDB
   );
 
-  const criterias = criteriasFromDB;
-  const products = rankedProducts;
-  const productsWithCriterias = productsWithCriteriasNormalizedWeightedValues;
+  const { addProductWithCriteria, setProductCriteriaValue } =
+    useHandleProductsWithCriterias(
+      productsWithCriterias,
+      setProductsWithCriterias,
+      products,
+      criterias
+    );
+
+  const { addCriteria, updateCriteria, removeCriteria } = useHandleCriterias(
+    setCriterias,
+    products,
+    addProductWithCriteria
+  );
+
+  const { addProduct, updateProduct, removeProduct } = useHandleProducts(
+    products,
+    setProducts,
+    criterias,
+    productsWithCriterias,
+    addProductWithCriteria
+  );
 
   const [cellId, setCellId] = useState<string | null>(null);
   const [cellValue, setCellValue] = useState<string | number | boolean | null>(
@@ -143,6 +85,13 @@ const DataTable = (props: DataTableProps) => {
       cellPadding={8}
       style={{ height: "fit-content", borderCollapse: "collapse" }}
     >
+      <TableHeader
+        products={products}
+        addProduct={addProduct}
+        updateProduct={updateProduct}
+        removeProduct={removeProduct}
+      />
+
       <tbody>
         {/*
          * CRITERIAS
@@ -158,7 +107,7 @@ const DataTable = (props: DataTableProps) => {
               {/*
                * CRITERIA - NAME
                */}
-              <td style={STYLES.TD.CRITERIA}>
+              <td style={DATA_TABLE_STYLES.TD.CRITERIA}>
                 <div
                   style={{
                     display: "flex",
@@ -207,7 +156,7 @@ const DataTable = (props: DataTableProps) => {
                           }
                         }}
                         style={{
-                          ...STYLES.INPUT.TEXT,
+                          ...DATA_TABLE_STYLES.INPUT.TEXT,
                           width: "100%",
                           padding: "7px 6px",
                         }}
@@ -231,7 +180,7 @@ const DataTable = (props: DataTableProps) => {
               {/*
                * CRITERIA - BENEFICIAL
                */}
-              <td style={STYLES.TD.CRITERIA_BENEFICIAL}>
+              <td style={DATA_TABLE_STYLES.TD.CRITERIA_BENEFICIAL}>
                 <div
                   ref={
                     isCriteriaBeneficialCellInEditMode ? inputRef : undefined
@@ -250,7 +199,7 @@ const DataTable = (props: DataTableProps) => {
                     setCellValue(null);
                   }}
                   style={{
-                    ...STYLES.INPUT.TEXT,
+                    ...DATA_TABLE_STYLES.INPUT.TEXT,
                     width: "100%",
                     margin: -8,
                     padding: 8,
@@ -293,7 +242,7 @@ const DataTable = (props: DataTableProps) => {
               {/*
                * CRITERIA - WEIGHT
                */}
-              <td style={STYLES.TD.CRITERIA_WEIGHT}>
+              <td style={DATA_TABLE_STYLES.TD.CRITERIA_WEIGHT}>
                 <div
                   ref={isCriteriaWeightCellInEditMode ? inputRef : undefined}
                   onClick={() => {
@@ -354,19 +303,19 @@ const DataTable = (props: DataTableProps) => {
                         }
                       }}
                       style={{
-                        ...STYLES.INPUT.TEXT,
+                        ...DATA_TABLE_STYLES.INPUT.TEXT,
                         width: "100%",
                         padding: "7px 6px",
                       }}
                     />
                   ) : (
-                    <div style={STYLES.TEXT.MORE_INFO_CONTAINER}>
+                    <div style={DATA_TABLE_STYLES.TEXT.MORE_INFO_CONTAINER}>
                       <div>
                         {isDefined(c.weight) && !isNaN(c.weight)
                           ? c.weight
                           : "-"}
                       </div>
-                      <div style={STYLES.TEXT.MORE_INFO}>
+                      <div style={DATA_TABLE_STYLES.TEXT.MORE_INFO}>
                         {isDefined(c.weight) && !isNaN(c.weight)
                           ? `(${(c.weight / weightTotal).toFixed(3)})`
                           : ""}
@@ -394,7 +343,7 @@ const DataTable = (props: DataTableProps) => {
                     : null;
 
                 return (
-                  <td key={v.id} style={STYLES.TD.CELL_VALUE}>
+                  <td key={v.id} style={DATA_TABLE_STYLES.TD.CELL_VALUE}>
                     <div
                       ref={isCellInEditMode ? inputRef : undefined}
                       onClick={() => {
@@ -441,16 +390,16 @@ const DataTable = (props: DataTableProps) => {
                             }
                           }}
                           style={{
-                            ...STYLES.INPUT.TEXT,
-                            width,
+                            ...DATA_TABLE_STYLES.INPUT.TEXT,
+                            width: minWidth,
                             padding: "7px 6px",
                           }}
                         />
                       ) : (
-                        <div style={STYLES.TEXT.MORE_INFO_CONTAINER}>
+                        <div style={DATA_TABLE_STYLES.TEXT.MORE_INFO_CONTAINER}>
                           <div>{value ?? "-"}</div>
                           {isDefined(v.weightedValue) ? (
-                            <div style={STYLES.TEXT.MORE_INFO}>
+                            <div style={DATA_TABLE_STYLES.TEXT.MORE_INFO}>
                               ({v.weightedValue?.toFixed(3) ?? "-"})
                             </div>
                           ) : null}
@@ -464,6 +413,12 @@ const DataTable = (props: DataTableProps) => {
           );
         })}
       </tbody>
+
+      <TableFooter
+        criterias={criterias}
+        products={products}
+        addCriteria={addCriteria}
+      />
     </table>
   );
 };

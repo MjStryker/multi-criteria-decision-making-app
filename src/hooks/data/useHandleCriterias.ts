@@ -2,17 +2,14 @@ import { TCriteria } from "../../types/criterias";
 import { TProduct } from "../../types/products";
 import { createEmptyProductCriteriaValue } from "../../utils/productsWithCriterias/productsWithCriterias";
 import useHandleProductsWithCriterias from "./useHandleProductsWithCriterias";
-import { useState } from "react";
 
 const useHandleCriterias = (
-  initialCriterias: TCriteria[],
+  setCriterias: React.Dispatch<React.SetStateAction<TCriteria[]>>,
   products: TProduct[],
   addProductWithCriteria: ReturnType<
     typeof useHandleProductsWithCriterias
   >["addProductWithCriteria"]
 ) => {
-  const [criterias, setCriterias] = useState(initialCriterias);
-
   const addCriteria = (criteria: TCriteria) => {
     setCriterias((prev) => [...prev, criteria]);
     products.forEach((product) => {
@@ -31,7 +28,12 @@ const useHandleCriterias = (
 
   const removeCriteria = ({ id }: TCriteria) =>
     setCriterias((prev) => prev.filter((c) => c.id !== id));
-  return { criterias, addCriteria, updateCriteria, removeCriteria };
+
+  return {
+    addCriteria,
+    updateCriteria,
+    removeCriteria,
+  };
 };
 
 export default useHandleCriterias;

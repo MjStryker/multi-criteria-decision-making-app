@@ -1,17 +1,43 @@
+import { useEffect, useState } from "react";
+
 import { TCriteria } from "../../types/criterias";
 import { TProduct } from "../../types/products";
+import { TProductWithCriteria } from "../../types/productsWithCriterias";
 import { createEmptyProductCriteriaValue } from "../../utils/productsWithCriterias/productsWithCriterias";
+import { deepEqual } from "../../utils/objects";
 import useHandleProductsWithCriterias from "./useHandleProductsWithCriterias";
-import { useState } from "react";
+import useRankProducts from "./useRankProducts";
 
 const useHandleProducts = (
-  initialProducts: TProduct[],
+  products: TProduct[],
+  setProducts: React.Dispatch<React.SetStateAction<TProduct[]>>,
   criterias: TCriteria[],
+  productsWithCriterias: TProductWithCriteria[],
   addProductWithCriteria: ReturnType<
     typeof useHandleProductsWithCriterias
   >["addProductWithCriteria"]
 ) => {
-  const [products, setProducts] = useState(initialProducts);
+  const [rankedProducts, setRankedProducts] = useState(
+    useRankProducts(products, criterias, productsWithCriterias).rankedProducts
+  );
+
+  // FIXME: Getting ranked products here causes a bug when editing products list
+  const { rankedProducts: newRankedProducts } = useRankProducts(
+    products,
+    criterias,
+    productsWithCriterias
+  );
+
+  useEffect(() => {
+    if (!deepEqual(rankedProducts, newRankedProducts)) {
+      setRankedProducts(newRankedProducts);
+    }
+  }, [products, rankedProducts, newRankedProducts]);
+
+  useEffect(() => {
+    setProducts(rankedProducts);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rankedProducts]);
 
   const addProduct = (product: TProduct) => {
     setProducts((prev) => [...prev, product]);
@@ -32,7 +58,11 @@ const useHandleProducts = (
   const removeProduct = ({ id }: TProduct) =>
     setProducts((prev) => prev.filter((p) => p.id !== id));
 
-  return { products, addProduct, updateProduct, removeProduct };
+  return {
+    addProduct,
+    updateProduct,
+    removeProduct,
+  };
 };
 
 export default useHandleProducts;
