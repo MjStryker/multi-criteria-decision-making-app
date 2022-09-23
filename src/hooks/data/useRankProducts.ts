@@ -1,21 +1,23 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { SORT_BY } from "../../constants/arrays";
 import { TCriteria } from "../../types/criterias";
 import { TProduct } from "../../types/products";
 import { TProductWithCriteria } from "../../types/productsWithCriterias";
 import { compareFn } from "../../utils/arrays";
+import { deepEqual } from "../../utils/objects";
 import { findProductWithCriteria } from "../../utils/productsWithCriterias/productsWithCriterias";
 import { isDefined } from "../../utils/objects";
 
 const useRankProducts = (
   products: TProduct[],
   criterias: TCriteria[],
-  productsWithCriterias: TProductWithCriteria[]
+  productsWithCriterias: TProductWithCriteria[],
+  setProducts: React.Dispatch<React.SetStateAction<TProduct[]>>
 ) => {
-  const [rankedProducts, setRankedProducts] = useState(products);
+  const [rankedProducts, setRankedProducts] = useState<TProduct[]>([]);
 
-  useEffect(() => {
+  const rankProductsFn: () => TProduct[] = useCallback(() => {
     /**
      * STEP 1 - Get normalized and weighted values for all products
      */
@@ -146,11 +148,27 @@ const useRankProducts = (
         rank: isDefined(ui) ? idx + 1 : undefined,
       }));
 
-    setRankedProducts(productsRank);
+    return productsRank;
+  }, [criterias, products, productsWithCriterias]);
+
+  useEffect(() => {
+    if (deepEqual(products, rankedProducts)) {
+      console.log("Equals..");
+      return;
+    }
+
+    const newRankedProducts = rankProductsFn();
+
+    if (!deepEqual(rankedProducts, newRankedProducts)) {
+      console.log("New ranks!");
+      setRankedProducts(newRankedProducts);
+      setProducts(newRankedProducts);
+    }
 
     return () => {
       console.log("[ useEffect ] useRankProducts -> cleanup()");
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [products, criterias, productsWithCriterias]);
 
   return { rankedProducts };

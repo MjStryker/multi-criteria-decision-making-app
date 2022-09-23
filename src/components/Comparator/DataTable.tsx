@@ -3,11 +3,14 @@ import {
   compareCriteriaByDefaultRowIdxFn,
   sumCriteriasWeight,
 } from "../../utils/criterias/criterias";
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 import { CRITERIA } from "../../constants/criterias";
 import { DATA_TABLE_STYLES } from "./DataTable.styles";
 import { SORT_BY } from "../../constants/arrays";
+import { TCriteria } from "../../types/criterias";
+import { TProduct } from "../../types/products";
+import { TProductWithCriteria } from "../../types/productsWithCriterias";
 import TableFooter from "./Table/TableFooter";
 import TableHeader from "./Table/TableHeader";
 import { capitalize } from "../../utils/strings";
@@ -20,6 +23,7 @@ import useClickOutside from "../../hooks/useClickOutside";
 import useHandleCriterias from "../../hooks/data/useHandleCriterias";
 import useHandleProducts from "../../hooks/data/useHandleProducts";
 import useHandleProductsWithCriterias from "../../hooks/data/useHandleProductsWithCriterias";
+import useRankProducts from "../../hooks/data/useRankProducts";
 
 const criteriasFromDB = cordlessVacuumCleaner.criterias;
 const productsFromDB = cordlessVacuumCleaner.products;
@@ -36,25 +40,50 @@ const DataTable = (props: DataTableProps) => {
     productsWithCriteriasFromDB
   );
 
+  const onSetCriterias: React.Dispatch<React.SetStateAction<TCriteria[]>> =
+    useCallback(
+      (newState) => {
+        setCriterias(newState);
+      },
+      [setCriterias]
+    );
+
+  const onSetProducts: React.Dispatch<React.SetStateAction<TProduct[]>> =
+    useCallback(
+      (newState) => {
+        setProducts(newState);
+      },
+      [setProducts]
+    );
+
+  const onSetProductsWithCriterias: React.Dispatch<
+    React.SetStateAction<TProductWithCriteria[]>
+  > = useCallback(
+    (newState) => {
+      setProductsWithCriterias(newState);
+    },
+    [setProductsWithCriterias]
+  );
+
+  useRankProducts(products, criterias, productsWithCriterias, onSetProducts);
+
   const { addProductWithCriteria, setProductCriteriaValue } =
     useHandleProductsWithCriterias(
       productsWithCriterias,
-      setProductsWithCriterias,
+      onSetProductsWithCriterias,
       products,
       criterias
     );
 
   const { addCriteria, updateCriteria, removeCriteria } = useHandleCriterias(
-    setCriterias,
+    onSetCriterias,
     products,
     addProductWithCriteria
   );
 
   const { addProduct, updateProduct, removeProduct } = useHandleProducts(
-    products,
-    setProducts,
+    onSetProducts,
     criterias,
-    productsWithCriterias,
     addProductWithCriteria
   );
 

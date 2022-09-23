@@ -22,44 +22,46 @@ type TableFooterProps = {
 
 const TableFooter = (props: TableFooterProps) => {
   return (
-    <tr>
-      {/*
-       * CRITERIA - ADD BUTTON
-       */}
-      <td>
-        <button
-          onClick={() =>
-            props.addCriteria(createEmptyCriteria(props.criterias.length))
-          }
-        >
-          +
-        </button>
-      </td>
-
-      {/*
-       * --------
-       */}
-      <td />
-
-      {/*
-       * --------
-       */}
-      <td />
-
-      {/*
-       * PRODUCTS - RANK
-       */}
-      {props.products.map((p) => (
-        <td key={p.id} style={STYLES.TD.PRODUCT_RANK}>
-          #{p.rank ?? " -"}
+    <tfoot>
+      <tr>
+        {/*
+         * CRITERIA - ADD BUTTON
+         */}
+        <td>
+          <button
+            onClick={() =>
+              props.addCriteria(createEmptyCriteria(props.criterias.length))
+            }
+          >
+            +
+          </button>
         </td>
-      ))}
 
-      {/*
-       * --------
-       */}
-      <td />
-    </tr>
+        {/*
+         * --------
+         */}
+        <td />
+
+        {/*
+         * --------
+         */}
+        <td />
+
+        {/*
+         * PRODUCTS - RANK
+         */}
+        {props.products.map((p) => (
+          <td key={p.id} style={STYLES.TD.PRODUCT_RANK}>
+            #{p.rank ?? " -"}
+          </td>
+        ))}
+
+        {/*
+         * --------
+         */}
+        <td />
+      </tr>
+    </tfoot>
   );
 };
 
