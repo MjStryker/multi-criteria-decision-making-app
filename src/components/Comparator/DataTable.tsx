@@ -1,6 +1,8 @@
+import { areDefined, isDefined } from "../../utils/objects";
 import {
   clampCriteriaWeightValue,
   compareCriteriaByDefaultRowIdxFn,
+  getCriteriasNormalizedMaxWeight,
   sumCriteriasWeight,
 } from "../../utils/criterias/criterias";
 import { useCallback, useRef, useState } from "react";
@@ -17,7 +19,6 @@ import { capitalize } from "../../utils/strings";
 import { compareProductsByDefaultColumnIdxFn } from "../../utils/products/products";
 import cordlessVacuumCleaner from "../../data/cordlessVacuumCleaner";
 import { createEmptyProductCriteriaValue } from "../../utils/productsWithCriterias/productsWithCriterias";
-import { isDefined } from "../../utils/objects";
 import { minWidth } from "../../styles/tables/tableCell";
 import useClickOutside from "../../hooks/useClickOutside";
 import useHandleCriterias from "../../hooks/data/useHandleCriterias";
@@ -105,6 +106,8 @@ const DataTable = (props: DataTableProps) => {
 
   const weightTotal = sumCriteriasWeight(criterias);
 
+  const maxWeight = getCriteriasNormalizedMaxWeight(criterias, weightTotal);
+
   const productsSorted = products.sort(
     compareProductsByDefaultColumnIdxFn(SORT_BY.ASC)
   );
@@ -141,7 +144,12 @@ const DataTable = (props: DataTableProps) => {
               {/*
                * CRITERIA - NAME / UNIT
                */}
-              <td style={DATA_TABLE_STYLES.TD.CRITERIA}>
+              <td
+                style={{
+                  ...DATA_TABLE_STYLES.TD.CRITERIA,
+                  position: "relative",
+                }}
+              >
                 <div
                   style={{
                     display: "flex",
@@ -253,6 +261,30 @@ const DataTable = (props: DataTableProps) => {
                     <button onClick={() => removeCriteria(c)}>-</button>
                   )}
                 </div>
+
+                {!isCriteriaNameCellInEditMode && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      left: 0,
+                      bottom: -3.75,
+                      width: "100%",
+                      padding: "0 8px",
+                      boxSizing: "border-box",
+                    }}
+                  >
+                    <progress
+                      max="100"
+                      value={
+                        areDefined([maxWeight, c.weight])
+                          ? (((c.weight ?? 1) / weightTotal) * 100) /
+                            (maxWeight ?? 1)
+                          : 0
+                      }
+                      style={{ width: "100%", height: 4 }}
+                    />
+                  </div>
+                )}
               </td>
 
               {/*

@@ -23,3 +23,19 @@ export const compareCriteriaByDefaultRowIdxFn =
 
 export const sumCriteriasWeight = (criterias: TCriteria[]) =>
   criterias.reduce((total, criteria) => total + (criteria.weight ?? 0), 0);
+
+export const getCriteriasNormalizedMaxWeight = (
+  criterias: TCriteria[],
+  weightTotal: number
+) => {
+  let max: number | null = null;
+
+  criterias.forEach((c) => {
+    const part = c.weight ? c.weight / weightTotal : null;
+    if (!max || (max && part && part > max)) {
+      max = part;
+    }
+  });
+
+  return max;
+};
