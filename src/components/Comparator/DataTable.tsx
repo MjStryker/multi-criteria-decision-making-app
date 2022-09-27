@@ -33,6 +33,7 @@ type DataTableProps = {};
 
 const DataTable = (props: DataTableProps) => {
   const inputRef = useRef(null);
+  const secondaryInputRef = useRef(null);
 
   const [criterias, setCriterias] = useState(criteriasFromDB);
   const [products, setProducts] = useState(productsFromDB);
@@ -91,11 +92,15 @@ const DataTable = (props: DataTableProps) => {
   const [cellValue, setCellValue] = useState<string | number | boolean | null>(
     null
   );
+  const [cellSecondaryValue, setCellSecondaryValue] = useState<
+    string | number | boolean | null
+  >(null);
 
   useClickOutside(inputRef, () => {
     console.log(`[ Cell ] Clicked away from ${cellId}..`);
     setCellId(null);
     setCellValue(null);
+    setCellSecondaryValue(null);
   });
 
   const weightTotal = sumCriteriasWeight(criterias);
@@ -134,7 +139,7 @@ const DataTable = (props: DataTableProps) => {
           return (
             <tr key={c.id}>
               {/*
-               * CRITERIA - NAME
+               * CRITERIA - NAME / UNIT
                */}
               <td style={DATA_TABLE_STYLES.TD.CRITERIA}>
                 <div
@@ -153,43 +158,87 @@ const DataTable = (props: DataTableProps) => {
                       console.log(`[ Cell ] Selected ${c.id}-name`);
                       setCellId(`${c.id}-name`);
                       setCellValue(c.name ?? null);
+                      setCellSecondaryValue(c.unit ?? null);
                     }}
                     onBlur={() => {
-                      updateCriteria({ ...c, name: `${cellValue}` });
-                      setCellId(null);
-                      setCellValue(null);
+                      updateCriteria({
+                        ...c,
+                        name: `${cellValue}`,
+                        unit: `${cellSecondaryValue}`,
+                      });
+                      // setCellId(null);
+                      // setCellValue(null);
+                      // setCellSecondaryValue(null);
                     }}
                     style={{
+                      display: "flex",
+                      alignItems: "center",
                       margin: -8,
                       padding: isCriteriaNameCellInEditMode ? 0 : 8,
                       width: "100%",
                     }}
                   >
                     {isCriteriaNameCellInEditMode ? (
-                      <input
-                        type="text"
-                        value={cellValue ? `${cellValue}` : ""}
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          const newValue =
-                            value && value.length > 0 ? value : null;
+                      <div style={{ display: "flex" }}>
+                        {/*
+                         * CRITERIA - NAME
+                         */}
+                        <input
+                          type="text"
+                          value={cellValue ? `${cellValue}` : ""}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            const newValue =
+                              value && value.length > 0 ? value : null;
 
-                          setCellValue(newValue);
-                          updateCriteria({ ...c, name: `${newValue}` });
-                        }}
-                        onKeyUp={(e) => {
-                          if (e.key === "Enter") {
-                            updateCriteria({ ...c, name: `${cellValue}` });
-                            setCellId(null);
-                            setCellValue(null);
+                            setCellValue(newValue);
+                            updateCriteria({ ...c, name: `${newValue}` });
+                          }}
+                          onKeyUp={(e) => {
+                            if (e.key === "Enter") {
+                              updateCriteria({ ...c, name: `${cellValue}` });
+                              // setCellId(null);
+                              // setCellValue(null);
+                            }
+                          }}
+                          style={{
+                            ...DATA_TABLE_STYLES.INPUT.TEXT,
+                            padding: "7px 6px",
+                          }}
+                        />
+                        {/*
+                         * CRITERIA - UNIT
+                         */}
+                        <input
+                          type="text"
+                          value={
+                            cellSecondaryValue ? `${cellSecondaryValue}` : ""
                           }
-                        }}
-                        style={{
-                          ...DATA_TABLE_STYLES.INPUT.TEXT,
-                          width: "100%",
-                          padding: "7px 6px",
-                        }}
-                      />
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            const newValue =
+                              value && value.length > 0 ? value : null;
+
+                            setCellSecondaryValue(newValue);
+                            updateCriteria({ ...c, unit: `${newValue}` });
+                          }}
+                          onKeyUp={(e) => {
+                            if (e.key === "Enter") {
+                              updateCriteria({
+                                ...c,
+                                unit: `${cellSecondaryValue}`,
+                              });
+                              // setCellId(null);
+                              // setCellSecondaryValue(null);
+                            }
+                          }}
+                          style={{
+                            ...DATA_TABLE_STYLES.INPUT.TEXT,
+                            maxWidth: 60,
+                            padding: "7px 6px",
+                          }}
+                        />
+                      </div>
                     ) : (
                       <div style={{ marginRight: 8 }}>
                         {c.name
