@@ -1,11 +1,14 @@
 import { useCallback, useState } from "react";
 
+import { SORT_BY } from "../../constants/arrays";
 import { TCriteria } from "../../types/criterias";
 import { TProduct } from "../../types/products";
 import { TProductWithCriteria } from "../../types/productsWithCriterias";
 import TableBody from "./Table/TableBody";
 import TableFooter from "./Table/TableFooter";
 import TableHeader from "./Table/TableHeader";
+import { compareCriteriaByDefaultRowIdxFn } from "../../utils/criterias/criterias";
+import { compareProductsByDefaultColumnIdxFn } from "../../utils/products/products";
 import cordlessVacuumCleaner from "../../data/cordlessVacuumCleaner";
 import useHandleCriterias from "../../hooks/data/useHandleCriterias";
 import useHandleProducts from "../../hooks/data/useHandleProducts";
@@ -16,9 +19,7 @@ const criteriasFromDB = cordlessVacuumCleaner.criterias;
 const productsFromDB = cordlessVacuumCleaner.products;
 const productsWithCriteriasFromDB = cordlessVacuumCleaner.productsWithCriterias;
 
-type DataTableProps = {};
-
-const DataTable = (props: DataTableProps) => {
+const DataTable = () => {
   const [criterias, setCriterias] = useState(criteriasFromDB);
   const [products, setProducts] = useState(productsFromDB);
   const [productsWithCriterias, setProductsWithCriterias] = useState(
@@ -72,6 +73,14 @@ const DataTable = (props: DataTableProps) => {
     addProductWithCriteria
   );
 
+  const criteriasSorted = criterias.sort(
+    compareCriteriaByDefaultRowIdxFn(SORT_BY.ASC)
+  );
+
+  const productsSorted = products.sort(
+    compareProductsByDefaultColumnIdxFn(SORT_BY.ASC)
+  );
+
   return (
     <table
       cellSpacing={0}
@@ -79,23 +88,23 @@ const DataTable = (props: DataTableProps) => {
       style={{ height: "fit-content", borderCollapse: "collapse" }}
     >
       <TableHeader
-        products={products}
+        products={productsSorted}
         addProduct={addProduct}
         updateProduct={updateProduct}
         removeProduct={removeProduct}
       />
 
       <TableBody
-        criterias={criterias}
-        products={products}
+        criterias={criteriasSorted}
+        products={productsSorted}
         updateCriteria={updateCriteria}
         removeCriteria={removeCriteria}
         setProductCriteriaValue={setProductCriteriaValue}
       />
 
       <TableFooter
-        criterias={criterias}
-        products={products}
+        criterias={criteriasSorted}
+        products={productsSorted}
         addCriteria={addCriteria}
       />
     </table>
