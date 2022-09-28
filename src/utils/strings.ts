@@ -1,9 +1,9 @@
-export const isValidNonEmptyString = (
+export function isValidNonEmptyString(
   str: string | null | undefined
-): boolean => {
+): str is string {
   if (str && typeof str === "string" && str.length > 0) return true;
   return false;
-};
+}
 
 export function isAnyValidNonEmptyString(str: any[]): boolean {
   return str.some(isValidNonEmptyString);

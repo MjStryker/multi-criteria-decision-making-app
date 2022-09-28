@@ -1,10 +1,10 @@
 import {
   getCriteriasNormalizedMaxWeight,
   sumCriteriasWeight,
-} from "../../../utils/criterias/criterias";
+} from "../../../../utils/criterias/criterias";
 
-import { TCriteria } from "../../../types/criterias";
-import { TProduct } from "../../../types/products";
+import { TCriteria } from "../../../../types/criterias";
+import { TProduct } from "../../../../types/products";
 import TableBodyRow from "./TableBodyRow";
 
 type TableBodyProps = {

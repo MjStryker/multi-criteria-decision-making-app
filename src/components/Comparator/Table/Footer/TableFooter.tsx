@@ -1,8 +1,8 @@
 import { CSSProperties } from "react";
-import { TCriteria } from "../../../types/criterias";
-import { TProduct } from "../../../types/products";
-import { border } from "../../../styles/tables/tableCell";
-import { createEmptyCriteria } from "../../../utils/criterias/criterias";
+import { TCriteria } from "../../../../types/criterias";
+import { TProduct } from "../../../../types/products";
+import { border } from "../../../../styles/tables/tableCell";
+import { createEmptyCriteria } from "../../../../utils/criterias/criterias";
 
 const STYLES = {
   TD: {

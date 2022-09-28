@@ -1,11 +1,11 @@
 import { CSSProperties, useRef, useState } from "react";
-import { border, minWidth } from "../../../styles/tables/tableCell";
+import { border, minWidth } from "../../../../styles/tables/tableCell";
 
-import { COLORS } from "../../../constants/colors";
-import { CRITERIA } from "../../../constants/criterias";
-import { TProduct } from "../../../types/products";
-import { createEmptyProduct } from "../../../utils/products/products";
-import useClickOutside from "../../../hooks/useClickOutside";
+import { COLORS } from "../../../../constants/colors";
+import { CRITERIA } from "../../../../constants/criterias";
+import { TProduct } from "../../../../types/products";
+import { createEmptyProduct } from "../../../../utils/products/products";
+import useClickOutside from "../../../../hooks/useClickOutside";
 
 const STYLES = {
   INPUT: {
