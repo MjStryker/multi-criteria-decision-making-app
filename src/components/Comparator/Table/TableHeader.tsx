@@ -5,6 +5,7 @@ import { COLORS } from "../../../constants/colors";
 import { CRITERIA } from "../../../constants/criterias";
 import { TProduct } from "../../../types/products";
 import { createEmptyProduct } from "../../../utils/products/products";
+import useClickOutside from "../../../hooks/useClickOutside";
 
 const STYLES = {
   INPUT: {
@@ -37,6 +38,12 @@ const TableHeader = (props: TableHeaderProps) => {
   const [cellValue, setCellValue] = useState<string | number | boolean | null>(
     null
   );
+
+  useClickOutside(inputRef, () => {
+    console.log(`[ Cell ] Clicked away from ${cellId}..`);
+    setCellId(null);
+    setCellValue(null);
+  });
 
   return (
     <thead>
