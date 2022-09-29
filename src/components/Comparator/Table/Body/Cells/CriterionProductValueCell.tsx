@@ -1,10 +1,10 @@
-import { useRef, useState } from "react";
+import { deepEqual, isDefined } from "../../../../../utils/objects";
+import { useLayoutEffect, useRef, useState } from "react";
 
 import { DATA_TABLE_STYLES } from "../../../DataTable.styles";
 import { TCriteria } from "../../../../../types/criterias";
 import { TProduct } from "../../../../../types/products";
 import { TProductWithCriteria } from "../../../../../types/productsWithCriterias";
-import { isDefined } from "../../../../../utils/objects";
 import { minWidth } from "../../../../../styles/tables/tableCell";
 import useClickOutside from "../../../../../hooks/useClickOutside";
 
@@ -17,51 +17,82 @@ type CriterionProductValueCellProps = {
 
 const CriterionProductValueCell = (props: CriterionProductValueCellProps) => {
   const cellRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const [cellId, setCellId] = useState<string | null>(null);
+  const cellId = props.criteriaProductValue?.id;
+
+  const [editMode, setEditMode] = useState(false);
+
+  const defaultValue = props.criteriaProductValue?.value ?? null;
 
   const [criterionProductNewValue, setCriterionProductNewValue] = useState<
     number | null
-  >(props.criteriaProductValue?.value ?? null);
+  >(defaultValue);
 
   useClickOutside(cellRef, () => {
-    console.log(`[ Cell ] Clicked away from ${cellId}..`);
-    setCellId(null);
-    setCriterionProductNewValue(null);
+    if (editMode) {
+      console.log(`[ Cell ] Clicked away from ${cellId}`);
+      closeEditMode();
+    }
   });
 
-  const isCellInEditMode = props.criteriaProductValue?.id === cellId;
+  /**
+   * Since the input has a conditional render (only displayed when editMode is true),
+   * we have to make sure that the browser gets the time to render the input before focusing it
+   */
+  useLayoutEffect(() => {
+    if (editMode) {
+      inputRef.current?.focus();
+    }
+  }, [editMode]);
+
+  const applyChanges = () => {
+    if (!deepEqual(criterionProductNewValue, defaultValue)) {
+      console.log("[ Cell ] Update value:", {
+        old: defaultValue,
+        new: criterionProductNewValue,
+      });
+
+      props.setProductCriteriaValue(
+        props.product,
+        props.criterion,
+        criterionProductNewValue
+      );
+    }
+  };
+
+  const handleCellClick = () => {
+    if (!editMode) {
+      console.log(`[ Cell ] Selected ${cellId}`);
+      setEditMode(true);
+      setCriterionProductNewValue(defaultValue);
+    }
+  };
+
+  const closeEditMode = (save = true) => {
+    inputRef.current?.blur();
+    if (save === true) {
+      applyChanges();
+    }
+    setEditMode(false);
+    setCriterionProductNewValue(defaultValue);
+  };
 
   return (
-    <td style={DATA_TABLE_STYLES.TD.CELL_VALUE}>
+    <td
+      style={DATA_TABLE_STYLES.TD.CELL_VALUE}
+      ref={cellRef}
+      onClick={handleCellClick}
+    >
       <div
-        ref={isCellInEditMode ? cellRef : undefined}
-        onClick={() => {
-          if (isCellInEditMode) {
-            return;
-          }
-          console.log(`[ Cell ] Selected ${props.criteriaProductValue?.id}`);
-          setCellId(props.criteriaProductValue?.id ?? "default");
-          setCriterionProductNewValue(
-            props.criteriaProductValue?.value ?? null
-          );
-        }}
-        onBlur={() => {
-          props.setProductCriteriaValue(
-            props.product,
-            props.criterion,
-            criterionProductNewValue
-          );
-          setCellId(null);
-          setCriterionProductNewValue(null);
-        }}
         style={{
           margin: -8,
-          padding: isCellInEditMode ? 0 : 8,
+          padding: editMode ? 0 : 8,
         }}
       >
-        {isCellInEditMode ? (
+        {editMode ? (
           <input
+            ref={inputRef}
             type="number"
             value={
               isDefined(criterionProductNewValue) &&
@@ -78,21 +109,15 @@ const CriterionProductValueCell = (props: CriterionProductValueCellProps) => {
                   : null;
 
               setCriterionProductNewValue(newValue);
-              props.setProductCriteriaValue(
-                props.product,
-                props.criterion,
-                newValue
-              );
             }}
             onKeyUp={(e) => {
-              if (e.key === "Enter") {
-                props.setProductCriteriaValue(
-                  props.product,
-                  props.criterion,
-                  criterionProductNewValue
-                );
-                setCellId(null);
-                setCriterionProductNewValue(null);
+              switch (e.key) {
+                case "Enter":
+                  closeEditMode();
+                  break;
+                case "Escape":
+                  closeEditMode(false);
+                  break;
               }
             }}
             style={{
