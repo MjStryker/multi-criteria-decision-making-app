@@ -29,16 +29,17 @@ const CriterionProductValueCell = (props: CriterionProductValueCellProps) => {
     number | null
   >(defaultValue);
 
-  useClickOutside(cellRef, () => {
+  const handleClickOutsideCell = () => {
     if (editMode) {
       console.log(`[ Cell ] Clicked away from ${cellId}`);
       closeEditMode();
     }
-  });
+  };
+
+  useClickOutside(cellRef, handleClickOutsideCell);
 
   /**
-   * Since the input has a conditional render (only displayed when editMode is true),
-   * we have to make sure that the browser gets the time to render the input before focusing it
+   * Forces focus on input when edit mode is true
    */
   useLayoutEffect(() => {
     if (editMode) {
@@ -61,7 +62,7 @@ const CriterionProductValueCell = (props: CriterionProductValueCellProps) => {
     }
   };
 
-  const handleCellClick = () => {
+  const handleClickOnCell = () => {
     if (!editMode) {
       console.log(`[ Cell ] Selected ${cellId}`);
       setEditMode(true);
@@ -80,9 +81,9 @@ const CriterionProductValueCell = (props: CriterionProductValueCellProps) => {
 
   return (
     <td
-      style={DATA_TABLE_STYLES.TD.CELL_VALUE}
       ref={cellRef}
-      onClick={handleCellClick}
+      style={DATA_TABLE_STYLES.TD.CELL_VALUE}
+      onClick={handleClickOnCell}
     >
       <div
         style={{
