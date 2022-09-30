@@ -1,3 +1,4 @@
+import { areDefined, deepEqual } from "../../../../../utils/objects";
 import {
   capitalize,
   isValidNonEmptyString,
@@ -6,7 +7,6 @@ import { useRef, useState } from "react";
 
 import { DATA_TABLE_STYLES } from "../../../DataTable.styles";
 import { TCriteria } from "../../../../../types/criterias";
-import { areDefined } from "../../../../../utils/objects";
 import useClickOutside from "../../../../../hooks/useClickOutside";
 
 type CriterionNameUnitCellProps = {
@@ -19,32 +19,87 @@ type CriterionNameUnitCellProps = {
 };
 
 const CriterionNameUnitCell = (props: CriterionNameUnitCellProps) => {
-  const cellRef = useRef(null);
+  const cellRef = useRef<HTMLTableCellElement>(null);
 
-  const [cellId, setCellId] = useState<string | null>(null);
+  const cellId = `criterion-name-unit-${props.criterion.id}`;
+
+  const [editMode, setEditMode] = useState(false);
+
+  const defaultCriterionName = isValidNonEmptyString(props.criterion.name)
+    ? props.criterion.name
+    : null;
+
+  const defaultCriterionUnit = isValidNonEmptyString(props.criterion.unit)
+    ? props.criterion.unit
+    : null;
 
   const [criterionNewName, setCriterionNewName] = useState<string | null>(
-    isValidNonEmptyString(props.criterion.name) ? props.criterion.name : null
+    defaultCriterionName
   );
   const [criterionNewUnit, setCriterionNewUnit] = useState<string | null>(
-    isValidNonEmptyString(props.criterion.unit) ? props.criterion.unit : null
+    defaultCriterionUnit
   );
 
-  useClickOutside(cellRef, () => {
-    console.log(`[ Cell ] Clicked away from ${cellId}..`);
-    setCellId(null);
-    setCriterionNewName(null);
-    setCriterionNewUnit(null);
-  });
+  const handleClickOutsideCell = () => {
+    if (editMode) {
+      console.log(`[ Cell ] Clicked away from cell ${cellId}`);
+      closeEditMode();
+    }
+  };
 
-  const isCriteriaNameCellInEditMode = `${props.criterion.id}-name` === cellId;
+  useClickOutside(cellRef, handleClickOutsideCell);
+
+  const applyNameChanges = () => {
+    if (!deepEqual(criterionNewName, defaultCriterionName)) {
+      console.log("[ Cell ] Update name:", {
+        old: defaultCriterionName,
+        new: criterionNewName,
+      });
+
+      props.updateCriteria({
+        ...props.criterion,
+        name: `${criterionNewName}`,
+      });
+    }
+  };
+
+  const applyUnitChanges = () => {
+    if (!deepEqual(criterionNewUnit, defaultCriterionUnit)) {
+      console.log("[ Cell ] Update unit:", {
+        old: defaultCriterionName,
+        new: criterionNewName,
+      });
+
+      props.updateCriteria({
+        ...props.criterion,
+        unit: `${criterionNewUnit}`,
+      });
+    }
+  };
+
+  const handleClickOnCell = () => {
+    if (!editMode) {
+      console.log(`[ Cell ] Selected cell ${cellId}`);
+      setEditMode(true);
+      setCriterionNewName(defaultCriterionName);
+      setCriterionNewUnit(defaultCriterionUnit);
+    }
+  };
+
+  const closeEditMode = () => {
+    setEditMode(false);
+    setCriterionNewName(defaultCriterionName);
+    setCriterionNewUnit(defaultCriterionUnit);
+  };
 
   return (
     <td
+      ref={cellRef}
       style={{
         ...DATA_TABLE_STYLES.TD.CRITERIA,
         position: "relative",
       }}
+      onClick={handleClickOnCell}
     >
       <div
         style={{
@@ -54,35 +109,15 @@ const CriterionNameUnitCell = (props: CriterionNameUnitCellProps) => {
         }}
       >
         <div
-          ref={isCriteriaNameCellInEditMode ? cellRef : undefined}
-          onClick={() => {
-            if (isCriteriaNameCellInEditMode) {
-              return;
-            }
-            console.log(`[ Cell ] Selected ${props.criterion.id}-name`);
-            setCellId(`${props.criterion.id}-name`);
-            setCriterionNewName(props.criterion.name ?? null);
-            setCriterionNewUnit(props.criterion.unit ?? null);
-          }}
-          onBlur={() => {
-            props.updateCriteria({
-              ...props.criterion,
-              name: `${criterionNewName}`,
-              unit: `${criterionNewUnit}`,
-            });
-            // setCellId(null);
-            // setCellValue(null);
-            // setCellSecondaryValue(null);
-          }}
           style={{
             display: "flex",
             alignItems: "center",
             margin: -8,
-            padding: isCriteriaNameCellInEditMode ? 0 : 8,
+            padding: editMode ? 0 : 8,
             width: "100%",
           }}
         >
-          {isCriteriaNameCellInEditMode ? (
+          {editMode ? (
             <div style={{ display: "flex" }}>
               {/*
                * CRITERIA - NAME
@@ -92,22 +127,17 @@ const CriterionNameUnitCell = (props: CriterionNameUnitCellProps) => {
                 value={criterionNewName ? `${criterionNewName}` : ""}
                 onChange={(e) => {
                   const value = e.target.value;
-                  const newValue = value && value.length > 0 ? value : null;
+                  const newValue = isValidNonEmptyString(value) ? value : null;
 
                   setCriterionNewName(newValue);
-                  props.updateCriteria({
-                    ...props.criterion,
-                    name: `${newValue}`,
-                  });
                 }}
                 onKeyUp={(e) => {
-                  if (e.key === "Enter") {
-                    props.updateCriteria({
-                      ...props.criterion,
-                      name: `${criterionNewName}`,
-                    });
-                    // setCellId(null);
-                    // setCellValue(null);
+                  switch (e.key) {
+                    case "Enter":
+                      applyNameChanges();
+                      break;
+                    case "Escape":
+                      break;
                   }
                 }}
                 style={{
@@ -123,22 +153,17 @@ const CriterionNameUnitCell = (props: CriterionNameUnitCellProps) => {
                 value={criterionNewUnit ? `${criterionNewUnit}` : ""}
                 onChange={(e) => {
                   const value = e.target.value;
-                  const newValue = value && value.length > 0 ? value : null;
+                  const newValue = isValidNonEmptyString(value) ? value : null;
 
                   setCriterionNewUnit(newValue);
-                  props.updateCriteria({
-                    ...props.criterion,
-                    unit: `${newValue}`,
-                  });
                 }}
                 onKeyUp={(e) => {
-                  if (e.key === "Enter") {
-                    props.updateCriteria({
-                      ...props.criterion,
-                      unit: `${criterionNewUnit}`,
-                    });
-                    // setCellId(null);
-                    // setCellSecondaryValue(null);
+                  switch (e.key) {
+                    case "Enter":
+                      applyUnitChanges();
+                      break;
+                    case "Escape":
+                      break;
                   }
                 }}
                 style={{
@@ -158,14 +183,14 @@ const CriterionNameUnitCell = (props: CriterionNameUnitCellProps) => {
           )}
         </div>
 
-        {!isCriteriaNameCellInEditMode && (
+        {!editMode && (
           <button onClick={() => props.removeCriteria(props.criterion)}>
             -
           </button>
         )}
       </div>
 
-      {!isCriteriaNameCellInEditMode && (
+      {!editMode && (
         <div
           style={{
             position: "absolute",
