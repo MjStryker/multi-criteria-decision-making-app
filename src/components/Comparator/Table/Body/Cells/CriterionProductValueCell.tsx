@@ -16,10 +16,10 @@ type CriterionProductValueCellProps = {
 };
 
 const CriterionProductValueCell = (props: CriterionProductValueCellProps) => {
-  const cellRef = useRef(null);
+  const cellRef = useRef<HTMLTableCellElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const cellId = props.criteriaProductValue?.id;
+  const cellId = `value-${props.criteriaProductValue?.id}`;
 
   const [editMode, setEditMode] = useState(false);
 
@@ -29,15 +29,6 @@ const CriterionProductValueCell = (props: CriterionProductValueCellProps) => {
     number | null
   >(defaultValue);
 
-  const handleClickOutsideCell = () => {
-    if (editMode) {
-      console.log(`[ Cell ] Clicked away from ${cellId}`);
-      closeEditMode();
-    }
-  };
-
-  useClickOutside(cellRef, handleClickOutsideCell);
-
   /**
    * Forces focus on input when edit mode is true
    */
@@ -46,6 +37,15 @@ const CriterionProductValueCell = (props: CriterionProductValueCellProps) => {
       inputRef.current?.focus();
     }
   }, [editMode]);
+
+  const handleClickOutsideCell = () => {
+    if (editMode) {
+      console.log(`[ Cell ] Clicked away from cell ${cellId}`);
+      closeEditMode();
+    }
+  };
+
+  useClickOutside(cellRef, handleClickOutsideCell);
 
   const applyChanges = () => {
     if (!deepEqual(criterionProductNewValue, defaultValue)) {
@@ -64,7 +64,7 @@ const CriterionProductValueCell = (props: CriterionProductValueCellProps) => {
 
   const handleClickOnCell = () => {
     if (!editMode) {
-      console.log(`[ Cell ] Selected ${cellId}`);
+      console.log(`[ Cell ] Selected cell ${cellId}`);
       setEditMode(true);
       setCriterionProductNewValue(defaultValue);
     }
@@ -89,6 +89,7 @@ const CriterionProductValueCell = (props: CriterionProductValueCellProps) => {
         style={{
           margin: -8,
           padding: editMode ? 0 : 8,
+          width: "100%",
         }}
       >
         {editMode ? (
