@@ -28,12 +28,12 @@ const CriterionProductValueCell = (props: CriterionProductValueCellProps) => {
 
   const [editMode, setEditMode] = useState(false);
 
-  const defaultValue = props.criteriaProductValue?.value ?? null;
+  const currentValue = props.criteriaProductValue?.value ?? null;
 
   const [criterionProductNewValue, setCriterionProductNewValue] =
-    useState(defaultValue);
+    useState(currentValue);
 
-  const valueChanged = !deepEqual(criterionProductNewValue, defaultValue);
+  const valueChanged = !deepEqual(criterionProductNewValue, currentValue);
 
   /**
    * Forces focus on input when entering edit mode state
@@ -47,8 +47,8 @@ const CriterionProductValueCell = (props: CriterionProductValueCellProps) => {
   const handleClickOnCell = () => {
     if (!editMode) {
       console.log(`[ Cell ] Selected cell ${cellId}`);
+      setCriterionProductNewValue(currentValue);
       setEditMode(true);
-      setCriterionProductNewValue(defaultValue);
     }
   };
 
@@ -65,7 +65,7 @@ const CriterionProductValueCell = (props: CriterionProductValueCellProps) => {
   const applyChanges = () => {
     if (valueChanged) {
       console.log("[ Cell ] Update value:", {
-        old: { value: defaultValue },
+        old: { value: currentValue },
         new: { value: criterionProductNewValue },
       });
 
@@ -116,10 +116,10 @@ const CriterionProductValueCell = (props: CriterionProductValueCellProps) => {
                 case "Escape":
                   if (valueChanged) {
                     console.log("[ Cell ] Abort changes:", {
-                      current: defaultValue,
+                      current: currentValue,
                       abort: criterionProductNewValue,
                     });
-                    setCriterionProductNewValue(defaultValue);
+                    setCriterionProductNewValue(currentValue);
                   }
                   closeEditMode();
                   break;
@@ -133,11 +133,7 @@ const CriterionProductValueCell = (props: CriterionProductValueCellProps) => {
           />
         ) : (
           <div style={DATA_TABLE_STYLES.TEXT.MORE_INFO_CONTAINER}>
-            <div>
-              {isValidNumber(props.criteriaProductValue?.value)
-                ? props.criteriaProductValue?.value
-                : "-"}
-            </div>
+            <div>{isValidNumber(currentValue) ? currentValue : "-"}</div>
             {isValidNumber(props.criteriaProductValue?.weightedValue) ? (
               <div style={DATA_TABLE_STYLES.TEXT.MORE_INFO}>
                 ({props.criteriaProductValue?.weightedValue?.toFixed(3) ?? "-"})

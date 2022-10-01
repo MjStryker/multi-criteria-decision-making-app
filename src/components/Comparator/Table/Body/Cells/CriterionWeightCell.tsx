@@ -24,11 +24,12 @@ const CriterionWeightCell = (props: CriterionWeightCellProps) => {
 
   const [editMode, setEditMode] = useState(false);
 
-  const defaultValue = props.criterion.weight ?? null;
+  const currentWeightValue = props.criterion.weight ?? null;
 
-  const [criterionNewWeight, setCriterionNewWeight] = useState(defaultValue);
+  const [criterionNewWeight, setCriterionNewWeight] =
+    useState(currentWeightValue);
 
-  const weightChanged = !deepEqual(criterionNewWeight, defaultValue);
+  const weightChanged = !deepEqual(criterionNewWeight, currentWeightValue);
 
   /**
    * Forces focus on input when entering edit mode state
@@ -43,7 +44,7 @@ const CriterionWeightCell = (props: CriterionWeightCellProps) => {
     if (!editMode) {
       console.log(`[ Cell ] Selected cell ${cellId}`);
       setEditMode(true);
-      setCriterionNewWeight(defaultValue);
+      setCriterionNewWeight(currentWeightValue);
     }
   };
 
@@ -61,7 +62,7 @@ const CriterionWeightCell = (props: CriterionWeightCellProps) => {
     if (weightChanged) {
       console.log("[ Cell ] Update value:", {
         criterion: props.criterion,
-        old: { weight: defaultValue },
+        old: { weight: currentWeightValue },
         new: { weight: criterionNewWeight },
       });
 
@@ -112,10 +113,10 @@ const CriterionWeightCell = (props: CriterionWeightCellProps) => {
                   if (weightChanged) {
                     console.log("[ Cell ] Abort changes:", {
                       criterion: props.criterion,
-                      current: { weight: defaultValue },
+                      current: { weight: currentWeightValue },
                       abort: { weight: criterionNewWeight },
                     });
-                    setCriterionNewWeight(defaultValue);
+                    setCriterionNewWeight(currentWeightValue);
                   }
                   closeEditMode();
                   break;
@@ -130,14 +131,12 @@ const CriterionWeightCell = (props: CriterionWeightCellProps) => {
         ) : (
           <div style={DATA_TABLE_STYLES.TEXT.MORE_INFO_CONTAINER}>
             <div>
-              {isValidNumber(props.criterion.weight)
-                ? props.criterion.weight
-                : "-"}
+              {isValidNumber(currentWeightValue) ? currentWeightValue : "-"}
             </div>
             <div style={DATA_TABLE_STYLES.TEXT.MORE_INFO}>
-              {isValidNumber(props.criterion.weight) &&
+              {isValidNumber(currentWeightValue) &&
               isValidNumber(props.weightTotal)
-                ? `(${(props.criterion.weight / props.weightTotal).toFixed(3)})`
+                ? `(${(currentWeightValue / props.weightTotal).toFixed(3)})`
                 : null}
             </div>
           </div>

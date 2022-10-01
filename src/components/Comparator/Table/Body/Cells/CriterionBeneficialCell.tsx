@@ -17,20 +17,24 @@ const CriterionBeneficialCell = (props: CriterionBeneficialCellProps) => {
 
   const [editMode, setEditMode] = useState(false);
 
-  const defaultValue = isDefined(props.criterion.beneficial)
+  const currentBeneficialValue = isDefined(props.criterion.beneficial)
     ? props.criterion.beneficial
     : null;
 
-  const [criterionNewBeneficial, setCriterionNewBeneficial] =
-    useState(defaultValue);
+  const [criterionNewBeneficial, setCriterionNewBeneficial] = useState(
+    currentBeneficialValue
+  );
 
-  const beneficialChanged = !deepEqual(criterionNewBeneficial, defaultValue);
+  const beneficialChanged = !deepEqual(
+    criterionNewBeneficial,
+    currentBeneficialValue
+  );
 
   const handleClickOnCell = () => {
     if (!editMode) {
       console.log(`[ Cell ] Selected cell ${cellId}`);
       setEditMode(true);
-      setCriterionNewBeneficial(defaultValue);
+      setCriterionNewBeneficial(currentBeneficialValue);
     }
   };
 
@@ -48,7 +52,7 @@ const CriterionBeneficialCell = (props: CriterionBeneficialCellProps) => {
     if (beneficialChanged) {
       console.log("[ Cell ] Update value:", {
         criterion: props.criterion,
-        old: { beneficial: defaultValue },
+        old: { beneficial: currentBeneficialValue },
         new: { beneficial: criterionNewBeneficial },
       });
 
@@ -96,9 +100,9 @@ const CriterionBeneficialCell = (props: CriterionBeneficialCellProps) => {
           </div>
         ) : (
           <div style={{ textAlign: "center" }}>
-            {props.criterion.beneficial === true
+            {currentBeneficialValue === true
               ? "+"
-              : props.criterion.beneficial === false
+              : currentBeneficialValue === false
               ? "-"
               : "??"}
           </div>
