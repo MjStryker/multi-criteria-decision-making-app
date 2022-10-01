@@ -58,7 +58,7 @@ const DataTable = () => {
     productsWithCriterias
   );
 
-  const applyRankProducts = useCallback(() => {
+  const updateProductsRanks = useCallback(() => {
     if (rankedProducts.length > 0) {
       console.log({
         products,
@@ -74,7 +74,7 @@ const DataTable = () => {
   }, [products, rankedProducts]);
 
   useEffect(() => {
-    applyRankProducts();
+    updateProductsRanks();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rankedProducts]);
 
