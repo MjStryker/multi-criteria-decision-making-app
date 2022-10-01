@@ -16,3 +16,9 @@ export function areValidNonEmptyStrings(str: any[]): boolean {
 export function capitalize(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
+
+export function parseStringAsNumber(str: string): number | null {
+  return isValidNonEmptyString(str) && !isNaN(parseFloat(str))
+    ? parseFloat(str)
+    : null;
+}

@@ -20,8 +20,10 @@ type CriterionNameUnitCellProps = {
 
 const CriterionNameUnitCell = (props: CriterionNameUnitCellProps) => {
   const cellRef = useRef<HTMLTableCellElement>(null);
-
   const cellId = `criterion-name-unit-${props.criterion.id}`;
+
+  const inputNameRef = useRef<HTMLInputElement>(null);
+  const inputUnitRef = useRef<HTMLInputElement>(null);
 
   const [editMode, setEditMode] = useState(false);
 
@@ -40,17 +42,45 @@ const CriterionNameUnitCell = (props: CriterionNameUnitCellProps) => {
     defaultCriterionUnit
   );
 
+  const criterionNameChanged = !deepEqual(
+    criterionNewName,
+    defaultCriterionName
+  );
+  const criterionUnitChanged = !deepEqual(
+    criterionNewUnit,
+    defaultCriterionUnit
+  );
+
+  const handleClickOnCell = () => {
+    if (!editMode) {
+      console.log(`[ Cell ] Selected cell ${cellId}`);
+      setEditMode(true);
+      setCriterionNewName(defaultCriterionName);
+      setCriterionNewUnit(defaultCriterionUnit);
+    }
+  };
+
   const handleClickOutsideCell = () => {
     if (editMode) {
       console.log(`[ Cell ] Clicked away from cell ${cellId}`);
+      applyChanges();
       closeEditMode();
     }
   };
 
   useClickOutside(cellRef, handleClickOutsideCell);
 
+  const closeEditMode = () => {
+    setEditMode(false);
+  };
+
+  const applyChanges = () => {
+    criterionNameChanged && applyNameChanges();
+    criterionUnitChanged && applyUnitChanges();
+  };
+
   const applyNameChanges = () => {
-    if (!deepEqual(criterionNewName, defaultCriterionName)) {
+    if (criterionNameChanged) {
       console.log("[ Cell ] Update name:", {
         old: defaultCriterionName,
         new: criterionNewName,
@@ -64,7 +94,7 @@ const CriterionNameUnitCell = (props: CriterionNameUnitCellProps) => {
   };
 
   const applyUnitChanges = () => {
-    if (!deepEqual(criterionNewUnit, defaultCriterionUnit)) {
+    if (criterionUnitChanged) {
       console.log("[ Cell ] Update unit:", {
         old: defaultCriterionName,
         new: criterionNewName,
@@ -77,29 +107,14 @@ const CriterionNameUnitCell = (props: CriterionNameUnitCellProps) => {
     }
   };
 
-  const handleClickOnCell = () => {
-    if (!editMode) {
-      console.log(`[ Cell ] Selected cell ${cellId}`);
-      setEditMode(true);
-      setCriterionNewName(defaultCriterionName);
-      setCriterionNewUnit(defaultCriterionUnit);
-    }
-  };
-
-  const closeEditMode = () => {
-    setEditMode(false);
-    setCriterionNewName(defaultCriterionName);
-    setCriterionNewUnit(defaultCriterionUnit);
-  };
-
   return (
     <td
       ref={cellRef}
+      onClick={handleClickOnCell}
       style={{
         ...DATA_TABLE_STYLES.TD.CRITERIA,
         position: "relative",
       }}
-      onClick={handleClickOnCell}
     >
       <div
         style={{
@@ -123,20 +138,34 @@ const CriterionNameUnitCell = (props: CriterionNameUnitCellProps) => {
                * CRITERIA - NAME
                */}
               <input
+                ref={inputNameRef}
                 type="text"
-                value={criterionNewName ? `${criterionNewName}` : ""}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  const newValue = isValidNonEmptyString(value) ? value : null;
-
-                  setCriterionNewName(newValue);
-                }}
+                value={
+                  isValidNonEmptyString(criterionNewName)
+                    ? criterionNewName
+                    : ""
+                }
+                onChange={(e) =>
+                  setCriterionNewName(
+                    isValidNonEmptyString(e.target.value)
+                      ? e.target.value
+                      : null
+                  )
+                }
                 onKeyUp={(e) => {
                   switch (e.key) {
                     case "Enter":
-                      applyNameChanges();
+                      inputNameRef.current?.blur();
                       break;
                     case "Escape":
+                      if (criterionNameChanged) {
+                        console.log("[ Cell ] Abort changes:", {
+                          current: defaultCriterionName,
+                          abort: criterionNewName,
+                        });
+                        setCriterionNewName(defaultCriterionName);
+                      }
+                      inputNameRef.current?.blur();
                       break;
                   }
                 }}
@@ -149,20 +178,34 @@ const CriterionNameUnitCell = (props: CriterionNameUnitCellProps) => {
                * CRITERIA - UNIT
                */}
               <input
+                ref={inputUnitRef}
                 type="text"
-                value={criterionNewUnit ? `${criterionNewUnit}` : ""}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  const newValue = isValidNonEmptyString(value) ? value : null;
-
-                  setCriterionNewUnit(newValue);
-                }}
+                value={
+                  isValidNonEmptyString(criterionNewUnit)
+                    ? criterionNewUnit
+                    : ""
+                }
+                onChange={(e) =>
+                  setCriterionNewUnit(
+                    isValidNonEmptyString(e.target.value)
+                      ? e.target.value
+                      : null
+                  )
+                }
                 onKeyUp={(e) => {
                   switch (e.key) {
                     case "Enter":
-                      applyUnitChanges();
+                      inputUnitRef.current?.blur();
                       break;
                     case "Escape":
+                      if (criterionUnitChanged) {
+                        console.log("[ Cell ] Abort changes:", {
+                          current: defaultCriterionUnit,
+                          abort: criterionNewUnit,
+                        });
+                        setCriterionNewUnit(defaultCriterionUnit);
+                      }
+                      inputUnitRef.current?.blur();
                       break;
                   }
                 }}

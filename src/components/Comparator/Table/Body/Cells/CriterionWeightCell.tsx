@@ -5,12 +5,15 @@ import { CRITERIA } from "../../../../../constants/criterias";
 import { DATA_TABLE_STYLES } from "../../../DataTable.styles";
 import { TCriteria } from "../../../../../types/criterias";
 import { clampCriteriaWeightValue } from "../../../../../utils/criterias/criterias";
+import { isValidNumber } from "../../../../../utils/numbers";
+import { parseStringAsNumber } from "../../../../../utils/strings";
 import useClickOutside from "../../../../../hooks/useClickOutside";
+import useHandleCriterias from "../../../../../hooks/data/useHandleCriterias";
 
 type CriterionWeightCellProps = {
   criterion: TCriteria;
   weightTotal: number | null;
-  updateCriteria: Function;
+  updateCriteria: ReturnType<typeof useHandleCriterias>["updateCriteria"];
 };
 
 const CriterionWeightCell = (props: CriterionWeightCellProps) => {
@@ -23,12 +26,12 @@ const CriterionWeightCell = (props: CriterionWeightCellProps) => {
 
   const defaultValue = props.criterion.weight ?? null;
 
-  const [criterionNewWeight, setCriterionNewWeight] = useState<number | null>(
-    defaultValue
-  );
+  const [criterionNewWeight, setCriterionNewWeight] = useState(defaultValue);
+
+  const weightChanged = !deepEqual(criterionNewWeight, defaultValue);
 
   /**
-   * Forces focus on input when edit mode is true
+   * Forces focus on input when entering edit mode state
    */
   useLayoutEffect(() => {
     if (editMode) {
@@ -36,9 +39,18 @@ const CriterionWeightCell = (props: CriterionWeightCellProps) => {
     }
   }, [editMode]);
 
+  const handleClickOnCell = () => {
+    if (!editMode) {
+      console.log(`[ Cell ] Selected cell ${cellId}`);
+      setEditMode(true);
+      setCriterionNewWeight(defaultValue);
+    }
+  };
+
   const handleClickOutsideCell = () => {
     if (editMode) {
       console.log(`[ Cell ] Clicked away from cell ${cellId}`);
+      applyChanges();
       closeEditMode();
     }
   };
@@ -46,10 +58,11 @@ const CriterionWeightCell = (props: CriterionWeightCellProps) => {
   useClickOutside(cellRef, handleClickOutsideCell);
 
   const applyChanges = () => {
-    if (!deepEqual(criterionNewWeight, defaultValue)) {
-      console.log("[ Cell ] Update criterion weight value:", {
-        old: defaultValue,
-        new: criterionNewWeight,
+    if (weightChanged) {
+      console.log("[ Cell ] Update value:", {
+        criterion: props.criterion,
+        old: { weight: defaultValue },
+        new: { weight: criterionNewWeight },
       });
 
       props.updateCriteria({
@@ -61,28 +74,16 @@ const CriterionWeightCell = (props: CriterionWeightCellProps) => {
     }
   };
 
-  const handleClickOnCell = () => {
-    if (!editMode) {
-      console.log(`[ Cell ] Selected cell ${cellId}`);
-      setEditMode(true);
-      setCriterionNewWeight(defaultValue);
-    }
-  };
-
-  const closeEditMode = (save = true) => {
+  const closeEditMode = () => {
     inputRef.current?.blur();
-    if (save === true) {
-      applyChanges();
-    }
     setEditMode(false);
-    setCriterionNewWeight(defaultValue);
   };
 
   return (
     <td
       ref={cellRef}
-      style={DATA_TABLE_STYLES.TD.CRITERIA_WEIGHT}
       onClick={handleClickOnCell}
+      style={DATA_TABLE_STYLES.TD.CRITERIA_WEIGHT}
     >
       <div
         style={{
@@ -97,29 +98,26 @@ const CriterionWeightCell = (props: CriterionWeightCellProps) => {
             type="number"
             min={CRITERIA.WEIGHT.MIN}
             max={CRITERIA.WEIGHT.MAX}
-            value={
-              isDefined(criterionNewWeight) &&
-              typeof criterionNewWeight === "number" &&
-              !isNaN(criterionNewWeight)
-                ? criterionNewWeight
-                : ""
+            value={isValidNumber(criterionNewWeight) ? criterionNewWeight : ""}
+            onChange={(e) =>
+              setCriterionNewWeight(parseStringAsNumber(e.target.value))
             }
-            onChange={(e) => {
-              const value = e.target.value;
-              const newValue =
-                isDefined(value) && !isNaN(parseFloat(value))
-                  ? clampCriteriaWeightValue(Number(value))
-                  : null;
-
-              setCriterionNewWeight(newValue);
-            }}
             onKeyUp={(e) => {
               switch (e.key) {
                 case "Enter":
+                  applyChanges();
                   closeEditMode();
                   break;
                 case "Escape":
-                  closeEditMode(false);
+                  if (weightChanged) {
+                    console.log("[ Cell ] Abort changes:", {
+                      criterion: props.criterion,
+                      current: { weight: defaultValue },
+                      abort: { weight: criterionNewWeight },
+                    });
+                    setCriterionNewWeight(defaultValue);
+                  }
+                  closeEditMode();
                   break;
               }
             }}
@@ -132,17 +130,15 @@ const CriterionWeightCell = (props: CriterionWeightCellProps) => {
         ) : (
           <div style={DATA_TABLE_STYLES.TEXT.MORE_INFO_CONTAINER}>
             <div>
-              {isDefined(props.criterion.weight) &&
-              !isNaN(props.criterion.weight)
+              {isValidNumber(props.criterion.weight)
                 ? props.criterion.weight
                 : "-"}
             </div>
             <div style={DATA_TABLE_STYLES.TEXT.MORE_INFO}>
-              {isDefined(props.criterion.weight) &&
-              isDefined(props.weightTotal) &&
-              !isNaN(props.criterion.weight)
+              {isValidNumber(props.criterion.weight) &&
+              isValidNumber(props.weightTotal)
                 ? `(${(props.criterion.weight / props.weightTotal).toFixed(3)})`
-                : ""}
+                : null}
             </div>
           </div>
         )}

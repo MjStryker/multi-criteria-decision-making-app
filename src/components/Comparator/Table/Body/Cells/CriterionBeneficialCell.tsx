@@ -1,8 +1,8 @@
+import { deepEqual, isDefined } from "../../../../../utils/objects";
 import { useRef, useState } from "react";
 
 import { DATA_TABLE_STYLES } from "../../../DataTable.styles";
 import { TCriteria } from "../../../../../types/criterias";
-import { isDefined } from "../../../../../utils/objects";
 import useClickOutside from "../../../../../hooks/useClickOutside";
 
 type CriterionBeneficialCellProps = {
@@ -13,41 +13,63 @@ type CriterionBeneficialCellProps = {
 const CriterionBeneficialCell = (props: CriterionBeneficialCellProps) => {
   const cellRef = useRef(null);
 
-  const [cellId, setCellId] = useState<string | null>(null);
+  const cellId = `criterion-beneficial-${props.criterion.id}`;
 
-  const [criterionNewBeneficial, setCriterionNewBeneficial] = useState<
-    boolean | null
-  >(isDefined(props.criterion.beneficial) ? props.criterion.beneficial : null);
+  const [editMode, setEditMode] = useState(false);
 
-  useClickOutside(cellRef, () => {
-    console.log(`[ Cell ] Clicked away from ${cellId}..`);
-    setCellId(null);
-    setCriterionNewBeneficial(null);
-  });
+  const defaultValue = isDefined(props.criterion.beneficial)
+    ? props.criterion.beneficial
+    : null;
 
-  const isCriteriaBeneficialCellInEditMode =
-    `${props.criterion.id}-beneficial` === cellId;
+  const [criterionNewBeneficial, setCriterionNewBeneficial] =
+    useState(defaultValue);
+
+  const beneficialChanged = !deepEqual(criterionNewBeneficial, defaultValue);
+
+  const handleClickOnCell = () => {
+    if (!editMode) {
+      console.log(`[ Cell ] Selected cell ${cellId}`);
+      setEditMode(true);
+      setCriterionNewBeneficial(defaultValue);
+    }
+  };
+
+  const handleClickOutsideCell = () => {
+    if (editMode) {
+      console.log(`[ Cell ] Clicked away from cell ${cellId}`);
+      applyChanges();
+      closeEditMode();
+    }
+  };
+
+  useClickOutside(cellRef, handleClickOutsideCell);
+
+  const applyChanges = () => {
+    if (beneficialChanged) {
+      console.log("[ Cell ] Update value:", {
+        criterion: props.criterion,
+        old: { beneficial: defaultValue },
+        new: { beneficial: criterionNewBeneficial },
+      });
+
+      props.updateCriteria({
+        ...props.criterion,
+        beneficial: criterionNewBeneficial === true,
+      });
+    }
+  };
+
+  const closeEditMode = () => {
+    setEditMode(false);
+  };
 
   return (
-    <td style={DATA_TABLE_STYLES.TD.CRITERIA_BENEFICIAL}>
+    <td
+      ref={cellRef}
+      onClick={handleClickOnCell}
+      style={DATA_TABLE_STYLES.TD.CRITERIA_BENEFICIAL}
+    >
       <div
-        ref={isCriteriaBeneficialCellInEditMode ? cellRef : undefined}
-        onClick={() => {
-          if (isCriteriaBeneficialCellInEditMode) {
-            return;
-          }
-          console.log(`[ Cell ] Selected ${props.criterion.id}-beneficial`);
-          setCellId(`${props.criterion.id}-beneficial`);
-          setCriterionNewBeneficial(props.criterion.beneficial ?? null);
-        }}
-        onBlur={() => {
-          props.updateCriteria({
-            ...props.criterion,
-            beneficial: criterionNewBeneficial === true,
-          });
-          setCellId(null);
-          setCriterionNewBeneficial(null);
-        }}
         style={{
           ...DATA_TABLE_STYLES.INPUT.TEXT,
           width: "100%",
@@ -55,29 +77,21 @@ const CriterionBeneficialCell = (props: CriterionBeneficialCellProps) => {
           padding: 8,
         }}
       >
-        {isCriteriaBeneficialCellInEditMode ? (
+        {editMode ? (
           <div style={{ display: "flex", alignItems: "center" }}>
             <div style={{ marginRight: 4, fontSize: 14 }}>
               Bénéfique (
-              {props.criterion.beneficial === true
+              {criterionNewBeneficial === true
                 ? "oui"
-                : props.criterion.beneficial === false
+                : criterionNewBeneficial === false
                 ? "non"
                 : "??"}
               )
             </div>
             <input
               type="checkbox"
-              checked={props.criterion.beneficial === true}
-              onChange={(e) => {
-                const checked = e.target.checked;
-
-                setCriterionNewBeneficial(checked);
-                props.updateCriteria({
-                  ...props.criterion,
-                  beneficial: checked,
-                });
-              }}
+              checked={criterionNewBeneficial === true}
+              onChange={(e) => setCriterionNewBeneficial(e.target.checked)}
             />
           </div>
         ) : (

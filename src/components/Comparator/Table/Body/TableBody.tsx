@@ -6,13 +6,17 @@ import {
 import { TCriteria } from "../../../../types/criterias";
 import { TProduct } from "../../../../types/products";
 import TableBodyRow from "./TableBodyRow";
+import useHandleCriterias from "../../../../hooks/data/useHandleCriterias";
+import useHandleProductsWithCriterias from "../../../../hooks/data/useHandleProductsWithCriterias";
 
 type TableBodyProps = {
   criterias: TCriteria[];
   products: TProduct[];
-  updateCriteria: Function;
-  removeCriteria: Function;
-  setProductCriteriaValue: Function;
+  updateCriteria: ReturnType<typeof useHandleCriterias>["updateCriteria"];
+  removeCriteria: ReturnType<typeof useHandleCriterias>["removeCriteria"];
+  setProductCriteriaValue: ReturnType<
+    typeof useHandleProductsWithCriterias
+  >["setProductCriteriaValue"];
 };
 
 const TableBody = (props: TableBodyProps) => {

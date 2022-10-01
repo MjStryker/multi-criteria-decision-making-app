@@ -6,6 +6,8 @@ import { TCriteria } from "../../../../types/criterias";
 import { TProduct } from "../../../../types/products";
 import { createEmptyProductCriteriaValue } from "../../../../utils/productsWithCriterias/productsWithCriterias";
 import productsWithCriterias from "../../../../data/cordlessVacuumCleaner/productsWithCriterias";
+import useHandleCriterias from "../../../../hooks/data/useHandleCriterias";
+import useHandleProductsWithCriterias from "../../../../hooks/data/useHandleProductsWithCriterias";
 
 type TableBodyRowProps = {
   criterion: TCriteria;
@@ -13,9 +15,11 @@ type TableBodyRowProps = {
   rowIdx: number;
   weightTotal: number;
   maxWeight: number | null;
-  updateCriteria: Function;
-  removeCriteria: Function;
-  setProductCriteriaValue: Function;
+  updateCriteria: ReturnType<typeof useHandleCriterias>["updateCriteria"];
+  removeCriteria: ReturnType<typeof useHandleCriterias>["removeCriteria"];
+  setProductCriteriaValue: ReturnType<
+    typeof useHandleProductsWithCriterias
+  >["setProductCriteriaValue"];
 };
 
 const TableBodyRow = (props: TableBodyRowProps) => {

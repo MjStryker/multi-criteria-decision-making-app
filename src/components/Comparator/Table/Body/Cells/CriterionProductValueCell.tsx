@@ -1,18 +1,23 @@
-import { deepEqual, isDefined } from "../../../../../utils/objects";
 import { useLayoutEffect, useRef, useState } from "react";
 
 import { DATA_TABLE_STYLES } from "../../../DataTable.styles";
 import { TCriteria } from "../../../../../types/criterias";
 import { TProduct } from "../../../../../types/products";
 import { TProductWithCriteria } from "../../../../../types/productsWithCriterias";
+import { deepEqual } from "../../../../../utils/objects";
+import { isValidNumber } from "../../../../../utils/numbers";
 import { minWidth } from "../../../../../styles/tables/tableCell";
+import { parseStringAsNumber } from "../../../../../utils/strings";
 import useClickOutside from "../../../../../hooks/useClickOutside";
+import useHandleProductsWithCriterias from "../../../../../hooks/data/useHandleProductsWithCriterias";
 
 type CriterionProductValueCellProps = {
   criterion: TCriteria;
   product: TProduct;
   criteriaProductValue: TProductWithCriteria | null;
-  setProductCriteriaValue: Function;
+  setProductCriteriaValue: ReturnType<
+    typeof useHandleProductsWithCriterias
+  >["setProductCriteriaValue"];
 };
 
 const CriterionProductValueCell = (props: CriterionProductValueCellProps) => {
@@ -25,12 +30,13 @@ const CriterionProductValueCell = (props: CriterionProductValueCellProps) => {
 
   const defaultValue = props.criteriaProductValue?.value ?? null;
 
-  const [criterionProductNewValue, setCriterionProductNewValue] = useState<
-    number | null
-  >(defaultValue);
+  const [criterionProductNewValue, setCriterionProductNewValue] =
+    useState(defaultValue);
+
+  const valueChanged = !deepEqual(criterionProductNewValue, defaultValue);
 
   /**
-   * Forces focus on input when edit mode is true
+   * Forces focus on input when entering edit mode state
    */
   useLayoutEffect(() => {
     if (editMode) {
@@ -38,9 +44,18 @@ const CriterionProductValueCell = (props: CriterionProductValueCellProps) => {
     }
   }, [editMode]);
 
+  const handleClickOnCell = () => {
+    if (!editMode) {
+      console.log(`[ Cell ] Selected cell ${cellId}`);
+      setEditMode(true);
+      setCriterionProductNewValue(defaultValue);
+    }
+  };
+
   const handleClickOutsideCell = () => {
     if (editMode) {
       console.log(`[ Cell ] Clicked away from cell ${cellId}`);
+      applyChanges();
       closeEditMode();
     }
   };
@@ -48,10 +63,10 @@ const CriterionProductValueCell = (props: CriterionProductValueCellProps) => {
   useClickOutside(cellRef, handleClickOutsideCell);
 
   const applyChanges = () => {
-    if (!deepEqual(criterionProductNewValue, defaultValue)) {
+    if (valueChanged) {
       console.log("[ Cell ] Update value:", {
-        old: defaultValue,
-        new: criterionProductNewValue,
+        old: { value: defaultValue },
+        new: { value: criterionProductNewValue },
       });
 
       props.setProductCriteriaValue(
@@ -62,28 +77,16 @@ const CriterionProductValueCell = (props: CriterionProductValueCellProps) => {
     }
   };
 
-  const handleClickOnCell = () => {
-    if (!editMode) {
-      console.log(`[ Cell ] Selected cell ${cellId}`);
-      setEditMode(true);
-      setCriterionProductNewValue(defaultValue);
-    }
-  };
-
-  const closeEditMode = (save = true) => {
+  const closeEditMode = () => {
     inputRef.current?.blur();
-    if (save === true) {
-      applyChanges();
-    }
     setEditMode(false);
-    setCriterionProductNewValue(defaultValue);
   };
 
   return (
     <td
       ref={cellRef}
-      style={DATA_TABLE_STYLES.TD.CELL_VALUE}
       onClick={handleClickOnCell}
+      style={DATA_TABLE_STYLES.TD.CELL_VALUE}
     >
       <div
         style={{
@@ -97,28 +100,28 @@ const CriterionProductValueCell = (props: CriterionProductValueCellProps) => {
             ref={inputRef}
             type="number"
             value={
-              isDefined(criterionProductNewValue) &&
-              typeof criterionProductNewValue === "number" &&
-              !isNaN(criterionProductNewValue)
+              isValidNumber(criterionProductNewValue)
                 ? criterionProductNewValue
                 : ""
             }
-            onChange={(e) => {
-              const value = e.target.value;
-              const newValue =
-                isDefined(value) && !isNaN(parseFloat(value))
-                  ? parseFloat(value)
-                  : null;
-
-              setCriterionProductNewValue(newValue);
-            }}
+            onChange={(e) =>
+              setCriterionProductNewValue(parseStringAsNumber(e.target.value))
+            }
             onKeyUp={(e) => {
               switch (e.key) {
                 case "Enter":
+                  applyChanges();
                   closeEditMode();
                   break;
                 case "Escape":
-                  closeEditMode(false);
+                  if (valueChanged) {
+                    console.log("[ Cell ] Abort changes:", {
+                      current: defaultValue,
+                      abort: criterionProductNewValue,
+                    });
+                    setCriterionProductNewValue(defaultValue);
+                  }
+                  closeEditMode();
                   break;
               }
             }}
@@ -130,8 +133,12 @@ const CriterionProductValueCell = (props: CriterionProductValueCellProps) => {
           />
         ) : (
           <div style={DATA_TABLE_STYLES.TEXT.MORE_INFO_CONTAINER}>
-            <div>{props.criteriaProductValue?.value ?? "-"}</div>
-            {isDefined(props.criteriaProductValue?.weightedValue) ? (
+            <div>
+              {isValidNumber(props.criteriaProductValue?.value)
+                ? props.criteriaProductValue?.value
+                : "-"}
+            </div>
+            {isValidNumber(props.criteriaProductValue?.weightedValue) ? (
               <div style={DATA_TABLE_STYLES.TEXT.MORE_INFO}>
                 ({props.criteriaProductValue?.weightedValue?.toFixed(3) ?? "-"})
               </div>
