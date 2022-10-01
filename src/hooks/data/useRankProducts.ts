@@ -34,7 +34,7 @@ const useRankProducts = (
     let allProductsTotalNonBeneficialValues = 0;
     let allProductsMinNonBeneficialValue: number | undefined = undefined;
 
-    const productsWithBeneficialAndNonBeneficialValues = products.map(
+    const productsWithBeneficialAndNonBeneficialValues = [...products].map(
       (product) => {
         let totalBeneficialValues = 0;
         let totalNonBeneficialValues = 0;
@@ -162,7 +162,6 @@ const useRankProducts = (
     if (!deepEqual(rankedProducts, newRankedProducts)) {
       console.log("New ranks!");
       setRankedProducts(newRankedProducts);
-      setProducts(newRankedProducts);
     }
 
     return () => {
