@@ -36,14 +36,15 @@ const useHandleProductsWithCriterias = (
     criteria: TCriteria,
     value: number | null
   ) => {
+    const res = [...productsWithCriterias];
     const productWithCriteria =
-      productsWithCriterias.find(
+      res.find(
         (e) => e.productId === product.id && e.criteriaId === criteria.id
       ) ?? createEmptyProductCriteriaValue(product, criteria);
 
     productWithCriteria.value = value ?? undefined;
 
-    setProductsWithCriterias((prev) => [...prev, productWithCriteria]);
+    setProductsWithCriterias(res);
   };
 
   const removeProductWithCriteria = (product: TProduct, criteria: TCriteria) =>
