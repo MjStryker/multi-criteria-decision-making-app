@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { SORT_BY } from "../../constants/arrays";
 import { TCriteria } from "../../types/criterias";
@@ -10,6 +10,7 @@ import TableHeader from "./Table/Header/TableHeader";
 import { compareCriteriaByDefaultRowIdxFn } from "../../utils/criterias/criterias";
 import { compareProductsByDefaultColumnIdxFn } from "../../utils/products/products";
 import cordlessVacuumCleaner from "../../data/cordlessVacuumCleaner";
+import { deepEqual } from "../../utils/objects";
 import useHandleCriterias from "../../hooks/data/useHandleCriterias";
 import useHandleProducts from "../../hooks/data/useHandleProducts";
 import useHandleProductsWithCriterias from "../../hooks/data/useHandleProductsWithCriterias";
@@ -51,7 +52,31 @@ const DataTable = () => {
     [setProductsWithCriterias]
   );
 
-  useRankProducts(products, criterias, productsWithCriterias, onSetProducts);
+  const { rankedProducts } = useRankProducts(
+    products,
+    criterias,
+    productsWithCriterias
+  );
+
+  const applyRankProducts = useCallback(() => {
+    if (rankedProducts.length > 0) {
+      console.log({
+        products,
+        rankedProducts,
+        equal: deepEqual(products, rankedProducts),
+      });
+
+      if (!deepEqual(products, rankedProducts)) {
+        console.log("Saving new ranks..");
+        setProducts(rankedProducts);
+      }
+    }
+  }, [products, rankedProducts]);
+
+  useEffect(() => {
+    applyRankProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rankedProducts]);
 
   const { addProductWithCriteria, setProductCriteriaValue } =
     useHandleProductsWithCriterias(

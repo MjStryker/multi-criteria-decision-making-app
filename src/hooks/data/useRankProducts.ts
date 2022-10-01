@@ -12,8 +12,8 @@ import { isDefined } from "../../utils/objects";
 const useRankProducts = (
   products: TProduct[],
   criterias: TCriteria[],
-  productsWithCriterias: TProductWithCriteria[],
-  setProducts: React.Dispatch<React.SetStateAction<TProduct[]>>
+  productsWithCriterias: TProductWithCriteria[]
+  // setProducts: React.Dispatch<React.SetStateAction<TProduct[]>>
 ) => {
   const [rankedProducts, setRankedProducts] = useState<TProduct[]>([]);
 
@@ -166,6 +166,7 @@ const useRankProducts = (
 
     return () => {
       console.log("[ useEffect ] useRankProducts -> cleanup()");
+      setRankedProducts([]);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [products, criterias, productsWithCriterias]);
