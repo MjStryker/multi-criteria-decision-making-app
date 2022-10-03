@@ -6,16 +6,16 @@ import {
 import { useRef, useState } from "react";
 
 import { DATA_TABLE_STYLES } from "../../../DataTable.styles";
-import { TCriteria } from "../../../../../types/criterias";
+import { TCriterion } from "../../../../../types/criteria";
 import useClickOutside from "../../../../../hooks/useClickOutside";
 
 type CriterionNameUnitCellProps = {
-  criterion: TCriteria;
+  criterion: TCriterion;
   rowIdx: number;
   weightTotal: number;
   maxWeight: number | null;
-  updateCriteria: Function;
-  removeCriteria: Function;
+  updateCriterion: Function;
+  removeCriterion: Function;
 };
 
 const CriterionNameUnitCell = (props: CriterionNameUnitCellProps) => {
@@ -86,7 +86,7 @@ const CriterionNameUnitCell = (props: CriterionNameUnitCellProps) => {
         new: criterionNewName,
       });
 
-      props.updateCriteria({
+      props.updateCriterion({
         ...props.criterion,
         name: `${criterionNewName}`,
       });
@@ -100,7 +100,7 @@ const CriterionNameUnitCell = (props: CriterionNameUnitCellProps) => {
         new: criterionNewName,
       });
 
-      props.updateCriteria({
+      props.updateCriterion({
         ...props.criterion,
         unit: `${criterionNewUnit}`,
       });
@@ -112,7 +112,7 @@ const CriterionNameUnitCell = (props: CriterionNameUnitCellProps) => {
       ref={cellRef}
       onClick={handleClickOnCell}
       style={{
-        ...DATA_TABLE_STYLES.TD.CRITERIA,
+        ...DATA_TABLE_STYLES.TD.CRITERION,
         position: "relative",
       }}
     >
@@ -135,7 +135,7 @@ const CriterionNameUnitCell = (props: CriterionNameUnitCellProps) => {
           {editMode ? (
             <div style={{ display: "flex" }}>
               {/*
-               * CRITERIA - NAME
+               * CRITERION - NAME
                */}
               <input
                 ref={inputNameRef}
@@ -175,7 +175,7 @@ const CriterionNameUnitCell = (props: CriterionNameUnitCellProps) => {
                 }}
               />
               {/*
-               * CRITERIA - UNIT
+               * CRITERION - UNIT
                */}
               <input
                 ref={inputUnitRef}
@@ -227,7 +227,7 @@ const CriterionNameUnitCell = (props: CriterionNameUnitCellProps) => {
         </div>
 
         {!editMode && (
-          <button onClick={() => props.removeCriteria(props.criterion)}>
+          <button onClick={() => props.removeCriterion(props.criterion)}>
             -
           </button>
         )}

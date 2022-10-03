@@ -1,12 +1,12 @@
-import { TProductWithCriteria } from "../../types/productsWithCriterias";
+import { TProductWithCriterion } from "../../types/productsWithCriteria";
 
-const productsWithCriteria: TProductWithCriteria[] = [
+const productsWithCriteria: TProductWithCriterion[] = [
   /**
    * Prix
    */
   {
     id: "prixDyson123",
-    criteriaId: "prix123",
+    criterionId: "prix123",
     productId: "dyson123",
     value: 800,
     normalizedValue: undefined,
@@ -14,7 +14,7 @@ const productsWithCriteria: TProductWithCriteria[] = [
   },
   {
     id: "prixDreame123",
-    criteriaId: "prix123",
+    criterionId: "prix123",
     productId: "dreame123",
     value: 300,
     normalizedValue: undefined,
@@ -22,7 +22,7 @@ const productsWithCriteria: TProductWithCriteria[] = [
   },
   {
     id: "prixRowenta123",
-    criteriaId: "prix123",
+    criterionId: "prix123",
     productId: "rowenta123",
     value: 500,
     normalizedValue: undefined,
@@ -34,7 +34,7 @@ const productsWithCriteria: TProductWithCriteria[] = [
    */
   {
     id: "puissanceAspirationDyson123",
-    criteriaId: "puissanceAspiration123",
+    criterionId: "puissanceAspiration123",
     productId: "dyson123",
     value: 180,
     normalizedValue: undefined,
@@ -42,7 +42,7 @@ const productsWithCriteria: TProductWithCriteria[] = [
   },
   {
     id: "puissanceAspirationDreame123",
-    criteriaId: "puissanceAspiration123",
+    criterionId: "puissanceAspiration123",
     productId: "dreame123",
     value: 210,
     normalizedValue: undefined,
@@ -50,7 +50,7 @@ const productsWithCriteria: TProductWithCriteria[] = [
   },
   {
     id: "puissanceAspirationRowenta123",
-    criteriaId: "puissanceAspiration123",
+    criterionId: "puissanceAspiration123",
     productId: "rowenta123",
     value: 200,
     normalizedValue: undefined,
@@ -62,7 +62,7 @@ const productsWithCriteria: TProductWithCriteria[] = [
    */
   {
     id: "autonomieDyson123",
-    criteriaId: "autonomie123",
+    criterionId: "autonomie123",
     productId: "dyson123",
     value: 60,
     normalizedValue: undefined,
@@ -70,7 +70,7 @@ const productsWithCriteria: TProductWithCriteria[] = [
   },
   {
     id: "autonomieDreame123",
-    criteriaId: "autonomie123",
+    criterionId: "autonomie123",
     productId: "dreame123",
     value: 80,
     normalizedValue: undefined,
@@ -78,7 +78,7 @@ const productsWithCriteria: TProductWithCriteria[] = [
   },
   {
     id: "autonomieRowenta123",
-    criteriaId: "autonomie123",
+    criterionId: "autonomie123",
     productId: "rowenta123",
     value: 70,
     normalizedValue: undefined,

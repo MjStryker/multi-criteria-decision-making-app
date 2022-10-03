@@ -1,26 +1,26 @@
-import { TCriteria } from "../../types/criterias";
+import { TCriterion } from "../../types/criteria";
 import { TProduct } from "../../types/products";
-import { createEmptyProductCriteriaValue } from "../../utils/productsWithCriterias/productsWithCriterias";
+import { createEmptyProductCriterionValue } from "../../utils/productsWithCriteria/productsWithCriteria";
 import { useCallback } from "react";
-import useHandleProductsWithCriterias from "./useHandleProductsWithCriterias";
+import useHandleProductsWithCriteria from "./useHandleProductsWithCriteria";
 
 const useHandleProducts = (
   setProducts: React.Dispatch<React.SetStateAction<TProduct[]>>,
-  criterias: TCriteria[],
+  criteria: TCriterion[],
   addProductWithCriteria: ReturnType<
-    typeof useHandleProductsWithCriterias
+    typeof useHandleProductsWithCriteria
   >["addProductWithCriteria"]
 ) => {
   const addProduct = useCallback(
     (product: TProduct) => {
       setProducts((prev) => [...prev, product]);
-      criterias.forEach((criteria) => {
+      criteria.forEach((criteria) => {
         addProductWithCriteria(
-          createEmptyProductCriteriaValue(product, criteria)
+          createEmptyProductCriterionValue(product, criteria)
         );
       });
     },
-    [addProductWithCriteria, criterias, setProducts]
+    [addProductWithCriteria, criteria, setProducts]
   );
 
   const updateProduct = useCallback(

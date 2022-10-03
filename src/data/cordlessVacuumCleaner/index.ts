@@ -1,11 +1,11 @@
-import criterias from "./criterias";
+import criteria from "./criteria";
 import products from "./products";
-import productsWithCriterias from "./productsWithCriterias";
+import productsWithCriteria from "./productsWithCriteria";
 
 const data = {
-  criterias,
+  criteria,
   products,
-  productsWithCriterias,
+  productsWithCriteria,
 };
 
 export default data;

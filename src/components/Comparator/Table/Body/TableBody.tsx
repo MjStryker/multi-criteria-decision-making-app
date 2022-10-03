@@ -1,35 +1,32 @@
 import {
-  getCriteriasNormalizedMaxWeight,
-  sumCriteriasWeight,
-} from "../../../../utils/criterias/criterias";
+  getCriteriaNormalizedMaxWeight,
+  sumCriteriaWeight,
+} from "../../../../utils/criteria/criteria";
 
-import { TCriteria } from "../../../../types/criterias";
+import { TCriterion } from "../../../../types/criteria";
 import { TProduct } from "../../../../types/products";
 import TableBodyRow from "./TableBodyRow";
-import useHandleCriterias from "../../../../hooks/data/useHandleCriterias";
-import useHandleProductsWithCriterias from "../../../../hooks/data/useHandleProductsWithCriterias";
+import useHandleCriteria from "../../../../hooks/data/useHandleCriteria";
+import useHandleProductsWithCriteria from "../../../../hooks/data/useHandleProductsWithCriteria";
 
 type TableBodyProps = {
-  criterias: TCriteria[];
+  criteria: TCriterion[];
   products: TProduct[];
-  updateCriteria: ReturnType<typeof useHandleCriterias>["updateCriteria"];
-  removeCriteria: ReturnType<typeof useHandleCriterias>["removeCriteria"];
+  updateCriterion: ReturnType<typeof useHandleCriteria>["updateCriterion"];
+  removeCriterion: ReturnType<typeof useHandleCriteria>["removeCriterion"];
   setProductCriteriaValue: ReturnType<
-    typeof useHandleProductsWithCriterias
+    typeof useHandleProductsWithCriteria
   >["setProductCriteriaValue"];
 };
 
 const TableBody = (props: TableBodyProps) => {
-  const weightTotal = sumCriteriasWeight(props.criterias);
+  const weightTotal = sumCriteriaWeight(props.criteria);
 
-  const maxWeight = getCriteriasNormalizedMaxWeight(
-    props.criterias,
-    weightTotal
-  );
+  const maxWeight = getCriteriaNormalizedMaxWeight(props.criteria, weightTotal);
 
   return (
     <tbody>
-      {props.criterias.map((criterion, criteriaRowIdx) => (
+      {props.criteria.map((criterion, criteriaRowIdx) => (
         <TableBodyRow
           key={criterion.id}
           criterion={criterion}
@@ -37,8 +34,8 @@ const TableBody = (props: TableBodyProps) => {
           rowIdx={0}
           weightTotal={weightTotal}
           maxWeight={maxWeight}
-          updateCriteria={props.updateCriteria}
-          removeCriteria={props.removeCriteria}
+          updateCriterion={props.updateCriterion}
+          removeCriterion={props.removeCriterion}
           setProductCriteriaValue={props.setProductCriteriaValue}
         />
       ))}

@@ -1,18 +1,18 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { SORT_BY } from "../../constants/arrays";
-import { TCriteria } from "../../types/criterias";
+import { TCriterion } from "../../types/criteria";
 import { TProduct } from "../../types/products";
-import { TProductWithCriteria } from "../../types/productsWithCriterias";
+import { TProductWithCriterion } from "../../types/productsWithCriteria";
 import { compareFn } from "../../utils/arrays";
 import { deepEqual } from "../../utils/objects";
-import { findProductWithCriteria } from "../../utils/productsWithCriterias/productsWithCriterias";
+import { findProductCriterionValue } from "../../utils/productsWithCriteria/productsWithCriteria";
 import { isDefined } from "../../utils/objects";
 
 const useRankProducts = (
   products: TProduct[],
-  criterias: TCriteria[],
-  productsWithCriterias: TProductWithCriteria[]
+  criteria: TCriterion[],
+  productsWithCriteria: TProductWithCriterion[]
   // setProducts: React.Dispatch<React.SetStateAction<TProduct[]>>
 ) => {
   const [rankedProducts, setRankedProducts] = useState<TProduct[]>([]);
@@ -21,11 +21,11 @@ const useRankProducts = (
     /**
      * STEP 1 - Get normalized and weighted values for all products
      */
-    // const { productsWithCriteriasNormalizedWeightedValues } =
-    //   getProductsWithCriteriasNormalizedWeightedValues(
+    // const { productsWithCriteriaNormalizedWeightedValues } =
+    //   getProductsWithCriteriaNormalizedWeightedValues(
     //     products,
-    //     criterias,
-    //     productsWithCriterias
+    //     criteria,
+    //     productsWithCriteria
     //   );
 
     /**
@@ -39,11 +39,11 @@ const useRankProducts = (
         let totalBeneficialValues = 0;
         let totalNonBeneficialValues = 0;
 
-        criterias.forEach((criteria) => {
-          const productWithCriteria = findProductWithCriteria(
+        criteria.forEach((criteria) => {
+          const productWithCriteria = findProductCriterionValue(
             product,
             criteria,
-            productsWithCriterias
+            productsWithCriteria
           );
 
           const weightedValueOrZero = productWithCriteria?.weightedValue ?? 0;
@@ -149,7 +149,7 @@ const useRankProducts = (
       }));
 
     return productsRank;
-  }, [criterias, products, productsWithCriterias]);
+  }, [criteria, products, productsWithCriteria]);
 
   useEffect(() => {
     if (deepEqual(products, rankedProducts)) {
@@ -169,7 +169,7 @@ const useRankProducts = (
       setRankedProducts([]);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [products, criterias, productsWithCriterias]);
+  }, [products, criteria, productsWithCriteria]);
 
   return { rankedProducts };
 };

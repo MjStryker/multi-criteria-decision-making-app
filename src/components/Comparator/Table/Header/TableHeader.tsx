@@ -2,7 +2,7 @@ import { CSSProperties, useRef, useState } from "react";
 import { border, minWidth } from "../../../../styles/tables/tableCell";
 
 import { COLORS } from "../../../../constants/colors";
-import { CRITERIA } from "../../../../constants/criterias";
+import { CRITERION } from "../../../../constants/criteria";
 import { TProduct } from "../../../../types/products";
 import { createEmptyProduct } from "../../../../utils/products/products";
 import useClickOutside from "../../../../hooks/useClickOutside";
@@ -59,7 +59,7 @@ const TableHeader = (props: TableHeaderProps) => {
         <td />
 
         {/*
-         * CRITERIAS - MIN/MAX WEIGHT INFO
+         * CRITERIONS - MIN/MAX WEIGHT INFO
          */}
         <td>
           <div
@@ -71,7 +71,7 @@ const TableHeader = (props: TableHeaderProps) => {
               fontSize: 14,
               color: COLORS.GREY,
             }}
-          >{`${CRITERIA.WEIGHT.MIN} - ${CRITERIA.WEIGHT.MAX}`}</div>
+          >{`${CRITERION.WEIGHT.MIN} - ${CRITERION.WEIGHT.MAX}`}</div>
         </td>
 
         {/*

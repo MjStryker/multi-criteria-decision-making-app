@@ -1,22 +1,22 @@
 import { useLayoutEffect, useRef, useState } from "react";
 
 import { DATA_TABLE_STYLES } from "../../../DataTable.styles";
-import { TCriteria } from "../../../../../types/criterias";
+import { TCriterion } from "../../../../../types/criteria";
 import { TProduct } from "../../../../../types/products";
-import { TProductWithCriteria } from "../../../../../types/productsWithCriterias";
+import { TProductWithCriterion } from "../../../../../types/productsWithCriteria";
 import { deepEqual } from "../../../../../utils/objects";
 import { isValidNumber } from "../../../../../utils/numbers";
 import { minWidth } from "../../../../../styles/tables/tableCell";
 import { parseStringAsNumber } from "../../../../../utils/strings";
 import useClickOutside from "../../../../../hooks/useClickOutside";
-import useHandleProductsWithCriterias from "../../../../../hooks/data/useHandleProductsWithCriterias";
+import useHandleProductsWithCriteria from "../../../../../hooks/data/useHandleProductsWithCriteria";
 
 type CriterionProductValueCellProps = {
-  criterion: TCriteria;
+  criterion: TCriterion;
   product: TProduct;
-  criteriaProductValue: TProductWithCriteria | null;
+  criteriaProductValue: TProductWithCriterion | null;
   setProductCriteriaValue: ReturnType<
-    typeof useHandleProductsWithCriterias
+    typeof useHandleProductsWithCriteria
   >["setProductCriteriaValue"];
 };
 

@@ -2,12 +2,12 @@ import { deepEqual, isDefined } from "../../../../../utils/objects";
 import { useRef, useState } from "react";
 
 import { DATA_TABLE_STYLES } from "../../../DataTable.styles";
-import { TCriteria } from "../../../../../types/criterias";
+import { TCriterion } from "../../../../../types/criteria";
 import useClickOutside from "../../../../../hooks/useClickOutside";
 
 type CriterionBeneficialCellProps = {
-  criterion: TCriteria;
-  updateCriteria: Function;
+  criterion: TCriterion;
+  updateCriterion: Function;
 };
 
 const CriterionBeneficialCell = (props: CriterionBeneficialCellProps) => {
@@ -56,7 +56,7 @@ const CriterionBeneficialCell = (props: CriterionBeneficialCellProps) => {
         new: { beneficial: criterionNewBeneficial },
       });
 
-      props.updateCriteria({
+      props.updateCriterion({
         ...props.criterion,
         beneficial: criterionNewBeneficial === true,
       });
@@ -71,7 +71,7 @@ const CriterionBeneficialCell = (props: CriterionBeneficialCellProps) => {
     <td
       ref={cellRef}
       onClick={handleClickOnCell}
-      style={DATA_TABLE_STYLES.TD.CRITERIA_BENEFICIAL}
+      style={DATA_TABLE_STYLES.TD.CRITERION_BENEFICIAL}
     >
       <div
         style={{

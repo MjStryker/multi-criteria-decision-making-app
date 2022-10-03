@@ -1,19 +1,19 @@
 import { deepEqual, isDefined } from "../../../../../utils/objects";
 import { useLayoutEffect, useRef, useState } from "react";
 
-import { CRITERIA } from "../../../../../constants/criterias";
+import { CRITERION } from "../../../../../constants/criteria";
 import { DATA_TABLE_STYLES } from "../../../DataTable.styles";
-import { TCriteria } from "../../../../../types/criterias";
-import { clampCriteriaWeightValue } from "../../../../../utils/criterias/criterias";
+import { TCriterion } from "../../../../../types/criteria";
+import { clampCriterionWeightValue } from "../../../../../utils/criteria/criteria";
 import { isValidNumber } from "../../../../../utils/numbers";
 import { parseStringAsNumber } from "../../../../../utils/strings";
 import useClickOutside from "../../../../../hooks/useClickOutside";
-import useHandleCriterias from "../../../../../hooks/data/useHandleCriterias";
+import useHandleCriteria from "../../../../../hooks/data/useHandleCriteria";
 
 type CriterionWeightCellProps = {
-  criterion: TCriteria;
+  criterion: TCriterion;
   weightTotal: number | null;
-  updateCriteria: ReturnType<typeof useHandleCriterias>["updateCriteria"];
+  updateCriterion: ReturnType<typeof useHandleCriteria>["updateCriterion"];
 };
 
 const CriterionWeightCell = (props: CriterionWeightCellProps) => {
@@ -66,10 +66,10 @@ const CriterionWeightCell = (props: CriterionWeightCellProps) => {
         new: { weight: criterionNewWeight },
       });
 
-      props.updateCriteria({
+      props.updateCriterion({
         ...props.criterion,
         weight: isDefined(criterionNewWeight)
-          ? clampCriteriaWeightValue(criterionNewWeight)
+          ? clampCriterionWeightValue(criterionNewWeight)
           : undefined,
       });
     }
@@ -84,7 +84,7 @@ const CriterionWeightCell = (props: CriterionWeightCellProps) => {
     <td
       ref={cellRef}
       onClick={handleClickOnCell}
-      style={DATA_TABLE_STYLES.TD.CRITERIA_WEIGHT}
+      style={DATA_TABLE_STYLES.TD.CRITERION_WEIGHT}
     >
       <div
         style={{
@@ -97,8 +97,8 @@ const CriterionWeightCell = (props: CriterionWeightCellProps) => {
           <input
             ref={inputRef}
             type="number"
-            min={CRITERIA.WEIGHT.MIN}
-            max={CRITERIA.WEIGHT.MAX}
+            min={CRITERION.WEIGHT.MIN}
+            max={CRITERION.WEIGHT.MAX}
             value={isValidNumber(criterionNewWeight) ? criterionNewWeight : ""}
             onChange={(e) =>
               setCriterionNewWeight(parseStringAsNumber(e.target.value))

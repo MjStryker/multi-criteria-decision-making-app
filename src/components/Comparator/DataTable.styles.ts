@@ -26,16 +26,16 @@ export const DATA_TABLE_STYLES = {
       border,
       textAlign: "right",
     } as CSSProperties,
-    CRITERIA: {
+    CRITERION: {
       width: "fit-content",
       minWidth: 200,
       border,
     } as CSSProperties,
-    CRITERIA_BENEFICIAL: {
+    CRITERION_BENEFICIAL: {
       minWidth: 36,
       border,
     } as CSSProperties,
-    CRITERIA_WEIGHT: {
+    CRITERION_WEIGHT: {
       border,
       textAlign: "right",
       width: 40,

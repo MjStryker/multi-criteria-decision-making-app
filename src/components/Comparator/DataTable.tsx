@@ -1,38 +1,38 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { SORT_BY } from "../../constants/arrays";
-import { TCriteria } from "../../types/criterias";
+import { TCriterion } from "../../types/criteria";
 import { TProduct } from "../../types/products";
-import { TProductWithCriteria } from "../../types/productsWithCriterias";
+import { TProductWithCriterion } from "../../types/productsWithCriteria";
 import TableBody from "./Table/Body/TableBody";
 import TableFooter from "./Table/Footer/TableFooter";
 import TableHeader from "./Table/Header/TableHeader";
-import { compareCriteriaByDefaultRowIdxFn } from "../../utils/criterias/criterias";
+import { compareCriterionByDefaultRowIdxFn } from "../../utils/criteria/criteria";
 import { compareProductsByDefaultColumnIdxFn } from "../../utils/products/products";
 import cordlessVacuumCleaner from "../../data/cordlessVacuumCleaner";
 import { deepEqual } from "../../utils/objects";
-import useHandleCriterias from "../../hooks/data/useHandleCriterias";
+import useHandleCriteria from "../../hooks/data/useHandleCriteria";
 import useHandleProducts from "../../hooks/data/useHandleProducts";
-import useHandleProductsWithCriterias from "../../hooks/data/useHandleProductsWithCriterias";
+import useHandleProductsWithCriteria from "../../hooks/data/useHandleProductsWithCriteria";
 import useRankProducts from "../../hooks/data/useRankProducts";
 
-const criteriasFromDB = cordlessVacuumCleaner.criterias;
+const criteriaFromDB = cordlessVacuumCleaner.criteria;
 const productsFromDB = cordlessVacuumCleaner.products;
-const productsWithCriteriasFromDB = cordlessVacuumCleaner.productsWithCriterias;
+const productsWithCriteriaFromDB = cordlessVacuumCleaner.productsWithCriteria;
 
 const DataTable = () => {
-  const [criterias, setCriterias] = useState(criteriasFromDB);
+  const [criteria, setCriteria] = useState(criteriaFromDB);
   const [products, setProducts] = useState(productsFromDB);
-  const [productsWithCriterias, setProductsWithCriterias] = useState(
-    productsWithCriteriasFromDB
+  const [productsWithCriteria, setProductsWithCriteria] = useState(
+    productsWithCriteriaFromDB
   );
 
-  const onSetCriterias: React.Dispatch<React.SetStateAction<TCriteria[]>> =
+  const onSetCriteria: React.Dispatch<React.SetStateAction<TCriterion[]>> =
     useCallback(
       (newState) => {
-        setCriterias(newState);
+        setCriteria(newState);
       },
-      [setCriterias]
+      [setCriteria]
     );
 
   const onSetProducts: React.Dispatch<React.SetStateAction<TProduct[]>> =
@@ -43,19 +43,19 @@ const DataTable = () => {
       [setProducts]
     );
 
-  const onSetProductsWithCriterias: React.Dispatch<
-    React.SetStateAction<TProductWithCriteria[]>
+  const onSetProductsWithCriteria: React.Dispatch<
+    React.SetStateAction<TProductWithCriterion[]>
   > = useCallback(
     (newState) => {
-      setProductsWithCriterias(newState);
+      setProductsWithCriteria(newState);
     },
-    [setProductsWithCriterias]
+    [setProductsWithCriteria]
   );
 
   const { rankedProducts } = useRankProducts(
     products,
-    criterias,
-    productsWithCriterias
+    criteria,
+    productsWithCriteria
   );
 
   const updateProductsRanks = useCallback(() => {
@@ -79,27 +79,27 @@ const DataTable = () => {
   }, [rankedProducts]);
 
   const { addProductWithCriteria, setProductCriteriaValue } =
-    useHandleProductsWithCriterias(
-      productsWithCriterias,
-      onSetProductsWithCriterias,
+    useHandleProductsWithCriteria(
+      productsWithCriteria,
+      onSetProductsWithCriteria,
       products,
-      criterias
+      criteria
     );
 
-  const { addCriteria, updateCriteria, removeCriteria } = useHandleCriterias(
-    onSetCriterias,
+  const { addCriterion, updateCriterion, removeCriterion } = useHandleCriteria(
+    onSetCriteria,
     products,
     addProductWithCriteria
   );
 
   const { addProduct, updateProduct, removeProduct } = useHandleProducts(
     onSetProducts,
-    criterias,
+    criteria,
     addProductWithCriteria
   );
 
-  const criteriasSorted = criterias.sort(
-    compareCriteriaByDefaultRowIdxFn(SORT_BY.ASC)
+  const criteriaSorted = criteria.sort(
+    compareCriterionByDefaultRowIdxFn(SORT_BY.ASC)
   );
 
   const productsSorted = products.sort(
@@ -120,17 +120,17 @@ const DataTable = () => {
       />
 
       <TableBody
-        criterias={criteriasSorted}
+        criteria={criteriaSorted}
         products={productsSorted}
-        updateCriteria={updateCriteria}
-        removeCriteria={removeCriteria}
+        updateCriterion={updateCriterion}
+        removeCriterion={removeCriterion}
         setProductCriteriaValue={setProductCriteriaValue}
       />
 
       <TableFooter
-        criterias={criteriasSorted}
+        criteria={criteriaSorted}
         products={productsSorted}
-        addCriteria={addCriteria}
+        addCriterion={addCriterion}
       />
     </table>
   );

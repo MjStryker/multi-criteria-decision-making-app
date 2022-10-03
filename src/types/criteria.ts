@@ -1,4 +1,4 @@
-export type TCriteria = {
+export type TCriterion = {
   id: string;
   name: string | undefined;
   weight: number | undefined;

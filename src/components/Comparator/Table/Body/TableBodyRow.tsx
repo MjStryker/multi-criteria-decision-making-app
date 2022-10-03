@@ -2,23 +2,23 @@ import CriterionBeneficialCell from "./Cells/CriterionBeneficialCell";
 import CriterionNameUnitCell from "./Cells/CriterionNameUnitCell";
 import CriterionProductValueCell from "./Cells/CriterionProductValueCell";
 import CriterionWeightCell from "./Cells/CriterionWeightCell";
-import { TCriteria } from "../../../../types/criterias";
+import { TCriterion } from "../../../../types/criteria";
 import { TProduct } from "../../../../types/products";
-import { createEmptyProductCriteriaValue } from "../../../../utils/productsWithCriterias/productsWithCriterias";
-import productsWithCriterias from "../../../../data/cordlessVacuumCleaner/productsWithCriterias";
-import useHandleCriterias from "../../../../hooks/data/useHandleCriterias";
-import useHandleProductsWithCriterias from "../../../../hooks/data/useHandleProductsWithCriterias";
+import { createEmptyProductCriterionValue } from "../../../../utils/productsWithCriteria/productsWithCriteria";
+import productsWithCriteria from "../../../../data/cordlessVacuumCleaner/productsWithCriteria";
+import useHandleCriteria from "../../../../hooks/data/useHandleCriteria";
+import useHandleProductsWithCriteria from "../../../../hooks/data/useHandleProductsWithCriteria";
 
 type TableBodyRowProps = {
-  criterion: TCriteria;
+  criterion: TCriterion;
   products: TProduct[];
   rowIdx: number;
   weightTotal: number;
   maxWeight: number | null;
-  updateCriteria: ReturnType<typeof useHandleCriterias>["updateCriteria"];
-  removeCriteria: ReturnType<typeof useHandleCriterias>["removeCriteria"];
+  updateCriterion: ReturnType<typeof useHandleCriteria>["updateCriterion"];
+  removeCriterion: ReturnType<typeof useHandleCriteria>["removeCriterion"];
   setProductCriteriaValue: ReturnType<
-    typeof useHandleProductsWithCriterias
+    typeof useHandleProductsWithCriteria
   >["setProductCriteriaValue"];
 };
 
@@ -26,43 +26,43 @@ const TableBodyRow = (props: TableBodyRowProps) => {
   return (
     <tr key={props.criterion.id}>
       {/*
-       * CRITERIA - NAME / UNIT
+       * CRITERION - NAME / UNIT
        */}
       <CriterionNameUnitCell
         criterion={props.criterion}
         rowIdx={props.rowIdx}
         weightTotal={props.weightTotal}
         maxWeight={props.maxWeight}
-        updateCriteria={props.updateCriteria}
-        removeCriteria={props.removeCriteria}
+        updateCriterion={props.updateCriterion}
+        removeCriterion={props.removeCriterion}
       />
 
       {/*
-       * CRITERIA - BENEFICIAL
+       * CRITERION - BENEFICIAL
        */}
       <CriterionBeneficialCell
         criterion={props.criterion}
-        updateCriteria={props.updateCriteria}
+        updateCriterion={props.updateCriterion}
       />
 
       {/*
-       * CRITERIA - WEIGHT
+       * CRITERION - WEIGHT
        */}
       <CriterionWeightCell
         criterion={props.criterion}
         weightTotal={props.weightTotal}
-        updateCriteria={props.updateCriteria}
+        updateCriterion={props.updateCriterion}
       />
 
       {/*
-       * PRODUCTS - CRITERIA VALUES
+       * PRODUCTS - CRITERION VALUES
        */}
       {props.products.map((product, productColumnIdx) => {
         const criteriaProductValue =
-          productsWithCriterias.find(
-            ({ criteriaId, productId }) =>
+          productsWithCriteria.find(
+            ({ criterionId: criteriaId, productId }) =>
               criteriaId === props.criterion.id && productId === product.id
-          ) ?? createEmptyProductCriteriaValue(product, props.criterion);
+          ) ?? createEmptyProductCriterionValue(product, props.criterion);
 
         return (
           <CriterionProductValueCell

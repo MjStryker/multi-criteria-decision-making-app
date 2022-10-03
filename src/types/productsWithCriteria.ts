@@ -1,6 +1,6 @@
-export type TProductWithCriteria = {
+export type TProductWithCriterion = {
   id: string;
-  criteriaId: string;
+  criterionId: string;
   productId: string;
   value: number | undefined;
   normalizedValue: number | undefined;

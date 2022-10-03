@@ -1,8 +1,8 @@
 import { CSSProperties } from "react";
-import { TCriteria } from "../../../../types/criterias";
+import { TCriterion } from "../../../../types/criteria";
 import { TProduct } from "../../../../types/products";
 import { border } from "../../../../styles/tables/tableCell";
-import { createEmptyCriteria } from "../../../../utils/criterias/criterias";
+import { createEmptyCriterion } from "../../../../utils/criteria/criteria";
 
 const STYLES = {
   TD: {
@@ -15,9 +15,9 @@ const STYLES = {
 };
 
 type TableFooterProps = {
-  criterias: TCriteria[];
+  criteria: TCriterion[];
   products: TProduct[];
-  addCriteria: Function;
+  addCriterion: Function;
 };
 
 const TableFooter = (props: TableFooterProps) => {
@@ -25,12 +25,12 @@ const TableFooter = (props: TableFooterProps) => {
     <tfoot>
       <tr>
         {/*
-         * CRITERIA - ADD BUTTON
+         * CRITERION - ADD BUTTON
          */}
         <td>
           <button
             onClick={() =>
-              props.addCriteria(createEmptyCriteria(props.criterias.length))
+              props.addCriterion(createEmptyCriterion(props.criteria.length))
             }
           >
             +
