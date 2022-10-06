@@ -22,7 +22,7 @@ export const compareCriterionByDefaultRowIdxFn =
     compareFn(sortBy)(a.defaultRowIdx, b.defaultRowIdx);
 
 export const sumCriteriaWeight = (criteria: TCriterion[]) =>
-  criteria.reduce((total, criteria) => total + (criteria.weight ?? 0), 0);
+  criteria.reduce((total, criterion) => total + (criterion.weight ?? 0), 0);
 
 export const getCriteriaNormalizedMaxWeight = (
   criteria: TCriterion[],
@@ -30,8 +30,8 @@ export const getCriteriaNormalizedMaxWeight = (
 ) => {
   let max: number | null = null;
 
-  criteria.forEach((c) => {
-    const part = c.weight ? c.weight / weightTotal : null;
+  criteria.forEach((criterion) => {
+    const part = criterion.weight ? criterion.weight / weightTotal : null;
     if (!max || (max && part && part > max)) {
       max = part;
     }

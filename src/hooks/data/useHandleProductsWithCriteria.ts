@@ -10,7 +10,7 @@ import { useEffect } from "react";
 
 const useHandleProductsWithCriteria = (
   productsWithCriterias: TProductWithCriterion[],
-  setProductsWithCriterias: React.Dispatch<
+  setProductsWithCriteria: React.Dispatch<
     React.SetStateAction<TProductWithCriterion[]>
   >,
   products: TProduct[],
@@ -24,37 +24,40 @@ const useHandleProductsWithCriteria = (
     );
 
   useEffect(() => {
-    setProductsWithCriterias(productsWithCriteriaNormalizedWeightedValues);
+    setProductsWithCriteria(productsWithCriteriaNormalizedWeightedValues);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productsWithCriteriaNormalizedWeightedValues]);
 
   const addProductWithCriteria = (
     productWithCriteria: TProductWithCriterion
   ) => {
-    setProductsWithCriterias((prev) => [...prev, productWithCriteria]);
+    setProductsWithCriteria((prev) => [...prev, productWithCriteria]);
   };
 
   const setProductCriteriaValue = (
     product: TProduct,
-    criteria: TCriterion,
+    criterion: TCriterion,
     value: number | null
   ) => {
     const res = [...productsWithCriterias];
     const productWithCriteria =
       res.find(
-        (e) => e.productId === product.id && e.criterionId === criteria.id
-      ) ?? createEmptyProductCriterionValue(product, criteria);
+        (e) => e.productId === product.id && e.criterionId === criterion.id
+      ) ?? createEmptyProductCriterionValue(product, criterion);
 
     productWithCriteria.value = value ?? undefined;
 
-    setProductsWithCriterias(res);
+    setProductsWithCriteria(res);
   };
 
-  const removeProductWithCriteria = (product: TProduct, criteria: TCriterion) =>
-    setProductsWithCriterias((prev) =>
+  const removeProductWithCriteria = (
+    product: TProduct,
+    criterion: TCriterion
+  ) =>
+    setProductsWithCriteria((prev) =>
       prev.filter(
-        ({ productId, criterionId: criteriaId }) =>
-          product.id !== productId && criteria.id !== criteriaId
+        ({ productId, criterionId }) =>
+          product.id !== productId && criterion.id !== criterionId
       )
     );
 

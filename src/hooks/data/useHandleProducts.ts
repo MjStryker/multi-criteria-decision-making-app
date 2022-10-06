@@ -14,9 +14,9 @@ const useHandleProducts = (
   const addProduct = useCallback(
     (product: TProduct) => {
       setProducts((prev) => [...prev, product]);
-      criteria.forEach((criteria) => {
+      criteria.forEach((criterion) => {
         addProductWithCriteria(
-          createEmptyProductCriterionValue(product, criteria)
+          createEmptyProductCriterionValue(product, criterion)
         );
       });
     },

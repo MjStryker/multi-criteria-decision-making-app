@@ -39,10 +39,10 @@ const useRankProducts = (
         let totalBeneficialValues = 0;
         let totalNonBeneficialValues = 0;
 
-        criteria.forEach((criteria) => {
+        criteria.forEach((criterion) => {
           const productWithCriteria = findProductCriterionValue(
             product,
-            criteria,
+            criterion,
             productsWithCriteria
           );
 
@@ -51,9 +51,9 @@ const useRankProducts = (
           allProductsTotalNonBeneficialValues += weightedValueOrZero;
 
           // Get totals
-          if (criteria.beneficial === true) {
+          if (criterion.beneficial === true) {
             totalBeneficialValues += weightedValueOrZero;
-          } else if (criteria.beneficial === false) {
+          } else if (criterion.beneficial === false) {
             totalNonBeneficialValues += weightedValueOrZero;
 
             // Get min
