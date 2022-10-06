@@ -5,6 +5,7 @@ import {
 
 import { TCriterion } from "../../../../types/criteria";
 import { TProduct } from "../../../../types/products";
+import { TProductWithCriterion } from "../../../../types/productsWithCriteria";
 import TableBodyRow from "./TableBodyRow";
 import useHandleCriteria from "../../../../hooks/data/useHandleCriteria";
 import useHandleProductsWithCriteria from "../../../../hooks/data/useHandleProductsWithCriteria";
@@ -12,6 +13,7 @@ import useHandleProductsWithCriteria from "../../../../hooks/data/useHandleProdu
 type TableBodyProps = {
   criteria: TCriterion[];
   products: TProduct[];
+  productsWithCriteria: TProductWithCriterion[];
   updateCriterion: ReturnType<typeof useHandleCriteria>["updateCriterion"];
   removeCriterion: ReturnType<typeof useHandleCriteria>["removeCriterion"];
   setProductCriteriaValue: ReturnType<
@@ -26,12 +28,13 @@ const TableBody = (props: TableBodyProps) => {
 
   return (
     <tbody>
-      {props.criteria.map((criterion, criteriaRowIdx) => (
+      {props.criteria.map((criterion, rowIdx) => (
         <TableBodyRow
           key={criterion.id}
           criterion={criterion}
           products={props.products}
-          rowIdx={0}
+          productsWithCriteria={props.productsWithCriteria}
+          rowIdx={rowIdx}
           weightTotal={weightTotal}
           maxWeight={maxWeight}
           updateCriterion={props.updateCriterion}

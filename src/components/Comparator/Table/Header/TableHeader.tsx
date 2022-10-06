@@ -77,11 +77,11 @@ const TableHeader = (props: TableHeaderProps) => {
         {/*
          * PRODUCTS
          */}
-        {props.products.map((p, idx) => {
-          const isCellInEditMode = p.id === cellId;
+        {props.products.map((product, idx) => {
+          const isCellInEditMode = product.id === cellId;
 
           return (
-            <td key={p.id} style={STYLES.TD.PRODUCT}>
+            <td key={product.id} style={STYLES.TD.PRODUCT}>
               <div
                 style={{
                   display: "flex",
@@ -96,13 +96,13 @@ const TableHeader = (props: TableHeaderProps) => {
                     if (isCellInEditMode) {
                       return;
                     }
-                    console.log(`[ Cell ] Selected ${p.id}`);
-                    setCellId(p.id);
-                    setCellValue(p.name ?? null);
+                    console.log(`[ Cell ] Selected ${product.id}`);
+                    setCellId(product.id);
+                    setCellValue(product.name ?? null);
                   }}
                   onBlur={() => {
                     props.updateProduct({
-                      ...p,
+                      ...product,
                       name: cellValue ? `${cellValue}` : undefined,
                     });
                     setCellId(null);
@@ -125,14 +125,14 @@ const TableHeader = (props: TableHeaderProps) => {
 
                         setCellValue(newValue);
                         props.updateProduct({
-                          ...p,
+                          ...product,
                           name: newValue ? `${newValue}` : undefined,
                         });
                       }}
                       onKeyUp={(e) => {
                         if (e.key === "Enter") {
                           props.updateProduct({
-                            ...p,
+                            ...product,
                             name: cellValue ? `${cellValue}` : undefined,
                           });
                           setCellId(null);
@@ -147,13 +147,15 @@ const TableHeader = (props: TableHeaderProps) => {
                     />
                   ) : (
                     <div style={{ marginRight: 8 }}>
-                      {p.name ?? `Produit ${idx + 1}`}
+                      {product.name ?? `Produit ${idx + 1}`}
                     </div>
                   )}
                 </div>
 
                 {!isCellInEditMode && (
-                  <button onClick={() => props.removeProduct(p)}>-</button>
+                  <button onClick={() => props.removeProduct(product)}>
+                    -
+                  </button>
                 )}
               </div>
             </td>

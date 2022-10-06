@@ -4,14 +4,15 @@ import CriterionProductValueCell from "./Cells/CriterionProductValueCell";
 import CriterionWeightCell from "./Cells/CriterionWeightCell";
 import { TCriterion } from "../../../../types/criteria";
 import { TProduct } from "../../../../types/products";
+import { TProductWithCriterion } from "../../../../types/productsWithCriteria";
 import { createEmptyProductCriterionValue } from "../../../../utils/productsWithCriteria/productsWithCriteria";
-import productsWithCriteria from "../../../../data/cordlessVacuumCleaner/productsWithCriteria";
 import useHandleCriteria from "../../../../hooks/data/useHandleCriteria";
 import useHandleProductsWithCriteria from "../../../../hooks/data/useHandleProductsWithCriteria";
 
 type TableBodyRowProps = {
   criterion: TCriterion;
   products: TProduct[];
+  productsWithCriteria: TProductWithCriterion[];
   rowIdx: number;
   weightTotal: number;
   maxWeight: number | null;
@@ -59,7 +60,7 @@ const TableBodyRow = (props: TableBodyRowProps) => {
        */}
       {props.products.map((product, productColumnIdx) => {
         const criteriaProductValue =
-          productsWithCriteria.find(
+          props.productsWithCriteria.find(
             ({ criterionId: criteriaId, productId }) =>
               criteriaId === props.criterion.id && productId === product.id
           ) ?? createEmptyProductCriterionValue(product, props.criterion);

@@ -122,6 +122,7 @@ const DataTable = () => {
       <TableBody
         criteria={criteriaSorted}
         products={productsSorted}
+        productsWithCriteria={productsWithCriteria}
         updateCriterion={updateCriterion}
         removeCriterion={removeCriterion}
         setProductCriteriaValue={setProductCriteriaValue}
