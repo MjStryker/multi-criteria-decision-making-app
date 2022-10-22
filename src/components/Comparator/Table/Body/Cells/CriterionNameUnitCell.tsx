@@ -107,6 +107,12 @@ const CriterionNameUnitCell = (props: CriterionNameUnitCellProps) => {
     }
   };
 
+  console.log({
+    weight: props.criterion.weight,
+    total: props.weightTotal,
+    max: props.maxWeight,
+  });
+
   return (
     <td
       ref={cellRef}

@@ -1,5 +1,5 @@
 import {
-  getCriteriaNormalizedMaxWeight,
+  getCriteriaMaxWeight,
   sumCriteriaWeight,
 } from "../../../../utils/criteria/criteria";
 
@@ -24,7 +24,7 @@ type TableBodyProps = {
 const TableBody = (props: TableBodyProps) => {
   const weightTotal = sumCriteriaWeight(props.criteria);
 
-  const maxWeight = getCriteriaNormalizedMaxWeight(props.criteria, weightTotal);
+  const maxWeight = getCriteriaMaxWeight(props.criteria, weightTotal);
 
   return (
     <tbody>

@@ -1,33 +1,50 @@
+import {
+  calculateCriteriaNormalizedWeight,
+  sumCriteriaWeight,
+} from "../../utils/criteria/criteria";
+
 import { TCriterion } from "../../types/criteria";
 import { TProduct } from "../../types/products";
 import { createEmptyProductCriterionValue } from "../../utils/productsWithCriteria/productsWithCriteria";
 import useHandleProductsWithCriteria from "./useHandleProductsWithCriteria";
 
 const useHandleCriteria = (
-  setCriterion: React.Dispatch<React.SetStateAction<TCriterion[]>>,
+  setCriteria: React.Dispatch<React.SetStateAction<TCriterion[]>>,
   products: TProduct[],
   addProductWithCriterion: ReturnType<
     typeof useHandleProductsWithCriteria
   >["addProductWithCriteria"]
 ) => {
+  const updateCriteriaNormalizedWeight = () => {
+    setCriteria((prev) => {
+      const weightTotal = sumCriteriaWeight(prev);
+      return calculateCriteriaNormalizedWeight(prev, weightTotal);
+    });
+  };
+
   const addCriterion = (criteria: TCriterion) => {
-    setCriterion((prev) => [...prev, criteria]);
+    setCriteria((prev) => [...prev, criteria]);
     products.forEach((product) => {
       addProductWithCriterion(
         createEmptyProductCriterionValue(product, criteria)
       );
     });
+    updateCriteriaNormalizedWeight();
   };
 
-  const updateCriterion = (criterion: TCriterion) =>
-    setCriterion((prev) => {
+  const updateCriterion = (criterion: TCriterion) => {
+    setCriteria((prev) => {
       const newCriteriaIdx = prev.findIndex((p) => criterion.id === p.id);
       prev[newCriteriaIdx] = criterion;
       return [...prev];
     });
+    updateCriteriaNormalizedWeight();
+  };
 
-  const removeCriterion = ({ id }: TCriterion) =>
-    setCriterion((prev) => prev.filter((c) => c.id !== id));
+  const removeCriterion = ({ id }: TCriterion) => {
+    setCriteria((prev) => prev.filter((c) => c.id !== id));
+    updateCriteriaNormalizedWeight();
+  };
 
   return {
     addCriterion,

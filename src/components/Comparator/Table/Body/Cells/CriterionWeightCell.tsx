@@ -134,9 +134,8 @@ const CriterionWeightCell = (props: CriterionWeightCellProps) => {
               {isValidNumber(currentWeightValue) ? currentWeightValue : "-"}
             </div>
             <div style={DATA_TABLE_STYLES.TEXT.MORE_INFO}>
-              {isValidNumber(currentWeightValue) &&
-              isValidNumber(props.weightTotal)
-                ? `(${(currentWeightValue / props.weightTotal).toFixed(3)})`
+              {isValidNumber(props.criterion.normalizedWeight)
+                ? `(${props.criterion.normalizedWeight.toFixed(3)})`
                 : null}
             </div>
           </div>
