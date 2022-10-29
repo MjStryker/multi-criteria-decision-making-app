@@ -12,7 +12,6 @@ import useHandleCriteria from "../../../../../hooks/data/useHandleCriteria";
 
 type CriterionWeightCellProps = {
   criterion: TCriterion;
-  weightTotal: number | null;
   updateCriterion: ReturnType<typeof useHandleCriteria>["updateCriterion"];
 };
 

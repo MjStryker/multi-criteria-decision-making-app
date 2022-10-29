@@ -14,8 +14,7 @@ type TableBodyRowProps = {
   products: TProduct[];
   productsWithCriteria: TProductWithCriterion[];
   rowIdx: number;
-  weightTotal: number;
-  maxWeight: number | null;
+  maxWeight: number;
   updateCriterion: ReturnType<typeof useHandleCriteria>["updateCriterion"];
   removeCriterion: ReturnType<typeof useHandleCriteria>["removeCriterion"];
   setProductCriteriaValue: ReturnType<
@@ -32,7 +31,6 @@ const TableBodyRow = (props: TableBodyRowProps) => {
       <CriterionNameUnitCell
         criterion={props.criterion}
         rowIdx={props.rowIdx}
-        weightTotal={props.weightTotal}
         maxWeight={props.maxWeight}
         updateCriterion={props.updateCriterion}
         removeCriterion={props.removeCriterion}
@@ -51,7 +49,6 @@ const TableBodyRow = (props: TableBodyRowProps) => {
        */}
       <CriterionWeightCell
         criterion={props.criterion}
-        weightTotal={props.weightTotal}
         updateCriterion={props.updateCriterion}
       />
 

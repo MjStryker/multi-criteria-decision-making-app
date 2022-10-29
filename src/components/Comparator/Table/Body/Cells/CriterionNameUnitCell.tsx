@@ -1,4 +1,3 @@
-import { areDefined, deepEqual } from "../../../../../utils/objects";
 import {
   capitalize,
   isValidNonEmptyString,
@@ -7,13 +6,14 @@ import { useRef, useState } from "react";
 
 import { DATA_TABLE_STYLES } from "../../../DataTable.styles";
 import { TCriterion } from "../../../../../types/criteria";
+import { deepEqual } from "../../../../../utils/objects";
+import { getCriterionWeightRelativeToMax } from "../../../../../utils/criteria/criteria";
 import useClickOutside from "../../../../../hooks/useClickOutside";
 
 type CriterionNameUnitCellProps = {
   criterion: TCriterion;
   rowIdx: number;
-  weightTotal: number;
-  maxWeight: number | null;
+  maxWeight: number;
   updateCriterion: Function;
   removeCriterion: Function;
 };
@@ -246,12 +246,10 @@ const CriterionNameUnitCell = (props: CriterionNameUnitCellProps) => {
         >
           <progress
             max="100"
-            value={
-              areDefined([props.maxWeight, props.criterion.weight])
-                ? (((props.criterion.weight ?? 1) / props.weightTotal) * 100) /
-                  (props.maxWeight ?? 1)
-                : 0
-            }
+            value={getCriterionWeightRelativeToMax(
+              props.criterion.weight,
+              props.maxWeight
+            )}
             style={{ width: "100%", height: 7 }}
           />
         </div>
