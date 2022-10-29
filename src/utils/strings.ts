@@ -1,8 +1,9 @@
+import { isDefined } from "./objects";
+
 export function isValidNonEmptyString(
   str: string | null | undefined
 ): str is string {
-  if (str && typeof str === "string" && str.length > 0) return true;
-  return false;
+  return isDefined(str) && typeof str === "string" && str.length > 0;
 }
 
 export function isAnyValidNonEmptyString(str: any[]): boolean {

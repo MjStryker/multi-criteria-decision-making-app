@@ -88,7 +88,7 @@ const CriterionNameUnitCell = (props: CriterionNameUnitCellProps) => {
 
       props.updateCriterion({
         ...props.criterion,
-        name: `${criterionNewName}`,
+        name: criterionNewName,
       });
     }
   };
@@ -102,16 +102,10 @@ const CriterionNameUnitCell = (props: CriterionNameUnitCellProps) => {
 
       props.updateCriterion({
         ...props.criterion,
-        unit: `${criterionNewUnit}`,
+        unit: criterionNewUnit,
       });
     }
   };
-
-  console.log({
-    weight: props.criterion.weight,
-    total: props.weightTotal,
-    max: props.maxWeight,
-  });
 
   return (
     <td
