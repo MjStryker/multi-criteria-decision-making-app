@@ -1,7 +1,9 @@
 import { isDefined } from "./objects";
 
-export const isValidNumber = (value: any): value is number =>
-  isDefined(value) && typeof value === "number" && !isNaN(value);
+export function isValidNumber(value: any): value is number {
+  return isDefined(value) && typeof value === "number" && !isNaN(value);
+}
 
-export const clamp = (value: number, min: number, max: number) =>
-  Math.min(Math.max(value, min), max);
+export function clamp(value: number, min: number, max: number): number {
+  return Math.min(Math.max(value, min), max);
+}

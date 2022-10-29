@@ -7,6 +7,10 @@ import { areDefined } from "../objects";
 import { compareFn } from "../arrays";
 import { nanoid } from "nanoid";
 
+export const compareCriterionByDefaultRowIdxFn =
+  (sortBy: TSortBy) => (a: TCriterion, b: TCriterion) =>
+    compareFn(sortBy)(a.defaultRowIdx, b.defaultRowIdx);
+
 export function createEmptyCriterion(defaultRowIdx: number): TCriterion {
   return {
     id: nanoid(),
@@ -22,10 +26,6 @@ export function createEmptyCriterion(defaultRowIdx: number): TCriterion {
 export function clampCriterionWeightValue(value: number): number {
   return clamp(value, CRITERION.WEIGHT.MIN, CRITERION.WEIGHT.MAX);
 }
-
-export const compareCriterionByDefaultRowIdxFn =
-  (sortBy: TSortBy) => (a: TCriterion, b: TCriterion) =>
-    compareFn(sortBy)(a.defaultRowIdx, b.defaultRowIdx);
 
 export function sumCriteriaWeight(criteria: TCriterion[]): number {
   return criteria.reduce(

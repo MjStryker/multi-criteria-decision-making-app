@@ -5,33 +5,36 @@ import { isDefined } from "../objects";
 import { nanoid } from "nanoid";
 import { sumCriteriaWeight } from "../criteria/criteria";
 
-export const createEmptyProductCriterionValue = (
+export function createEmptyProductCriterionValue(
   { id: productId }: TProduct,
   { id: criterionId }: TCriterion
-): TProductWithCriterion => ({
-  id: nanoid(),
-  productId,
-  criterionId,
-  value: undefined,
-  normalizedValue: undefined,
-  weightedValue: undefined,
-});
+): TProductWithCriterion {
+  return {
+    id: nanoid(),
+    productId,
+    criterionId,
+    value: undefined,
+    normalizedValue: undefined,
+    weightedValue: undefined,
+  };
+}
 
-export const findProductCriterionValue = (
+export function findProductCriterionValue(
   product: TProduct,
   criterion: TCriterion,
   productsWithCriterias: TProductWithCriterion[]
-) =>
-  productsWithCriterias.find(
+): TProductWithCriterion | undefined {
+  return productsWithCriterias.find(
     ({ productId, criterionId }) =>
       product.id === productId && criterion.id === criterionId
   );
+}
 
-export const getProductsCriteriaNormalizedWeightedValues = (
+export function getProductsCriteriaNormalizedWeightedValues(
   products: TProduct[],
   criteria: TCriterion[],
   productsWithCriteria: TProductWithCriterion[]
-) => {
+): TProductWithCriterion[] {
   const productsWithCriteriaNormalizedWeightedValues = productsWithCriteria;
 
   const weightTotal = sumCriteriaWeight(criteria);
@@ -73,7 +76,5 @@ export const getProductsCriteriaNormalizedWeightedValues = (
     });
   });
 
-  return {
-    productsWithCriteriaNormalizedWeightedValues,
-  };
-};
+  return productsWithCriteriaNormalizedWeightedValues;
+}

@@ -16,7 +16,7 @@ const useHandleProductsWithCriteria = (
   products: TProduct[],
   criteria: TCriterion[]
 ) => {
-  const { productsWithCriteriaNormalizedWeightedValues } =
+  const productsWithCriteriaNormalizedWeightedValues =
     getProductsCriteriaNormalizedWeightedValues(
       products,
       criteria,
