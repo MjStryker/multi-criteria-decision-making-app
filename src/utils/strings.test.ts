@@ -37,14 +37,14 @@ describe("capitalize(...)", () => {
 });
 
 describe("parseStringAsNumber(...)", () => {
-  test("Returning null", () => {
+  test("Returning null value", () => {
     expect(parseStringAsNumber("a")).toBe(null);
     expect(parseStringAsNumber("-")).toBe(null);
     expect(parseStringAsNumber(" ")).toBe(null);
     expect(parseStringAsNumber("")).toBe(null);
   });
 
-  test("Returning int", () => {
+  test("Returning int value", () => {
     expect(parseStringAsNumber("1")).toBe(1);
     expect(parseStringAsNumber("+1")).toBe(1);
     expect(parseStringAsNumber("-1")).toBe(-1);
@@ -53,7 +53,7 @@ describe("parseStringAsNumber(...)", () => {
     expect(parseStringAsNumber("3000  ")).toBe(3000);
   });
 
-  test("Returning decimals", () => {
+  test("Returning decimal value", () => {
     expect(parseStringAsNumber("1.0")).toBe(1.0);
     expect(parseStringAsNumber("1.000")).toBe(1.0);
     expect(parseStringAsNumber("1.025")).toBe(1.025);
