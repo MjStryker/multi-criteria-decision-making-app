@@ -17,8 +17,7 @@ const useHandleCriteria = (
 ) => {
   const updateCriteriaNormalizedWeight = () => {
     setCriteria((prev) => {
-      const weightTotal = sumCriteriaWeight(prev);
-      return calculateCriteriaNormalizedWeight(prev, weightTotal);
+      return calculateCriteriaNormalizedWeight(prev);
     });
   };
 

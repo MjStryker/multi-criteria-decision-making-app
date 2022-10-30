@@ -35,9 +35,10 @@ export function sumCriteriaWeight(criteria: TCriterion[]): number {
 }
 
 export function calculateCriteriaNormalizedWeight(
-  criteria: TCriterion[],
-  weightTotal: number
+  criteria: TCriterion[]
 ): TCriterion[] {
+  const weightTotal = sumCriteriaWeight(criteria);
+
   return criteria.map((criterion) => ({
     ...criterion,
     normalizedWeight: isValidNumber(criterion.weight)

@@ -1,20 +1,20 @@
 import { SORT_BY } from "../constants/arrays";
 import { compareFn } from "./arrays";
 
+const ASC = SORT_BY.ASC;
+const DESC = SORT_BY.DESC;
+
+const sortedStringArray = {
+  ASC: ["a", "b", "c", undefined],
+  DESC: ["c", "b", "a", undefined],
+};
+
+const sortedNumberArray = {
+  ASC: [-1, 0, 1, undefined],
+  DESC: [-1, 0, 1, undefined],
+};
+
 describe("compareFn(...)", () => {
-  const ASC = SORT_BY.ASC;
-  const DESC = SORT_BY.DESC;
-
-  const sortedStringArray = {
-    ASC: ["a", "b", "c", undefined],
-    DESC: ["c", "b", "a", undefined],
-  };
-
-  const sortedNumberArray = {
-    ASC: [-1, 0, 1, undefined],
-    DESC: [-1, 0, 1, undefined],
-  };
-
   describe("Comparing string[])", () => {
     describe("ASC", () => {
       it("Already sorted string array", () => {
