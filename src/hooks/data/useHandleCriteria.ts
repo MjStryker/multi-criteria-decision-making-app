@@ -1,10 +1,6 @@
-import {
-  calculateCriteriaNormalizedWeight,
-  sumCriteriaWeight,
-} from "../../utils/criteria/criteria";
-
 import { TCriterion } from "../../types/criteria";
 import { TProduct } from "../../types/products";
+import { calculateCriteriaNormalizedWeight } from "../../utils/criteria/criteria";
 import { createEmptyProductCriterionValue } from "../../utils/productsWithCriteria/productsWithCriteria";
 import useHandleProductsWithCriteria from "./useHandleProductsWithCriteria";
 
