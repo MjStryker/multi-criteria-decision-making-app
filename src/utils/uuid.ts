@@ -1,4 +1,8 @@
-export function uuid(length = 16) {
+/**
+ * @param length (23 max)
+ * @returns
+ */
+export function uuid(length = 16): string {
   return String(Date.now().toString(32) + Math.random().toString(16))
     .replace(/\./g, "")
     .split("")
