@@ -5,7 +5,7 @@ import { TCriterion } from "../../types/criteria";
 import { TSortBy } from "../../types/arrays";
 import { areDefined } from "../objects";
 import { compareFn } from "../arrays";
-import { nanoid } from "nanoid";
+import { uuid } from "../uuid";
 
 export const compareCriterionByDefaultRowIdxFn =
   (sortBy: TSortBy) => (a: TCriterion, b: TCriterion) =>
@@ -13,7 +13,7 @@ export const compareCriterionByDefaultRowIdxFn =
 
 export function createEmptyCriterion(defaultRowIdx: number): TCriterion {
   return {
-    id: nanoid(),
+    id: uuid(),
     name: undefined,
     weight: 1,
     normalizedWeight: undefined,

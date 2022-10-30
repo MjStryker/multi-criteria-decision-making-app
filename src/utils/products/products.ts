@@ -1,7 +1,7 @@
 import { TProduct } from "../../types/products";
 import { TSortBy } from "../../types/arrays";
 import { compareFn } from "../arrays";
-import { nanoid } from "nanoid";
+import { uuid } from "../uuid";
 
 export const compareProductsByDefaultColumnIdxFn =
   (sortBy: TSortBy) =>
@@ -15,7 +15,7 @@ export const compareProductsByRankFn =
 
 export function createEmptyProduct(defaultColumnIdx: number): TProduct {
   return {
-    id: nanoid(),
+    id: uuid(),
     name: undefined,
     reference: undefined,
     rank: undefined,

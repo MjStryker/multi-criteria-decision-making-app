@@ -2,15 +2,15 @@ import { TCriterion } from "../../types/criteria";
 import { TProduct } from "../../types/products";
 import { TProductWithCriterion } from "../../types/productsWithCriteria";
 import { isDefined } from "../objects";
-import { nanoid } from "nanoid";
 import { sumCriteriaWeight } from "../criteria/criteria";
+import { uuid } from "../uuid";
 
 export function createEmptyProductCriterionValue(
   { id: productId }: TProduct,
   { id: criterionId }: TCriterion
 ): TProductWithCriterion {
   return {
-    id: nanoid(),
+    id: uuid(),
     productId,
     criterionId,
     value: undefined,
