@@ -1,12 +1,13 @@
-/**
- * @param length (23 max)
- * @returns
- */
-export function uuid(length = 16): string {
-  return String(Date.now().toString(32) + Math.random().toString(16))
-    .replace(/\./g, "")
-    .split("")
-    .sort(() => 0.5 - Math.random())
-    .slice(0, length)
-    .join("");
+const charsSet =
+  "0123456789abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+const charsSetLength = charsSet.length;
+
+export function uuid(length = 12): string {
+  return length < 1
+    ? ""
+    : Array(length)
+        .fill("")
+        .map(() => charsSet.charAt(Math.random() * charsSetLength))
+        .join("");
 }
