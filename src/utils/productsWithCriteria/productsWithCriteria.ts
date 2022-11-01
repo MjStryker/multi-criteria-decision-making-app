@@ -2,7 +2,6 @@ import { TCriterion } from "../../types/criteria";
 import { TProduct } from "../../types/products";
 import { TProductWithCriterion } from "../../types/productsWithCriteria";
 import { isDefined } from "../objects";
-import { sumCriteriaWeight } from "../criteria/criteria";
 import { uuid } from "../uuid";
 
 export function createEmptyProductCriterionValue(
@@ -30,15 +29,12 @@ export function findProductCriterionValue(
   );
 }
 
-export function getProductsCriteriaNormalizedWeightedValues(
+// TODO: Tests missing for this function
+export function calculateProductsCriteriaNormalizedWeightedValues(
   products: TProduct[],
   criteria: TCriterion[],
   productsWithCriteria: TProductWithCriterion[]
 ): TProductWithCriterion[] {
-  const productsWithCriteriaNormalizedWeightedValues = productsWithCriteria;
-
-  const weightTotal = sumCriteriaWeight(criteria);
-
   products.forEach((product) => {
     let criteriaValuesTotal = 0;
 
@@ -53,20 +49,20 @@ export function getProductsCriteriaNormalizedWeightedValues(
     });
 
     criteriaWithValues.forEach(({ criterion, value }) => {
-      const criterionWeightNormalized = criterion.weight
-        ? criterion.weight / weightTotal
-        : undefined;
+      const normalizedValue =
+        isDefined(value) && criteriaValuesTotal > 0
+          ? value / criteriaValuesTotal
+          : undefined;
 
-      const normalizedValue = value ? value / criteriaValuesTotal : undefined;
       const weightedValue =
-        normalizedValue && criterionWeightNormalized
-          ? normalizedValue * criterionWeightNormalized
+        isDefined(normalizedValue) && isDefined(criterion.normalizedWeight)
+          ? normalizedValue * criterion.normalizedWeight
           : undefined;
 
       const e = findProductCriterionValue(
         product,
         criterion,
-        productsWithCriteriaNormalizedWeightedValues
+        productsWithCriteria
       );
 
       if (isDefined(e)) {
@@ -76,5 +72,5 @@ export function getProductsCriteriaNormalizedWeightedValues(
     });
   });
 
-  return productsWithCriteriaNormalizedWeightedValues;
+  return productsWithCriteria;
 }

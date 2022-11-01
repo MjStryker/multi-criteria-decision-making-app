@@ -81,9 +81,9 @@ const DataTable = () => {
   const { addProductWithCriteria, setProductCriteriaValue } =
     useHandleProductsWithCriteria(
       productsWithCriteria,
-      onSetProductsWithCriteria,
-      products,
-      criteria
+      onSetProductsWithCriteria
+      // products,
+      // criteria
     );
 
   const { addCriterion, updateCriterion, removeCriterion } = useHandleCriteria(

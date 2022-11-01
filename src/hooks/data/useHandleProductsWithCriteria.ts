@@ -1,33 +1,27 @@
-import {
-  createEmptyProductCriterionValue,
-  getProductsCriteriaNormalizedWeightedValues,
-} from "../../utils/productsWithCriteria/productsWithCriteria";
-
 import { TCriterion } from "../../types/criteria";
 import { TProduct } from "../../types/products";
 import { TProductWithCriterion } from "../../types/productsWithCriteria";
-import { useEffect } from "react";
+import { createEmptyProductCriterionValue } from "../../utils/productsWithCriteria/productsWithCriteria";
 
 const useHandleProductsWithCriteria = (
   productsWithCriterias: TProductWithCriterion[],
   setProductsWithCriteria: React.Dispatch<
     React.SetStateAction<TProductWithCriterion[]>
-  >,
-  products: TProduct[],
-  criteria: TCriterion[]
+  >
+  // products: TProduct[],
+  // criteria: TCriterion[]
 ) => {
-  // TODO: Tests missing for this function
-  const productsWithCriteriaNormalizedWeightedValues =
-    getProductsCriteriaNormalizedWeightedValues(
-      products,
-      criteria,
-      productsWithCriterias
-    );
+  // const productsWithCriteriaNormalizedWeightedValues =
+  //   calculateProductsCriteriaNormalizedWeightedValues(
+  //     products,
+  //     criteria,
+  //     productsWithCriterias
+  //   );
 
-  useEffect(() => {
-    setProductsWithCriteria(productsWithCriteriaNormalizedWeightedValues);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [productsWithCriteriaNormalizedWeightedValues]);
+  // useEffect(() => {
+  //   setProductsWithCriteria(productsWithCriteriaNormalizedWeightedValues);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [productsWithCriteriaNormalizedWeightedValues]);
 
   const addProductWithCriteria = (
     productWithCriteria: TProductWithCriterion

@@ -1,6 +1,6 @@
 import {
+  calculateProductsCriteriaNormalizedWeightedValues,
   findProductCriterionValue,
-  getProductsCriteriaNormalizedWeightedValues,
 } from "../productsWithCriteria/productsWithCriteria";
 
 import { SORT_BY } from "../../constants/arrays";
@@ -19,7 +19,7 @@ export function rankProducts(
    * STEP 1 - Get normalized and weighted values for all products
    */
   const productsWithCriteriaNormalizedWeightedValues =
-    getProductsCriteriaNormalizedWeightedValues(
+    calculateProductsCriteriaNormalizedWeightedValues(
       products,
       criteria,
       productsWithCriteria
@@ -38,13 +38,13 @@ export function rankProducts(
       let productTotalNonBeneficialValues = 0;
 
       criteria.forEach((criterion) => {
-        const productWithCriteria = findProductCriterionValue(
+        const productWithCriterion = findProductCriterionValue(
           product,
           criterion,
           productsWithCriteriaNormalizedWeightedValues
         );
 
-        const weightedValueOrZero = productWithCriteria?.weightedValue ?? 0;
+        const weightedValueOrZero = productWithCriterion?.weightedValue ?? 0;
 
         // Get beneficial total (sum Bi)
         if (criterion.beneficial === true) {
