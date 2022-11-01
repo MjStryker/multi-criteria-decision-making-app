@@ -1,9 +1,13 @@
+import {
+  findProductCriterionValue,
+  getProductsCriteriaNormalizedWeightedValues,
+} from "../productsWithCriteria/productsWithCriteria";
+
 import { SORT_BY } from "../../constants/arrays";
 import { TCriterion } from "../../types/criteria";
 import { TProduct } from "../../types/products";
 import { TProductWithCriterion } from "../../types/productsWithCriteria";
 import { compareFn } from "../arrays";
-import { findProductCriterionValue } from "../productsWithCriteria/productsWithCriteria";
 import { isDefined } from "../objects";
 
 export function rankProducts(
@@ -14,104 +18,109 @@ export function rankProducts(
   /**
    * STEP 1 - Get normalized and weighted values for all products
    */
-  // const { productsWithCriteriaNormalizedWeightedValues } =
-  //   getProductsWithCriteriaNormalizedWeightedValues(
-  //     products,
-  //     criteria,
-  //     productsWithCriteria
-  //   );
+  const productsWithCriteriaNormalizedWeightedValues =
+    getProductsCriteriaNormalizedWeightedValues(
+      products,
+      criteria,
+      productsWithCriteria
+    );
 
   /**
-   * STEP 2 - Get total beneficial (Bi) and non-beneficial (Ci) values (with min)
+   * STEP 2 - Get total beneficial and non-beneficial values (sum Bi / sum Ci)
+   *        - Get min non-beneficial value (min Ci)
    */
   let allProductsTotalNonBeneficialValues = 0;
-  let allProductsMinNonBeneficialValue: number | undefined = undefined;
+  let allProductsMinNonBeneficialValue = -1;
 
   const productsWithBeneficialAndNonBeneficialValues = [...products].map(
     (product) => {
-      let totalBeneficialValues = 0;
-      let totalNonBeneficialValues = 0;
+      let productTotalBeneficialValues = 0;
+      let productTotalNonBeneficialValues = 0;
 
       criteria.forEach((criterion) => {
         const productWithCriteria = findProductCriterionValue(
           product,
           criterion,
-          productsWithCriteria
+          productsWithCriteriaNormalizedWeightedValues
         );
 
         const weightedValueOrZero = productWithCriteria?.weightedValue ?? 0;
 
-        allProductsTotalNonBeneficialValues += weightedValueOrZero;
-
-        // Get totals
+        // Get beneficial total (sum Bi)
         if (criterion.beneficial === true) {
-          totalBeneficialValues += weightedValueOrZero;
-        } else if (criterion.beneficial === false) {
-          totalNonBeneficialValues += weightedValueOrZero;
+          productTotalBeneficialValues += weightedValueOrZero;
+        }
+        // Get non-beneficial total (sum Ci)
+        else {
+          productTotalNonBeneficialValues += weightedValueOrZero;
+          allProductsTotalNonBeneficialValues += weightedValueOrZero;
 
-          // Get min
+          // Get non-beneficial min (min Ci)
           if (
-            !allProductsMinNonBeneficialValue ||
-            (allProductsMinNonBeneficialValue &&
-              productWithCriteria?.weightedValue &&
-              productWithCriteria.weightedValue <
-                allProductsMinNonBeneficialValue)
+            allProductsMinNonBeneficialValue === -1 ||
+            weightedValueOrZero < allProductsMinNonBeneficialValue
           ) {
-            allProductsMinNonBeneficialValue =
-              productWithCriteria?.weightedValue ?? undefined;
+            allProductsMinNonBeneficialValue = weightedValueOrZero;
           }
         }
       });
 
-      return { product, totalBeneficialValues, totalNonBeneficialValues };
+      return {
+        product,
+        totalBeneficialValues: productTotalBeneficialValues,
+        totalNonBeneficialValues: productTotalNonBeneficialValues,
+      };
     }
   );
 
   /**
-   * STEP 3 - Get beneficial and non-beneficial values relative to  min ((min Ci)/Ci)
+   * STEP 3 - Get non-beneficial values relative to min ((min Ci)/Ci)
    */
   let allProductsTotalNonBeneficialValuesRelatedToMin = 0;
 
   const productsWithValuesRelativeToMinBeneficial =
     productsWithBeneficialAndNonBeneficialValues.map((product) => {
-      const minNonBeneficialValueRelativeToGlobalMin =
-        allProductsMinNonBeneficialValue
+      const nonBeneficialValueRelativeToGlobalMin =
+        allProductsMinNonBeneficialValue > 0 &&
+        product.totalNonBeneficialValues > 0
           ? allProductsMinNonBeneficialValue / product.totalNonBeneficialValues
-          : undefined;
+          : 0;
 
       allProductsTotalNonBeneficialValuesRelatedToMin +=
-        minNonBeneficialValueRelativeToGlobalMin ?? 0;
+        nonBeneficialValueRelativeToGlobalMin ?? 0;
 
       return {
         ...product,
-        minNonBeneficialValueRelativeToGlobalMin,
+        minNonBeneficialValueRelativeToGlobalMin:
+          nonBeneficialValueRelativeToGlobalMin,
       };
     });
 
   /**
-   * STEP 4 - Get all products Qi value
+   * STEP 4 - Get products Qi value
    */
-  let allProductsMaxQi: number | undefined = undefined;
+  let allProductsMaxQi: number = -1;
 
   const productsQi = productsWithValuesRelativeToMinBeneficial.map(
     (product) => {
-      const qi =
-        // If variables are defined
-        allProductsMinNonBeneficialValue &&
-        allProductsTotalNonBeneficialValuesRelatedToMin
-          ? // then ..
-            product.totalBeneficialValues +
-            (allProductsMinNonBeneficialValue *
-              allProductsTotalNonBeneficialValues) /
-              (product.totalNonBeneficialValues *
-                allProductsTotalNonBeneficialValuesRelatedToMin)
-          : undefined;
+      let qi = product.totalBeneficialValues;
 
+      // If there are non-beneficial values
       if (
-        !allProductsMaxQi ||
-        (allProductsMaxQi && qi && qi > allProductsMaxQi)
+        allProductsMinNonBeneficialValue > 0 &&
+        allProductsTotalNonBeneficialValuesRelatedToMin > 0
       ) {
-        allProductsMaxQi = qi;
+        // Then to the following calculous:
+        // Qi + ((min Ci) x (sum Ci)) / Ci x sum((min Ci)/Ci)
+        qi +=
+          (allProductsMinNonBeneficialValue *
+            allProductsTotalNonBeneficialValues) /
+          (product.totalNonBeneficialValues *
+            allProductsTotalNonBeneficialValuesRelatedToMin);
+      }
+
+      if (allProductsMaxQi === -1 || qi > allProductsMaxQi) {
+        allProductsMaxQi = qi as number;
       }
 
       return { ...product, qi };
@@ -133,12 +142,25 @@ export function rankProducts(
   /**
    * STEP 6 - Get products rank (+ sort by rank)
    */
+  let lastUi = -1;
+  let lastRank = 0;
+
   const productsRank = productsUi
     .sort((p1, p2) => compareFn(SORT_BY.DESC)(p1.ui, p2.ui))
-    .map(({ product, ui }, idx) => ({
-      ...product,
-      rank: isDefined(ui) ? idx + 1 : undefined,
-    }));
+    .map(({ product, ui }, idx) => {
+      let rank = undefined;
+
+      if (isDefined(ui)) {
+        rank = lastRank + (ui === lastUi ? 0 : 1);
+        lastUi = ui;
+        lastRank = rank;
+      }
+
+      return {
+        ...product,
+        rank,
+      };
+    });
 
   return productsRank;
 }

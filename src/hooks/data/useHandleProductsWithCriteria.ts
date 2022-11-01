@@ -16,6 +16,7 @@ const useHandleProductsWithCriteria = (
   products: TProduct[],
   criteria: TCriterion[]
 ) => {
+  // TODO: Tests missing for this function
   const productsWithCriteriaNormalizedWeightedValues =
     getProductsCriteriaNormalizedWeightedValues(
       products,
