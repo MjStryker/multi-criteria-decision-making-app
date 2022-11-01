@@ -1,6 +1,6 @@
 import {
   calculateCriteriaNormalizedWeight,
-  compareCriterionByDefaultRowIdxFn,
+  compareCriteriaByDefaultRowIdxFn,
   getCriteriaMaxWeight,
   getCriterionWeightRelativeToMax,
   sumCriteriaWeight,
@@ -41,27 +41,27 @@ const c3: TCriterion = {
 
 const criteria: TCriterion[] = [c1, c2, c3];
 
+const ASC = SORT_BY.ASC;
+const DESC = SORT_BY.DESC;
+
 const criteriaSortedByDefaultRowIdx = {
   ASC: [c2, c1, c3] as TCriterion[],
   DESC: [c3, c1, c2] as TCriterion[],
 };
 
-const ASC = SORT_BY.ASC;
-const DESC = SORT_BY.DESC;
-
-describe("sortCriteriaByDefaultRowIdx(...)", () => {
+describe("compareCriteriaByDefaultRowIdxFn(...)", () => {
   describe("ASC", () => {
     it("Already sorted criterion array", () => {
       expect(
         criteriaSortedByDefaultRowIdx.ASC.sort(
-          compareCriterionByDefaultRowIdxFn(ASC)
+          compareCriteriaByDefaultRowIdxFn(ASC)
         )
       ).toStrictEqual(criteriaSortedByDefaultRowIdx.ASC);
     });
 
     it("Unsorted criterion array", () => {
       expect(
-        [c1, c2, c3].sort(compareCriterionByDefaultRowIdxFn(ASC))
+        [c1, c2, c3].sort(compareCriteriaByDefaultRowIdxFn(ASC))
       ).toStrictEqual(criteriaSortedByDefaultRowIdx.ASC);
     });
   });
@@ -70,14 +70,14 @@ describe("sortCriteriaByDefaultRowIdx(...)", () => {
     it("Already sorted criterion array", () => {
       expect(
         criteriaSortedByDefaultRowIdx.DESC.sort(
-          compareCriterionByDefaultRowIdxFn(DESC)
+          compareCriteriaByDefaultRowIdxFn(DESC)
         )
       ).toStrictEqual(criteriaSortedByDefaultRowIdx.DESC);
     });
 
     it("Unsorted criterion array", () => {
       expect(
-        [c1, c2, c3].sort(compareCriterionByDefaultRowIdxFn(DESC))
+        [c1, c2, c3].sort(compareCriteriaByDefaultRowIdxFn(DESC))
       ).toStrictEqual(criteriaSortedByDefaultRowIdx.DESC);
     });
   });

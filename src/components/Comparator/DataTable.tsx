@@ -7,7 +7,7 @@ import { TProductWithCriterion } from "../../types/productsWithCriteria";
 import TableBody from "./Table/Body/TableBody";
 import TableFooter from "./Table/Footer/TableFooter";
 import TableHeader from "./Table/Header/TableHeader";
-import { compareCriterionByDefaultRowIdxFn } from "../../utils/criteria/criteria";
+import { compareCriteriaByDefaultRowIdxFn } from "../../utils/criteria/criteria";
 import { compareProductsByDefaultColumnIdxFn } from "../../utils/products/products";
 import cordlessVacuumCleaner from "../../data/cordlessVacuumCleaner";
 import { deepEqual } from "../../utils/objects";
@@ -99,7 +99,7 @@ const DataTable = () => {
   );
 
   const criteriaSorted = criteria.sort(
-    compareCriterionByDefaultRowIdxFn(SORT_BY.ASC)
+    compareCriteriaByDefaultRowIdxFn(SORT_BY.ASC)
   );
 
   const productsSorted = products.sort(

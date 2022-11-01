@@ -7,7 +7,7 @@ import { areDefined } from "../objects";
 import { compareFn } from "../arrays";
 import { uuid } from "../uuid";
 
-export const compareCriterionByDefaultRowIdxFn =
+export const compareCriteriaByDefaultRowIdxFn =
   (sortBy: TSortBy) => (a: TCriterion, b: TCriterion) =>
     compareFn(sortBy)(a.defaultRowIdx, b.defaultRowIdx);
 
