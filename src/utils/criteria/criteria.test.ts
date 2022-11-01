@@ -52,15 +52,15 @@ const criteriaSortedByDefaultRowIdx = {
 
 describe("compareCriteriaByDefaultRowIdxFn(...)", () => {
   describe("ASC", () => {
-    it("Already sorted criterion array", () => {
+    it("Already sorted criteria array", () => {
       expect(
-        criteriaSortedByDefaultRowIdx.ASC.sort(
+        [...criteriaSortedByDefaultRowIdx.ASC].sort(
           compareCriteriaByDefaultRowIdxFn(ASC)
         )
       ).toStrictEqual(criteriaSortedByDefaultRowIdx.ASC);
     });
 
-    it("Unsorted criterion array", () => {
+    it("Unsorted criteria array", () => {
       expect(
         [c1, c2, c3].sort(compareCriteriaByDefaultRowIdxFn(ASC))
       ).toStrictEqual(criteriaSortedByDefaultRowIdx.ASC);
@@ -68,15 +68,15 @@ describe("compareCriteriaByDefaultRowIdxFn(...)", () => {
   });
 
   describe("DESC", () => {
-    it("Already sorted criterion array", () => {
+    it("Already sorted criteria array", () => {
       expect(
-        criteriaSortedByDefaultRowIdx.DESC.sort(
+        [...criteriaSortedByDefaultRowIdx.DESC].sort(
           compareCriteriaByDefaultRowIdxFn(DESC)
         )
       ).toStrictEqual(criteriaSortedByDefaultRowIdx.DESC);
     });
 
-    it("Unsorted criterion array", () => {
+    it("Unsorted criteria array", () => {
       expect(
         [c1, c2, c3].sort(compareCriteriaByDefaultRowIdxFn(DESC))
       ).toStrictEqual(criteriaSortedByDefaultRowIdx.DESC);

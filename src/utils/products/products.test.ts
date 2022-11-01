@@ -42,7 +42,7 @@ describe("compareProductsByDefaultColumnIdxFn(...)", () => {
   describe("ASC", () => {
     it("Already sorted products array", () => {
       expect(
-        productsSortedByDefaultColumnIdx.ASC.sort(
+        [...productsSortedByDefaultColumnIdx.ASC].sort(
           compareProductsByDefaultColumnIdxFn(ASC)
         )
       ).toStrictEqual(productsSortedByDefaultColumnIdx.ASC);
@@ -58,7 +58,7 @@ describe("compareProductsByDefaultColumnIdxFn(...)", () => {
   describe("DESC", () => {
     it("Already sorted products array", () => {
       expect(
-        productsSortedByDefaultColumnIdx.DESC.sort(
+        [...productsSortedByDefaultColumnIdx.DESC].sort(
           compareProductsByDefaultColumnIdxFn(DESC)
         )
       ).toStrictEqual(productsSortedByDefaultColumnIdx.DESC);
@@ -81,7 +81,7 @@ describe("compareProductsByRankFn(...)", () => {
   describe("ASC", () => {
     it("Already sorted products array", () => {
       expect(
-        productsSortedByRank.ASC.sort(compareProductsByRankFn(ASC))
+        [...productsSortedByRank.ASC].sort(compareProductsByRankFn(ASC))
       ).toStrictEqual(productsSortedByRank.ASC);
     });
 
@@ -95,7 +95,7 @@ describe("compareProductsByRankFn(...)", () => {
   describe("DESC", () => {
     it("Already sorted products array", () => {
       expect(
-        productsSortedByRank.DESC.sort(compareProductsByRankFn(DESC))
+        [...productsSortedByRank.DESC].sort(compareProductsByRankFn(DESC))
       ).toStrictEqual(productsSortedByRank.DESC);
     });
 
