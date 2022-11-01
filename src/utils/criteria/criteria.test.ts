@@ -3,6 +3,7 @@ import {
   compareCriteriaByDefaultRowIdxFn,
   getCriteriaMaxWeight,
   getCriterionWeightRelativeToMax,
+  sumCriteriaNormalizedWeight,
   sumCriteriaWeight,
 } from "./criteria";
 
@@ -24,7 +25,7 @@ const c2: TCriterion = {
   name: "c2",
   unit: undefined,
   weight: 1,
-  normalizedWeight: 1,
+  normalizedWeight: 0.25,
   beneficial: true,
   defaultRowIdx: 1,
 };
@@ -34,7 +35,7 @@ const c3: TCriterion = {
   name: "c3",
   unit: undefined,
   weight: 1,
-  normalizedWeight: 1,
+  normalizedWeight: 0.25,
   beneficial: true,
   defaultRowIdx: 3,
 };
@@ -86,6 +87,12 @@ describe("compareCriteriaByDefaultRowIdxFn(...)", () => {
 describe("sumCriteriaWeight(...)", () => {
   it("Check return value", () => {
     expect(sumCriteriaWeight(criteria)).toEqual(4);
+  });
+});
+
+describe("sumCriteriaNormalizedWeight(...)", () => {
+  it("Check return value", () => {
+    expect(sumCriteriaNormalizedWeight(criteria)).toEqual(1);
   });
 });
 
