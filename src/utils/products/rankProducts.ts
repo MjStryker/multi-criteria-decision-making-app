@@ -1,3 +1,4 @@
+import { areDefined, isDefined } from "../objects";
 import {
   calculateProductsCriteriaNormalizedWeightedValues,
   findProductCriterionValue,
@@ -8,9 +9,9 @@ import { TCriterion } from "../../types/criteria";
 import { TProduct } from "../../types/products";
 import { TProductWithCriterion } from "../../types/productsWithCriteria";
 import { compareFn } from "../arrays";
-import { isDefined } from "../objects";
+import { sumCriteriaWeight } from "../criteria/criteria";
 
-export function rankProducts(
+function rankProductsUsingCoprasMethod(
   products: TProduct[],
   criteria: TCriterion[],
   productsWithCriteria: TProductWithCriterion[]
@@ -163,4 +164,133 @@ export function rankProducts(
     });
 
   return productsRank;
+}
+
+export function rankProducts(
+  products: TProduct[],
+  criteria: TCriterion[],
+  productsWithCriteria: TProductWithCriterion[]
+): TProduct[] {
+  /**
+   * * If data is simple (same criterion weight) -> Compare products' values
+   */
+  if (sumCriteriaWeight(criteria) === criteria.length) {
+    const productsBeneficialAndNonBeneficialTotals = products.map(
+      (product) => ({
+        ...product,
+        beneficialRankTotal: undefined as number | undefined,
+        nonBeneficialRankTotal: undefined as number | undefined,
+      })
+    );
+
+    let maxBeneficial: number | undefined = undefined;
+    let minNonBeneficial: number | undefined = undefined;
+
+    criteria.forEach((criterion) => {
+      productsBeneficialAndNonBeneficialTotals.map((product) => {
+        const value: number | undefined = findProductCriterionValue(
+          product,
+          criterion,
+          productsWithCriteria
+        )?.value;
+
+        if (criterion.beneficial === true) {
+          const newBeneficialRankSum = isDefined(value)
+            ? isDefined(product.beneficialRankTotal)
+              ? product.beneficialRankTotal + value
+              : value
+            : undefined;
+
+          product.beneficialRankTotal = newBeneficialRankSum;
+
+          if (
+            isDefined(newBeneficialRankSum) &&
+            (!maxBeneficial || newBeneficialRankSum > maxBeneficial)
+          ) {
+            maxBeneficial = newBeneficialRankSum;
+          }
+        }
+
+        if (criterion.beneficial === false) {
+          const newNonBeneficialRankSum = isDefined(value)
+            ? isDefined(product.nonBeneficialRankTotal)
+              ? product.nonBeneficialRankTotal + value
+              : value
+            : undefined;
+
+          product.nonBeneficialRankTotal = newNonBeneficialRankSum;
+
+          if (
+            isDefined(newNonBeneficialRankSum) &&
+            (!minNonBeneficial || newNonBeneficialRankSum < minNonBeneficial)
+          ) {
+            minNonBeneficial = newNonBeneficialRankSum;
+          }
+        }
+
+        return product;
+      });
+    });
+
+    const productsRanksInPercentage =
+      productsBeneficialAndNonBeneficialTotals.map(
+        ({
+          beneficialRankTotal: beneficialRankSum,
+          nonBeneficialRankTotal: nonBeneficialRankSum,
+          ...product
+        }) => {
+          const beneficialRank = areDefined([beneficialRankSum, maxBeneficial])
+            ? beneficialRankSum! / maxBeneficial!
+            : undefined;
+
+          const nonBeneficialRank = areDefined([
+            nonBeneficialRankSum,
+            minNonBeneficial,
+          ])
+            ? 2 - nonBeneficialRankSum! / minNonBeneficial!
+            : undefined;
+
+          const ui = areDefined([beneficialRank, nonBeneficialRank])
+            ? beneficialRank! + nonBeneficialRank!
+            : isDefined(beneficialRank)
+            ? beneficialRank
+            : isDefined(nonBeneficialRank)
+            ? nonBeneficialRank
+            : undefined;
+
+          return { ...product, ui };
+        }
+      );
+
+    let lastUi = -1;
+    let lastRank = 0;
+
+    const productsRank = productsRanksInPercentage
+      .sort((p1, p2) => compareFn(SORT_BY.DESC)(p1.ui, p2.ui))
+      .map(({ ui, ...product }) => {
+        let rank = undefined;
+
+        if (isDefined(ui)) {
+          rank = lastRank + (ui === lastUi ? 0 : 1);
+          lastUi = ui;
+          lastRank = rank;
+        }
+
+        return {
+          ...product,
+          rank,
+        };
+      });
+
+    return productsRank;
+  }
+
+  /**
+   * * Else if data is complex (criteria with different weights) -> Use COPRAS method
+   */
+  return rankProductsUsingCoprasMethod(
+    products,
+    criteria,
+    productsWithCriteria
+  );
 }

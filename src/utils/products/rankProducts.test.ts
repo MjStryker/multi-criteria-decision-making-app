@@ -191,21 +191,21 @@ export const productsWithCriteria: TProductWithCriterion[] = [
 ];
 
 function getTestValues(
-  values: { criterionData: Partial<TCriterion>; productValues: number[] }[]
+  values: [criterionData: Partial<TCriterion>, productValues: number[]][]
 ): {
   criteriaToUse: TCriterion[];
   productsWithCriteriaToUse: TProductWithCriterion[];
 } {
   expect(values.length).toBe(criteria.length);
 
-  values.forEach(({ productValues }) =>
-    expect(productValues.length).toBe(products.length)
+  values.forEach(
+    (val) => expect(val[1].length).toBe(products.length) // productValues
   );
 
   const criteriaToUse = calculateCriteriaNormalizedWeight(
     [...criteria].map((criterion, idx) => ({
       ...criterion,
-      ...values[idx].criterionData,
+      ...values[idx][0],
     }))
   );
 
@@ -213,7 +213,7 @@ function getTestValues(
     0.999
   );
 
-  const productValues = values.map(({ productValues }) => productValues).flat();
+  const productValues = values.map((val) => val[1]).flat();
 
   const productsWithCriteriaToUse = [...productsWithCriteria].map(
     (elt, idx) => ({
@@ -238,128 +238,54 @@ describe("rankProducts(...)", () => {
     });
   });
 
-  describe("Only beneficial values", () => {
-    const beneficial = true;
+  it("test 1", () => {
+    const { criteriaToUse, productsWithCriteriaToUse } = getTestValues([
+      [{}, [100, 100, 100]],
+      [{}, [100, 100, 100]],
+      [{}, [100, 100, 100]],
+      [{}, [100, 100, 100]],
+    ]);
 
-    it("Equal ranks", () => {
-      const productValues = [100, 100, 100];
-
-      const values = [
-        { criterionData: { weight: 1, beneficial }, productValues },
-        { criterionData: { weight: 1, beneficial }, productValues },
-        { criterionData: { weight: 1, beneficial }, productValues },
-        { criterionData: { weight: 1, beneficial }, productValues },
-      ];
-
-      const { criteriaToUse, productsWithCriteriaToUse } =
-        getTestValues(values);
-
-      const rankedProducts = rankProducts(
-        products,
-        criteriaToUse,
-        productsWithCriteriaToUse
-      );
-
-      expect(rankedProducts).toStrictEqual([
-        { ...p1, rank: 1 },
-        { ...p2, rank: 1 },
-        { ...p3, rank: 1 },
-      ]);
-    });
-
-    it("1,2,3..", () => {
-      const values = [
-        {
-          criterionData: { weight: 2, beneficial },
-          productValues: [100, 200, 150],
-        },
-        {
-          criterionData: { weight: 1, beneficial },
-          productValues: [100, 100, 100],
-        },
-        {
-          criterionData: { weight: 1, beneficial },
-          productValues: [100, 100, 100],
-        },
-        {
-          criterionData: { weight: 1, beneficial },
-          productValues: [100, 100, 100],
-        },
-      ];
-
-      const { criteriaToUse, productsWithCriteriaToUse } =
-        getTestValues(values);
-
-      const rankedProducts = rankProducts(
-        [...products],
-        criteriaToUse,
-        productsWithCriteriaToUse
-      );
-
-      expect(rankedProducts).toStrictEqual([
-        { ...p2, rank: 1 },
-        { ...p3, rank: 2 },
-        { ...p1, rank: 3 },
-      ]);
-    });
+    expect(
+      rankProducts(products, criteriaToUse, productsWithCriteriaToUse)
+    ).toStrictEqual([
+      { ...p1, rank: 1 },
+      { ...p2, rank: 1 },
+      { ...p3, rank: 1 },
+    ]);
   });
 
-  // describe("Only non-beneficial values", () => {
-  //   const beneficial = false;
-  //   const criterionData = { weight, beneficial };
+  it("test 2", () => {
+    const { criteriaToUse, productsWithCriteriaToUse } = getTestValues([
+      [{}, [99, 101, 100]],
+      [{}, [100, 100, 100]],
+      [{}, [100, 100, 100]],
+      [{}, [100, 100, 100]],
+    ]);
 
-  //   it("Equal ranks", () => {
-  //     const productValues = [100, 100, 100];
+    expect(
+      rankProducts(products, criteriaToUse, productsWithCriteriaToUse)
+    ).toStrictEqual([
+      { ...p2, rank: 1 },
+      { ...p3, rank: 2 },
+      { ...p1, rank: 3 },
+    ]);
+  });
 
-  //     const values = [
-  //       { criterionData, productValues },
-  //       { criterionData, productValues },
-  //       { criterionData, productValues },
-  //       { criterionData, productValues },
-  //     ];
+  it("test 3", () => {
+    const { criteriaToUse, productsWithCriteriaToUse } = getTestValues([
+      [{ beneficial: false }, [99, 101, 100]],
+      [{}, [100, 100, 100]],
+      [{}, [100, 100, 100]],
+      [{}, [100, 100, 100]],
+    ]);
 
-  //     const { criteriaToUse, productsWithCriteriaToUse } =
-  //       getTestValues(values);
-
-  //     const rankedProducts = rankProducts(
-  //       products,
-  //       criteriaToUse,
-  //       productsWithCriteriaToUse
-  //     );
-
-  //     expect(rankedProducts).toStrictEqual([
-  //       { ...p1, rank: 1 },
-  //       { ...p2, rank: 1 },
-  //       { ...p3, rank: 1 },
-  //     ]);
-  //   });
-  // });
-
-  // describe("Mixed of beneficial and non-beneficial values", () => {
-  //   it("Equal ranks", () => {
-  //     const productValues = [100, 100, 100];
-
-  //     const values = [
-  //       { criterionData: { weight, beneficial: false }, productValues },
-  //       { criterionData: { weight, beneficial: true }, productValues },
-  //       { criterionData: { weight, beneficial: true }, productValues },
-  //       { criterionData: { weight, beneficial: true }, productValues },
-  //     ];
-
-  //     const { criteriaToUse, productsWithCriteriaToUse } =
-  //       getTestValues(values);
-
-  //     const rankedProducts = rankProducts(
-  //       products,
-  //       criteriaToUse,
-  //       productsWithCriteriaToUse
-  //     );
-
-  //     expect(rankedProducts).toStrictEqual([
-  //       { ...p1, rank: 1 },
-  //       { ...p2, rank: 1 },
-  //       { ...p3, rank: 1 },
-  //     ]);
-  //   });
-  // });
+    expect(
+      rankProducts(products, criteriaToUse, productsWithCriteriaToUse)
+    ).toStrictEqual([
+      { ...p1, rank: 1 },
+      { ...p3, rank: 2 },
+      { ...p2, rank: 3 },
+    ]);
+  });
 });
