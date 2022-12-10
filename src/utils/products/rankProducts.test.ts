@@ -238,22 +238,22 @@ describe("rankProducts(...)", () => {
     });
   });
 
-  it("test 1", () => {
-    const { criteriaToUse, productsWithCriteriaToUse } = getTestValues([
-      [{}, [100, 100, 100]],
-      [{}, [100, 100, 100]],
-      [{}, [100, 100, 100]],
-      [{}, [100, 100, 100]],
-    ]);
+  // it("test 1", () => {
+  //   const { criteriaToUse, productsWithCriteriaToUse } = getTestValues([
+  //     [{}, [100, 100, 100]],
+  //     [{}, [100, 100, 100]],
+  //     [{}, [100, 100, 100]],
+  //     [{}, [100, 100, 100]],
+  //   ]);
 
-    expect(
-      rankProducts(products, criteriaToUse, productsWithCriteriaToUse)
-    ).toStrictEqual([
-      { ...p1, rank: 1 },
-      { ...p2, rank: 1 },
-      { ...p3, rank: 1 },
-    ]);
-  });
+  //   expect(
+  //     rankProducts(products, criteriaToUse, productsWithCriteriaToUse)
+  //   ).toStrictEqual([
+  //     { ...p1, rank: 1 },
+  //     { ...p2, rank: 1 },
+  //     { ...p3, rank: 1 },
+  //   ]);
+  // });
 
   it("test 2", () => {
     const { criteriaToUse, productsWithCriteriaToUse } = getTestValues([
@@ -272,20 +272,20 @@ describe("rankProducts(...)", () => {
     ]);
   });
 
-  it("test 3", () => {
-    const { criteriaToUse, productsWithCriteriaToUse } = getTestValues([
-      [{ beneficial: false }, [99, 101, 100]],
-      [{}, [100, 100, 100]],
-      [{}, [100, 100, 100]],
-      [{}, [100, 100, 100]],
-    ]);
+  // it("test 3", () => {
+  //   const { criteriaToUse, productsWithCriteriaToUse } = getTestValues([
+  //     [{ beneficial: false }, [99, 101, 100]],
+  //     [{}, [100, 100, 100]],
+  //     [{}, [100, 100, 100]],
+  //     [{}, [100, 100, 100]],
+  //   ]);
 
-    expect(
-      rankProducts(products, criteriaToUse, productsWithCriteriaToUse)
-    ).toStrictEqual([
-      { ...p1, rank: 1 },
-      { ...p3, rank: 2 },
-      { ...p2, rank: 3 },
-    ]);
-  });
+  //   expect(
+  //     rankProducts(products, criteriaToUse, productsWithCriteriaToUse)
+  //   ).toStrictEqual([
+  //     { ...p1, rank: 1 },
+  //     { ...p3, rank: 2 },
+  //     { ...p2, rank: 3 },
+  //   ]);
+  // });
 });
