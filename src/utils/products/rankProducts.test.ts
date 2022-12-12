@@ -87,6 +87,7 @@ export const productsWithCriteria: TProductWithCriterion[] = [
     value: 100,
     normalizedValue: undefined,
     weightedValue: undefined,
+    criterionRankPts: undefined,
   },
   {
     id: "id-c1-p2",
@@ -95,6 +96,7 @@ export const productsWithCriteria: TProductWithCriterion[] = [
     value: 100,
     normalizedValue: undefined,
     weightedValue: undefined,
+    criterionRankPts: undefined,
   },
   {
     id: "id-c1-p3",
@@ -103,6 +105,7 @@ export const productsWithCriteria: TProductWithCriterion[] = [
     value: 100,
     normalizedValue: undefined,
     weightedValue: undefined,
+    criterionRankPts: undefined,
   },
 
   /**
@@ -115,6 +118,7 @@ export const productsWithCriteria: TProductWithCriterion[] = [
     value: 100,
     normalizedValue: undefined,
     weightedValue: undefined,
+    criterionRankPts: undefined,
   },
   {
     id: "id-c2-p2",
@@ -123,6 +127,7 @@ export const productsWithCriteria: TProductWithCriterion[] = [
     value: 100,
     normalizedValue: undefined,
     weightedValue: undefined,
+    criterionRankPts: undefined,
   },
   {
     id: "id-c2-p3",
@@ -131,6 +136,7 @@ export const productsWithCriteria: TProductWithCriterion[] = [
     value: 100,
     normalizedValue: undefined,
     weightedValue: undefined,
+    criterionRankPts: undefined,
   },
 
   /**
@@ -143,6 +149,7 @@ export const productsWithCriteria: TProductWithCriterion[] = [
     value: 100,
     normalizedValue: undefined,
     weightedValue: undefined,
+    criterionRankPts: undefined,
   },
   {
     id: "id-c3-p2",
@@ -151,6 +158,7 @@ export const productsWithCriteria: TProductWithCriterion[] = [
     value: 100,
     normalizedValue: undefined,
     weightedValue: undefined,
+    criterionRankPts: undefined,
   },
   {
     id: "id-c3-p3",
@@ -159,6 +167,7 @@ export const productsWithCriteria: TProductWithCriterion[] = [
     value: 100,
     normalizedValue: undefined,
     weightedValue: undefined,
+    criterionRankPts: undefined,
   },
 
   /**
@@ -171,6 +180,7 @@ export const productsWithCriteria: TProductWithCriterion[] = [
     value: 100,
     normalizedValue: undefined,
     weightedValue: undefined,
+    criterionRankPts: undefined,
   },
   {
     id: "id-c4-p2",
@@ -179,6 +189,7 @@ export const productsWithCriteria: TProductWithCriterion[] = [
     value: 100,
     normalizedValue: undefined,
     weightedValue: undefined,
+    criterionRankPts: undefined,
   },
   {
     id: "id-c4-p3",
@@ -187,6 +198,7 @@ export const productsWithCriteria: TProductWithCriterion[] = [
     value: 100,
     normalizedValue: undefined,
     weightedValue: undefined,
+    criterionRankPts: undefined,
   },
 ];
 

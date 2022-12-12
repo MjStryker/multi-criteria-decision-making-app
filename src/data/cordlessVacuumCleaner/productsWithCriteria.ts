@@ -11,6 +11,7 @@ const productsWithCriteria: TProductWithCriterion[] = [
     value: 800,
     normalizedValue: undefined,
     weightedValue: undefined,
+    criterionRankPts: undefined,
   },
   {
     id: "prixDreame123",
@@ -19,6 +20,7 @@ const productsWithCriteria: TProductWithCriterion[] = [
     value: 300,
     normalizedValue: undefined,
     weightedValue: undefined,
+    criterionRankPts: undefined,
   },
   {
     id: "prixRowenta123",
@@ -27,6 +29,7 @@ const productsWithCriteria: TProductWithCriterion[] = [
     value: 500,
     normalizedValue: undefined,
     weightedValue: undefined,
+    criterionRankPts: undefined,
   },
 
   /**
@@ -39,6 +42,7 @@ const productsWithCriteria: TProductWithCriterion[] = [
     value: 180,
     normalizedValue: undefined,
     weightedValue: undefined,
+    criterionRankPts: undefined,
   },
   {
     id: "puissanceAspirationDreame123",
@@ -47,6 +51,7 @@ const productsWithCriteria: TProductWithCriterion[] = [
     value: 210,
     normalizedValue: undefined,
     weightedValue: undefined,
+    criterionRankPts: undefined,
   },
   {
     id: "puissanceAspirationRowenta123",
@@ -55,6 +60,7 @@ const productsWithCriteria: TProductWithCriterion[] = [
     value: 200,
     normalizedValue: undefined,
     weightedValue: undefined,
+    criterionRankPts: undefined,
   },
 
   /**
@@ -67,6 +73,7 @@ const productsWithCriteria: TProductWithCriterion[] = [
     value: 60,
     normalizedValue: undefined,
     weightedValue: undefined,
+    criterionRankPts: undefined,
   },
   {
     id: "autonomieDreame123",
@@ -75,6 +82,7 @@ const productsWithCriteria: TProductWithCriterion[] = [
     value: 80,
     normalizedValue: undefined,
     weightedValue: undefined,
+    criterionRankPts: undefined,
   },
   {
     id: "autonomieRowenta123",
@@ -83,6 +91,7 @@ const productsWithCriteria: TProductWithCriterion[] = [
     value: 70,
     normalizedValue: undefined,
     weightedValue: undefined,
+    criterionRankPts: undefined,
   },
 
   // /**

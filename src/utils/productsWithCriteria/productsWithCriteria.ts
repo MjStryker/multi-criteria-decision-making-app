@@ -15,15 +15,16 @@ export function createEmptyProductCriterionValue(
     value: undefined,
     normalizedValue: undefined,
     weightedValue: undefined,
+    criterionRank: undefined,
   };
 }
 
 export function findProductCriterionValue(
   product: TProduct,
   criterion: TCriterion,
-  productsWithCriterias: TProductWithCriterion[]
+  productsWithCriteria: TProductWithCriterion[]
 ): TProductWithCriterion | undefined {
-  return productsWithCriterias.find(
+  return productsWithCriteria.find(
     ({ productId, criterionId }) =>
       product.id === productId && criterion.id === criterionId
   );

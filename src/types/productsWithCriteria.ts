@@ -5,4 +5,5 @@ export type TProductWithCriterion = {
   value: number | undefined;
   normalizedValue: number | undefined;
   weightedValue: number | undefined;
+  criterionRankPts: number | undefined;
 };
