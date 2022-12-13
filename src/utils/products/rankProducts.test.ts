@@ -1,6 +1,8 @@
+import { SORT_BY } from "../../constants/arrays";
 import { TCriterion } from "../../types/criteria";
 import { TProduct } from "../../types/products";
 import { TProductWithCriterion } from "../../types/productsWithCriteria";
+import { compareFn } from "../arrays";
 import { rankProducts } from "./rankProducts";
 import { sumCriteriaNormalizedWeight } from "../criteria/criteria";
 

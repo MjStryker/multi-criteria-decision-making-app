@@ -22,10 +22,6 @@ function rankProductsPerCriterion(
     let lastValue: number | undefined = undefined;
     let lastPos = 0;
 
-    /**
-     * -- FIXME: Something's wrong with negative numbers..
-     */
-
     products
       .sort((p1, p2) =>
         compareFn(SORT_BY[criterion.beneficial === true ? "ASC" : "DESC"])(
@@ -41,7 +37,7 @@ function rankProductsPerCriterion(
 
         const criterionRankPts = isDefined(criterion.weight)
           ? criterion.weight * pos
-          : 0;
+          : 1;
 
         lastPos = pos;
         lastValue = product.value;
@@ -68,14 +64,12 @@ export function rankProducts(
 
   const res = [...products]
     .map((product) => {
-      const rankPts = [product].reduce((total, product) => {
-        const pts =
-          productsWithCriteriaRanks.find(
-            ({ productId }) => productId === product.id
-          )?.criterionRankPts ?? 0;
-
-        return (total += pts);
-      }, 0);
+      const rankPts = productsWithCriteriaRanks
+        .filter(({ productId }) => productId === product.id)
+        .reduce(
+          (total, current) => total + (current?.criterionRankPts ?? 0),
+          0
+        );
 
       return { ...product, rankPts };
     })

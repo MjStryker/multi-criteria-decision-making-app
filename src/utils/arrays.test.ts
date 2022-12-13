@@ -11,7 +11,7 @@ const sortedStringArray = {
 
 const sortedNumberArray = {
   ASC: [-1, 0, 1, undefined],
-  DESC: [-1, 0, 1, undefined],
+  DESC: [1, 0, -1, undefined],
 };
 
 describe("compareFn(...)", () => {
