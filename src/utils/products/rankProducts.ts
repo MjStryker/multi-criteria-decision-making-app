@@ -31,15 +31,18 @@ function rankProductsPerCriterion(
       )
       .forEach((product) => {
         const pos =
-          lastPos +
-          (isDefined(criterion.weight) && lastValue !== product.value ? 1 : 0);
+          isDefined(criterion.weight) && lastValue !== product.value
+            ? lastPos + 1
+            : lastPos;
 
-        product.criterionRankPts = isDefined(criterion.weight)
+        const criterionRankPts = isDefined(criterion.weight)
           ? criterion.weight * pos
           : 0;
 
         lastPos = pos;
         lastValue = product.value;
+
+        product.criterionRankPts = criterionRankPts;
       });
   });
 
@@ -61,7 +64,7 @@ export function rankProducts(
 
   const res = [...products]
     .map((product) => {
-      const rankPts = products.reduce((total, product) => {
+      const rankPts = [product].reduce((total, product) => {
         const pts =
           productsWithCriteriaRanks.find(
             ({ productId }) => productId === product.id

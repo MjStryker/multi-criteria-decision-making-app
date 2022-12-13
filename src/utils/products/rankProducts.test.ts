@@ -1,12 +1,8 @@
-import {
-  calculateCriteriaNormalizedWeight,
-  sumCriteriaNormalizedWeight,
-} from "../criteria/criteria";
-
 import { TCriterion } from "../../types/criteria";
 import { TProduct } from "../../types/products";
 import { TProductWithCriterion } from "../../types/productsWithCriteria";
 import { rankProducts } from "./rankProducts";
+import { sumCriteriaNormalizedWeight } from "../criteria/criteria";
 
 const c1: TCriterion = {
   id: "id-c1",
@@ -76,7 +72,7 @@ const p3: TProduct = {
 
 const products: TProduct[] = [p1, p2, p3];
 
-export const productsWithCriteria: TProductWithCriterion[] = [
+const productsWithCriteria: TProductWithCriterion[] = [
   /**
    * Criterion - 1
    */
@@ -214,16 +210,10 @@ function getTestValues(
     (val) => expect(val[1].length).toBe(products.length) // productValues
   );
 
-  const criteriaToUse = calculateCriteriaNormalizedWeight(
-    [...criteria].map((criterion, idx) => ({
-      ...criterion,
-      ...values[idx][0],
-    }))
-  );
-
-  expect(sumCriteriaNormalizedWeight(criteriaToUse)).toBeGreaterThanOrEqual(
-    0.999
-  );
+  const criteriaToUse = [...criteria].map((criterion, idx) => ({
+    ...criterion,
+    ...values[idx][0],
+  }));
 
   const productValues = values.map((val) => val[1]).flat();
 
@@ -234,7 +224,14 @@ function getTestValues(
     })
   );
 
-  return { criteriaToUse, productsWithCriteriaToUse };
+  return {
+    criteriaToUse,
+    productsWithCriteriaToUse,
+  };
+}
+
+function getProductFromName(productName: string, list = products) {
+  return list?.find(({ name }) => name === productName);
 }
 
 describe("rankProducts(...)", () => {
@@ -250,22 +247,24 @@ describe("rankProducts(...)", () => {
     });
   });
 
-  // it("test 1", () => {
-  //   const { criteriaToUse, productsWithCriteriaToUse } = getTestValues([
-  //     [{}, [100, 100, 100]],
-  //     [{}, [100, 100, 100]],
-  //     [{}, [100, 100, 100]],
-  //     [{}, [100, 100, 100]],
-  //   ]);
+  it("test 1", () => {
+    const { criteriaToUse, productsWithCriteriaToUse } = getTestValues([
+      [{}, [100, 100, 100]],
+      [{}, [100, 100, 100]],
+      [{}, [100, 100, 100]],
+      [{}, [100, 100, 100]],
+    ]);
 
-  //   expect(
-  //     rankProducts(products, criteriaToUse, productsWithCriteriaToUse)
-  //   ).toStrictEqual([
-  //     { ...p1, rank: 1 },
-  //     { ...p2, rank: 1 },
-  //     { ...p3, rank: 1 },
-  //   ]);
-  // });
+    const rankedProducts = rankProducts(
+      products,
+      criteriaToUse,
+      productsWithCriteriaToUse
+    );
+
+    expect(getProductFromName("p1", rankedProducts)?.rank).toEqual(1);
+    expect(getProductFromName("p2", rankedProducts)?.rank).toEqual(1);
+    expect(getProductFromName("p3", rankedProducts)?.rank).toEqual(1);
+  });
 
   it("test 2", () => {
     const { criteriaToUse, productsWithCriteriaToUse } = getTestValues([
@@ -281,25 +280,46 @@ describe("rankProducts(...)", () => {
       productsWithCriteriaToUse
     );
 
-    expect(rankedProducts?.find(({ name }) => name === "p1")?.rank).toEqual(1);
-    expect(rankedProducts?.find(({ name }) => name === "p2")?.rank).toEqual(1);
-    expect(rankedProducts?.find(({ name }) => name === "p3")?.rank).toEqual(1);
+    expect(getProductFromName("p1", rankedProducts)?.rank).toEqual(3);
+    expect(getProductFromName("p2", rankedProducts)?.rank).toEqual(1);
+    expect(getProductFromName("p3", rankedProducts)?.rank).toEqual(2);
   });
 
-  // it("test 3", () => {
-  //   const { criteriaToUse, productsWithCriteriaToUse } = getTestValues([
-  //     [{ beneficial: false }, [99, 101, 100]],
-  //     [{}, [100, 100, 100]],
-  //     [{}, [100, 100, 100]],
-  //     [{}, [100, 100, 100]],
-  //   ]);
+  it("test 3", () => {
+    const { criteriaToUse, productsWithCriteriaToUse } = getTestValues([
+      [{ beneficial: false }, [99, 101, 100]],
+      [{}, [100, 100, 100]],
+      [{}, [100, 100, 100]],
+      [{}, [100, 100, 100]],
+    ]);
 
-  //   expect(
-  //     rankProducts(products, criteriaToUse, productsWithCriteriaToUse)
-  //   ).toStrictEqual([
-  //     { ...p1, rank: 1 },
-  //     { ...p3, rank: 2 },
-  //     { ...p2, rank: 3 },
-  //   ]);
-  // });
+    const rankedProducts = rankProducts(
+      products,
+      criteriaToUse,
+      productsWithCriteriaToUse
+    );
+
+    expect(getProductFromName("p1", rankedProducts)?.rank).toEqual(1);
+    expect(getProductFromName("p2", rankedProducts)?.rank).toEqual(3);
+    expect(getProductFromName("p3", rankedProducts)?.rank).toEqual(2);
+  });
+
+  it("test 4", () => {
+    const { criteriaToUse, productsWithCriteriaToUse } = getTestValues([
+      [{}, [100, 101, 100]],
+      [{}, [100, 100, 100]],
+      [{}, [100, 100, 100]],
+      [{}, [100, 100, 100]],
+    ]);
+
+    const rankedProducts = rankProducts(
+      products,
+      criteriaToUse,
+      productsWithCriteriaToUse
+    );
+
+    expect(getProductFromName("p1", rankedProducts)?.rank).toEqual(2);
+    expect(getProductFromName("p2", rankedProducts)?.rank).toEqual(1);
+    expect(getProductFromName("p3", rankedProducts)?.rank).toEqual(2);
+  });
 });
