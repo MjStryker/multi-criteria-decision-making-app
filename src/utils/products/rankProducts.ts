@@ -22,6 +22,10 @@ function rankProductsPerCriterion(
     let lastValue: number | undefined = undefined;
     let lastPos = 0;
 
+    /**
+     * -- FIXME: Something's wrong with negative numbers..
+     */
+
     products
       .sort((p1, p2) =>
         compareFn(SORT_BY[criterion.beneficial === true ? "ASC" : "DESC"])(

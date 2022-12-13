@@ -322,4 +322,23 @@ describe("rankProducts(...)", () => {
     expect(getProductFromName("p2", rankedProducts)?.rank).toEqual(1);
     expect(getProductFromName("p3", rankedProducts)?.rank).toEqual(2);
   });
+
+  it("test 5", () => {
+    const { criteriaToUse, productsWithCriteriaToUse } = getTestValues([
+      [{}, [100, 100, 100]],
+      [{}, [100, 100, 100]],
+      [{}, [-100, 100, 100]],
+      [{}, [100, 100, 100]],
+    ]);
+
+    const rankedProducts = rankProducts(
+      products,
+      criteriaToUse,
+      productsWithCriteriaToUse
+    );
+
+    expect(getProductFromName("p1", rankedProducts)?.rank).toEqual(2);
+    expect(getProductFromName("p2", rankedProducts)?.rank).toEqual(1);
+    expect(getProductFromName("p3", rankedProducts)?.rank).toEqual(1);
+  });
 });
