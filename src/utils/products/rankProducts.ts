@@ -9,7 +9,6 @@ import { isDefined } from "../objects";
  * Rank products for each criteria
  */
 function rankProductsPerCriterion(
-  products: TProduct[],
   criteria: TCriterion[],
   productsWithCriteria: TProductWithCriterion[]
 ): TProductWithCriterion[] {
@@ -47,105 +46,41 @@ function rankProductsPerCriterion(
   return res;
 }
 
-// /**
-//  * Rank products for each criteria
-//  */
-// function rankCriteriaProducts(
-//   products: TProduct[],
-//   criteria: TCriterion[],
-//   productsWithCriteria: TProductWithCriterion[]
-// ): TProductWithCriterion[] {
-//   let productsWithCriteriaRank = [...productsWithCriteria];
-
-//   [...criteria].forEach((criterion) => {
-//     const isBeneficial = criterion.beneficial === true;
-
-// let lastValue: number | undefined = undefined;
-// let lastPos = 0;
-
-//     [...products]
-//       .map((product) => ({
-//         ...product,
-//         rankPts: 0,
-//       }))
-//       /**
-//        * Get products values
-//        */
-//       .map((product) => {
-//         const value = productsWithCriteria.find(
-//           ({ criterionId, productId }) =>
-//             criterionId === criterion.id && productId === product.id
-//         )?.value;
-
-//         return { ...product, value };
-//       })
-//       /**
-//        * Sort them by value using their idx in the array as pts (further in the array the better)
-//        */
-// .sort((p1, p2) =>
-//   compareFn(SORT_BY[isBeneficial ? "ASC" : "DESC"])(p1.value, p2.value)
-// )
-// /**
-//  * Calculate rankPts
-//  */
-// .forEach(({ value, rankPts, ...product }, idx) => {
-//   const pos =
-//     lastPos +
-//     (isDefined(criterion.weight) && lastValue !== value ? 1 : 0);
-
-//   const criterionRank = isDefined(criterion.weight)
-//     ? criterion.weight * pos
-//     : 0;
-
-//   const productWithCriterion = productsWithCriteriaRank.find(
-//     ({ criterionId, productId }) =>
-//       criterionId === criterion.id && productId === product.id
-//   );
-
-//   if (productWithCriterion) {
-//     productWithCriterion.criterionRank = criterionRank;
-//   }
-
-//         // lastValue = value;
-//         // lastPos = pos;
-
-//         // return {
-//         //   ...product,
-//         //   rankPts: rankPts + criterionRank,
-//         // };
-//       });
-//   });
-
-//   return productsWithCriteriaRank;
-// }
-
 export function rankProducts(
   products: TProduct[],
   criteria: TCriterion[],
   productsWithCriteria: TProductWithCriterion[]
 ): TProduct[] {
-  const rankedProducts = [...products];
-
   const productsWithCriteriaRanks = rankProductsPerCriterion(
-    products,
     criteria,
     productsWithCriteria
   );
 
-  const test = [...rankedProducts].map((product) => {
-    const rankPts = products.reduce((total, product) => {
-      const pts =
-        productsWithCriteriaRanks.find(
-          ({ productId }) => productId === product.id
-        )?.criterionRankPts ?? 0;
+  let lastRankPts: number | undefined = undefined;
+  let lastPos = 0;
 
-      return (total += pts);
-    }, 0);
+  const res = [...products]
+    .map((product) => {
+      const rankPts = products.reduce((total, product) => {
+        const pts =
+          productsWithCriteriaRanks.find(
+            ({ productId }) => productId === product.id
+          )?.criterionRankPts ?? 0;
 
-    return { ...product, rankPts };
-  });
+        return (total += pts);
+      }, 0);
 
-  console.log(test);
+      return { ...product, rankPts };
+    })
+    .sort((p1, p2) => compareFn(SORT_BY.DESC)(p1.rankPts, p2.rankPts))
+    .map(({ rankPts, rank, ...product }) => {
+      const pos = rankPts !== lastRankPts ? lastPos + 1 : lastPos;
 
-  return rankedProducts;
+      lastRankPts = rankPts;
+      lastPos = pos;
+
+      return { ...product, rank: pos };
+    });
+
+  return res;
 }

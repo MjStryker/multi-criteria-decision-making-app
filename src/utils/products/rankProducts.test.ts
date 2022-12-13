@@ -275,13 +275,15 @@ describe("rankProducts(...)", () => {
       [{}, [100, 100, 100]],
     ]);
 
-    expect(
-      rankProducts(products, criteriaToUse, productsWithCriteriaToUse)
-    ).toStrictEqual([
-      { ...p2, rank: 1 },
-      { ...p3, rank: 2 },
-      { ...p1, rank: 3 },
-    ]);
+    const rankedProducts = rankProducts(
+      products,
+      criteriaToUse,
+      productsWithCriteriaToUse
+    );
+
+    expect(rankedProducts?.find(({ name }) => name === "p1")?.rank).toEqual(1);
+    expect(rankedProducts?.find(({ name }) => name === "p2")?.rank).toEqual(1);
+    expect(rankedProducts?.find(({ name }) => name === "p3")?.rank).toEqual(1);
   });
 
   // it("test 3", () => {
