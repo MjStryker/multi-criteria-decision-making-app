@@ -9,8 +9,6 @@ const productsWithCriteria: TProductWithCriterion[] = [
     criterionId: "prix123",
     productId: "dyson123",
     value: 800,
-    normalizedValue: undefined,
-    weightedValue: undefined,
     criterionRankPts: undefined,
   },
   {
@@ -18,8 +16,6 @@ const productsWithCriteria: TProductWithCriterion[] = [
     criterionId: "prix123",
     productId: "dreame123",
     value: 300,
-    normalizedValue: undefined,
-    weightedValue: undefined,
     criterionRankPts: undefined,
   },
   {
@@ -27,8 +23,6 @@ const productsWithCriteria: TProductWithCriterion[] = [
     criterionId: "prix123",
     productId: "rowenta123",
     value: 500,
-    normalizedValue: undefined,
-    weightedValue: undefined,
     criterionRankPts: undefined,
   },
 
@@ -40,8 +34,6 @@ const productsWithCriteria: TProductWithCriterion[] = [
     criterionId: "puissanceAspiration123",
     productId: "dyson123",
     value: 180,
-    normalizedValue: undefined,
-    weightedValue: undefined,
     criterionRankPts: undefined,
   },
   {
@@ -49,8 +41,6 @@ const productsWithCriteria: TProductWithCriterion[] = [
     criterionId: "puissanceAspiration123",
     productId: "dreame123",
     value: 210,
-    normalizedValue: undefined,
-    weightedValue: undefined,
     criterionRankPts: undefined,
   },
   {
@@ -58,8 +48,6 @@ const productsWithCriteria: TProductWithCriterion[] = [
     criterionId: "puissanceAspiration123",
     productId: "rowenta123",
     value: 200,
-    normalizedValue: undefined,
-    weightedValue: undefined,
     criterionRankPts: undefined,
   },
 
@@ -71,8 +59,6 @@ const productsWithCriteria: TProductWithCriterion[] = [
     criterionId: "autonomie123",
     productId: "dyson123",
     value: 60,
-    normalizedValue: undefined,
-    weightedValue: undefined,
     criterionRankPts: undefined,
   },
   {
@@ -80,8 +66,6 @@ const productsWithCriteria: TProductWithCriterion[] = [
     criterionId: "autonomie123",
     productId: "dreame123",
     value: 80,
-    normalizedValue: undefined,
-    weightedValue: undefined,
     criterionRankPts: undefined,
   },
   {
@@ -89,8 +73,6 @@ const productsWithCriteria: TProductWithCriterion[] = [
     criterionId: "autonomie123",
     productId: "rowenta123",
     value: 70,
-    normalizedValue: undefined,
-    weightedValue: undefined,
     criterionRankPts: undefined,
   },
 
@@ -101,25 +83,19 @@ const productsWithCriteria: TProductWithCriterion[] = [
   //   id: "capaciteReservoirDyson123",
   //   criteriaId: "capaciteReservoir123",
   //   productId: "dyson123",
-  //   value: 0.75,
-  //   normalizedValue: undefined,
-  //   weightedValue: undefined,
+  //   value: 0.75
   // },
   // {
   //   id: "capaciteReservoirDreame123",
   //   criteriaId: "capaciteReservoir123",
   //   productId: "dreame123",
-  //   value: 0.7,
-  //   normalizedValue: undefined,
-  //   weightedValue: undefined,
+  //   value: 0.7
   // },
   // {
   //   id: "capaciteReservoirRowenta123",
   //   criteriaId: "capaciteReservoir123",
   //   productId: "rowenta123",
-  //   value: 0.8,
-  //   normalizedValue: undefined,
-  //   weightedValue: undefined,
+  //   value: 0.8
   // },
 
   // /**
@@ -129,25 +105,19 @@ const productsWithCriteria: TProductWithCriterion[] = [
   //   id: "nbAccessoiresDyson123",
   //   criteriaId: "nbAccessoires123",
   //   productId: "dyson123",
-  //   value: 4,
-  //   normalizedValue: undefined,
-  //   weightedValue: undefined,
+  //   value: 4
   // },
   // {
   //   id: "nbAccessoiresDreame123",
   //   criteriaId: "nbAccessoires123",
   //   productId: "dreame123",
-  //   value: 7,
-  //   normalizedValue: undefined,
-  //   weightedValue: undefined,
+  //   value: 7
   // },
   // {
   //   id: "nbAccessoiresRowenta123",
   //   criteriaId: "nbAccessoires123",
   //   productId: "rowenta123",
-  //   value: 6,
-  //   normalizedValue: undefined,
-  //   weightedValue: undefined,
+  //   value: 6
   // },
 
   // /**
@@ -157,25 +127,19 @@ const productsWithCriteria: TProductWithCriterion[] = [
   //   id: "batterieAmovibleDyson123",
   //   criteriaId: "batterieAmovible123",
   //   productId: "dyson123",
-  //   value: 0,
-  //   normalizedValue: undefined,
-  //   weightedValue: undefined,
+  //   value: 0
   // },
   // {
   //   id: "batterieAmovibleDreame123",
   //   criteriaId: "batterieAmovible123",
   //   productId: "dreame123",
-  //   value: undefined,
-  //   normalizedValue: undefined,
-  //   weightedValue: undefined,
+  //   value: undefined
   // },
   // {
   //   id: "batterieAmovibleRowenta123",
   //   criteriaId: "batterieAmovible123",
   //   productId: "rowenta123",
-  //   value: 1,
-  //   normalizedValue: undefined,
-  //   weightedValue: undefined,
+  //   value: 1
   // },
 ];
 

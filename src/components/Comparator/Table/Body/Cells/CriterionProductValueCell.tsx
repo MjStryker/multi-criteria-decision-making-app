@@ -1,10 +1,10 @@
+import { deepEqual, isDefined } from "../../../../../utils/objects";
 import { useLayoutEffect, useRef, useState } from "react";
 
 import { DATA_TABLE_STYLES } from "../../../DataTable.styles";
 import { TCriterion } from "../../../../../types/criteria";
 import { TProduct } from "../../../../../types/products";
 import { TProductWithCriterion } from "../../../../../types/productsWithCriteria";
-import { deepEqual } from "../../../../../utils/objects";
 import { isValidNumber } from "../../../../../utils/numbers";
 import { minWidth } from "../../../../../styles/tables/tableCell";
 import { parseStringAsNumber } from "../../../../../utils/strings";
@@ -134,9 +134,10 @@ const CriterionProductValueCell = (props: CriterionProductValueCellProps) => {
         ) : (
           <div style={DATA_TABLE_STYLES.TEXT.MORE_INFO_CONTAINER}>
             <div>{isValidNumber(currentValue) ? currentValue : "-"}</div>
-            {isValidNumber(props.criteriaProductValue?.weightedValue) ? (
+
+            {isDefined(props.criteriaProductValue?.criterionRankPts) ? (
               <div style={DATA_TABLE_STYLES.TEXT.MORE_INFO}>
-                ({props.criteriaProductValue?.weightedValue?.toFixed(3) ?? "-"})
+                ({props.criteriaProductValue?.criterionRankPts ?? "-"})
               </div>
             ) : null}
           </div>

@@ -1,7 +1,7 @@
 import { TCriterion } from "../../types/criteria";
 import { TProduct } from "../../types/products";
 import { TProductWithCriterion } from "../../types/productsWithCriteria";
-import { findProductCriterionValue } from "./productsWithCriteria";
+import { findProductWithCriterion } from "./productsWithCriteria";
 
 export const productsWithCriteria: TProductWithCriterion[] = [
   /**
@@ -12,24 +12,21 @@ export const productsWithCriteria: TProductWithCriterion[] = [
     criterionId: "id-c1",
     productId: "id-p1",
     value: 100,
-    normalizedValue: undefined,
-    weightedValue: undefined,
+    criterionRankPts: undefined,
   },
   {
     id: "id-c1-p2",
     criterionId: "id-c1",
     productId: "id-p2",
     value: 100,
-    normalizedValue: undefined,
-    weightedValue: undefined,
+    criterionRankPts: undefined,
   },
   {
     id: "id-c1-p3",
     criterionId: "id-c1",
     productId: "id-p3",
     value: 100,
-    normalizedValue: undefined,
-    weightedValue: undefined,
+    criterionRankPts: undefined,
   },
 
   /**
@@ -40,24 +37,21 @@ export const productsWithCriteria: TProductWithCriterion[] = [
     criterionId: "id-c2",
     productId: "id-p1",
     value: 100,
-    normalizedValue: undefined,
-    weightedValue: undefined,
+    criterionRankPts: undefined,
   },
   {
     id: "id-c2-p2",
     criterionId: "id-c2",
     productId: "id-p2",
     value: 100,
-    normalizedValue: undefined,
-    weightedValue: undefined,
+    criterionRankPts: undefined,
   },
   {
     id: "id-c2-p3",
     criterionId: "id-c2",
     productId: "id-p3",
     value: 100,
-    normalizedValue: undefined,
-    weightedValue: undefined,
+    criterionRankPts: undefined,
   },
 
   /**
@@ -68,24 +62,21 @@ export const productsWithCriteria: TProductWithCriterion[] = [
     criterionId: "id-c3",
     productId: "id-p1",
     value: 100,
-    normalizedValue: undefined,
-    weightedValue: undefined,
+    criterionRankPts: undefined,
   },
   {
     id: "id-c3-p2",
     criterionId: "id-c3",
     productId: "id-p2",
     value: 100,
-    normalizedValue: undefined,
-    weightedValue: undefined,
+    criterionRankPts: undefined,
   },
   {
     id: "id-c3-p3",
     criterionId: "id-c3",
     productId: "id-p3",
     value: 100,
-    normalizedValue: undefined,
-    weightedValue: undefined,
+    criterionRankPts: undefined,
   },
 ];
 
@@ -114,12 +105,11 @@ describe("findProductCriterionValue(...)", () => {
       criterionId: "id-c2",
       productId: "id-p3",
       value: 100,
-      normalizedValue: undefined,
-      weightedValue: undefined,
+      criterionRankPts: undefined,
     };
 
     expect(
-      findProductCriterionValue(p3, c2, productsWithCriteria)
+      findProductWithCriterion(p3, c2, productsWithCriteria)
     ).toStrictEqual(matchingResult);
   });
 
@@ -133,7 +123,7 @@ describe("findProductCriterionValue(...)", () => {
     };
 
     expect(
-      findProductCriterionValue(pUnmatched, c2, productsWithCriteria)
+      findProductWithCriterion(pUnmatched, c2, productsWithCriteria)
     ).toBeUndefined();
   });
 
@@ -149,7 +139,7 @@ describe("findProductCriterionValue(...)", () => {
     };
 
     expect(
-      findProductCriterionValue(p3, cUnmatched, productsWithCriteria)
+      findProductWithCriterion(p3, cUnmatched, productsWithCriteria)
     ).toBeUndefined();
   });
 });

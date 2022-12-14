@@ -1,8 +1,6 @@
-import { SORT_BY } from "../../constants/arrays";
 import { TCriterion } from "../../types/criteria";
 import { TProduct } from "../../types/products";
 import { TProductWithCriterion } from "../../types/productsWithCriteria";
-import { compareFn } from "../arrays";
 import { rankProducts } from "./rankProducts";
 import { sumCriteriaNormalizedWeight } from "../criteria/criteria";
 
@@ -83,8 +81,6 @@ const productsWithCriteria: TProductWithCriterion[] = [
     criterionId: "id-c1",
     productId: "id-p1",
     value: 100,
-    normalizedValue: undefined,
-    weightedValue: undefined,
     criterionRankPts: undefined,
   },
   {
@@ -92,8 +88,6 @@ const productsWithCriteria: TProductWithCriterion[] = [
     criterionId: "id-c1",
     productId: "id-p2",
     value: 100,
-    normalizedValue: undefined,
-    weightedValue: undefined,
     criterionRankPts: undefined,
   },
   {
@@ -101,8 +95,6 @@ const productsWithCriteria: TProductWithCriterion[] = [
     criterionId: "id-c1",
     productId: "id-p3",
     value: 100,
-    normalizedValue: undefined,
-    weightedValue: undefined,
     criterionRankPts: undefined,
   },
 
@@ -114,8 +106,6 @@ const productsWithCriteria: TProductWithCriterion[] = [
     criterionId: "id-c2",
     productId: "id-p1",
     value: 100,
-    normalizedValue: undefined,
-    weightedValue: undefined,
     criterionRankPts: undefined,
   },
   {
@@ -123,8 +113,6 @@ const productsWithCriteria: TProductWithCriterion[] = [
     criterionId: "id-c2",
     productId: "id-p2",
     value: 100,
-    normalizedValue: undefined,
-    weightedValue: undefined,
     criterionRankPts: undefined,
   },
   {
@@ -132,8 +120,6 @@ const productsWithCriteria: TProductWithCriterion[] = [
     criterionId: "id-c2",
     productId: "id-p3",
     value: 100,
-    normalizedValue: undefined,
-    weightedValue: undefined,
     criterionRankPts: undefined,
   },
 
@@ -145,8 +131,6 @@ const productsWithCriteria: TProductWithCriterion[] = [
     criterionId: "id-c3",
     productId: "id-p1",
     value: 100,
-    normalizedValue: undefined,
-    weightedValue: undefined,
     criterionRankPts: undefined,
   },
   {
@@ -154,8 +138,6 @@ const productsWithCriteria: TProductWithCriterion[] = [
     criterionId: "id-c3",
     productId: "id-p2",
     value: 100,
-    normalizedValue: undefined,
-    weightedValue: undefined,
     criterionRankPts: undefined,
   },
   {
@@ -163,8 +145,6 @@ const productsWithCriteria: TProductWithCriterion[] = [
     criterionId: "id-c3",
     productId: "id-p3",
     value: 100,
-    normalizedValue: undefined,
-    weightedValue: undefined,
     criterionRankPts: undefined,
   },
 
@@ -176,8 +156,6 @@ const productsWithCriteria: TProductWithCriterion[] = [
     criterionId: "id-c4",
     productId: "id-p1",
     value: 100,
-    normalizedValue: undefined,
-    weightedValue: undefined,
     criterionRankPts: undefined,
   },
   {
@@ -185,8 +163,6 @@ const productsWithCriteria: TProductWithCriterion[] = [
     criterionId: "id-c4",
     productId: "id-p2",
     value: 100,
-    normalizedValue: undefined,
-    weightedValue: undefined,
     criterionRankPts: undefined,
   },
   {
@@ -194,8 +170,6 @@ const productsWithCriteria: TProductWithCriterion[] = [
     criterionId: "id-c4",
     productId: "id-p3",
     value: 100,
-    normalizedValue: undefined,
-    weightedValue: undefined,
     criterionRankPts: undefined,
   },
 ];
