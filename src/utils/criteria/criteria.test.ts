@@ -1,5 +1,5 @@
 import {
-  calculateCriteriaNormalizedWeight,
+  calculateCriteriaNormalizedWeights,
   compareCriteriaByDefaultRowIdxFn,
   getCriteriaMaxWeight,
   getCriterionWeightRelativeToMax,
@@ -98,7 +98,7 @@ describe("sumCriteriaNormalizedWeight(...)", () => {
 
 describe("calculateCriteriaNormalizedWeight(...)", () => {
   const criteriaWithNormalizedWeights =
-    calculateCriteriaNormalizedWeight(criteria);
+    calculateCriteriaNormalizedWeights(criteria);
 
   it("Expect correct values", () => {
     expect(criteriaWithNormalizedWeights).toStrictEqual([

@@ -210,6 +210,13 @@ function getProductFromName(productName: string, list = products) {
   return list?.find(({ name }) => name === productName);
 }
 
+/**
+ * -- TODO: Split tests in two parts:
+ *
+ *  1. calculateProductsCriteriaRankPts
+ *  2. rankProducts
+ */
+
 describe("rankProducts(...)", () => {
   describe("Validate Test Suite data set", () => {
     it("Ensure criteria total normalized weight is 1", () => {

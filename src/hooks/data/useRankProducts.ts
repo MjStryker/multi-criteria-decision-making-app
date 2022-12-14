@@ -1,10 +1,13 @@
-import { useCallback, useEffect, useState } from "react";
+import {
+  calculateProductsCriteriaRankPts,
+  rankProducts,
+} from "../../utils/products/rankProducts";
+import { useEffect, useMemo, useState } from "react";
 
 import { TCriterion } from "../../types/criteria";
 import { TProduct } from "../../types/products";
 import { TProductWithCriterion } from "../../types/productsWithCriteria";
 import { deepEqual } from "../../utils/objects";
-import { rankProducts } from "../../utils/products/rankProducts";
 
 const useRankProducts = (
   products: TProduct[],
@@ -13,9 +16,14 @@ const useRankProducts = (
 ) => {
   const [rankedProducts, setRankedProducts] = useState<TProduct[]>([]);
 
-  const rankProductsCallback = useCallback(
-    () => rankProducts(products, criteria, productsWithCriteria),
-    [criteria, products, productsWithCriteria]
+  const newProductsWithCriteriaRankPts = useMemo(
+    () => calculateProductsCriteriaRankPts(criteria, productsWithCriteria),
+    [criteria, productsWithCriteria]
+  );
+
+  const newRankedProducts = useMemo(
+    () => rankProducts(products, newProductsWithCriteriaRankPts),
+    [products, newProductsWithCriteriaRankPts]
   );
 
   useEffect(() => {
@@ -23,8 +31,6 @@ const useRankProducts = (
       console.log("Equals..");
       return;
     }
-
-    const newRankedProducts = rankProductsCallback();
 
     if (!deepEqual(rankedProducts, newRankedProducts)) {
       console.log("New ranks!");
@@ -36,7 +42,7 @@ const useRankProducts = (
       setRankedProducts([]);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [products, criteria, productsWithCriteria]);
+  }, [newProductsWithCriteriaRankPts]);
 
   return { rankedProducts };
 };

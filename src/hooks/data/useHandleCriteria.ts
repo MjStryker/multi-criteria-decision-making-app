@@ -1,6 +1,6 @@
 import { TCriterion } from "../../types/criteria";
 import { TProduct } from "../../types/products";
-import { calculateCriteriaNormalizedWeight } from "../../utils/criteria/criteria";
+import { calculateCriteriaNormalizedWeights } from "../../utils/criteria/criteria";
 import { createEmptyProductCriterionValue } from "../../utils/productsWithCriteria/productsWithCriteria";
 import useHandleProductsWithCriteria from "./useHandleProductsWithCriteria";
 
@@ -11,10 +11,8 @@ const useHandleCriteria = (
     typeof useHandleProductsWithCriteria
   >["addProductWithCriteria"]
 ) => {
-  const updateCriteriaNormalizedWeight = () => {
-    setCriteria((prev) => {
-      return calculateCriteriaNormalizedWeight(prev);
-    });
+  const updateCriteriaNormalizedWeights = () => {
+    setCriteria((prev) => calculateCriteriaNormalizedWeights(prev));
   };
 
   const addCriterion = (criteria: TCriterion) => {
@@ -24,7 +22,7 @@ const useHandleCriteria = (
         createEmptyProductCriterionValue(product, criteria)
       );
     });
-    updateCriteriaNormalizedWeight();
+    updateCriteriaNormalizedWeights();
   };
 
   const updateCriterion = (criterion: TCriterion) => {
@@ -33,12 +31,12 @@ const useHandleCriteria = (
       prev[newCriteriaIdx] = criterion;
       return [...prev];
     });
-    updateCriteriaNormalizedWeight();
+    updateCriteriaNormalizedWeights();
   };
 
   const removeCriterion = ({ id }: TCriterion) => {
     setCriteria((prev) => prev.filter((c) => c.id !== id));
-    updateCriteriaNormalizedWeight();
+    updateCriteriaNormalizedWeights();
   };
 
   return {

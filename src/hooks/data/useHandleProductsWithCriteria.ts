@@ -4,37 +4,23 @@ import { TProductWithCriterion } from "../../types/productsWithCriteria";
 import { createEmptyProductCriterionValue } from "../../utils/productsWithCriteria/productsWithCriteria";
 
 const useHandleProductsWithCriteria = (
-  productsWithCriterias: TProductWithCriterion[],
+  productsWithCriteria: TProductWithCriterion[],
   setProductsWithCriteria: React.Dispatch<
     React.SetStateAction<TProductWithCriterion[]>
   >
-  // products: TProduct[],
-  // criteria: TCriterion[]
 ) => {
-  // const productsWithCriteriaNormalizedWeightedValues =
-  //   calculateProductsCriteriaNormalizedWeightedValues(
-  //     products,
-  //     criteria,
-  //     productsWithCriterias
-  //   );
-
-  // useEffect(() => {
-  //   setProductsWithCriteria(productsWithCriteriaNormalizedWeightedValues);
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [productsWithCriteriaNormalizedWeightedValues]);
-
   const addProductWithCriteria = (
     productWithCriteria: TProductWithCriterion
   ) => {
     setProductsWithCriteria((prev) => [...prev, productWithCriteria]);
   };
 
-  const setProductCriteriaValue = (
+  const setProductCriterionValue = (
     product: TProduct,
     criterion: TCriterion,
     value: number | null
   ) => {
-    const res = [...productsWithCriterias];
+    const res = [...productsWithCriteria];
     const productWithCriteria =
       res.find(
         (e) => e.productId === product.id && e.criterionId === criterion.id
@@ -58,7 +44,7 @@ const useHandleProductsWithCriteria = (
 
   return {
     addProductWithCriteria,
-    setProductCriteriaValue,
+    setProductCriteriaValue: setProductCriterionValue,
     removeProductWithCriteria,
   };
 };

@@ -8,7 +8,7 @@ import { isDefined } from "../objects";
 /**
  * Rank products for each criteria
  */
-function rankProductsPerCriterion(
+export function calculateProductsCriteriaRankPts(
   criteria: TCriterion[],
   productsWithCriteria: TProductWithCriterion[]
 ): TProductWithCriterion[] {
@@ -51,20 +51,14 @@ function rankProductsPerCriterion(
 
 export function rankProducts(
   products: TProduct[],
-  criteria: TCriterion[],
   productsWithCriteria: TProductWithCriterion[]
 ): TProduct[] {
-  const productsWithCriteriaRanks = rankProductsPerCriterion(
-    criteria,
-    productsWithCriteria
-  );
-
   let lastRankPts: number | undefined = undefined;
   let lastPos = 0;
 
   const res = [...products]
     .map((product) => {
-      const rankPts = productsWithCriteriaRanks
+      const rankPts = productsWithCriteria
         .filter(({ productId }) => productId === product.id)
         .reduce(
           (total, current) => total + (current?.criterionRankPts ?? 0),
