@@ -51,14 +51,20 @@ export function calculateProductsCriteriaRankPts(
 
 export function rankProducts(
   products: TProduct[],
+  criteria: TCriterion[],
   productsWithCriteria: TProductWithCriterion[]
 ): TProduct[] {
   let lastRankPts: number | undefined = undefined;
   let lastPos = 0;
 
+  const productsWithCriteriaRankPts = calculateProductsCriteriaRankPts(
+    criteria,
+    productsWithCriteria
+  );
+
   const res = [...products]
     .map((product) => {
-      const rankPts = productsWithCriteria
+      const rankPts = productsWithCriteriaRankPts
         .filter(({ productId }) => productId === product.id)
         .reduce(
           (total, current) => total + (current?.criterionRankPts ?? 0),

@@ -1,13 +1,10 @@
-import {
-  calculateProductsCriteriaRankPts,
-  rankProducts,
-} from "../../utils/products/rankProducts";
 import { useEffect, useMemo, useState } from "react";
 
 import { TCriterion } from "../../types/criteria";
 import { TProduct } from "../../types/products";
 import { TProductWithCriterion } from "../../types/productsWithCriteria";
 import { deepEqual } from "../../utils/objects";
+import { rankProducts } from "../../utils/products/rankProducts";
 
 const useRankProducts = (
   products: TProduct[],
@@ -16,14 +13,9 @@ const useRankProducts = (
 ) => {
   const [rankedProducts, setRankedProducts] = useState<TProduct[]>([]);
 
-  const newProductsWithCriteriaRankPts = useMemo(
-    () => calculateProductsCriteriaRankPts(criteria, productsWithCriteria),
-    [criteria, productsWithCriteria]
-  );
-
   const newRankedProducts = useMemo(
-    () => rankProducts(products, newProductsWithCriteriaRankPts),
-    [products, newProductsWithCriteriaRankPts]
+    () => rankProducts(products, criteria, productsWithCriteria),
+    [products, criteria, productsWithCriteria]
   );
 
   useEffect(() => {
@@ -42,7 +34,7 @@ const useRankProducts = (
       setRankedProducts([]);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [newProductsWithCriteriaRankPts]);
+  }, [newRankedProducts]);
 
   return { rankedProducts };
 };
