@@ -1,6 +1,10 @@
+import {
+  calculateCriteriaNormalizedWeights,
+  updateCriteriaDefaultRowIdx,
+} from "../../utils/criteria/criteria";
+
 import { TCriterion } from "../../types/criteria";
 import { TProduct } from "../../types/products";
-import { calculateCriteriaNormalizedWeights } from "../../utils/criteria/criteria";
 import { createEmptyProductCriterionValue } from "../../utils/productsWithCriteria/productsWithCriteria";
 import useHandleProductsWithCriteria from "./useHandleProductsWithCriteria";
 
@@ -29,13 +33,18 @@ const useHandleCriteria = (
     setCriteria((prev) => {
       const newCriteriaIdx = prev.findIndex((p) => criterion.id === p.id);
       prev[newCriteriaIdx] = criterion;
-      return [...prev];
+
+      return updateCriteriaDefaultRowIdx(prev);
     });
+
     updateCriteriaNormalizedWeights();
   };
 
   const removeCriterion = ({ id }: TCriterion) => {
-    setCriteria((prev) => prev.filter((c) => c.id !== id));
+    setCriteria((prev) =>
+      updateCriteriaDefaultRowIdx(prev.filter((c) => c.id !== id))
+    );
+
     updateCriteriaNormalizedWeights();
   };
 

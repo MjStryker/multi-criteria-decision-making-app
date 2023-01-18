@@ -174,8 +174,10 @@ const productsWithCriteria: TProductWithCriterion[] = [
   },
 ];
 
+type TProductValue = number | undefined;
+
 function getTestValues(
-  values: [criterionData: Partial<TCriterion>, productValues: number[]][]
+  values: [criterionData: Partial<TCriterion>, productValues: TProductValue[]][]
 ): {
   criteriaToUse: TCriterion[];
   productsWithCriteriaToUse: TProductWithCriterion[];
@@ -316,5 +318,24 @@ describe("rankProducts(...)", () => {
     expect(getProductFromName("p1", rankedProducts)?.rank).toEqual(2);
     expect(getProductFromName("p2", rankedProducts)?.rank).toEqual(1);
     expect(getProductFromName("p3", rankedProducts)?.rank).toEqual(1);
+  });
+
+  it("test 6", () => {
+    const { criteriaToUse, productsWithCriteriaToUse } = getTestValues([
+      [{}, [100, 100, undefined]],
+      [{}, [100, 100, undefined]],
+      [{}, [100, 100, undefined]],
+      [{}, [100, 100, undefined]],
+    ]);
+
+    const rankedProducts = rankProducts(
+      products,
+      criteriaToUse,
+      productsWithCriteriaToUse
+    );
+
+    expect(getProductFromName("p1", rankedProducts)?.rank).toEqual(1);
+    expect(getProductFromName("p2", rankedProducts)?.rank).toEqual(1);
+    expect(getProductFromName("p3", rankedProducts)?.rank).toEqual(2);
   });
 });

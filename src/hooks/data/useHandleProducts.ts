@@ -1,6 +1,7 @@
 import { TCriterion } from "../../types/criteria";
 import { TProduct } from "../../types/products";
 import { createEmptyProductCriterionValue } from "../../utils/productsWithCriteria/productsWithCriteria";
+import { updateProductsDefaultColumnIdx } from "../../utils/products/products";
 import { useCallback } from "react";
 import useHandleProductsWithCriteria from "./useHandleProductsWithCriteria";
 
@@ -28,14 +29,17 @@ const useHandleProducts = (
       setProducts((prev) => {
         const newProductIdx = prev.findIndex((p) => product.id === p.id);
         prev[newProductIdx] = product;
-        return [...prev];
+
+        return updateProductsDefaultColumnIdx(prev);
       }),
     [setProducts]
   );
 
   const removeProduct = useCallback(
     ({ id }: TProduct) =>
-      setProducts((prev) => prev.filter((p) => p.id !== id)),
+      setProducts((prev) =>
+        updateProductsDefaultColumnIdx(prev.filter((p) => p.id !== id))
+      ),
     [setProducts]
   );
 

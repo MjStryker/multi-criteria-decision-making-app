@@ -31,13 +31,16 @@ export function calculateProductsCriteriaRankPts(
       )
       .forEach((product) => {
         const pos =
-          isDefined(criterion.weight) && lastValue !== product.value
+          isDefined(criterion.weight) &&
+          isDefined(product.value) &&
+          lastValue !== product.value
             ? lastPos + 1
             : lastPos;
 
-        const criterionRankPts = isDefined(criterion.weight)
-          ? criterion.weight * pos
-          : 1;
+        const criterionRankPts =
+          isDefined(criterion.weight) && isDefined(product.value)
+            ? criterion.weight * pos
+            : 0;
 
         lastPos = pos;
         lastValue = product.value;

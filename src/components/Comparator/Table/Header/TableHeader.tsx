@@ -9,16 +9,16 @@ import useClickOutside from "../../../../hooks/useClickOutside";
 
 const STYLES = {
   INPUT: {
-    TEXT: {
-      fontSize: 16,
-      textAlign: "inherit",
-    } as CSSProperties,
-  },
+    height: 54,
+    boxSizing: "border-box",
+    fontSize: 16,
+    textAlign: "inherit",
+  } as CSSProperties,
   TD: {
     PRODUCT: {
-      width: "fit-content",
       minWidth: minWidth,
       maxWidth: minWidth,
+      padding: 0,
       border,
     } as CSSProperties,
   },
@@ -81,82 +81,110 @@ const TableHeader = (props: TableHeaderProps) => {
           const isCellInEditMode = product.id === cellId;
 
           return (
-            <td key={product.id} style={STYLES.TD.PRODUCT}>
+            <td key={product.id} style={{ ...STYLES.TD.PRODUCT }}>
               <div
+                className="HeadCellProductContainer"
                 style={{
                   display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: "column",
                   justifyContent: "space-between",
+                  height: "100%",
                 }}
               >
                 <div
-                  ref={isCellInEditMode ? inputRef : undefined}
-                  onClick={() => {
-                    if (isCellInEditMode) {
-                      return;
-                    }
-                    console.log(`[ Cell ] Selected ${product.id}`);
-                    setCellId(product.id);
-                    setCellValue(product.name ?? null);
-                  }}
-                  onBlur={() => {
-                    props.updateProduct({
-                      ...product,
-                      name: cellValue ? `${cellValue}` : undefined,
-                    });
-                    setCellId(null);
-                    setCellValue(null);
-                  }}
+                  className="HeadCellProductRow-1"
                   style={{
-                    margin: -8,
-                    padding: isCellInEditMode ? 0 : 8,
-                    width: "100%",
+                    flex: 1,
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "stretch",
                   }}
                 >
-                  {isCellInEditMode ? (
-                    <input
-                      type="text"
-                      value={cellValue ? `${cellValue}` : ""}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        const newValue =
-                          value && value.length > 0 ? value : null;
+                  <div
+                    ref={isCellInEditMode ? inputRef : undefined}
+                    onClick={() => {
+                      if (isCellInEditMode) {
+                        return;
+                      }
+                      console.log(`[ Cell ] Selected ${product.id}`);
+                      setCellId(product.id);
+                      setCellValue(product.name ?? null);
+                    }}
+                    onBlur={() => {
+                      props.updateProduct({
+                        ...product,
+                        name: cellValue ? `${cellValue}` : undefined,
+                      });
+                      setCellId(null);
+                      setCellValue(null);
+                    }}
+                    style={{
+                      display: "flex",
+                      alignItems: "stretch",
+                      padding: isCellInEditMode ? 0 : 8,
+                      width: "100%",
+                    }}
+                  >
+                    {isCellInEditMode ? (
+                      <input
+                        type="text"
+                        value={cellValue ? `${cellValue}` : ""}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          const newValue =
+                            value && value.length > 0 ? value : null;
 
-                        setCellValue(newValue);
-                        props.updateProduct({
-                          ...product,
-                          name: newValue ? `${newValue}` : undefined,
-                        });
-                      }}
-                      onKeyUp={(e) => {
-                        if (e.key === "Enter") {
+                          setCellValue(newValue);
                           props.updateProduct({
                             ...product,
-                            name: cellValue ? `${cellValue}` : undefined,
+                            name: newValue ? `${newValue}` : undefined,
                           });
-                          setCellId(null);
-                          setCellValue(null);
-                        }
-                      }}
-                      style={{
-                        ...STYLES.INPUT.TEXT,
-                        width: minWidth,
-                        padding: "7px 6px",
-                      }}
-                    />
-                  ) : (
-                    <div style={{ marginRight: 8 }}>
-                      {product.name ?? `Produit ${idx + 1}`}
-                    </div>
+                        }}
+                        onKeyUp={(e) => {
+                          if (e.key === "Enter") {
+                            props.updateProduct({
+                              ...product,
+                              name: cellValue ? `${cellValue}` : undefined,
+                            });
+                            setCellId(null);
+                            setCellValue(null);
+                          }
+                        }}
+                        style={{
+                          ...STYLES.INPUT,
+                          width: "100%",
+                          padding: "7px 6px",
+                        }}
+                      />
+                    ) : (
+                      <div
+                        className="ProductName"
+                        style={{ flex: 1, alignSelf: "center", marginRight: 8 }}
+                      >
+                        {product.name ?? `Produit ${idx + 1}`}
+                      </div>
+                    )}
+                  </div>
+
+                  {!isCellInEditMode && (
+                    <button onClick={() => props.removeProduct(product)}>
+                      -
+                    </button>
                   )}
                 </div>
 
-                {!isCellInEditMode && (
-                  <button onClick={() => props.removeProduct(product)}>
-                    -
-                  </button>
-                )}
+                <div
+                  className="HeadCellProductRow-2"
+                  style={{
+                    padding: "6px 8px",
+                    fontSize: "12px",
+                    color: "#5a5a5a",
+                    backgroundColor: "rgba(0, 0, 0, 0.02",
+                  }}
+                >
+                  Column idx: <b>{product.defaultColumnIdx}</b>
+                </div>
               </div>
             </td>
           );

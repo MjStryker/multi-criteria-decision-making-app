@@ -66,3 +66,7 @@ export function getCriterionWeightRelativeToMax(
     ? (criterionWeight! / maxWeight!) * 100
     : 0;
 }
+
+export function updateCriteriaDefaultRowIdx(criteria: TCriterion[]) {
+  return criteria.map((c, idx) => ({ ...c, defaultRowIdx: idx }));
+}

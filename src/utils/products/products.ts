@@ -22,3 +22,7 @@ export function createEmptyProduct(defaultColumnIdx: number): TProduct {
     defaultColumnIdx,
   };
 }
+
+export function updateProductsDefaultColumnIdx(products: TProduct[]) {
+  return products.map((p, idx) => ({ ...p, defaultColumnIdx: idx }));
+}

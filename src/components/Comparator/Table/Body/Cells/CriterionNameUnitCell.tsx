@@ -121,113 +121,135 @@ const CriterionNameUnitCell = (props: CriterionNameUnitCellProps) => {
           display: "flex",
           flexDirection: "row",
           justifyContent: "space-between",
+          height: "100%",
         }}
       >
         <div
           style={{
             display: "flex",
-            alignItems: "center",
-            margin: -8,
-            padding: editMode ? 0 : 8,
+            alignItems: "stretch",
             width: "100%",
           }}
         >
-          {editMode ? (
-            <div style={{ display: "flex" }}>
-              {/*
-               * CRITERION - NAME
-               */}
-              <input
-                ref={inputNameRef}
-                type="text"
-                value={
-                  isValidNonEmptyString(criterionNewName)
-                    ? criterionNewName
-                    : ""
-                }
-                onChange={(e) =>
-                  setCriterionNewName(
-                    isValidNonEmptyString(e.target.value)
-                      ? e.target.value
-                      : null
-                  )
-                }
-                onKeyUp={(e) => {
-                  switch (e.key) {
-                    case "Enter":
-                      inputNameRef.current?.blur();
-                      break;
-                    case "Escape":
-                      if (criterionNameChanged) {
-                        console.log("[ Cell ] Abort changes:", {
-                          current: defaultCriterionName,
-                          abort: criterionNewName,
-                        });
-                        setCriterionNewName(defaultCriterionName);
-                      }
-                      inputNameRef.current?.blur();
-                      break;
+          <div
+            style={{
+              alignSelf: "center",
+              marginRight: editMode ? 0 : 8,
+              padding: 8,
+              fontSize: "12px",
+              color: "#5a5a5a",
+              backgroundColor: "rgba(0, 0, 0, 0.02",
+            }}
+          >
+            {props.criterion.defaultRowIdx}
+          </div>
+
+          <div
+            style={{
+              alignSelf: "center",
+              display: "flex",
+            }}
+          >
+            {editMode ? (
+              <>
+                {/*
+                 * CRITERION - NAME
+                 */}
+                <input
+                  ref={inputNameRef}
+                  type="text"
+                  value={
+                    isValidNonEmptyString(criterionNewName)
+                      ? criterionNewName
+                      : ""
                   }
-                }}
-                style={{
-                  ...DATA_TABLE_STYLES.INPUT.TEXT,
-                  padding: "7px 6px",
-                }}
-              />
-              {/*
-               * CRITERION - UNIT
-               */}
-              <input
-                ref={inputUnitRef}
-                type="text"
-                value={
-                  isValidNonEmptyString(criterionNewUnit)
-                    ? criterionNewUnit
-                    : ""
-                }
-                onChange={(e) =>
-                  setCriterionNewUnit(
-                    isValidNonEmptyString(e.target.value)
-                      ? e.target.value
-                      : null
-                  )
-                }
-                onKeyUp={(e) => {
-                  switch (e.key) {
-                    case "Enter":
-                      inputUnitRef.current?.blur();
-                      break;
-                    case "Escape":
-                      if (criterionUnitChanged) {
-                        console.log("[ Cell ] Abort changes:", {
-                          current: defaultCriterionUnit,
-                          abort: criterionNewUnit,
-                        });
-                        setCriterionNewUnit(defaultCriterionUnit);
-                      }
-                      inputUnitRef.current?.blur();
-                      break;
+                  onChange={(e) =>
+                    setCriterionNewName(
+                      isValidNonEmptyString(e.target.value)
+                        ? e.target.value
+                        : null
+                    )
                   }
-                }}
-                style={{
-                  ...DATA_TABLE_STYLES.INPUT.TEXT,
-                  maxWidth: 60,
-                  padding: "7px 6px",
-                }}
-              />
-            </div>
-          ) : (
-            <div style={{ marginRight: 8 }}>
-              {props.criterion.name
-                ? capitalize(props.criterion.name)
-                : `Critère ${props.rowIdx + 1}`}{" "}
-              {props.criterion.unit && `(${props.criterion.unit})`}
-            </div>
-          )}
+                  onKeyUp={(e) => {
+                    switch (e.key) {
+                      case "Enter":
+                        inputNameRef.current?.blur();
+                        break;
+                      case "Escape":
+                        if (criterionNameChanged) {
+                          console.log("[ Cell ] Abort changes:", {
+                            current: defaultCriterionName,
+                            abort: criterionNewName,
+                          });
+                          setCriterionNewName(defaultCriterionName);
+                        }
+                        inputNameRef.current?.blur();
+                        break;
+                    }
+                  }}
+                  style={{
+                    ...DATA_TABLE_STYLES.INPUT.TEXT,
+                    padding: "7px 6px",
+                  }}
+                />
+                {/*
+                 * CRITERION - UNIT
+                 */}
+                <input
+                  ref={inputUnitRef}
+                  type="text"
+                  value={
+                    isValidNonEmptyString(criterionNewUnit)
+                      ? criterionNewUnit
+                      : ""
+                  }
+                  onChange={(e) =>
+                    setCriterionNewUnit(
+                      isValidNonEmptyString(e.target.value)
+                        ? e.target.value
+                        : null
+                    )
+                  }
+                  onKeyUp={(e) => {
+                    switch (e.key) {
+                      case "Enter":
+                        inputUnitRef.current?.blur();
+                        break;
+                      case "Escape":
+                        if (criterionUnitChanged) {
+                          console.log("[ Cell ] Abort changes:", {
+                            current: defaultCriterionUnit,
+                            abort: criterionNewUnit,
+                          });
+                          setCriterionNewUnit(defaultCriterionUnit);
+                        }
+                        inputUnitRef.current?.blur();
+                        break;
+                    }
+                  }}
+                  style={{
+                    ...DATA_TABLE_STYLES.INPUT.TEXT,
+                    maxWidth: 60,
+                    padding: "7px 6px",
+                  }}
+                />
+              </>
+            ) : (
+              <div style={{ marginRight: 8 }}>
+                {props.criterion.name
+                  ? capitalize(props.criterion.name)
+                  : `Critère ${props.rowIdx + 1}`}{" "}
+                {props.criterion.unit && `(${props.criterion.unit})`}
+              </div>
+            )}
+          </div>
         </div>
 
         {!editMode && (
-          <button onClick={() => props.removeCriterion(props.criterion)}>
+          <button
+            onClick={() => props.removeCriterion(props.criterion)}
+            style={{ zIndex: 2 }}
+          >
             -
           </button>
         )}
@@ -235,16 +257,18 @@ const CriterionNameUnitCell = (props: CriterionNameUnitCellProps) => {
 
       {!editMode && (
         <div
+          className="CriterionWeightBarWrapper"
           style={{
             position: "absolute",
             left: 0,
             bottom: -5,
             width: "100%",
-            padding: "0 8px",
             boxSizing: "border-box",
+            zIndex: 1,
           }}
         >
           <progress
+            className="CriterionWeightBar"
             max="100"
             value={getCriterionWeightRelativeToMax(
               props.criterion.weight,

@@ -27,8 +27,11 @@ export const DATA_TABLE_STYLES = {
       textAlign: "right",
     } as CSSProperties,
     CRITERION: {
+      boxSizing: "border-box",
       width: "fit-content",
       minWidth: 200,
+      maxWidth: 300,
+      padding: 0,
       border,
     } as CSSProperties,
     CRITERION_BENEFICIAL: {
