@@ -148,6 +148,9 @@ const CriterionNameUnitCell = (props: CriterionNameUnitCellProps) => {
             style={{
               alignSelf: "center",
               display: "flex",
+              alignItems: "center",
+              height: "100%",
+              zIndex: 2,
             }}
           >
             {editMode ? (
@@ -190,6 +193,7 @@ const CriterionNameUnitCell = (props: CriterionNameUnitCellProps) => {
                   style={{
                     ...DATA_TABLE_STYLES.INPUT.TEXT,
                     padding: "7px 6px",
+                    maxWidth: 180,
                   }}
                 />
                 {/*
