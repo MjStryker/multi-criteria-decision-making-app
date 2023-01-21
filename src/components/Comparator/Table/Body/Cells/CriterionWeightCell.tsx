@@ -2,8 +2,8 @@ import { deepEqual, isDefined } from "../../../../../utils/objects";
 import { useLayoutEffect, useRef, useState } from "react";
 
 import { CRITERION } from "../../../../../constants/criteria";
-import { DATA_TABLE_STYLES } from "../../../DataTable.styles";
 import { TCriterion } from "../../../../../types/criteria";
+import { Td } from "@chakra-ui/react";
 import { clampCriterionWeightValue } from "../../../../../utils/criteria/criteria";
 import { isValidNumber } from "../../../../../utils/numbers";
 import { parseStringAsNumber } from "../../../../../utils/strings";
@@ -80,11 +80,7 @@ const CriterionWeightCell = (props: CriterionWeightCellProps) => {
   };
 
   return (
-    <td
-      ref={cellRef}
-      onClick={handleClickOnCell}
-      style={DATA_TABLE_STYLES.TD.CRITERION_WEIGHT}
-    >
+    <Td ref={cellRef} onClick={handleClickOnCell}>
       <div
         style={{
           margin: -8,
@@ -122,17 +118,16 @@ const CriterionWeightCell = (props: CriterionWeightCellProps) => {
               }
             }}
             style={{
-              ...DATA_TABLE_STYLES.INPUT.TEXT,
               width: "100%",
               padding: "7px 6px",
             }}
           />
         ) : (
-          <div style={DATA_TABLE_STYLES.TEXT.MORE_INFO_CONTAINER}>
+          <div>
             <div>
               {isValidNumber(currentWeightValue) ? currentWeightValue : "-"}
             </div>
-            <div style={DATA_TABLE_STYLES.TEXT.MORE_INFO}>
+            <div>
               {isValidNumber(props.criterion.normalizedWeight)
                 ? `(${props.criterion.normalizedWeight.toFixed(3)})`
                 : null}
@@ -140,7 +135,7 @@ const CriterionWeightCell = (props: CriterionWeightCellProps) => {
           </div>
         )}
       </div>
-    </td>
+    </Td>
   );
 };
 

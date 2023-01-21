@@ -4,8 +4,8 @@ import {
 } from "../../../../../utils/strings";
 import { useRef, useState } from "react";
 
-import { DATA_TABLE_STYLES } from "../../../DataTable.styles";
 import { TCriterion } from "../../../../../types/criteria";
+import { Td } from "@chakra-ui/react";
 import { deepEqual } from "../../../../../utils/objects";
 import { getCriterionWeightRelativeToMax } from "../../../../../utils/criteria/criteria";
 import useClickOutside from "../../../../../hooks/useClickOutside";
@@ -108,11 +108,10 @@ const CriterionNameUnitCell = (props: CriterionNameUnitCellProps) => {
   };
 
   return (
-    <td
+    <Td
       ref={cellRef}
       onClick={handleClickOnCell}
       style={{
-        ...DATA_TABLE_STYLES.TD.CRITERION,
         position: "relative",
       }}
     >
@@ -191,7 +190,6 @@ const CriterionNameUnitCell = (props: CriterionNameUnitCellProps) => {
                     }
                   }}
                   style={{
-                    ...DATA_TABLE_STYLES.INPUT.TEXT,
                     padding: "7px 6px",
                     maxWidth: 180,
                   }}
@@ -232,7 +230,6 @@ const CriterionNameUnitCell = (props: CriterionNameUnitCellProps) => {
                     }
                   }}
                   style={{
-                    ...DATA_TABLE_STYLES.INPUT.TEXT,
                     maxWidth: 60,
                     padding: "7px 6px",
                   }}
@@ -282,7 +279,7 @@ const CriterionNameUnitCell = (props: CriterionNameUnitCellProps) => {
           />
         </div>
       )}
-    </td>
+    </Td>
   );
 };
 

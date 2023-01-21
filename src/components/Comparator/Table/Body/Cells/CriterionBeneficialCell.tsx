@@ -1,8 +1,8 @@
 import { deepEqual, isDefined } from "../../../../../utils/objects";
 import { useRef, useState } from "react";
 
-import { DATA_TABLE_STYLES } from "../../../DataTable.styles";
 import { TCriterion } from "../../../../../types/criteria";
+import { Td } from "@chakra-ui/react";
 import useClickOutside from "../../../../../hooks/useClickOutside";
 
 type CriterionBeneficialCellProps = {
@@ -68,14 +68,9 @@ const CriterionBeneficialCell = (props: CriterionBeneficialCellProps) => {
   };
 
   return (
-    <td
-      ref={cellRef}
-      onClick={handleClickOnCell}
-      style={DATA_TABLE_STYLES.TD.CRITERION_BENEFICIAL}
-    >
+    <Td ref={cellRef} onClick={handleClickOnCell}>
       <div
         style={{
-          ...DATA_TABLE_STYLES.INPUT.TEXT,
           width: "100%",
           margin: -8,
           padding: 8,
@@ -108,7 +103,7 @@ const CriterionBeneficialCell = (props: CriterionBeneficialCellProps) => {
           </div>
         )}
       </div>
-    </td>
+    </Td>
   );
 };
 

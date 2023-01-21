@@ -1,10 +1,10 @@
 import { deepEqual, isDefined } from "../../../../../utils/objects";
 import { useLayoutEffect, useRef, useState } from "react";
 
-import { DATA_TABLE_STYLES } from "../../../DataTable.styles";
 import { TCriterion } from "../../../../../types/criteria";
 import { TProduct } from "../../../../../types/products";
 import { TProductWithCriterion } from "../../../../../types/productsWithCriteria";
+import { Td } from "@chakra-ui/react";
 import { isValidNumber } from "../../../../../utils/numbers";
 import { minWidth } from "../../../../../styles/tables/tableCell";
 import { parseStringAsNumber } from "../../../../../utils/strings";
@@ -83,11 +83,7 @@ const CriterionProductValueCell = (props: CriterionProductValueCellProps) => {
   };
 
   return (
-    <td
-      ref={cellRef}
-      onClick={handleClickOnCell}
-      style={DATA_TABLE_STYLES.TD.CELL_VALUE}
-    >
+    <Td ref={cellRef} onClick={handleClickOnCell}>
       <div
         style={{
           margin: -8,
@@ -126,24 +122,21 @@ const CriterionProductValueCell = (props: CriterionProductValueCellProps) => {
               }
             }}
             style={{
-              ...DATA_TABLE_STYLES.INPUT.TEXT,
               width: minWidth,
               padding: "7px 6px",
             }}
           />
         ) : (
-          <div style={DATA_TABLE_STYLES.TEXT.MORE_INFO_CONTAINER}>
+          <div>
             <div>{isValidNumber(currentValue) ? currentValue : "-"}</div>
 
             {isDefined(props.criteriaProductValue?.criterionRankPts) ? (
-              <div style={DATA_TABLE_STYLES.TEXT.MORE_INFO}>
-                ({props.criteriaProductValue?.criterionRankPts ?? "-"})
-              </div>
+              <div>({props.criteriaProductValue?.criterionRankPts ?? "-"})</div>
             ) : null}
           </div>
         )}
       </div>
-    </td>
+    </Td>
   );
 };
 

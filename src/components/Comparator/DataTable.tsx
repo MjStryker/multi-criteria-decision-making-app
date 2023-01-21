@@ -1,3 +1,4 @@
+import { Table, TableContainer } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 
 import { SORT_BY } from "../../constants/arrays";
@@ -107,33 +108,31 @@ const DataTable = () => {
   );
 
   return (
-    <table
-      cellSpacing={0}
-      cellPadding={8}
-      style={{ height: "fit-content", borderCollapse: "collapse" }}
-    >
-      <TableHeader
-        products={productsSorted}
-        addProduct={addProduct}
-        updateProduct={updateProduct}
-        removeProduct={removeProduct}
-      />
+    <TableContainer>
+      <Table size="sm">
+        <TableHeader
+          products={productsSorted}
+          addProduct={addProduct}
+          updateProduct={updateProduct}
+          removeProduct={removeProduct}
+        />
 
-      <TableBody
-        criteria={criteriaSorted}
-        products={productsSorted}
-        productsWithCriteria={productsWithCriteria}
-        updateCriterion={updateCriterion}
-        removeCriterion={removeCriterion}
-        setProductCriteriaValue={setProductCriteriaValue}
-      />
+        <TableBody
+          criteria={criteriaSorted}
+          products={productsSorted}
+          productsWithCriteria={productsWithCriteria}
+          updateCriterion={updateCriterion}
+          removeCriterion={removeCriterion}
+          setProductCriteriaValue={setProductCriteriaValue}
+        />
 
-      <TableFooter
-        criteria={criteriaSorted}
-        products={productsSorted}
-        addCriterion={addCriterion}
-      />
-    </table>
+        <TableFooter
+          criteria={criteriaSorted}
+          products={productsSorted}
+          addCriterion={addCriterion}
+        />
+      </Table>
+    </TableContainer>
   );
 };
 

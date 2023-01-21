@@ -1,37 +1,25 @@
-import { CSSProperties, useRef, useState } from "react";
-import { border, minWidth } from "../../../../styles/tables/tableCell";
+import { Button, Flex, Td, Thead, Tr } from "@chakra-ui/react";
+import { useRef, useState } from "react";
 
-import { COLORS } from "../../../../constants/colors";
 import { CRITERION } from "../../../../constants/criteria";
+import EditProductButton from "./EditProductButton";
 import { TProduct } from "../../../../types/products";
 import { createEmptyProduct } from "../../../../utils/products/products";
 import useClickOutside from "../../../../hooks/useClickOutside";
 
-const STYLES = {
-  INPUT: {
-    height: 54,
-    boxSizing: "border-box",
-    fontSize: 16,
-    textAlign: "inherit",
-  } as CSSProperties,
-  TD: {
-    PRODUCT: {
-      minWidth: minWidth,
-      maxWidth: minWidth,
-      padding: 0,
-      border,
-    } as CSSProperties,
-  },
-} as const;
-
 type TableHeaderProps = {
   products: TProduct[];
-  addProduct: Function;
-  updateProduct: Function;
-  removeProduct: Function;
+  addProduct: (product: TProduct) => void;
+  updateProduct: (product: TProduct) => void;
+  removeProduct: (product: TProduct) => void;
 };
 
-const TableHeader = (props: TableHeaderProps) => {
+const TableHeader = ({
+  products,
+  addProduct,
+  updateProduct,
+  removeProduct,
+}: TableHeaderProps) => {
   const inputRef = useRef(null);
 
   const [cellId, setCellId] = useState<string | null>(null);
@@ -46,42 +34,38 @@ const TableHeader = (props: TableHeaderProps) => {
   });
 
   return (
-    <thead>
-      <tr>
+    <Thead>
+      <Tr>
         {/*
          * --------
          */}
-        <td />
+        <Td />
 
         {/*
          * --------
          */}
-        <td />
+        <Td />
 
         {/*
          * CRITERIONS - MIN/MAX WEIGHT INFO
          */}
-        <td>
-          <div
-            style={{
-              height: "100%",
-              display: "flex",
-              alignItems: "flex-end",
-              justifyContent: "center",
-              fontSize: 14,
-              color: COLORS.GREY,
-            }}
-          >{`${CRITERION.WEIGHT.MIN} - ${CRITERION.WEIGHT.MAX}`}</div>
-        </td>
+        <Td textAlign="center">
+          <Flex
+            h="full"
+            direction="column"
+            fontSize="xs"
+            color="gray"
+          >{`${CRITERION.WEIGHT.MIN} - ${CRITERION.WEIGHT.MAX}`}</Flex>
+        </Td>
 
         {/*
          * PRODUCTS
          */}
-        {props.products.map((product, idx) => {
+        {products.map((product, idx) => {
           const isCellInEditMode = product.id === cellId;
 
           return (
-            <td key={product.id} style={{ ...STYLES.TD.PRODUCT }}>
+            <Td key={product.id}>
               <div
                 className="HeadCellProductContainer"
                 style={{
@@ -91,15 +75,12 @@ const TableHeader = (props: TableHeaderProps) => {
                   height: "100%",
                 }}
               >
-                <div
-                  className="HeadCellProductRow-1"
-                  style={{
-                    flex: 1,
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "stretch",
-                  }}
+                <Flex
+                  className="FirstRowContainer"
+                  flex={1}
+                  flexDirection="row"
+                  justifyContent="space-between"
+                  alignItems="center"
                 >
                   <div
                     ref={isCellInEditMode ? inputRef : undefined}
@@ -112,7 +93,7 @@ const TableHeader = (props: TableHeaderProps) => {
                       setCellValue(product.name ?? null);
                     }}
                     onBlur={() => {
-                      props.updateProduct({
+                      updateProduct({
                         ...product,
                         name: cellValue ? `${cellValue}` : undefined,
                       });
@@ -136,14 +117,14 @@ const TableHeader = (props: TableHeaderProps) => {
                             value && value.length > 0 ? value : null;
 
                           setCellValue(newValue);
-                          props.updateProduct({
+                          updateProduct({
                             ...product,
                             name: newValue ? `${newValue}` : undefined,
                           });
                         }}
-                        onKeyUp={(e) => {
+                        onKeyDown={(e) => {
                           if (e.key === "Enter") {
-                            props.updateProduct({
+                            updateProduct({
                               ...product,
                               name: cellValue ? `${cellValue}` : undefined,
                             });
@@ -152,7 +133,6 @@ const TableHeader = (props: TableHeaderProps) => {
                           }
                         }}
                         style={{
-                          ...STYLES.INPUT,
                           width: "100%",
                           padding: "7px 6px",
                         }}
@@ -168,11 +148,13 @@ const TableHeader = (props: TableHeaderProps) => {
                   </div>
 
                   {!isCellInEditMode && (
-                    <button onClick={() => props.removeProduct(product)}>
-                      -
-                    </button>
+                    <EditProductButton
+                      product={product}
+                      updateProduct={updateProduct}
+                      removeProduct={removeProduct}
+                    />
                   )}
-                </div>
+                </Flex>
 
                 <div
                   className="HeadCellProductRow-2"
@@ -186,24 +168,22 @@ const TableHeader = (props: TableHeaderProps) => {
                   Column idx: <b>{product.defaultColumnIdx}</b>
                 </div>
               </div>
-            </td>
+            </Td>
           );
         })}
 
         {/*
          * PRODUCTS - ADD BUTTON
          */}
-        <td>
-          <button
-            onClick={() =>
-              props.addProduct(createEmptyProduct(props.products.length))
-            }
+        <Td>
+          <Button
+            onClick={() => addProduct(createEmptyProduct(products.length))}
           >
             +
-          </button>
-        </td>
-      </tr>
-    </thead>
+          </Button>
+        </Td>
+      </Tr>
+    </Thead>
   );
 };
 
