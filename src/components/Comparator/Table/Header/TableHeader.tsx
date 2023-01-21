@@ -101,6 +101,7 @@ const TableHeader = ({
             size="sm"
             icon={<AddIcon />}
             onClick={handleAddProduct}
+            boxShadow="base"
           />
         </Td>
       </Tr>

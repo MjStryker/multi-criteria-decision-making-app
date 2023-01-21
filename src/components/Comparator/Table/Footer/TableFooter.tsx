@@ -33,15 +33,16 @@ const TableFooter = ({
         {/*
          * CRITERION - ADD BUTTON
          */}
-        <Td border="none" px={0}>
+        <Td border="none" px={0.5}>
           <Button
             w="full"
             size="sm"
             colorScheme="blue"
             onClick={handleAddCriterion}
             leftIcon={<AddIcon fontSize="xs" />}
+            boxShadow="base"
           >
-            Add criterion
+            Add
           </Button>
         </Td>
 
