@@ -1,3 +1,5 @@
+import { Td, Tr } from "@chakra-ui/react";
+
 import CriterionBeneficialCell from "./Cells/CriterionBeneficialCell";
 import CriterionNameUnitCell from "./Cells/CriterionNameUnitCell";
 import CriterionProductValueCell from "./Cells/CriterionProductValueCell";
@@ -24,7 +26,7 @@ type TableBodyRowProps = {
 
 const TableBodyRow = (props: TableBodyRowProps) => {
   return (
-    <tr key={props.criterion.id}>
+    <Tr key={props.criterion.id}>
       {/*
        * CRITERION - NAME / UNIT
        */}
@@ -72,7 +74,12 @@ const TableBodyRow = (props: TableBodyRowProps) => {
           />
         );
       })}
-    </tr>
+
+      {/*
+       * --------
+       */}
+      <Td border="none" />
+    </Tr>
   );
 };
 
