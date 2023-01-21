@@ -1,5 +1,13 @@
-import { Td, Tfoot, Tr } from "@chakra-ui/react";
+import {
+  Button,
+  ButtonGroup,
+  IconButton,
+  Td,
+  Tfoot,
+  Tr,
+} from "@chakra-ui/react";
 
+import { AddIcon } from "@chakra-ui/icons";
 import { TCriterion } from "../../../../types/criteria";
 import { TProduct } from "../../../../types/products";
 import { createEmptyCriterion } from "../../../../utils/criteria/criteria";
@@ -10,44 +18,54 @@ type TableFooterProps = {
   addCriterion: Function;
 };
 
-const TableFooter = (props: TableFooterProps) => {
+const TableFooter = ({
+  criteria,
+  products,
+  addCriterion,
+}: TableFooterProps) => {
+  const handleAddCriterion = () => {
+    addCriterion(createEmptyCriterion(criteria.length));
+  };
+
   return (
     <Tfoot>
       <Tr>
         {/*
          * CRITERION - ADD BUTTON
          */}
-        <Td>
-          <button
-            onClick={() =>
-              props.addCriterion(createEmptyCriterion(props.criteria.length))
-            }
+        <Td border="none" px={0}>
+          <Button
+            w="full"
+            size="sm"
+            colorScheme="blue"
+            onClick={handleAddCriterion}
+            leftIcon={<AddIcon fontSize="xs" />}
           >
-            +
-          </button>
+            Add criterion
+          </Button>
         </Td>
 
         {/*
          * --------
          */}
-        <Td />
+        <Td border="none" />
 
         {/*
          * --------
          */}
-        <Td />
+        <Td border="none" />
 
         {/*
          * PRODUCTS - RANK
          */}
-        {props.products.map((p) => (
+        {products.map((p) => (
           <Td key={p.id}>#{p.rank ?? " -"}</Td>
         ))}
 
         {/*
          * --------
          */}
-        <Td />
+        <Td border="none" />
       </Tr>
     </Tfoot>
   );
