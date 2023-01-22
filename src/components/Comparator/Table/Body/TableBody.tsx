@@ -3,36 +3,42 @@ import { TProduct } from "../../../../types/products";
 import { TProductWithCriterion } from "../../../../types/productsWithCriteria";
 import TableBodyRow from "./TableBodyRow";
 import { getCriteriaMaxWeight } from "../../../../utils/criteria/criteria";
-import useHandleCriteria from "../../../../hooks/data/useHandleCriteria";
-import useHandleProductsWithCriteria from "../../../../hooks/data/useHandleProductsWithCriteria";
+import { useHandleCriteriaFunctions } from "../../../../hooks/data/useHandleCriteria";
+import { useHandleProductsWithCriteriaFunctions } from "../../../../hooks/data/useHandleProductsWithCriteria";
+import { useMemo } from "react";
 
 type TableBodyProps = {
   criteria: TCriterion[];
   products: TProduct[];
   productsWithCriteria: TProductWithCriterion[];
-  updateCriterion: ReturnType<typeof useHandleCriteria>["updateCriterion"];
-  removeCriterion: ReturnType<typeof useHandleCriteria>["removeCriterion"];
-  setProductCriteriaValue: ReturnType<
-    typeof useHandleProductsWithCriteria
-  >["setProductCriteriaValue"];
+  updateCriterion: useHandleCriteriaFunctions["updateCriterion"];
+  removeCriterion: useHandleCriteriaFunctions["removeCriterion"];
+  setProductCriterionValue: useHandleProductsWithCriteriaFunctions["setProductCriterionValue"];
 };
 
-const TableBody = (props: TableBodyProps) => {
-  const maxWeight = getCriteriaMaxWeight(props.criteria);
+const TableBody = ({
+  criteria,
+  products,
+  productsWithCriteria,
+  updateCriterion,
+  removeCriterion,
+  setProductCriterionValue,
+}: TableBodyProps) => {
+  const maxWeight = useMemo(() => getCriteriaMaxWeight(criteria), [criteria]);
 
   return (
     <tbody>
-      {props.criteria.map((criterion, rowIdx) => (
+      {criteria.map((criterion, rowIdx) => (
         <TableBodyRow
           key={criterion.id}
           criterion={criterion}
           maxWeight={maxWeight}
-          products={props.products}
-          productsWithCriteria={props.productsWithCriteria}
+          products={products}
+          productsWithCriteria={productsWithCriteria}
           rowIdx={rowIdx}
-          updateCriterion={props.updateCriterion}
-          removeCriterion={props.removeCriterion}
-          setProductCriteriaValue={props.setProductCriteriaValue}
+          updateCriterion={updateCriterion}
+          removeCriterion={removeCriterion}
+          setProductCriterionValue={setProductCriterionValue}
         />
       ))}
     </tbody>

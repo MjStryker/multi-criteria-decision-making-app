@@ -79,7 +79,7 @@ const DataTable = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rankedProducts]);
 
-  const { addProductWithCriteria, setProductCriteriaValue } =
+  const { addProductWithCriteria, setProductCriterionValue } =
     useHandleProductsWithCriteria(
       productsWithCriteria,
       onSetProductsWithCriteria
@@ -123,7 +123,7 @@ const DataTable = () => {
           productsWithCriteria={productsWithCriteria}
           updateCriterion={updateCriterion}
           removeCriterion={removeCriterion}
-          setProductCriteriaValue={setProductCriteriaValue}
+          setProductCriterionValue={setProductCriterionValue}
         />
 
         <TableFooter

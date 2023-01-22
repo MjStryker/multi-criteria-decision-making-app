@@ -8,6 +8,8 @@ import { TProduct } from "../../types/products";
 import { createEmptyProductCriterionValue } from "../../utils/productsWithCriteria/productsWithCriteria";
 import useHandleProductsWithCriteria from "./useHandleProductsWithCriteria";
 
+export type useHandleCriteriaFunctions = ReturnType<typeof useHandleCriteria>;
+
 const useHandleCriteria = (
   setCriteria: React.Dispatch<React.SetStateAction<TCriterion[]>>,
   products: TProduct[],

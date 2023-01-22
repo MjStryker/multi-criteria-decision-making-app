@@ -50,10 +50,10 @@ const EditProductForm = ({
   /**
    * * Handle Inputs change
    */
-  const handleNameChange = (e: FormEvent<HTMLInputElement>) =>
+  const onNameChange = (e: FormEvent<HTMLInputElement>) =>
     setName(e.currentTarget.value);
 
-  const handleReferenceChange = (e: FormEvent<HTMLInputElement>) =>
+  const onReferenceChange = (e: FormEvent<HTMLInputElement>) =>
     setReference(e.currentTarget.value);
 
   /**
@@ -77,13 +77,13 @@ const EditProductForm = ({
   /**
    * * Form
    */
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     onSave();
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={onSubmit}>
       <Stack spacing={4}>
         <TextInput
           label="Name"
@@ -91,7 +91,7 @@ const EditProductForm = ({
           ref={firstFieldRef}
           type="text"
           value={name}
-          onChange={handleNameChange}
+          onChange={onNameChange}
           isDisabled={confirmDelete}
           // defaultValue={}
         />
@@ -101,7 +101,7 @@ const EditProductForm = ({
           id="product-reference"
           type="text"
           value={reference}
-          onChange={handleReferenceChange}
+          onChange={onReferenceChange}
           isDisabled={confirmDelete}
           // defaultValue={}
         />

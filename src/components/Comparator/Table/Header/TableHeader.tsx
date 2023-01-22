@@ -4,6 +4,7 @@ import {
   Flex,
   HStack,
   IconButton,
+  SimpleGrid,
   Tag,
   Td,
   Text,
@@ -65,23 +66,26 @@ const TableHeader = ({
          */}
         {products.map((product, idx) => {
           return (
-            <Td key={product.id}>
+            <Td key={product.id} w="150px" maxW="150px" px={2}>
               <VStack className="CellContainer" alignItems="stretch">
-                <HStack
+                <SimpleGrid
                   className="FirstRowContainer"
-                  flex={1}
-                  flexDirection="row"
-                  justifyContent="space-between"
+                  templateColumns="1fr auto"
                   alignItems="center"
+                  gap={1}
                 >
-                  <Text>{product.name ?? `Produit ${idx + 1}`}</Text>
+                  <Text whiteSpace="break-spaces" wordBreak="break-word">
+                    {product.name ?? `Produit ${idx + 1}`}
+                  </Text>
 
-                  <EditProductButton
-                    product={product}
-                    updateProduct={updateProduct}
-                    removeProduct={removeProduct}
-                  />
-                </HStack>
+                  <Box>
+                    <EditProductButton
+                      product={product}
+                      updateProduct={updateProduct}
+                      removeProduct={removeProduct}
+                    />
+                  </Box>
+                </SimpleGrid>
 
                 <Tag color="gray.600" fontSize="xs">
                   {product.reference}
