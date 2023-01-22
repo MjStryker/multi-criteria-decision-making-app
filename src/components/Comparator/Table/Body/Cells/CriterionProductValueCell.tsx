@@ -4,24 +4,19 @@ import {
   EditablePreview,
   Input,
   Td,
-  Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { deepEqual, isDefined } from "../../../../../utils/objects";
 import {
   isValidNonEmptyString,
   parseStringAsNumber,
 } from "../../../../../utils/strings";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import useHandleProductsWithCriteria, {
-  useHandleProductsWithCriteriaFunctions,
-} from "../../../../../hooks/data/useHandleProductsWithCriteria";
+import { useEffect, useState } from "react";
 
 import { TCriterion } from "../../../../../types/criteria";
 import { TProduct } from "../../../../../types/products";
 import { TProductWithCriterion } from "../../../../../types/productsWithCriteria";
 import { isValidNumber } from "../../../../../utils/numbers";
-import { minWidth } from "../../../../../styles/tables/tableCell";
+import { useHandleProductsWithCriteriaFunctions } from "../../../../../hooks/data/useHandleProductsWithCriteria";
 
 type CriterionProductValueCellProps = {
   criterion: TCriterion;
@@ -68,7 +63,7 @@ const CriterionProductValueCell = ({
   };
 
   return (
-    <Td isNumeric>
+    <Td isNumeric px={2}>
       <Editable value={value || "-"} onChange={onChange} onSubmit={onSubmit}>
         <EditablePreview
           py={2}

@@ -11,6 +11,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { DeleteIcon } from "@chakra-ui/icons";
 import { TProduct } from "../../../../types/products";
 import TextInput from "../../global/form/TextInput";
+import { isValidNonEmptyString } from "../../../../utils/strings";
 
 type EditProductFormProps = {
   firstFieldRef: any;
@@ -93,7 +94,6 @@ const EditProductForm = ({
           value={name}
           onChange={onNameChange}
           isDisabled={confirmDelete}
-          // defaultValue={}
         />
 
         <TextInput
@@ -103,7 +103,6 @@ const EditProductForm = ({
           value={reference}
           onChange={onReferenceChange}
           isDisabled={confirmDelete}
-          // defaultValue={}
         />
 
         <HStack>
@@ -127,7 +126,14 @@ const EditProductForm = ({
                 colorScheme="red"
                 icon={<DeleteIcon />}
                 aria-label="Delete product"
-                onClick={setConfirmDelete.on}
+                onClick={
+                  !isValidNonEmptyString(name) &&
+                  !isValidNonEmptyString(reference)
+                    ? // * If fields are empty then delete product
+                      onDelete
+                    : // * Else go through confirm process
+                      setConfirmDelete.on
+                }
               />
 
               <Button flex={1} variant="outline" onClick={onClose}>
