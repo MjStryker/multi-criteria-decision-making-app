@@ -1,3 +1,4 @@
+import { Box, Progress, Td } from "@chakra-ui/react";
 import {
   capitalize,
   isValidNonEmptyString,
@@ -5,7 +6,6 @@ import {
 import { useRef, useState } from "react";
 
 import { TCriterion } from "../../../../../types/criteria";
-import { Td } from "@chakra-ui/react";
 import { deepEqual } from "../../../../../utils/objects";
 import { getCriterionWeightRelativeToMax } from "../../../../../utils/criteria/criteria";
 import useClickOutside from "../../../../../hooks/useClickOutside";
@@ -256,29 +256,23 @@ const CriterionNameUnitCell = (props: CriterionNameUnitCellProps) => {
         )}
       </div>
 
-      {!editMode && (
-        <div
-          className="CriterionWeightBarWrapper"
-          style={{
-            position: "absolute",
-            left: 0,
-            bottom: -5,
-            width: "100%",
-            boxSizing: "border-box",
-            zIndex: 1,
-          }}
-        >
-          <progress
-            className="CriterionWeightBar"
-            max="100"
-            value={getCriterionWeightRelativeToMax(
-              props.criterion.weight,
-              props.maxWeight
-            )}
-            style={{ width: "100%", height: 7 }}
-          />
-        </div>
-      )}
+      <Box
+        className="CriterionWeightBarWrapper"
+        position="absolute"
+        left={0}
+        bottom={0}
+        width="100%"
+        boxSizing="border-box"
+        zIndex="auto"
+      >
+        <Progress
+          size="xs"
+          value={getCriterionWeightRelativeToMax(
+            props.criterion.weight,
+            props.maxWeight
+          )}
+        />
+      </Box>
     </Td>
   );
 };
