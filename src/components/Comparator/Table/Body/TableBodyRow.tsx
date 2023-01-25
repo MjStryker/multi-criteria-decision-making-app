@@ -46,14 +46,6 @@ const TableBodyRow = ({
       />
 
       {/*
-       * CRITERION - BENEFICIAL
-       */}
-      <CriterionBeneficialCell
-        criterion={criterion}
-        updateCriterion={updateCriterion}
-      />
-
-      {/*
        * CRITERION - WEIGHT
        */}
       <CriterionWeightCell

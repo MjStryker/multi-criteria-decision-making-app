@@ -42,8 +42,10 @@ const CriterionNameUnitCell = ({
   return (
     <Td position="relative">
       <HStack>
-        <Text>{criterion.name}</Text>
-        {isValidNonEmptyString(criterion.unit) ? `(${criterion.unit})` : null}
+        <Text>{capitalize(criterion.name)}</Text>
+        {isValidNonEmptyString(criterion.unit) ? (
+          <Text fontSize="sm">({criterion.unit})</Text>
+        ) : null}
       </HStack>
 
       {/* <Input

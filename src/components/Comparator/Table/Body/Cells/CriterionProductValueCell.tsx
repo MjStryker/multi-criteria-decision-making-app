@@ -2,6 +2,7 @@ import {
   Editable,
   EditableInput,
   EditablePreview,
+  HStack,
   Input,
   Td,
   useColorModeValue,
@@ -12,6 +13,9 @@ import {
 } from "../../../../../utils/strings";
 import { useEffect, useState } from "react";
 
+import { DEBUG } from "../../../../../constants/global";
+import DebugValue from "../../../global/table/DebugValue";
+import { EDITABLE_MIN_WIDTH } from "../../../../../constants/table";
 import { TCriterion } from "../../../../../types/criteria";
 import { TProduct } from "../../../../../types/products";
 import { TProductWithCriterion } from "../../../../../types/productsWithCriteria";
@@ -64,24 +68,38 @@ const CriterionProductValueCell = ({
 
   return (
     <Td isNumeric px={2}>
-      <Editable value={value || "-"} onChange={onChange} onSubmit={onSubmit}>
-        <EditablePreview
-          py={2}
-          px={2}
-          w="full"
-          _hover={{
-            background: useColorModeValue("gray.100", "gray.700"),
-          }}
-        />
+      <HStack spacing={1} justifyContent="flex-end">
+        <Editable
+          flex={1}
+          value={value || "-"}
+          onChange={onChange}
+          onSubmit={onSubmit}
+        >
+          <EditablePreview
+            py={2}
+            px={2}
+            w="full"
+            minW={EDITABLE_MIN_WIDTH}
+            _hover={{
+              background: useColorModeValue("gray.100", "gray.700"),
+            }}
+          />
 
-        <Input
-          as={EditableInput}
-          type="number"
-          borderRadius="base"
-          size="sm"
-          px={2}
-        />
-      </Editable>
+          <Input
+            as={EditableInput}
+            type="number"
+            borderRadius="base"
+            size="sm"
+            px={2}
+          />
+        </Editable>
+
+        {DEBUG && isValidNumber(criterionProductValue?.criterionRankPts) ? (
+          <DebugValue
+            value={`${criterionProductValue?.criterionRankPts.toFixed(0)} pts`}
+          />
+        ) : null}
+      </HStack>
     </Td>
   );
 };

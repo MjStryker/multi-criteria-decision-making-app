@@ -43,11 +43,6 @@ const TableHeader = ({
         <Td />
 
         {/*
-         * --------
-         */}
-        <Td />
-
-        {/*
          * CRITERIONS - MIN/MAX WEIGHT INFO
          */}
         <Td textAlign="center">

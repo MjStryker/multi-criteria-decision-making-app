@@ -14,8 +14,10 @@ export function areValidNonEmptyStrings(str: any[]): boolean {
   return str.every(isValidNonEmptyString);
 }
 
-export function capitalize(str: string): string {
-  return str.charAt(0).toUpperCase() + str.slice(1);
+export function capitalize(str: string | undefined): string | undefined {
+  return isValidNonEmptyString(str)
+    ? str.charAt(0).toUpperCase() + str.slice(1)
+    : undefined;
 }
 
 export function parseStringAsNumber(str: string): number | null {

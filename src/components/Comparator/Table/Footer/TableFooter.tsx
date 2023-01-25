@@ -46,11 +46,6 @@ const TableFooter = ({
         <Td border="none" />
 
         {/*
-         * --------
-         */}
-        <Td border="none" />
-
-        {/*
          * PRODUCTS - RANK
          */}
         {products.map(({ id, rank }) => (
