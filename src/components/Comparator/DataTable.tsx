@@ -108,7 +108,7 @@ const DataTable = () => {
   );
 
   return (
-    <TableContainer>
+    <TableContainer className="TableContainer">
       <Table size="sm">
         <TableHeader
           products={productsSorted}

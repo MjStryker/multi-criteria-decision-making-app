@@ -33,7 +33,7 @@ const CriterionNameUnitCell = ({
   removeCriterion,
 }: CriterionNameUnitCellProps) => {
   return (
-    <Td position="relative" pl={0} pr={2}>
+    <Td position="relative" pl={0} pr={2} w="260px">
       <HStack justifyContent="space-between">
         {!isValidNonEmptyString(criterion.name) ? (
           <Text>
@@ -43,11 +43,13 @@ const CriterionNameUnitCell = ({
             {criterion.unit && `(${criterion.unit})`}
           </Text>
         ) : (
-          <Flex>
+          <Flex alignItems="center">
             {/*
              * -- Name
              */}
-            <Text>{capitalize(criterion.name)}</Text>
+            <Text whiteSpace="break-spaces" wordBreak="break-word">
+              {capitalize(criterion.name)}
+            </Text>
 
             {/*
              * -- Unit
