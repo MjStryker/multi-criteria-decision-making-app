@@ -9,47 +9,45 @@ import {
 import { FormEvent, useEffect, useState } from "react";
 
 import { DeleteIcon } from "@chakra-ui/icons";
-import { TProduct } from "../../../../types/products";
-import TextInput from "../../global/form/TextInput";
-import { isValidNonEmptyString } from "../../../../utils/strings";
+import { TCriterion } from "../../../../../types/criteria";
+import TextInput from "../../../global/form/TextInput";
+import { isValidNonEmptyString } from "../../../../../utils/strings";
 
-type EditProductFormProps = {
+type EditCriterionFormProps = {
   firstFieldRef: any;
   onClose: VoidFunction;
-  product: TProduct;
-  updateProduct: (product: TProduct) => void;
-  removeProduct: (product: TProduct) => void;
+  criterion: TCriterion;
+  updateCriterion: (criterion: TCriterion) => void;
+  removeCriterion: (criterion: TCriterion) => void;
 };
 
-const EditProductForm = ({
+const EditCriterionForm = ({
   firstFieldRef,
-  product,
+  criterion,
   onClose: onPropsClose,
-  updateProduct,
-  removeProduct,
-}: EditProductFormProps) => {
-  const [name, setName] = useState<string | undefined>(product.name);
+  updateCriterion,
+  removeCriterion,
+}: EditCriterionFormProps) => {
+  const [name, setName] = useState<string | undefined>(criterion.name);
 
-  const [reference, setReference] = useState<string | undefined>(
-    product.reference
-  );
+  const [unit, setUnit] = useState<string | undefined>(criterion.unit);
 
   const [confirmDelete, setConfirmDelete] = useBoolean();
 
-  const hasChanges = name !== product.name || reference !== product.reference;
+  const hasChanges = name !== criterion.name || unit !== criterion.unit;
 
   /**
    * * Sync local state on props change
    */
   useEffect(() => {
-    setName(product.name);
+    setName(criterion.name);
     return () => setName("");
-  }, [product.name]);
+  }, [criterion.name]);
 
   useEffect(() => {
-    setReference(product.reference);
-    return () => setReference("");
-  }, [product.reference]);
+    setUnit(criterion.unit);
+    return () => setUnit("");
+  }, [criterion.unit]);
 
   /**
    * * Handle Inputs change
@@ -57,8 +55,8 @@ const EditProductForm = ({
   const onNameChange = (e: FormEvent<HTMLInputElement>) =>
     setName(e.currentTarget.value);
 
-  const onReferenceChange = (e: FormEvent<HTMLInputElement>) =>
-    setReference(e.currentTarget.value);
+  const onUnitChange = (e: FormEvent<HTMLInputElement>) =>
+    setUnit(e.currentTarget.value);
 
   /**
    * * Dialog actions
@@ -69,12 +67,12 @@ const EditProductForm = ({
   };
 
   const onSave = () => {
-    updateProduct({ ...product, name, reference });
+    updateCriterion({ ...criterion, name, unit });
     onClose();
   };
 
   const onDelete = () => {
-    removeProduct(product);
+    removeCriterion(criterion);
     onClose();
   };
 
@@ -91,7 +89,7 @@ const EditProductForm = ({
       <Stack spacing={4}>
         <TextInput
           label="Name"
-          id="product-name"
+          id="criterion-name"
           ref={firstFieldRef}
           type="text"
           value={name}
@@ -100,11 +98,11 @@ const EditProductForm = ({
         />
 
         <TextInput
-          label="Reference"
-          id="product-reference"
+          label="Unit"
+          id="criterion-unit"
           type="text"
-          value={reference}
-          onChange={onReferenceChange}
+          value={unit}
+          onChange={onUnitChange}
           isDisabled={confirmDelete}
         />
 
@@ -128,11 +126,10 @@ const EditProductForm = ({
               <IconButton
                 colorScheme="red"
                 icon={<DeleteIcon />}
-                aria-label="Delete product"
+                aria-label="Delete criterion"
                 onClick={
-                  !isValidNonEmptyString(name) &&
-                  !isValidNonEmptyString(reference)
-                    ? // * If fields are empty then delete product
+                  !isValidNonEmptyString(name) && !isValidNonEmptyString(unit)
+                    ? // * If fields are empty then delete criterion
                       onDelete
                     : // * Else go through confirm process
                       setConfirmDelete.on
@@ -159,4 +156,4 @@ const EditProductForm = ({
   );
 };
 
-export default EditProductForm;
+export default EditCriterionForm;

@@ -80,9 +80,9 @@ const TableHeader = ({
                   </Box>
                 </SimpleGrid>
 
-                <Tag color="gray.600" fontSize="xs">
+                <Text color="gray.500" fontSize="xs">
                   {product.reference}
-                </Tag>
+                </Text>
               </VStack>
             </Td>
           );

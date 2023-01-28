@@ -61,7 +61,7 @@ const CriterionWeightCell = ({
   };
 
   return (
-    <Td isNumeric>
+    <Td isNumeric px={3} bgColor="gray.50">
       <HStack spacing={1}>
         <Editable
           flex={1}

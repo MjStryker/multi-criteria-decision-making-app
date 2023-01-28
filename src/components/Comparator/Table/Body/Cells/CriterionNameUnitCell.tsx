@@ -1,13 +1,21 @@
-import { Box, HStack, Progress, Td, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  HStack,
+  Progress,
+  Td,
+  Text,
+  useBoolean,
+} from "@chakra-ui/react";
 import {
   capitalize,
   isValidNonEmptyString,
 } from "../../../../../utils/strings";
 
+import EditCriterionButton from "./EditCriterionButton";
 import { TCriterion } from "../../../../../types/criteria";
 import { getCriterionWeightRelativeToMax } from "../../../../../utils/criteria/criteria";
 import { useHandleCriteriaFunctions } from "../../../../../hooks/data/useHandleCriteria";
-import { useState } from "react";
 
 type CriterionNameUnitCellProps = {
   criterion: TCriterion;
@@ -24,60 +32,50 @@ const CriterionNameUnitCell = ({
   updateCriterion,
   removeCriterion,
 }: CriterionNameUnitCellProps) => {
-  const defaultCriterionName = isValidNonEmptyString(criterion.name)
-    ? criterion.name
-    : null;
-
-  const defaultCriterionUnit = isValidNonEmptyString(criterion.unit)
-    ? criterion.unit
-    : null;
-
-  const [criterionName, setCriterionName] = useState<string | null>(
-    defaultCriterionName
-  );
-  const [criterionUnit, setCriterionUnit] = useState<string | null>(
-    defaultCriterionUnit
-  );
-
   return (
-    <Td position="relative">
-      <HStack>
-        <Text>{capitalize(criterion.name)}</Text>
-        {isValidNonEmptyString(criterion.unit) ? (
-          <Text fontSize="sm">({criterion.unit})</Text>
-        ) : null}
+    <Td position="relative" pl={0} pr={2}>
+      <HStack justifyContent="space-between">
+        {!isValidNonEmptyString(criterion.name) ? (
+          <Text>
+            {criterion.name
+              ? capitalize(criterion.name)
+              : `Critère ${rowIdx + 1}`}{" "}
+            {criterion.unit && `(${criterion.unit})`}
+          </Text>
+        ) : (
+          <Flex>
+            {/*
+             * -- Name
+             */}
+            <Text>{capitalize(criterion.name)}</Text>
+
+            {/*
+             * -- Unit
+             */}
+            {isValidNonEmptyString(criterion.unit) ? (
+              <Text fontSize="0.75rem" color="gray.500" ml={1}>
+                ({criterion.unit})
+              </Text>
+            ) : null}
+          </Flex>
+        )}
+
+        {/*
+         * -- Edit
+         */}
+        <EditCriterionButton
+          criterion={criterion}
+          updateCriterion={updateCriterion}
+          removeCriterion={removeCriterion}
+        />
       </HStack>
-
-      {/* <Input
-        type="text"
-        value={isValidNonEmptyString(criterionNewName) ? criterionNewName : ""}
-        onChange={(e) =>
-          setCriterionNewName(
-            isValidNonEmptyString(e.target.value) ? e.target.value : null
-          )
-        }
-      /> */}
-
-      {/* <Input
-        type="text"
-        value={isValidNonEmptyString(criterionNewUnit) ? criterionNewUnit : ""}
-        onChange={(e) =>
-          setCriterionNewUnit(
-            isValidNonEmptyString(e.target.value) ? e.target.value : null
-          )
-        }
-      /> */}
-
-      {/* <div>
-        {criterion.name ? capitalize(criterion.name) : `Critère ${rowIdx + 1}`}{" "}
-        {criterion.unit && `(${criterion.unit})`}
-      </div> */}
 
       <Box
         className="CriterionWeightBarWrapper"
         position="absolute"
         left={0}
         bottom={0}
+        pr={2}
         width="100%"
         boxSizing="border-box"
         zIndex="auto"
