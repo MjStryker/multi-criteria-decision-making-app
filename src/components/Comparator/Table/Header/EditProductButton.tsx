@@ -8,7 +8,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
-import { EditIcon } from "@chakra-ui/icons";
+import { MdEdit as EditIcon } from "react-icons/md";
 import EditProductForm from "./EditProductForm";
 import FocusLock from "react-focus-lock";
 import { TProduct } from "../../../../types/products";
@@ -43,7 +43,13 @@ const EditProductButton = ({
       lazyBehavior="unmount"
     >
       <PopoverTrigger>
-        <IconButton size="sm" icon={<EditIcon />} aria-label="Edit product" />
+        <IconButton
+          size="sm"
+          variant="outline"
+          color="gray.500"
+          icon={<EditIcon />}
+          aria-label="Edit product"
+        />
       </PopoverTrigger>
 
       <PopoverContent p={5}>

@@ -67,7 +67,7 @@ const CriterionProductValueCell = ({
   };
 
   return (
-    <Td isNumeric px={2}>
+    <Td isNumeric px={2} border="1px" borderColor="gray.100">
       <HStack spacing={1} justifyContent="flex-end">
         <Editable
           flex={1}
@@ -97,6 +97,8 @@ const CriterionProductValueCell = ({
         {DEBUG && isValidNumber(criterionProductValue?.criterionRankPts) ? (
           <DebugValue
             value={`${criterionProductValue?.criterionRankPts.toFixed(0)} pts`}
+            variant="outline"
+            colorScheme={criterion.beneficial === false ? "orange" : "blue"}
           />
         ) : null}
       </HStack>

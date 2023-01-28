@@ -108,7 +108,12 @@ const DataTable = () => {
   );
 
   return (
-    <TableContainer className="TableContainer">
+    <TableContainer
+      className="TableContainer"
+      h="full"
+      display="flex"
+      alignItems="center"
+    >
       <Table size="sm">
         <TableHeader
           products={productsSorted}

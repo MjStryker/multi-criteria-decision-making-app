@@ -1,6 +1,5 @@
 import { Td, Tr } from "@chakra-ui/react";
 
-import CriterionBeneficialCell from "./Cells/CriterionBeneficialCell";
 import CriterionNameUnitCell from "./Cells/CriterionNameUnitCell";
 import CriterionProductValueCell from "./Cells/CriterionProductValueCell";
 import CriterionWeightCell from "./Cells/CriterionWeightCell";

@@ -1,12 +1,4 @@
-import {
-  Box,
-  Flex,
-  HStack,
-  Progress,
-  Td,
-  Text,
-  useBoolean,
-} from "@chakra-ui/react";
+import { Box, Flex, HStack, Progress, Td, Text } from "@chakra-ui/react";
 import {
   capitalize,
   isValidNonEmptyString,
@@ -32,35 +24,41 @@ const CriterionNameUnitCell = ({
   updateCriterion,
   removeCriterion,
 }: CriterionNameUnitCellProps) => {
-  return (
-    <Td position="relative" pl={0} pr={2} w="260px">
-      <HStack justifyContent="space-between">
-        {!isValidNonEmptyString(criterion.name) ? (
-          <Text>
-            {criterion.name
-              ? capitalize(criterion.name)
-              : `Critère ${rowIdx + 1}`}{" "}
-            {criterion.unit && `(${criterion.unit})`}
-          </Text>
-        ) : (
-          <Flex alignItems="center">
-            {/*
-             * -- Name
-             */}
-            <Text whiteSpace="break-spaces" wordBreak="break-word">
-              {capitalize(criterion.name)}
-            </Text>
+  const hasName = isValidNonEmptyString(criterion.name);
 
-            {/*
-             * -- Unit
-             */}
-            {isValidNonEmptyString(criterion.unit) ? (
-              <Text fontSize="0.75rem" color="gray.500" ml={1}>
-                ({criterion.unit})
-              </Text>
-            ) : null}
-          </Flex>
-        )}
+  const defaultName = `Critère ${rowIdx + 1}`;
+
+  return (
+    <Td
+      position="relative"
+      pl={2}
+      pr={1}
+      w="240px"
+      border="1px"
+      borderColor="gray.100"
+    >
+      <HStack justifyContent="space-between">
+        <Flex flex={1} alignItems="center" justifyContent="space-between">
+          {/*
+           * -- Name
+           */}
+          <Text
+            whiteSpace="break-spaces"
+            wordBreak="break-word"
+            fontWeight="semibold"
+          >
+            {!hasName ? defaultName : capitalize(criterion.name)}
+          </Text>
+
+          {/*
+           * -- Unit
+           */}
+          {isValidNonEmptyString(criterion.unit) ? (
+            <Text fontSize="0.75rem" color="gray.500" ml={1}>
+              ({criterion.unit})
+            </Text>
+          ) : null}
+        </Flex>
 
         {/*
          * -- Edit
@@ -77,14 +75,18 @@ const CriterionNameUnitCell = ({
         position="absolute"
         left={0}
         bottom={0}
-        pr={2}
         width="100%"
+        pl={2}
+        pr={1}
         boxSizing="border-box"
         zIndex="auto"
       >
         <Progress
           size="xs"
+          borderRadius="base"
+          colorScheme={criterion.beneficial === false ? "orange" : "blue"}
           value={getCriterionWeightRelativeToMax(criterion.weight, maxWeight)}
+          opacity={0.7}
         />
       </Box>
     </Td>

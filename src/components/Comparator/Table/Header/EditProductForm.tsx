@@ -43,12 +43,12 @@ const EditProductForm = ({
    */
   useEffect(() => {
     setName(product.name);
-    return () => setName("");
+    return () => setName(undefined);
   }, [product.name]);
 
   useEffect(() => {
     setReference(product.reference);
-    return () => setReference("");
+    return () => setReference(undefined);
   }, [product.reference]);
 
   /**

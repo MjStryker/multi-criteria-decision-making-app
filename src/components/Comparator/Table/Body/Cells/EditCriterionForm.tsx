@@ -1,14 +1,18 @@
 import {
   Button,
+  ButtonGroup,
+  FormControl,
+  FormLabel,
   HStack,
   IconButton,
   Stack,
   Text,
+  VStack,
   useBoolean,
 } from "@chakra-ui/react";
+import { DeleteIcon, TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import { FormEvent, useEffect, useState } from "react";
 
-import { DeleteIcon } from "@chakra-ui/icons";
 import { TCriterion } from "../../../../../types/criteria";
 import TextInput from "../../../global/form/TextInput";
 import { isValidNonEmptyString } from "../../../../../utils/strings";
@@ -29,25 +33,35 @@ const EditCriterionForm = ({
   removeCriterion,
 }: EditCriterionFormProps) => {
   const [name, setName] = useState<string | undefined>(criterion.name);
-
   const [unit, setUnit] = useState<string | undefined>(criterion.unit);
+  const [beneficial, setBeneficial] = useState<boolean | undefined>(
+    criterion.beneficial
+  );
 
   const [confirmDelete, setConfirmDelete] = useBoolean();
 
-  const hasChanges = name !== criterion.name || unit !== criterion.unit;
+  const hasChanges =
+    name !== criterion.name ||
+    unit !== criterion.unit ||
+    beneficial !== criterion.beneficial;
 
   /**
    * * Sync local state on props change
    */
   useEffect(() => {
     setName(criterion.name);
-    return () => setName("");
+    return () => setName(undefined);
   }, [criterion.name]);
 
   useEffect(() => {
     setUnit(criterion.unit);
-    return () => setUnit("");
+    return () => setUnit(undefined);
   }, [criterion.unit]);
+
+  useEffect(() => {
+    setBeneficial(criterion.beneficial);
+    return () => setBeneficial(undefined);
+  }, [criterion.beneficial]);
 
   /**
    * * Handle Inputs change
@@ -58,6 +72,10 @@ const EditCriterionForm = ({
   const onUnitChange = (e: FormEvent<HTMLInputElement>) =>
     setUnit(e.currentTarget.value);
 
+  const toggleBeneficial = () => {
+    setBeneficial((prev) => !prev);
+  };
+
   /**
    * * Dialog actions
    */
@@ -67,7 +85,7 @@ const EditCriterionForm = ({
   };
 
   const onSave = () => {
-    updateCriterion({ ...criterion, name, unit });
+    updateCriterion({ ...criterion, name, unit, beneficial });
     onClose();
   };
 
@@ -105,6 +123,37 @@ const EditCriterionForm = ({
           onChange={onUnitChange}
           isDisabled={confirmDelete}
         />
+
+        <FormControl as={VStack} spacing={0} alignItems="stretch">
+          <FormLabel>Best value</FormLabel>
+
+          <ButtonGroup
+            colorScheme={beneficial === false ? "orange" : "blue"}
+            isAttached
+            isDisabled={confirmDelete}
+          >
+            <Button
+              flex={1}
+              aria-label="Non beneficial"
+              variant={beneficial === false ? "solid" : "outline"}
+              rightIcon={
+                beneficial === false ? <TriangleDownIcon /> : undefined
+              }
+              onClick={toggleBeneficial}
+            >
+              Lowest
+            </Button>
+            <Button
+              flex={1}
+              aria-label="Beneficial"
+              variant={beneficial === true ? "solid" : "outline"}
+              rightIcon={beneficial === true ? <TriangleUpIcon /> : undefined}
+              onClick={toggleBeneficial}
+            >
+              Highest
+            </Button>
+          </ButtonGroup>
+        </FormControl>
 
         <HStack>
           {confirmDelete ? (

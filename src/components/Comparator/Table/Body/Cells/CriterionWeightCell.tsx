@@ -61,7 +61,7 @@ const CriterionWeightCell = ({
   };
 
   return (
-    <Td isNumeric px={3} bgColor="gray.50">
+    <Td isNumeric px={2} border="1px" borderColor="gray.100">
       <HStack spacing={1}>
         <Editable
           flex={1}
@@ -74,6 +74,10 @@ const CriterionWeightCell = ({
             px={2}
             w="full"
             minW={EDITABLE_MIN_WIDTH}
+            fontSize="md"
+            fontWeight="semibold"
+            textAlign="center"
+            color={criterion.beneficial === false ? "orange.600" : "blue.600"}
             _hover={{
               background: useColorModeValue("gray.100", "gray.700"),
             }}
@@ -85,13 +89,18 @@ const CriterionWeightCell = ({
             borderRadius="base"
             size="sm"
             w="full"
+            textAlign="center"
             maxW={EDITABLE_MIN_WIDTH}
             px={2}
           />
         </Editable>
 
         {DEBUG && isValidNumber(criterion.normalizedWeight) ? (
-          <DebugValue value={criterion.normalizedWeight.toFixed(2)} />
+          <DebugValue
+            value={criterion.normalizedWeight.toFixed(2)}
+            variant="solid"
+            colorScheme={criterion.beneficial === false ? "orange" : "blue"}
+          />
         ) : null}
       </HStack>
     </Td>

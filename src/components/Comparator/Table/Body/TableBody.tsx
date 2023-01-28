@@ -2,6 +2,7 @@ import { TCriterion } from "../../../../types/criteria";
 import { TProduct } from "../../../../types/products";
 import { TProductWithCriterion } from "../../../../types/productsWithCriteria";
 import TableBodyRow from "./TableBodyRow";
+import { Tbody } from "@chakra-ui/react";
 import { getCriteriaMaxWeight } from "../../../../utils/criteria/criteria";
 import { useHandleCriteriaFunctions } from "../../../../hooks/data/useHandleCriteria";
 import { useHandleProductsWithCriteriaFunctions } from "../../../../hooks/data/useHandleProductsWithCriteria";
@@ -27,7 +28,7 @@ const TableBody = ({
   const maxWeight = useMemo(() => getCriteriaMaxWeight(criteria), [criteria]);
 
   return (
-    <tbody>
+    <Tbody>
       {criteria.map((criterion, rowIdx) => (
         <TableBodyRow
           key={criterion.id}
@@ -41,7 +42,7 @@ const TableBody = ({
           setProductCriterionValue={setProductCriterionValue}
         />
       ))}
-    </tbody>
+    </Tbody>
   );
 };
 

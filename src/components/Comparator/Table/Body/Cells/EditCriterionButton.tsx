@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 
 import EditCriterionForm from "./EditCriterionForm";
-import { EditIcon } from "@chakra-ui/icons";
+import { MdEdit as EditIcon } from "react-icons/md";
 import FocusLock from "react-focus-lock";
 import { TCriterion } from "../../../../../types/criteria";
 import { useRef } from "react";
@@ -43,7 +43,13 @@ const EditCriterionButton = ({
       lazyBehavior="unmount"
     >
       <PopoverTrigger>
-        <IconButton size="sm" icon={<EditIcon />} aria-label="Edit criterion" />
+        <IconButton
+          size="sm"
+          variant="outline"
+          color="gray.500"
+          icon={<EditIcon />}
+          aria-label="Edit criterion"
+        />
       </PopoverTrigger>
 
       <PopoverContent p={5}>
