@@ -1,4 +1,4 @@
-import { Flex, Icon, IconButton, Td, Text, Thead, Tr } from "@chakra-ui/react";
+import { Icon, IconButton, Td, Text, Thead, Tr } from "@chakra-ui/react";
 
 import { AddIcon } from "@chakra-ui/icons";
 import { GiAnvil as AnvilIcon } from "react-icons/gi";

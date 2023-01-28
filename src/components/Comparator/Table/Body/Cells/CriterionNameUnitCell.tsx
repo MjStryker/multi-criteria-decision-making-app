@@ -74,7 +74,7 @@ const CriterionNameUnitCell = ({
         className="CriterionWeightBarWrapper"
         position="absolute"
         left={0}
-        bottom={0}
+        bottom="-2.4px"
         width="100%"
         pl={2}
         pr={1}
@@ -87,6 +87,11 @@ const CriterionNameUnitCell = ({
           colorScheme={criterion.beneficial === false ? "orange" : "blue"}
           value={getCriterionWeightRelativeToMax(criterion.weight, maxWeight)}
           opacity={0.7}
+          sx={{
+            "& > div": {
+              transition: "width .5s ease-in-out",
+            },
+          }}
         />
       </Box>
     </Td>

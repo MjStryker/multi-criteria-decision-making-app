@@ -27,7 +27,7 @@ const TableFooter = ({
         {/*
          * CRITERION - ADD BUTTON
          */}
-        <Td border="none" pl={0} pr={2} colSpan={2}>
+        <Td border="none" pl={1} pr={2} colSpan={2}>
           <Button
             w="full"
             size="sm"
