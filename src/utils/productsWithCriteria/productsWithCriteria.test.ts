@@ -95,6 +95,7 @@ export const p3: TProduct = {
   name: "p3",
   reference: undefined,
   rank: undefined,
+  rankPts: undefined,
   defaultColumnIdx: 3,
 };
 
@@ -119,6 +120,7 @@ describe("findProductCriterionValue(...)", () => {
       name: "pUnmatched",
       reference: undefined,
       rank: undefined,
+      rankPts: undefined,
       defaultColumnIdx: -1,
     };
 

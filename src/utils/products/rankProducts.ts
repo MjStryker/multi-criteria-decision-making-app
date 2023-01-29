@@ -83,7 +83,7 @@ export function rankProducts(
       lastRankPts = rankPts;
       lastPos = pos;
 
-      return { ...product, rank: pos };
+      return { ...product, rank: pos, rankPts };
     });
 
   return res;

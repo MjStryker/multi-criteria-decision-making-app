@@ -19,6 +19,7 @@ export function createEmptyProduct(defaultColumnIdx: number): TProduct {
     name: undefined,
     reference: undefined,
     rank: undefined,
+    rankPts: undefined,
     defaultColumnIdx,
   };
 }

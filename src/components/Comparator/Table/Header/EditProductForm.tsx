@@ -142,8 +142,9 @@ const EditProductForm = ({
                 aria-label="Delete product"
                 onClick={
                   !isValidNonEmptyString(name) &&
-                  !isValidNonEmptyString(reference)
-                    ? // * If fields are empty then delete product
+                  !isValidNonEmptyString(reference) &&
+                  product.rankPts === 0
+                    ? // * If fields are empty + product does not have any value
                       onDelete
                     : // * Else go through confirm process
                       setConfirmDelete.on

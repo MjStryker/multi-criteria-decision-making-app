@@ -43,8 +43,8 @@ const TableFooter = ({
         {/*
          * PRODUCTS - RANK
          */}
-        {products.map(({ id, rank }) => (
-          <TableFooterCell key={id} productRank={rank} />
+        {products.map((product) => (
+          <TableFooterCell key={product.id} product={product} />
         ))}
 
         {/*
