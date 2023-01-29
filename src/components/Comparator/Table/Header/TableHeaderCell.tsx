@@ -23,7 +23,7 @@ const TableHeaderCell = ({
   const defaultName = `Produit ${columnIdx + 1}`;
 
   return (
-    <Td w="150px" maxW="150px" px={2} border="1px" borderColor="gray.100">
+    <Td minW="150px" maxW="150px" px={2} border="1px" borderColor="gray.100">
       <VStack
         className="CellContainer"
         alignItems="stretch"

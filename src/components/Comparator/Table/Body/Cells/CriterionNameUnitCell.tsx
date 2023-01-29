@@ -33,7 +33,8 @@ const CriterionNameUnitCell = ({
       position="relative"
       pl={2}
       pr={1}
-      w="240px"
+      minW="240px"
+      maxW="240px"
       border="1px"
       borderColor="gray.100"
     >

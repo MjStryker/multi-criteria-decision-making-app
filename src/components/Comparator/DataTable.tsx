@@ -113,6 +113,8 @@ const DataTable = () => {
       <TableContainer
         className="TableContainer"
         h="full"
+        pl="12"
+        pr="8"
         display="flex"
         alignItems="center"
       >
