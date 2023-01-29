@@ -1,6 +1,7 @@
 import { Table, TableContainer } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 
+import { IsAnyEditDialogOpenedContextProvider } from "../../context/IsAnyEditDialogOpened";
 import { SORT_BY } from "../../constants/arrays";
 import { TCriterion } from "../../types/criteria";
 import { TProduct } from "../../types/products";
@@ -108,36 +109,38 @@ const DataTable = () => {
   );
 
   return (
-    <TableContainer
-      className="TableContainer"
-      h="full"
-      display="flex"
-      alignItems="center"
-    >
-      <Table size="sm">
-        <TableHeader
-          products={productsSorted}
-          addProduct={addProduct}
-          updateProduct={updateProduct}
-          removeProduct={removeProduct}
-        />
+    <IsAnyEditDialogOpenedContextProvider>
+      <TableContainer
+        className="TableContainer"
+        h="full"
+        display="flex"
+        alignItems="center"
+      >
+        <Table size="sm">
+          <TableHeader
+            products={productsSorted}
+            addProduct={addProduct}
+            updateProduct={updateProduct}
+            removeProduct={removeProduct}
+          />
 
-        <TableBody
-          criteria={criteriaSorted}
-          products={productsSorted}
-          productsWithCriteria={productsWithCriteria}
-          updateCriterion={updateCriterion}
-          removeCriterion={removeCriterion}
-          setProductCriterionValue={setProductCriterionValue}
-        />
+          <TableBody
+            criteria={criteriaSorted}
+            products={productsSorted}
+            productsWithCriteria={productsWithCriteria}
+            updateCriterion={updateCriterion}
+            removeCriterion={removeCriterion}
+            setProductCriterionValue={setProductCriterionValue}
+          />
 
-        <TableFooter
-          criteria={criteriaSorted}
-          products={productsSorted}
-          addCriterion={addCriterion}
-        />
-      </Table>
-    </TableContainer>
+          <TableFooter
+            criteria={criteriaSorted}
+            products={productsSorted}
+            addCriterion={addCriterion}
+          />
+        </Table>
+      </TableContainer>
+    </IsAnyEditDialogOpenedContextProvider>
   );
 };
 

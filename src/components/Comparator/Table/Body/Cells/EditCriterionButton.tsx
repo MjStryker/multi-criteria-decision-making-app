@@ -5,14 +5,17 @@ import {
   PopoverCloseButton,
   PopoverContent,
   PopoverTrigger,
+  useBoolean,
   useDisclosure,
 } from "@chakra-ui/react";
+import { useContext, useRef } from "react";
 
+import { SmallCloseIcon as CloseIcon } from "@chakra-ui/icons";
 import EditCriterionForm from "./EditCriterionForm";
 import { MdEdit as EditIcon } from "react-icons/md";
 import FocusLock from "react-focus-lock";
+import { IsAnyEditDialogOpenedContext } from "../../../../../context/IsAnyEditDialogOpened";
 import { TCriterion } from "../../../../../types/criteria";
-import { useRef } from "react";
 
 type EditCriterionButtonProps = {
   criterion: TCriterion;
@@ -25,18 +28,38 @@ const EditCriterionButton = ({
   updateCriterion,
   removeCriterion,
 }: EditCriterionButtonProps) => {
-  const { onOpen, onClose, isOpen } = useDisclosure();
+  const { isAnyEditDialogOpened, toggleIsAnyEditDialogOpened } = useContext(
+    IsAnyEditDialogOpenedContext
+  );
 
   const firstFieldRef = useRef(null);
+
+  const [isFormDirty, setIsFormDirty] = useBoolean();
+
+  const { onOpen, onClose, isOpen } = useDisclosure();
+
+  const handleOpen = () => {
+    if (isOpen || isAnyEditDialogOpened) return;
+
+    onOpen();
+    toggleIsAnyEditDialogOpened();
+  };
+
+  const handleClose = () => {
+    if (!isOpen) return;
+
+    onClose();
+    toggleIsAnyEditDialogOpened();
+  };
 
   return (
     <Popover
       isOpen={isOpen}
       initialFocusRef={firstFieldRef}
-      onOpen={onOpen}
-      onClose={onClose}
+      onOpen={handleOpen}
+      onClose={handleClose}
       placement="right"
-      closeOnBlur={false}
+      closeOnBlur={!isFormDirty}
       closeOnEsc
       returnFocusOnClose
       isLazy
@@ -44,11 +67,11 @@ const EditCriterionButton = ({
     >
       <PopoverTrigger>
         <IconButton
+          aria-label="Edit criterion"
           size="sm"
           variant="outline"
           color="gray.500"
-          icon={<EditIcon />}
-          aria-label="Edit criterion"
+          icon={!isOpen ? <EditIcon /> : <CloseIcon />}
         />
       </PopoverTrigger>
 
@@ -58,7 +81,8 @@ const EditCriterionButton = ({
           <PopoverCloseButton />
           <EditCriterionForm
             firstFieldRef={firstFieldRef}
-            onClose={onClose}
+            setParentIsDirty={setIsFormDirty}
+            onParentClose={handleClose}
             criterion={criterion}
             updateCriterion={updateCriterion}
             removeCriterion={removeCriterion}

@@ -12,10 +12,12 @@ import { DeleteIcon } from "@chakra-ui/icons";
 import { TProduct } from "../../../../types/products";
 import TextInput from "../../global/form/TextInput";
 import { isValidNonEmptyString } from "../../../../utils/strings";
+import { useBooleanSetState } from "../../../../types/chakra";
 
 type EditProductFormProps = {
   firstFieldRef: any;
-  onClose: VoidFunction;
+  setParentIsDirty: useBooleanSetState;
+  onParentClose: VoidFunction;
   product: TProduct;
   updateProduct: (product: TProduct) => void;
   removeProduct: (product: TProduct) => void;
@@ -23,8 +25,9 @@ type EditProductFormProps = {
 
 const EditProductForm = ({
   firstFieldRef,
+  setParentIsDirty,
   product,
-  onClose: onPropsClose,
+  onParentClose,
   updateProduct,
   removeProduct,
 }: EditProductFormProps) => {
@@ -36,7 +39,15 @@ const EditProductForm = ({
 
   const [confirmDelete, setConfirmDelete] = useBoolean();
 
-  const hasChanges = name !== product.name || reference !== product.reference;
+  const isDirty = name !== product.name || reference !== product.reference;
+
+  /**
+   * * Update parent props
+   */
+  useEffect(() => {
+    isDirty ? setParentIsDirty.on() : setParentIsDirty.off();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isDirty]);
 
   /**
    * * Sync local state on props change
@@ -65,7 +76,7 @@ const EditProductForm = ({
    */
   const onClose = () => {
     setConfirmDelete.off();
-    onPropsClose();
+    onParentClose();
   };
 
   const onSave = () => {
@@ -147,7 +158,7 @@ const EditProductForm = ({
                 flex={1}
                 type="submit"
                 colorScheme="teal"
-                isDisabled={!hasChanges}
+                isDisabled={!isDirty}
               >
                 Save
               </Button>

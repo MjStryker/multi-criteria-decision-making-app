@@ -16,19 +16,23 @@ import { FormEvent, useEffect, useState } from "react";
 import { TCriterion } from "../../../../../types/criteria";
 import TextInput from "../../../global/form/TextInput";
 import { isValidNonEmptyString } from "../../../../../utils/strings";
+import { useBooleanSetState } from "../../../../../types/chakra";
+import { useHandleCriteriaFunctions } from "../../../../../hooks/data/useHandleCriteria";
 
 type EditCriterionFormProps = {
   firstFieldRef: any;
-  onClose: VoidFunction;
+  setParentIsDirty: useBooleanSetState;
+  onParentClose: VoidFunction;
   criterion: TCriterion;
-  updateCriterion: (criterion: TCriterion) => void;
-  removeCriterion: (criterion: TCriterion) => void;
+  updateCriterion: useHandleCriteriaFunctions["updateCriterion"];
+  removeCriterion: useHandleCriteriaFunctions["removeCriterion"];
 };
 
 const EditCriterionForm = ({
   firstFieldRef,
+  setParentIsDirty,
   criterion,
-  onClose: onPropsClose,
+  onParentClose,
   updateCriterion,
   removeCriterion,
 }: EditCriterionFormProps) => {
@@ -40,10 +44,18 @@ const EditCriterionForm = ({
 
   const [confirmDelete, setConfirmDelete] = useBoolean();
 
-  const hasChanges =
+  const isDirty =
     name !== criterion.name ||
     unit !== criterion.unit ||
     beneficial !== criterion.beneficial;
+
+  /**
+   * * Update parent props
+   */
+  useEffect(() => {
+    isDirty ? setParentIsDirty.on() : setParentIsDirty.off();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isDirty]);
 
   /**
    * * Sync local state on props change
@@ -81,7 +93,7 @@ const EditCriterionForm = ({
    */
   const onClose = () => {
     setConfirmDelete.off();
-    onPropsClose();
+    onParentClose();
   };
 
   const onSave = () => {
@@ -193,7 +205,7 @@ const EditCriterionForm = ({
                 flex={1}
                 type="submit"
                 colorScheme="teal"
-                isDisabled={!hasChanges}
+                isDisabled={!isDirty}
               >
                 Save
               </Button>
