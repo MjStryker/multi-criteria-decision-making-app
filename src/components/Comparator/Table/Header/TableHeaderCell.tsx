@@ -20,10 +20,19 @@ const TableHeaderCell = ({
 }: TableHeaderCellProps) => {
   const hasName = isValidNonEmptyString(product.name);
 
+  const cellWidth = "150px";
+
   const defaultName = `Produit ${columnIdx + 1}`;
 
   return (
-    <Td minW="150px" maxW="150px" px={2} border="1px" borderColor="gray.100">
+    <Td
+      w={cellWidth}
+      minW={cellWidth}
+      maxW={cellWidth}
+      px={2}
+      border="1px"
+      borderColor="gray.100"
+    >
       <VStack
         className="CellContainer"
         alignItems="stretch"

@@ -26,6 +26,8 @@ const CriterionNameUnitCell = ({
 }: CriterionNameUnitCellProps) => {
   const hasName = isValidNonEmptyString(criterion.name);
 
+  const cellWidth = "240px";
+
   const defaultName = `Critère ${rowIdx + 1}`;
 
   return (
@@ -33,8 +35,9 @@ const CriterionNameUnitCell = ({
       position="relative"
       pl={2}
       pr={1}
-      minW="240px"
-      maxW="240px"
+      w={cellWidth}
+      minW={cellWidth}
+      maxW={cellWidth}
       border="1px"
       borderColor="gray.100"
     >

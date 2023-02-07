@@ -113,12 +113,14 @@ const DataTable = () => {
       <TableContainer
         className="TableContainer"
         h="full"
-        pl="12"
-        pr="8"
+        p={4}
         display="flex"
-        alignItems="center"
+        // justifyContent="center"
+        // alignItems="center"
+        flex={1}
+        overflowY="auto"
       >
-        <Table size="sm">
+        <Table size="sm" w="auto" h="min-content" m="0 auto">
           <TableHeader
             products={productsSorted}
             addProduct={addProduct}

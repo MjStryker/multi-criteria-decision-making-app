@@ -21,6 +21,8 @@ const TableHeader = ({
   updateProduct,
   removeProduct,
 }: TableHeaderProps) => {
+  const addButtonCellWidth = "50px";
+
   const handleAddProduct = () => {
     addProduct(createEmptyProduct(products.length));
   };
@@ -60,7 +62,12 @@ const TableHeader = ({
         {/*
          * PRODUCTS - ADD BUTTON
          */}
-        <Td border="none">
+        <Td
+          border="none"
+          w={addButtonCellWidth}
+          minW={addButtonCellWidth}
+          maxW={addButtonCellWidth}
+        >
           <IconButton
             colorScheme="blue"
             aria-label="Add product"

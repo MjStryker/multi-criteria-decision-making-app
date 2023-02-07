@@ -60,8 +60,18 @@ const CriterionWeightCell = ({
     updateCriterion({ ...criterion, weight: newWeight });
   };
 
+  const cellWidth = "100px";
+
   return (
-    <Td isNumeric px={2} border="1px" borderColor="gray.100">
+    <Td
+      isNumeric
+      w={cellWidth}
+      minW={cellWidth}
+      maxW={cellWidth}
+      px={2}
+      border="1px"
+      borderColor="gray.100"
+    >
       <HStack spacing={1}>
         <Editable
           flex={1}
