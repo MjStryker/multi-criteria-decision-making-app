@@ -1,18 +1,10 @@
-import { CSSProperties } from "react";
+import { Button, Td, Tfoot, Tr } from "@chakra-ui/react";
+
+import { AddIcon } from "@chakra-ui/icons";
 import { TCriterion } from "../../../../types/criteria";
 import { TProduct } from "../../../../types/products";
-import { border } from "../../../../styles/tables/tableCell";
+import TableFooterCell from "./TableFooterCell";
 import { createEmptyCriterion } from "../../../../utils/criteria/criteria";
-
-const STYLES = {
-  TD: {
-    PRODUCT_RANK: {
-      border,
-      textAlign: "right",
-      fontWeight: "bold",
-    } as CSSProperties,
-  },
-};
 
 type TableFooterProps = {
   criteria: TCriterion[];
@@ -20,48 +12,47 @@ type TableFooterProps = {
   addCriterion: Function;
 };
 
-const TableFooter = (props: TableFooterProps) => {
+const TableFooter = ({
+  criteria,
+  products,
+  addCriterion,
+}: TableFooterProps) => {
+  const handleAddCriterion = () => {
+    addCriterion(createEmptyCriterion(criteria.length));
+  };
+
   return (
-    <tfoot>
-      <tr>
+    <Tfoot>
+      <Tr>
         {/*
          * CRITERION - ADD BUTTON
          */}
-        <td>
-          <button
-            onClick={() =>
-              props.addCriterion(createEmptyCriterion(props.criteria.length))
-            }
+        <Td border="none" pl={1} pr={2} colSpan={2}>
+          <Button
+            w="full"
+            size="sm"
+            colorScheme="blue"
+            onClick={handleAddCriterion}
+            leftIcon={<AddIcon fontSize="xs" />}
+            boxShadow="base"
           >
-            +
-          </button>
-        </td>
-
-        {/*
-         * --------
-         */}
-        <td />
-
-        {/*
-         * --------
-         */}
-        <td />
+            Add
+          </Button>
+        </Td>
 
         {/*
          * PRODUCTS - RANK
          */}
-        {props.products.map((p) => (
-          <td key={p.id} style={STYLES.TD.PRODUCT_RANK}>
-            #{p.rank ?? " -"}
-          </td>
+        {products.map((product) => (
+          <TableFooterCell key={product.id} product={product} />
         ))}
 
         {/*
          * --------
          */}
-        <td />
-      </tr>
-    </tfoot>
+        <Td border="none" />
+      </Tr>
+    </Tfoot>
   );
 };
 

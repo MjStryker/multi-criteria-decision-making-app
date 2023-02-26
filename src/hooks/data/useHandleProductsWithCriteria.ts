@@ -3,6 +3,10 @@ import { TProduct } from "../../types/products";
 import { TProductWithCriterion } from "../../types/productsWithCriteria";
 import { createEmptyProductCriterionValue } from "../../utils/productsWithCriteria/productsWithCriteria";
 
+export type useHandleProductsWithCriteriaFunctions = ReturnType<
+  typeof useHandleProductsWithCriteria
+>;
+
 const useHandleProductsWithCriteria = (
   productsWithCriteria: TProductWithCriterion[],
   setProductsWithCriteria: React.Dispatch<
@@ -44,7 +48,7 @@ const useHandleProductsWithCriteria = (
 
   return {
     addProductWithCriteria,
-    setProductCriteriaValue: setProductCriterionValue,
+    setProductCriterionValue,
     removeProductWithCriteria,
   };
 };

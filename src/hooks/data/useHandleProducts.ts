@@ -5,6 +5,8 @@ import { updateProductsDefaultColumnIdx } from "../../utils/products/products";
 import { useCallback } from "react";
 import useHandleProductsWithCriteria from "./useHandleProductsWithCriteria";
 
+export type useHandleProductsFunctions = ReturnType<typeof useHandleProducts>;
+
 const useHandleProducts = (
   setProducts: React.Dispatch<React.SetStateAction<TProduct[]>>,
   criteria: TCriterion[],

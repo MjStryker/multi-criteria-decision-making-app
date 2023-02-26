@@ -4,5 +4,6 @@ export type TProduct = {
   reference: string | undefined;
   // picture: string;
   rank: number | undefined;
+  rankPts: number | undefined;
   defaultColumnIdx: number;
 };

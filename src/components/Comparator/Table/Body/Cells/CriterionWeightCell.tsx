@@ -1,146 +1,119 @@
-import { deepEqual, isDefined } from "../../../../../utils/objects";
-import { useLayoutEffect, useRef, useState } from "react";
+import {
+  Editable,
+  EditableInput,
+  EditablePreview,
+  HStack,
+  Input,
+  Td,
+  useColorModeValue,
+} from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 
-import { CRITERION } from "../../../../../constants/criteria";
-import { DATA_TABLE_STYLES } from "../../../DataTable.styles";
+import { DEBUG } from "../../../../../constants/global";
+import DebugValue from "../../../global/table/DebugValue";
+import { EDITABLE_MIN_WIDTH } from "../../../../../constants/table";
 import { TCriterion } from "../../../../../types/criteria";
 import { clampCriterionWeightValue } from "../../../../../utils/criteria/criteria";
+import { isDefined } from "../../../../../utils/objects";
 import { isValidNumber } from "../../../../../utils/numbers";
 import { parseStringAsNumber } from "../../../../../utils/strings";
-import useClickOutside from "../../../../../hooks/useClickOutside";
-import useHandleCriteria from "../../../../../hooks/data/useHandleCriteria";
+import { useHandleCriteriaFunctions } from "../../../../../hooks/data/useHandleCriteria";
 
 type CriterionWeightCellProps = {
   criterion: TCriterion;
-  updateCriterion: ReturnType<typeof useHandleCriteria>["updateCriterion"];
+  updateCriterion: useHandleCriteriaFunctions["updateCriterion"];
 };
 
-const CriterionWeightCell = (props: CriterionWeightCellProps) => {
-  const cellRef = useRef<HTMLTableCellElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+const CriterionWeightCell = ({
+  criterion,
+  updateCriterion,
+}: CriterionWeightCellProps) => {
+  const getValueFromProps = () => criterion.weight || null;
 
-  const cellId = `criterion-weight-${props.criterion.id}`;
-
-  const [editMode, setEditMode] = useState(false);
-
-  const currentWeightValue = props.criterion.weight ?? null;
-
-  const [criterionNewWeight, setCriterionNewWeight] =
-    useState(currentWeightValue);
-
-  const weightChanged = !deepEqual(criterionNewWeight, currentWeightValue);
+  const [weight, setWeight] = useState<number | null>(getValueFromProps);
 
   /**
-   * Forces focus on input when entering edit mode state
+   * * Sync local state on props change
    */
-  useLayoutEffect(() => {
-    if (editMode) {
-      inputRef.current?.focus();
-    }
-  }, [editMode]);
+  useEffect(() => {
+    setWeight(getValueFromProps);
+    return () => setWeight(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [criterion.weight]);
 
-  const handleClickOnCell = () => {
-    if (!editMode) {
-      console.log(`[ Cell ] Selected cell ${cellId}`);
-      setEditMode(true);
-      setCriterionNewWeight(currentWeightValue);
-    }
+  /**
+   * * Handle Inputs change / validation
+   */
+  const onChange = (nextValue: string) => {
+    const newWeight = parseStringAsNumber(nextValue);
+
+    setWeight(
+      isDefined(newWeight) ? clampCriterionWeightValue(newWeight) : null
+    );
   };
 
-  const handleClickOutsideCell = () => {
-    if (editMode) {
-      console.log(`[ Cell ] Clicked away from cell ${cellId}`);
-      applyChanges();
-      closeEditMode();
-    }
+  const onSubmit = () => {
+    const newWeight = isValidNumber(weight)
+      ? clampCriterionWeightValue(weight)
+      : undefined;
+
+    updateCriterion({ ...criterion, weight: newWeight });
   };
 
-  useClickOutside(cellRef, handleClickOutsideCell);
-
-  const applyChanges = () => {
-    if (weightChanged) {
-      console.log("[ Cell ] Update value:", {
-        criterion: props.criterion,
-        old: { weight: currentWeightValue },
-        new: { weight: criterionNewWeight },
-      });
-
-      props.updateCriterion({
-        ...props.criterion,
-        weight: isDefined(criterionNewWeight)
-          ? clampCriterionWeightValue(criterionNewWeight)
-          : undefined,
-      });
-    }
-  };
-
-  const closeEditMode = () => {
-    inputRef.current?.blur();
-    setEditMode(false);
-  };
+  const cellWidth = "100px";
 
   return (
-    <td
-      ref={cellRef}
-      onClick={handleClickOnCell}
-      style={DATA_TABLE_STYLES.TD.CRITERION_WEIGHT}
+    <Td
+      isNumeric
+      w={cellWidth}
+      minW={cellWidth}
+      maxW={cellWidth}
+      px={2}
+      border="1px"
+      borderColor="gray.100"
     >
-      <div
-        style={{
-          margin: -8,
-          padding: editMode ? 0 : 8,
-          width: "100%",
-        }}
-      >
-        {editMode ? (
-          <input
-            ref={inputRef}
-            type="number"
-            min={CRITERION.WEIGHT.MIN}
-            max={CRITERION.WEIGHT.MAX}
-            value={isValidNumber(criterionNewWeight) ? criterionNewWeight : ""}
-            onChange={(e) =>
-              setCriterionNewWeight(parseStringAsNumber(e.target.value))
-            }
-            onKeyUp={(e) => {
-              switch (e.key) {
-                case "Enter":
-                  applyChanges();
-                  closeEditMode();
-                  break;
-                case "Escape":
-                  if (weightChanged) {
-                    console.log("[ Cell ] Abort changes:", {
-                      criterion: props.criterion,
-                      current: { weight: currentWeightValue },
-                      abort: { weight: criterionNewWeight },
-                    });
-                    setCriterionNewWeight(currentWeightValue);
-                  }
-                  closeEditMode();
-                  break;
-              }
-            }}
-            style={{
-              ...DATA_TABLE_STYLES.INPUT.TEXT,
-              width: "100%",
-              padding: "7px 6px",
+      <HStack spacing={1}>
+        <Editable
+          flex={1}
+          value={isValidNumber(weight) ? weight.toString() : "-"}
+          onChange={onChange}
+          onSubmit={onSubmit}
+        >
+          <EditablePreview
+            py={2}
+            px={2}
+            w="full"
+            minW={EDITABLE_MIN_WIDTH}
+            fontSize="md"
+            fontWeight="semibold"
+            textAlign="center"
+            color={criterion.beneficial === false ? "orange.600" : "blue.600"}
+            _hover={{
+              background: useColorModeValue("gray.100", "gray.700"),
             }}
           />
-        ) : (
-          <div style={DATA_TABLE_STYLES.TEXT.MORE_INFO_CONTAINER}>
-            <div>
-              {isValidNumber(currentWeightValue) ? currentWeightValue : "-"}
-            </div>
-            <div style={DATA_TABLE_STYLES.TEXT.MORE_INFO}>
-              {isValidNumber(props.criterion.normalizedWeight)
-                ? `(${props.criterion.normalizedWeight.toFixed(3)})`
-                : null}
-            </div>
-          </div>
-        )}
-      </div>
-    </td>
+
+          <Input
+            as={EditableInput}
+            type="number"
+            borderRadius="base"
+            size="sm"
+            w="full"
+            textAlign="center"
+            maxW={EDITABLE_MIN_WIDTH}
+            px={2}
+          />
+        </Editable>
+
+        {DEBUG && isValidNumber(criterion.normalizedWeight) ? (
+          <DebugValue
+            value={criterion.normalizedWeight.toFixed(2)}
+            variant="solid"
+            colorScheme={criterion.beneficial === false ? "orange" : "blue"}
+          />
+        ) : null}
+      </HStack>
+    </Td>
   );
 };
 

@@ -11,6 +11,7 @@ const p1: TProduct = {
   name: "p1",
   reference: undefined,
   rank: 3,
+  rankPts: undefined,
   defaultColumnIdx: 2,
 };
 
@@ -19,6 +20,7 @@ const p2: TProduct = {
   name: "p2",
   reference: undefined,
   rank: 2,
+  rankPts: undefined,
   defaultColumnIdx: 1,
 };
 
@@ -27,6 +29,7 @@ const p3: TProduct = {
   name: "p3",
   reference: undefined,
   rank: 1,
+  rankPts: undefined,
   defaultColumnIdx: 3,
 };
 

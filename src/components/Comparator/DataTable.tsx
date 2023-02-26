@@ -1,5 +1,7 @@
+import { Table, TableContainer } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 
+import { IsAnyEditDialogOpenedContextProvider } from "../../context/IsAnyEditDialogOpened";
 import { SORT_BY } from "../../constants/arrays";
 import { TCriterion } from "../../types/criteria";
 import { TProduct } from "../../types/products";
@@ -78,7 +80,7 @@ const DataTable = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rankedProducts]);
 
-  const { addProductWithCriteria, setProductCriteriaValue } =
+  const { addProductWithCriteria, setProductCriterionValue } =
     useHandleProductsWithCriteria(
       productsWithCriteria,
       onSetProductsWithCriteria
@@ -107,33 +109,42 @@ const DataTable = () => {
   );
 
   return (
-    <table
-      cellSpacing={0}
-      cellPadding={8}
-      style={{ height: "fit-content", borderCollapse: "collapse" }}
-    >
-      <TableHeader
-        products={productsSorted}
-        addProduct={addProduct}
-        updateProduct={updateProduct}
-        removeProduct={removeProduct}
-      />
+    <IsAnyEditDialogOpenedContextProvider>
+      <TableContainer
+        className="TableContainer"
+        h="full"
+        p={4}
+        display="flex"
+        // justifyContent="center"
+        // alignItems="center"
+        flex={1}
+        overflowY="auto"
+      >
+        <Table size="sm" w="auto" h="min-content" m="0 auto">
+          <TableHeader
+            products={productsSorted}
+            addProduct={addProduct}
+            updateProduct={updateProduct}
+            removeProduct={removeProduct}
+          />
 
-      <TableBody
-        criteria={criteriaSorted}
-        products={productsSorted}
-        productsWithCriteria={productsWithCriteria}
-        updateCriterion={updateCriterion}
-        removeCriterion={removeCriterion}
-        setProductCriteriaValue={setProductCriteriaValue}
-      />
+          <TableBody
+            criteria={criteriaSorted}
+            products={productsSorted}
+            productsWithCriteria={productsWithCriteria}
+            updateCriterion={updateCriterion}
+            removeCriterion={removeCriterion}
+            setProductCriterionValue={setProductCriterionValue}
+          />
 
-      <TableFooter
-        criteria={criteriaSorted}
-        products={productsSorted}
-        addCriterion={addCriterion}
-      />
-    </table>
+          <TableFooter
+            criteria={criteriaSorted}
+            products={productsSorted}
+            addCriterion={addCriterion}
+          />
+        </Table>
+      </TableContainer>
+    </IsAnyEditDialogOpenedContextProvider>
   );
 };
 

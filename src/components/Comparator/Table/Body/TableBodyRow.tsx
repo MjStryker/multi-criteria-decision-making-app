@@ -1,4 +1,5 @@
-import CriterionBeneficialCell from "./Cells/CriterionBeneficialCell";
+import { Td, Tr } from "@chakra-ui/react";
+
 import CriterionNameUnitCell from "./Cells/CriterionNameUnitCell";
 import CriterionProductValueCell from "./Cells/CriterionProductValueCell";
 import CriterionWeightCell from "./Cells/CriterionWeightCell";
@@ -6,8 +7,8 @@ import { TCriterion } from "../../../../types/criteria";
 import { TProduct } from "../../../../types/products";
 import { TProductWithCriterion } from "../../../../types/productsWithCriteria";
 import { createEmptyProductCriterionValue } from "../../../../utils/productsWithCriteria/productsWithCriteria";
-import useHandleCriteria from "../../../../hooks/data/useHandleCriteria";
-import useHandleProductsWithCriteria from "../../../../hooks/data/useHandleProductsWithCriteria";
+import { useHandleCriteriaFunctions } from "../../../../hooks/data/useHandleCriteria";
+import { useHandleProductsWithCriteriaFunctions } from "../../../../hooks/data/useHandleProductsWithCriteria";
 
 type TableBodyRowProps = {
   criterion: TCriterion;
@@ -15,64 +16,68 @@ type TableBodyRowProps = {
   productsWithCriteria: TProductWithCriterion[];
   rowIdx: number;
   maxWeight: number;
-  updateCriterion: ReturnType<typeof useHandleCriteria>["updateCriterion"];
-  removeCriterion: ReturnType<typeof useHandleCriteria>["removeCriterion"];
-  setProductCriteriaValue: ReturnType<
-    typeof useHandleProductsWithCriteria
-  >["setProductCriteriaValue"];
+  updateCriterion: useHandleCriteriaFunctions["updateCriterion"];
+  removeCriterion: useHandleCriteriaFunctions["removeCriterion"];
+  setProductCriterionValue: useHandleProductsWithCriteriaFunctions["setProductCriterionValue"];
 };
 
-const TableBodyRow = (props: TableBodyRowProps) => {
+const TableBodyRow = ({
+  criterion,
+  products,
+  productsWithCriteria,
+  rowIdx,
+  maxWeight,
+  updateCriterion,
+  removeCriterion,
+  setProductCriterionValue,
+}: TableBodyRowProps) => {
   return (
-    <tr key={props.criterion.id}>
+    <Tr key={criterion.id}>
       {/*
        * CRITERION - NAME / UNIT
        */}
       <CriterionNameUnitCell
-        criterion={props.criterion}
-        rowIdx={props.rowIdx}
-        maxWeight={props.maxWeight}
-        updateCriterion={props.updateCriterion}
-        removeCriterion={props.removeCriterion}
-      />
-
-      {/*
-       * CRITERION - BENEFICIAL
-       */}
-      <CriterionBeneficialCell
-        criterion={props.criterion}
-        updateCriterion={props.updateCriterion}
+        criterion={criterion}
+        rowIdx={rowIdx}
+        maxWeight={maxWeight}
+        updateCriterion={updateCriterion}
+        removeCriterion={removeCriterion}
       />
 
       {/*
        * CRITERION - WEIGHT
        */}
       <CriterionWeightCell
-        criterion={props.criterion}
-        updateCriterion={props.updateCriterion}
+        criterion={criterion}
+        updateCriterion={updateCriterion}
       />
 
       {/*
        * PRODUCTS - CRITERION VALUES
        */}
-      {props.products.map((product, productColumnIdx) => {
-        const criteriaProductValue =
-          props.productsWithCriteria.find(
+      {products.map((product) => {
+        const criterionProductValue =
+          productsWithCriteria.find(
             ({ criterionId: criteriaId, productId }) =>
-              criteriaId === props.criterion.id && productId === product.id
-          ) ?? createEmptyProductCriterionValue(product, props.criterion);
+              criteriaId === criterion.id && productId === product.id
+          ) ?? createEmptyProductCriterionValue(product, criterion);
 
         return (
           <CriterionProductValueCell
-            key={criteriaProductValue.id}
-            criterion={props.criterion}
+            key={criterionProductValue.id}
+            criterion={criterion}
             product={product}
-            criteriaProductValue={criteriaProductValue}
-            setProductCriteriaValue={props.setProductCriteriaValue}
+            criterionProductValue={criterionProductValue}
+            setProductCriterionValue={setProductCriterionValue}
           />
         );
       })}
-    </tr>
+
+      {/*
+       * --------
+       */}
+      <Td border="none" />
+    </Tr>
   );
 };
 

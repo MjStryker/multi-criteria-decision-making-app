@@ -1,149 +1,108 @@
-import { deepEqual, isDefined } from "../../../../../utils/objects";
-import { useLayoutEffect, useRef, useState } from "react";
+import {
+  Editable,
+  EditableInput,
+  EditablePreview,
+  HStack,
+  Input,
+  Td,
+  useColorModeValue,
+} from "@chakra-ui/react";
+import {
+  isValidNonEmptyString,
+  parseStringAsNumber,
+} from "../../../../../utils/strings";
+import { useEffect, useState } from "react";
 
-import { DATA_TABLE_STYLES } from "../../../DataTable.styles";
+import { DEBUG } from "../../../../../constants/global";
+import DebugValue from "../../../global/table/DebugValue";
+import { EDITABLE_MIN_WIDTH } from "../../../../../constants/table";
 import { TCriterion } from "../../../../../types/criteria";
 import { TProduct } from "../../../../../types/products";
 import { TProductWithCriterion } from "../../../../../types/productsWithCriteria";
 import { isValidNumber } from "../../../../../utils/numbers";
-import { minWidth } from "../../../../../styles/tables/tableCell";
-import { parseStringAsNumber } from "../../../../../utils/strings";
-import useClickOutside from "../../../../../hooks/useClickOutside";
-import useHandleProductsWithCriteria from "../../../../../hooks/data/useHandleProductsWithCriteria";
+import { useHandleProductsWithCriteriaFunctions } from "../../../../../hooks/data/useHandleProductsWithCriteria";
 
 type CriterionProductValueCellProps = {
   criterion: TCriterion;
   product: TProduct;
-  criteriaProductValue: TProductWithCriterion | null;
-  setProductCriteriaValue: ReturnType<
-    typeof useHandleProductsWithCriteria
-  >["setProductCriteriaValue"];
+  criterionProductValue: TProductWithCriterion | null;
+  setProductCriterionValue: useHandleProductsWithCriteriaFunctions["setProductCriterionValue"];
 };
 
-const CriterionProductValueCell = (props: CriterionProductValueCellProps) => {
-  const cellRef = useRef<HTMLTableCellElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+const CriterionProductValueCell = ({
+  criterion,
+  product,
+  criterionProductValue,
+  setProductCriterionValue,
+}: CriterionProductValueCellProps) => {
+  const getValueFromProps = () =>
+    isValidNumber(criterionProductValue?.value)
+      ? criterionProductValue?.value?.toString() || null
+      : null;
 
-  const cellId = `value-${props.criteriaProductValue?.id}`;
-
-  const [editMode, setEditMode] = useState(false);
-
-  const currentValue = props.criteriaProductValue?.value ?? null;
-
-  const [criterionProductNewValue, setCriterionProductNewValue] =
-    useState(currentValue);
-
-  const valueChanged = !deepEqual(criterionProductNewValue, currentValue);
+  const [value, setValue] = useState<string | null>(getValueFromProps);
 
   /**
-   * Forces focus on input when entering edit mode state
+   * * Sync local state on props change
    */
-  useLayoutEffect(() => {
-    if (editMode) {
-      inputRef.current?.focus();
-    }
-  }, [editMode]);
+  useEffect(() => {
+    setValue(getValueFromProps);
+    return () => setValue(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [criterionProductValue]);
 
-  const handleClickOnCell = () => {
-    if (!editMode) {
-      console.log(`[ Cell ] Selected cell ${cellId}`);
-      setCriterionProductNewValue(currentValue);
-      setEditMode(true);
-    }
+  /**
+   * * Handle Inputs change / validation
+   */
+  const onChange = (nextValue: string) => {
+    setValue(nextValue);
   };
 
-  const handleClickOutsideCell = () => {
-    if (editMode) {
-      console.log(`[ Cell ] Clicked away from cell ${cellId}`);
-      applyChanges();
-      closeEditMode();
-    }
-  };
+  const onSubmit = () => {
+    const newValue = isValidNonEmptyString(value)
+      ? parseStringAsNumber(value as string)
+      : null;
 
-  useClickOutside(cellRef, handleClickOutsideCell);
-
-  const applyChanges = () => {
-    if (valueChanged) {
-      console.log("[ Cell ] Update value:", {
-        old: { value: currentValue },
-        new: { value: criterionProductNewValue },
-      });
-
-      props.setProductCriteriaValue(
-        props.product,
-        props.criterion,
-        criterionProductNewValue
-      );
-    }
-  };
-
-  const closeEditMode = () => {
-    inputRef.current?.blur();
-    setEditMode(false);
+    setProductCriterionValue(product, criterion, newValue);
   };
 
   return (
-    <td
-      ref={cellRef}
-      onClick={handleClickOnCell}
-      style={DATA_TABLE_STYLES.TD.CELL_VALUE}
-    >
-      <div
-        style={{
-          margin: -8,
-          padding: editMode ? 0 : 8,
-          width: "100%",
-        }}
-      >
-        {editMode ? (
-          <input
-            ref={inputRef}
-            type="number"
-            value={
-              isValidNumber(criterionProductNewValue)
-                ? criterionProductNewValue
-                : ""
-            }
-            onChange={(e) =>
-              setCriterionProductNewValue(parseStringAsNumber(e.target.value))
-            }
-            onKeyUp={(e) => {
-              switch (e.key) {
-                case "Enter":
-                  applyChanges();
-                  closeEditMode();
-                  break;
-                case "Escape":
-                  if (valueChanged) {
-                    console.log("[ Cell ] Abort changes:", {
-                      current: currentValue,
-                      abort: criterionProductNewValue,
-                    });
-                    setCriterionProductNewValue(currentValue);
-                  }
-                  closeEditMode();
-                  break;
-              }
-            }}
-            style={{
-              ...DATA_TABLE_STYLES.INPUT.TEXT,
-              width: minWidth,
-              padding: "7px 6px",
+    <Td isNumeric px={2} border="1px" borderColor="gray.100">
+      <HStack spacing={1} justifyContent="flex-end">
+        <Editable
+          flex={1}
+          value={value || "-"}
+          onChange={onChange}
+          onSubmit={onSubmit}
+        >
+          <EditablePreview
+            py={2}
+            px={2}
+            w="full"
+            minW={EDITABLE_MIN_WIDTH}
+            _hover={{
+              background: useColorModeValue("gray.100", "gray.700"),
             }}
           />
-        ) : (
-          <div style={DATA_TABLE_STYLES.TEXT.MORE_INFO_CONTAINER}>
-            <div>{isValidNumber(currentValue) ? currentValue : "-"}</div>
 
-            {isDefined(props.criteriaProductValue?.criterionRankPts) ? (
-              <div style={DATA_TABLE_STYLES.TEXT.MORE_INFO}>
-                ({props.criteriaProductValue?.criterionRankPts ?? "-"})
-              </div>
-            ) : null}
-          </div>
-        )}
-      </div>
-    </td>
+          <Input
+            as={EditableInput}
+            type="number"
+            borderRadius="base"
+            size="sm"
+            px={2}
+          />
+        </Editable>
+
+        {DEBUG && isValidNumber(criterionProductValue?.criterionRankPts) ? (
+          <DebugValue
+            value={`${criterionProductValue?.criterionRankPts.toFixed(0)} pts`}
+            variant="outline"
+            colorScheme={criterion.beneficial === false ? "orange" : "blue"}
+          />
+        ) : null}
+      </HStack>
+    </Td>
   );
 };
 

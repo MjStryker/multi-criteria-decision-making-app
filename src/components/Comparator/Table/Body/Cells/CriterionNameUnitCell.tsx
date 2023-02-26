@@ -1,288 +1,104 @@
+import { Box, Flex, HStack, Progress, Td, Text } from "@chakra-ui/react";
 import {
   capitalize,
   isValidNonEmptyString,
 } from "../../../../../utils/strings";
-import { useRef, useState } from "react";
 
-import { DATA_TABLE_STYLES } from "../../../DataTable.styles";
+import EditCriterionButton from "./EditCriterionButton";
 import { TCriterion } from "../../../../../types/criteria";
-import { deepEqual } from "../../../../../utils/objects";
 import { getCriterionWeightRelativeToMax } from "../../../../../utils/criteria/criteria";
-import useClickOutside from "../../../../../hooks/useClickOutside";
+import { useHandleCriteriaFunctions } from "../../../../../hooks/data/useHandleCriteria";
 
 type CriterionNameUnitCellProps = {
   criterion: TCriterion;
   rowIdx: number;
   maxWeight: number;
-  updateCriterion: Function;
-  removeCriterion: Function;
+  updateCriterion: useHandleCriteriaFunctions["updateCriterion"];
+  removeCriterion: useHandleCriteriaFunctions["removeCriterion"];
 };
 
-const CriterionNameUnitCell = (props: CriterionNameUnitCellProps) => {
-  const cellRef = useRef<HTMLTableCellElement>(null);
-  const cellId = `criterion-name-unit-${props.criterion.id}`;
+const CriterionNameUnitCell = ({
+  criterion,
+  rowIdx,
+  maxWeight,
+  updateCriterion,
+  removeCriterion,
+}: CriterionNameUnitCellProps) => {
+  const hasName = isValidNonEmptyString(criterion.name);
 
-  const inputNameRef = useRef<HTMLInputElement>(null);
-  const inputUnitRef = useRef<HTMLInputElement>(null);
+  const cellWidth = "240px";
 
-  const [editMode, setEditMode] = useState(false);
-
-  const defaultCriterionName = isValidNonEmptyString(props.criterion.name)
-    ? props.criterion.name
-    : null;
-
-  const defaultCriterionUnit = isValidNonEmptyString(props.criterion.unit)
-    ? props.criterion.unit
-    : null;
-
-  const [criterionNewName, setCriterionNewName] = useState<string | null>(
-    defaultCriterionName
-  );
-  const [criterionNewUnit, setCriterionNewUnit] = useState<string | null>(
-    defaultCriterionUnit
-  );
-
-  const criterionNameChanged = !deepEqual(
-    criterionNewName,
-    defaultCriterionName
-  );
-  const criterionUnitChanged = !deepEqual(
-    criterionNewUnit,
-    defaultCriterionUnit
-  );
-
-  const handleClickOnCell = () => {
-    if (!editMode) {
-      console.log(`[ Cell ] Selected cell ${cellId}`);
-      setEditMode(true);
-      setCriterionNewName(defaultCriterionName);
-      setCriterionNewUnit(defaultCriterionUnit);
-    }
-  };
-
-  const handleClickOutsideCell = () => {
-    if (editMode) {
-      console.log(`[ Cell ] Clicked away from cell ${cellId}`);
-      applyChanges();
-      closeEditMode();
-    }
-  };
-
-  useClickOutside(cellRef, handleClickOutsideCell);
-
-  const closeEditMode = () => {
-    setEditMode(false);
-  };
-
-  const applyChanges = () => {
-    criterionNameChanged && applyNameChanges();
-    criterionUnitChanged && applyUnitChanges();
-  };
-
-  const applyNameChanges = () => {
-    if (criterionNameChanged) {
-      console.log("[ Cell ] Update name:", {
-        old: defaultCriterionName,
-        new: criterionNewName,
-      });
-
-      props.updateCriterion({
-        ...props.criterion,
-        name: criterionNewName,
-      });
-    }
-  };
-
-  const applyUnitChanges = () => {
-    if (criterionUnitChanged) {
-      console.log("[ Cell ] Update unit:", {
-        old: defaultCriterionName,
-        new: criterionNewName,
-      });
-
-      props.updateCriterion({
-        ...props.criterion,
-        unit: criterionNewUnit,
-      });
-    }
-  };
+  const defaultName = `Critère ${rowIdx + 1}`;
 
   return (
-    <td
-      ref={cellRef}
-      onClick={handleClickOnCell}
-      style={{
-        ...DATA_TABLE_STYLES.TD.CRITERION,
-        position: "relative",
-      }}
+    <Td
+      position="relative"
+      pl={2}
+      pr={1}
+      w={cellWidth}
+      minW={cellWidth}
+      maxW={cellWidth}
+      border="1px"
+      borderColor="gray.100"
     >
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between",
-          height: "100%",
-        }}
+      <HStack justifyContent="space-between">
+        <Flex flex={1} alignItems="center" justifyContent="space-between">
+          {/*
+           * -- Name
+           */}
+          <Text
+            whiteSpace="break-spaces"
+            wordBreak="break-word"
+            fontWeight="semibold"
+          >
+            {!hasName ? defaultName : capitalize(criterion.name)}
+          </Text>
+
+          {/*
+           * -- Unit
+           */}
+          {isValidNonEmptyString(criterion.unit) ? (
+            <Text fontSize="0.75rem" color="gray.500" ml={1}>
+              ({criterion.unit})
+            </Text>
+          ) : null}
+        </Flex>
+
+        {/*
+         * -- Edit
+         */}
+        <EditCriterionButton
+          criterion={criterion}
+          updateCriterion={updateCriterion}
+          removeCriterion={removeCriterion}
+        />
+      </HStack>
+
+      <Box
+        className="CriterionWeightBarWrapper"
+        position="absolute"
+        left={0}
+        bottom="-2.4px"
+        width="100%"
+        pl={2}
+        pr={1}
+        boxSizing="border-box"
+        zIndex="auto"
       >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "stretch",
-            width: "100%",
+        <Progress
+          size="xs"
+          borderRadius="base"
+          colorScheme={criterion.beneficial === false ? "orange" : "blue"}
+          value={getCriterionWeightRelativeToMax(criterion.weight, maxWeight)}
+          opacity={0.7}
+          sx={{
+            "& > div": {
+              transition: "width .5s ease-in-out",
+            },
           }}
-        >
-          <div
-            style={{
-              alignSelf: "center",
-              marginRight: editMode ? 0 : 8,
-              padding: 8,
-              fontSize: "12px",
-              color: "#5a5a5a",
-              backgroundColor: "rgba(0, 0, 0, 0.02",
-            }}
-          >
-            {props.criterion.defaultRowIdx}
-          </div>
-
-          <div
-            style={{
-              alignSelf: "center",
-              display: "flex",
-              alignItems: "center",
-              height: "100%",
-              zIndex: 2,
-            }}
-          >
-            {editMode ? (
-              <>
-                {/*
-                 * CRITERION - NAME
-                 */}
-                <input
-                  ref={inputNameRef}
-                  type="text"
-                  value={
-                    isValidNonEmptyString(criterionNewName)
-                      ? criterionNewName
-                      : ""
-                  }
-                  onChange={(e) =>
-                    setCriterionNewName(
-                      isValidNonEmptyString(e.target.value)
-                        ? e.target.value
-                        : null
-                    )
-                  }
-                  onKeyUp={(e) => {
-                    switch (e.key) {
-                      case "Enter":
-                        inputNameRef.current?.blur();
-                        break;
-                      case "Escape":
-                        if (criterionNameChanged) {
-                          console.log("[ Cell ] Abort changes:", {
-                            current: defaultCriterionName,
-                            abort: criterionNewName,
-                          });
-                          setCriterionNewName(defaultCriterionName);
-                        }
-                        inputNameRef.current?.blur();
-                        break;
-                    }
-                  }}
-                  style={{
-                    ...DATA_TABLE_STYLES.INPUT.TEXT,
-                    padding: "7px 6px",
-                    maxWidth: 180,
-                  }}
-                />
-                {/*
-                 * CRITERION - UNIT
-                 */}
-                <input
-                  ref={inputUnitRef}
-                  type="text"
-                  value={
-                    isValidNonEmptyString(criterionNewUnit)
-                      ? criterionNewUnit
-                      : ""
-                  }
-                  onChange={(e) =>
-                    setCriterionNewUnit(
-                      isValidNonEmptyString(e.target.value)
-                        ? e.target.value
-                        : null
-                    )
-                  }
-                  onKeyUp={(e) => {
-                    switch (e.key) {
-                      case "Enter":
-                        inputUnitRef.current?.blur();
-                        break;
-                      case "Escape":
-                        if (criterionUnitChanged) {
-                          console.log("[ Cell ] Abort changes:", {
-                            current: defaultCriterionUnit,
-                            abort: criterionNewUnit,
-                          });
-                          setCriterionNewUnit(defaultCriterionUnit);
-                        }
-                        inputUnitRef.current?.blur();
-                        break;
-                    }
-                  }}
-                  style={{
-                    ...DATA_TABLE_STYLES.INPUT.TEXT,
-                    maxWidth: 60,
-                    padding: "7px 6px",
-                  }}
-                />
-              </>
-            ) : (
-              <div style={{ marginRight: 8 }}>
-                {props.criterion.name
-                  ? capitalize(props.criterion.name)
-                  : `Critère ${props.rowIdx + 1}`}{" "}
-                {props.criterion.unit && `(${props.criterion.unit})`}
-              </div>
-            )}
-          </div>
-        </div>
-
-        {!editMode && (
-          <button
-            onClick={() => props.removeCriterion(props.criterion)}
-            style={{ zIndex: 2 }}
-          >
-            -
-          </button>
-        )}
-      </div>
-
-      {!editMode && (
-        <div
-          className="CriterionWeightBarWrapper"
-          style={{
-            position: "absolute",
-            left: 0,
-            bottom: -5,
-            width: "100%",
-            boxSizing: "border-box",
-            zIndex: 1,
-          }}
-        >
-          <progress
-            className="CriterionWeightBar"
-            max="100"
-            value={getCriterionWeightRelativeToMax(
-              props.criterion.weight,
-              props.maxWeight
-            )}
-            style={{ width: "100%", height: 7 }}
-          />
-        </div>
-      )}
-    </td>
+        />
+      </Box>
+    </Td>
   );
 };
 

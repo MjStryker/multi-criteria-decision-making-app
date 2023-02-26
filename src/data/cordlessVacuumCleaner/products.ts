@@ -6,6 +6,7 @@ const products: TProduct[] = [
     name: "Dyson v15 Detect",
     reference: "NF02HF774",
     rank: undefined,
+    rankPts: undefined,
     defaultColumnIdx: 0,
   },
   {
@@ -13,6 +14,7 @@ const products: TProduct[] = [
     name: "Dreame v11",
     reference: "0B28FNR3",
     rank: undefined,
+    rankPts: undefined,
     defaultColumnIdx: 1,
   },
   {
@@ -20,6 +22,7 @@ const products: TProduct[] = [
     name: "Rowenta",
     reference: "RH9151WO",
     rank: undefined,
+    rankPts: undefined,
     defaultColumnIdx: 2,
   },
 ];
