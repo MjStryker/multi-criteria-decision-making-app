@@ -54,7 +54,7 @@ const TableFooterCell = ({ product }: TableFooterCellProps) => {
           ) : null}
         </HStack>
       ) : (
-        "-"
+        ""
       )}
     </Td>
   );

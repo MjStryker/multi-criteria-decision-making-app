@@ -19,15 +19,9 @@ import { TCriterion } from "../../../../../types/criteria";
 
 type EditCriterionButtonProps = {
   criterion: TCriterion;
-  updateCriterion: (criterion: TCriterion) => void;
-  removeCriterion: (criterion: TCriterion) => void;
 };
 
-const EditCriterionButton = ({
-  criterion,
-  updateCriterion,
-  removeCriterion,
-}: EditCriterionButtonProps) => {
+const EditCriterionButton = ({ criterion }: EditCriterionButtonProps) => {
   const { isAnyEditDialogOpened, toggleIsAnyEditDialogOpened } = useContext(
     IsAnyEditDialogOpenedContext
   );
@@ -84,8 +78,6 @@ const EditCriterionButton = ({
             setParentIsDirty={setIsFormDirty}
             onParentClose={handleClose}
             criterion={criterion}
-            updateCriterion={updateCriterion}
-            removeCriterion={removeCriterion}
           />
         </FocusLock>
       </PopoverContent>

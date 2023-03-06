@@ -11,30 +11,30 @@ import {
   isValidNonEmptyString,
   parseStringAsNumber,
 } from "../../../../../utils/strings";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { DEBUG } from "../../../../../constants/global";
+import { DataContext } from "../../../../../context/DataContext";
 import DebugValue from "../../../global/table/DebugValue";
 import { EDITABLE_MIN_WIDTH } from "../../../../../constants/table";
 import { TCriterion } from "../../../../../types/criteria";
 import { TProduct } from "../../../../../types/products";
 import { TProductWithCriterion } from "../../../../../types/productsWithCriteria";
 import { isValidNumber } from "../../../../../utils/numbers";
-import { useHandleProductsWithCriteriaFunctions } from "../../../../../hooks/data/useHandleProductsWithCriteria";
 
 type CriterionProductValueCellProps = {
   criterion: TCriterion;
   product: TProduct;
   criterionProductValue: TProductWithCriterion | null;
-  setProductCriterionValue: useHandleProductsWithCriteriaFunctions["setProductCriterionValue"];
 };
 
 const CriterionProductValueCell = ({
   criterion,
   product,
   criterionProductValue,
-  setProductCriterionValue,
 }: CriterionProductValueCellProps) => {
+  const { setProductCriterionValue } = useContext(DataContext);
+
   const getValueFromProps = () =>
     isValidNumber(criterionProductValue?.value)
       ? criterionProductValue?.value?.toString() || null

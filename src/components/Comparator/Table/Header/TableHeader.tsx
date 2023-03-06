@@ -3,25 +3,15 @@ import { Icon, IconButton, Td, Text, Thead, Tr } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import { GiAnvil as AnvilIcon } from "react-icons/gi";
 import { CRITERION } from "../../../../constants/criteria";
-import { TProduct } from "../../../../types/products";
+import { DataContext } from "../../../../context/DataContext";
 import TableHeaderCell from "./TableHeaderCell";
 import { createEmptyProduct } from "../../../../utils/products/products";
-import { useHandleProductsFunctions } from "../../../../hooks/data/useHandleProducts";
+import { useContext } from "react";
 
-type TableHeaderProps = {
-  products: TProduct[];
-  addProduct: useHandleProductsFunctions["addProduct"];
-  updateProduct: useHandleProductsFunctions["updateProduct"];
-  removeProduct: useHandleProductsFunctions["removeProduct"];
-};
+const addButtonCellWidth = "50px";
 
-const TableHeader = ({
-  products,
-  addProduct,
-  updateProduct,
-  removeProduct,
-}: TableHeaderProps) => {
-  const addButtonCellWidth = "50px";
+const TableHeader = () => {
+  const { products, addProduct } = useContext(DataContext);
 
   const handleAddProduct = () => {
     addProduct(createEmptyProduct(products.length));
@@ -50,13 +40,7 @@ const TableHeader = ({
          * PRODUCTS
          */}
         {products.map((product, idx) => (
-          <TableHeaderCell
-            key={product.id}
-            columnIdx={idx}
-            product={product}
-            updateProduct={updateProduct}
-            removeProduct={removeProduct}
-          />
+          <TableHeaderCell key={product.id} columnIdx={idx} product={product} />
         ))}
 
         {/*

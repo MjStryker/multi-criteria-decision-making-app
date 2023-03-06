@@ -21,11 +21,11 @@ const useHandleCriteria = (
     setCriteria((prev) => calculateCriteriaNormalizedWeights(prev));
   };
 
-  const addCriterion = (criteria: TCriterion) => {
-    setCriteria((prev) => [...prev, criteria]);
+  const addCriterion = (criterion: TCriterion) => {
+    setCriteria((prev) => [...prev, criterion]);
     products.forEach((product) => {
       addProductWithCriterion(
-        createEmptyProductCriterionValue(product, criteria)
+        createEmptyProductCriterionValue(product, criterion)
       );
     });
     updateCriteriaNormalizedWeights();

@@ -1,22 +1,14 @@
 import { Button, Td, Tfoot, Tr } from "@chakra-ui/react";
 
 import { AddIcon } from "@chakra-ui/icons";
-import { TCriterion } from "../../../../types/criteria";
-import { TProduct } from "../../../../types/products";
+import { DataContext } from "../../../../context/DataContext";
 import TableFooterCell from "./TableFooterCell";
 import { createEmptyCriterion } from "../../../../utils/criteria/criteria";
+import { useContext } from "react";
 
-type TableFooterProps = {
-  criteria: TCriterion[];
-  products: TProduct[];
-  addCriterion: Function;
-};
+const TableFooter = () => {
+  const { products, criteria, addCriterion } = useContext(DataContext);
 
-const TableFooter = ({
-  criteria,
-  products,
-  addCriterion,
-}: TableFooterProps) => {
   const handleAddCriterion = () => {
     addCriterion(createEmptyCriterion(criteria.length));
   };

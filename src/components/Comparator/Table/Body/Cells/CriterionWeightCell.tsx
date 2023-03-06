@@ -7,9 +7,10 @@ import {
   Td,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { DEBUG } from "../../../../../constants/global";
+import { DataContext } from "../../../../../context/DataContext";
 import DebugValue from "../../../global/table/DebugValue";
 import { EDITABLE_MIN_WIDTH } from "../../../../../constants/table";
 import { TCriterion } from "../../../../../types/criteria";
@@ -17,17 +18,16 @@ import { clampCriterionWeightValue } from "../../../../../utils/criteria/criteri
 import { isDefined } from "../../../../../utils/objects";
 import { isValidNumber } from "../../../../../utils/numbers";
 import { parseStringAsNumber } from "../../../../../utils/strings";
-import { useHandleCriteriaFunctions } from "../../../../../hooks/data/useHandleCriteria";
+
+const cellWidth = "100px";
 
 type CriterionWeightCellProps = {
   criterion: TCriterion;
-  updateCriterion: useHandleCriteriaFunctions["updateCriterion"];
 };
 
-const CriterionWeightCell = ({
-  criterion,
-  updateCriterion,
-}: CriterionWeightCellProps) => {
+const CriterionWeightCell = ({ criterion }: CriterionWeightCellProps) => {
+  const { updateCriterion } = useContext(DataContext);
+
   const getValueFromProps = () => criterion.weight || null;
 
   const [weight, setWeight] = useState<number | null>(getValueFromProps);
@@ -59,8 +59,6 @@ const CriterionWeightCell = ({
 
     updateCriterion({ ...criterion, weight: newWeight });
   };
-
-  const cellWidth = "100px";
 
   return (
     <Td

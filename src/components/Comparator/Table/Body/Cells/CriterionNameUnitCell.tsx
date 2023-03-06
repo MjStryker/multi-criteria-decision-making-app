@@ -9,24 +9,20 @@ import { TCriterion } from "../../../../../types/criteria";
 import { getCriterionWeightRelativeToMax } from "../../../../../utils/criteria/criteria";
 import { useHandleCriteriaFunctions } from "../../../../../hooks/data/useHandleCriteria";
 
+const cellWidth = "240px";
+
 type CriterionNameUnitCellProps = {
   criterion: TCriterion;
   rowIdx: number;
   maxWeight: number;
-  updateCriterion: useHandleCriteriaFunctions["updateCriterion"];
-  removeCriterion: useHandleCriteriaFunctions["removeCriterion"];
 };
 
 const CriterionNameUnitCell = ({
   criterion,
   rowIdx,
   maxWeight,
-  updateCriterion,
-  removeCriterion,
 }: CriterionNameUnitCellProps) => {
   const hasName = isValidNonEmptyString(criterion.name);
-
-  const cellWidth = "240px";
 
   const defaultName = `Critère ${rowIdx + 1}`;
 
@@ -67,11 +63,7 @@ const CriterionNameUnitCell = ({
         {/*
          * -- Edit
          */}
-        <EditCriterionButton
-          criterion={criterion}
-          updateCriterion={updateCriterion}
-          removeCriterion={removeCriterion}
-        />
+        <EditCriterionButton criterion={criterion} />
       </HStack>
 
       <Box
