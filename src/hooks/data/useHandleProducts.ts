@@ -23,7 +23,9 @@ const useHandleProducts = (
         );
       });
     },
-    [addProductWithCriteria, criteria, setProducts]
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
   );
 
   const updateProduct = useCallback(
@@ -34,7 +36,9 @@ const useHandleProducts = (
 
         return updateProductsDefaultColumnIdx(prev);
       }),
-    [setProducts]
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
   );
 
   const removeProduct = useCallback(
@@ -42,7 +46,9 @@ const useHandleProducts = (
       setProducts((prev) =>
         updateProductsDefaultColumnIdx(prev.filter((p) => p.id !== id))
       ),
-    [setProducts]
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
   );
 
   return {

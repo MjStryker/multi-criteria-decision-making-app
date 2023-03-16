@@ -6,6 +6,7 @@ import {
 import { TCriterion } from "../../types/criteria";
 import { TProduct } from "../../types/products";
 import { createEmptyProductCriterionValue } from "../../utils/productsWithCriteria/productsWithCriteria";
+import { useCallback } from "react";
 import useHandleProductsWithCriteria from "./useHandleProductsWithCriteria";
 
 export type useHandleCriteriaFunctions = ReturnType<typeof useHandleCriteria>;
@@ -17,21 +18,26 @@ const useHandleCriteria = (
     typeof useHandleProductsWithCriteria
   >["addProductWithCriteria"]
 ) => {
-  const updateCriteriaNormalizedWeights = () => {
+  const updateCriteriaNormalizedWeights = useCallback(() => {
     setCriteria((prev) => calculateCriteriaNormalizedWeights(prev));
-  };
 
-  const addCriterion = (criterion: TCriterion) => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const addCriterion = useCallback((criterion: TCriterion) => {
     setCriteria((prev) => [...prev, criterion]);
     products.forEach((product) => {
       addProductWithCriterion(
         createEmptyProductCriterionValue(product, criterion)
       );
     });
-    updateCriteriaNormalizedWeights();
-  };
 
-  const updateCriterion = (criterion: TCriterion) => {
+    updateCriteriaNormalizedWeights();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const updateCriterion = useCallback((criterion: TCriterion) => {
     setCriteria((prev) => {
       const newCriteriaIdx = prev.findIndex((p) => criterion.id === p.id);
       prev[newCriteriaIdx] = criterion;
@@ -40,15 +46,19 @@ const useHandleCriteria = (
     });
 
     updateCriteriaNormalizedWeights();
-  };
 
-  const removeCriterion = ({ id }: TCriterion) => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const removeCriterion = useCallback(({ id }: TCriterion) => {
     setCriteria((prev) =>
       updateCriteriaDefaultRowIdx(prev.filter((c) => c.id !== id))
     );
 
     updateCriteriaNormalizedWeights();
-  };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return {
     addCriterion,

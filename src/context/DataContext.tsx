@@ -1,9 +1,10 @@
-import React, {
+import {
   Dispatch,
   ReactNode,
   SetStateAction,
   createContext,
   useCallback,
+  useEffect,
   useState,
 } from "react";
 import useHandleCriteria, {
@@ -16,13 +17,13 @@ import useHandleProductsWithCriteria, {
   useHandleProductsWithCriteriaFunctions,
 } from "../hooks/data/useHandleProductsWithCriteria";
 
-import { SORT_BY } from "../constants/arrays";
 import { TCriterion } from "../types/criteria";
 import { TProduct } from "../types/products";
 import { TProductWithCriterion } from "../types/productsWithCriteria";
 import { compareCriteriaByDefaultRowIdxFn } from "../utils/criteria/criteria";
 import { compareProductsByDefaultColumnIdxFn } from "../utils/products/products";
 import cordlessVacuumCleaner from "../data/cordlessVacuumCleaner";
+import { rankProducts } from "../utils/products/rankProducts";
 
 /**
  * * 0 - Example data
@@ -84,33 +85,48 @@ export const DataContextProvider = (props: { children: ReactNode }) => {
     productsWithCriteriaFromDB
   );
 
-  const onSetCriteria: Dispatch<SetStateAction<TCriterion[]>> = useCallback(
-    (newState) => {
-      // TODO
-      // .sort(
-      //   compareCriteriaByDefaultRowIdxFn(SORT_BY.ASC)
-      // )
-      setCriteria(newState);
+  /**
+   * -- Rank products on first render
+   */
+
+  const onRankProducts = useCallback(
+    (productsToRank = products) => {
+      console.log("Rank products");
+
+      setProducts(rankProducts(productsToRank, criteria, productsWithCriteria));
     },
+    [criteria, products, productsWithCriteria]
+  );
+
+  useEffect(() => {
+    onRankProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  /**
+   * -- Memoized setState functions
+   */
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const onSetCriteria: Dispatch<SetStateAction<TCriterion[]>> = useCallback(
+    setCriteria,
     []
   );
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const onSetProducts: Dispatch<SetStateAction<TProduct[]>> = useCallback(
-    (newState) => {
-      // TODO
-      // .sort(
-      //   compareProductsByDefaultColumnIdxFn(SORT_BY.ASC)
-      // )
-      setProducts(newState);
-    },
+    setProducts,
     []
   );
 
   const onSetProductsWithCriteria: Dispatch<
     SetStateAction<TProductWithCriterion[]>
-  > = useCallback((newState) => {
-    setProductsWithCriteria(newState);
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  > = useCallback(setProductsWithCriteria, []);
+
+  /**
+   * -- Handlers utils
+   */
 
   const {
     addProductWithCriteria,
