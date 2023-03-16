@@ -7,7 +7,6 @@ import {
 import EditCriterionButton from "./EditCriterionButton";
 import { TCriterion } from "../../../../../types/criteria";
 import { getCriterionWeightRelativeToMax } from "../../../../../utils/criteria/criteria";
-import { useHandleCriteriaFunctions } from "../../../../../hooks/data/useHandleCriteria";
 
 const cellWidth = "240px";
 
