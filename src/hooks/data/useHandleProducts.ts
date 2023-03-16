@@ -29,24 +29,24 @@ const useHandleProducts = (
   );
 
   const updateProduct = useCallback(
-    (product: TProduct) =>
+    (product: TProduct) => {
       setProducts((prev) => {
         const newProductIdx = prev.findIndex((p) => product.id === p.id);
         prev[newProductIdx] = product;
 
         return updateProductsDefaultColumnIdx(prev);
-      }),
-
+      });
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
   const removeProduct = useCallback(
-    ({ id }: TProduct) =>
+    ({ id }: TProduct) => {
       setProducts((prev) =>
         updateProductsDefaultColumnIdx(prev.filter((p) => p.id !== id))
-      ),
-
+      );
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );

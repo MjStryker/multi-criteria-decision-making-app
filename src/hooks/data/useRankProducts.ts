@@ -14,7 +14,7 @@ const useRankProducts = (
   const [rankedProducts, setRankedProducts] = useState<TProduct[]>([]);
 
   const newRankedProducts = useMemo(
-    () => rankProducts(products, criteria, productsWithCriteria),
+    () => rankProducts(products, criteria, productsWithCriteria).rankedProducts,
     [products, criteria, productsWithCriteria]
   );
 

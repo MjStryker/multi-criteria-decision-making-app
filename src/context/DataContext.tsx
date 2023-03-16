@@ -20,7 +20,6 @@ import useHandleProductsWithCriteria, {
 import { TCriterion } from "../types/criteria";
 import { TProduct } from "../types/products";
 import { TProductWithCriterion } from "../types/productsWithCriteria";
-import { compareCriteriaByDefaultRowIdxFn } from "../utils/criteria/criteria";
 import { compareProductsByDefaultColumnIdxFn } from "../utils/products/products";
 import cordlessVacuumCleaner from "../data/cordlessVacuumCleaner";
 import { rankProducts } from "../utils/products/rankProducts";
@@ -85,18 +84,28 @@ export const DataContextProvider = (props: { children: ReactNode }) => {
     productsWithCriteriaFromDB
   );
 
+  const compareProductsFn = compareProductsByDefaultColumnIdxFn();
+
   /**
    * -- Rank products on first render
    */
 
-  const onRankProducts = useCallback(
-    (productsToRank = products) => {
-      console.log("Rank products");
+  // TODO: Fix & Apply
+  const onRankProducts = useCallback(() => {
+    console.log("Rank products");
 
-      setProducts(rankProducts(productsToRank, criteria, productsWithCriteria));
-    },
-    [criteria, products, productsWithCriteria]
-  );
+    const { rankedProducts, productsWithCriteriaRankPts } = rankProducts(
+      products,
+      criteria,
+      productsWithCriteria
+    );
+
+    const rankedProductsSorted = [...rankedProducts].sort(compareProductsFn);
+
+    setProducts(rankedProductsSorted);
+
+    setProductsWithCriteria(productsWithCriteriaRankPts);
+  }, [compareProductsFn, criteria, products, productsWithCriteria]);
 
   useEffect(() => {
     onRankProducts();
@@ -107,22 +116,32 @@ export const DataContextProvider = (props: { children: ReactNode }) => {
    * -- Memoized setState functions
    */
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const onSetCriteria: Dispatch<SetStateAction<TCriterion[]>> = useCallback(
-    setCriteria,
+    (newState) => {
+      setCriteria(newState);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const onSetProducts: Dispatch<SetStateAction<TProduct[]>> = useCallback(
-    setProducts,
+    (newState) => {
+      setProducts(newState);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
   const onSetProductsWithCriteria: Dispatch<
     SetStateAction<TProductWithCriterion[]>
+  > = useCallback(
+    (newState) => {
+      setProductsWithCriteria(newState);
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  > = useCallback(setProductsWithCriteria, []);
+    []
+  );
 
   /**
    * -- Handlers utils
