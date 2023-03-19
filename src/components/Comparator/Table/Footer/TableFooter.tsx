@@ -30,9 +30,11 @@ const TableFooter = () => {
     }
 
     if (nbCriteriaRemaining - 1 <= CRITERIA_ITEMS_REMAINING_WARNING) {
+      const label = nbCriteriaRemaining - 1 === 1 ? "criterion" : "criteria";
+
       toast({
         status: "warning",
-        title: `${nbCriteriaRemaining - 1} criteria remaining`,
+        title: `${nbCriteriaRemaining - 1} ${label} remaining`,
       });
     }
 

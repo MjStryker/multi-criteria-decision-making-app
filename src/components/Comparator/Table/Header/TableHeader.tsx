@@ -42,9 +42,11 @@ const TableHeader = () => {
     }
 
     if (nbProductsRemaining - 1 <= PRODUCTS_ITEMS_REMAINING_WARNING) {
+      const label = nbProductsRemaining - 1 === 1 ? "product" : "products";
+
       toast({
         status: "warning",
-        title: `${nbProductsRemaining - 1} product(s) remaining`,
+        title: `${nbProductsRemaining - 1} ${label} remaining`,
       });
     }
 
