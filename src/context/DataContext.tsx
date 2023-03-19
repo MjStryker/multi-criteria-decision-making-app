@@ -26,17 +26,24 @@ import { compareCriteriaByDefaultRowIdxFn } from "../utils/criteria/criteria";
 import { compareProductsByDefaultColumnIdxFn } from "../utils/products/products";
 import cordlessVacuumCleaner from "../data/cordlessVacuumCleaner";
 import { rankProducts } from "../utils/products/rankProducts";
+import useLocalStorage from "../hooks/global/useLocalStorage";
 
 /**
- * * 0 - Example data
+ * * 0 - Example / Default data
  */
-const criteriaFromDB = cordlessVacuumCleaner.criteria;
-const productsFromDB = cordlessVacuumCleaner.products;
-const productsWithCriteriaFromDB = cordlessVacuumCleaner.productsWithCriteria;
+
+const useVacuumExample = false;
+
+const defaultCriteria = useVacuumExample ? cordlessVacuumCleaner.criteria : [];
+const defaultProducts = useVacuumExample ? cordlessVacuumCleaner.products : [];
+const defaultValues = useVacuumExample
+  ? cordlessVacuumCleaner.productsWithCriteria
+  : [];
 
 /**
  * * 1 - Type
  */
+
 type ContextType = {
   isPending: boolean;
   criteria: TCriterion[];
@@ -49,6 +56,7 @@ type ContextType = {
 /**
  * * 2 - Default value
  */
+
 const defaultValue: ContextType = {
   isPending: false,
   // --
@@ -71,21 +79,24 @@ const defaultValue: ContextType = {
 /**
  * * 3 - Context
  */
+
 export const DataContext = createContext<ContextType>(defaultValue);
 
 /**
  * * 4 - Provider
  */
+
 export const DataContextProvider = (props: { children: ReactNode }) => {
-  const [criteria, setCriteria] = useState(criteriaFromDB);
-  const [products, setProducts] = useState(productsFromDB);
-  const [productsWithCriteria, setProductsWithCriteria] = useState(
-    productsWithCriteriaFromDB
+  const [criteria, setCriteria] = useLocalStorage("criteria", defaultCriteria);
+  const [products, setProducts] = useLocalStorage("products", defaultProducts);
+  const [productsWithCriteria, setProductsWithCriteria] = useLocalStorage(
+    "values",
+    defaultValues
   );
 
-  const [rankedProducts, setRankedProducts] = useState(productsFromDB);
+  const [rankedProducts, setRankedProducts] = useState(products);
   const [productsWithCriteriaRankPts, setProductsWithCriteriaRankPts] =
-    useState(productsWithCriteriaFromDB);
+    useState(productsWithCriteria);
 
   const [isPending, startTransition] = useTransition();
 
