@@ -1,4 +1,6 @@
-export const CRITERIA_MAX_ITEMS = 30;
+export const CRITERIA_MAX_ITEMS = 20;
+
+export const CRITERIA_ITEMS_REMAINING_WARNING = 3;
 
 export const CRITERION = {
   WEIGHT: {

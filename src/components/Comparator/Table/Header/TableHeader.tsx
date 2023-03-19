@@ -27,10 +27,12 @@ const TableHeader = () => {
 
   const toast = useToast();
 
-  const canAddProduct = products.length + 1 <= PRODUCTS_MAX_ITEMS;
+  const nbProducts = products.length;
+
+  const nbProductsRemaining = PRODUCTS_MAX_ITEMS - nbProducts;
 
   const handleAddProduct = () => {
-    if (!canAddProduct) {
+    if (nbProductsRemaining === 0) {
       toast({
         status: "error",
         title: "Cannot add another product",
@@ -39,16 +41,14 @@ const TableHeader = () => {
       return;
     }
 
-    if (products.length + 1 >= PRODUCTS_ITEMS_REMAINING_WARNING) {
+    if (nbProductsRemaining - 1 <= PRODUCTS_ITEMS_REMAINING_WARNING) {
       toast({
         status: "warning",
-        title: `${
-          PRODUCTS_MAX_ITEMS - PRODUCTS_ITEMS_REMAINING_WARNING - 1
-        } product(s) remaining`,
+        title: `${nbProductsRemaining - 1} product(s) remaining`,
       });
     }
 
-    addProduct(createEmptyProduct(products.length));
+    addProduct(createEmptyProduct(nbProducts));
   };
 
   return (
