@@ -5,7 +5,6 @@ import {
   createContext,
   useCallback,
   useEffect,
-  useMemo,
   useState,
   useTransition,
 } from "react";
@@ -111,13 +110,13 @@ export const DataContextProvider = (props: { children: ReactNode }) => {
   useEffect(() => {
     console.log("Ranking products");
 
-    const { rankedProducts, productsWithCriteriaRankPts } = rankProducts(
-      [...products],
-      [...criteria],
-      [...productsWithCriteria]
-    );
-
     startTransition(() => {
+      const { rankedProducts, productsWithCriteriaRankPts } = rankProducts(
+        products,
+        criteria,
+        productsWithCriteria
+      );
+
       setRankedProducts(rankedProducts);
       setProductsWithCriteriaRankPts(productsWithCriteriaRankPts);
     });

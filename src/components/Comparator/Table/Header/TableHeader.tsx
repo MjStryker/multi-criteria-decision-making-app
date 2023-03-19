@@ -89,12 +89,13 @@ const TableHeader = () => {
           maxW={addButtonCellWidth}
         >
           <IconButton
-            colorScheme="blue"
+            colorScheme={nbProductsRemaining > 0 ? "blue" : "gray"}
             aria-label="Add product"
             size="sm"
             icon={<AddIcon />}
             onClick={handleAddProduct}
             boxShadow="base"
+            transition="background .2s"
           />
         </Td>
       </Tr>

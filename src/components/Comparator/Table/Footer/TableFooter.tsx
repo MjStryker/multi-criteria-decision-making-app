@@ -51,10 +51,11 @@ const TableFooter = () => {
           <Button
             w="full"
             size="sm"
-            colorScheme="blue"
+            colorScheme={nbCriteriaRemaining > 0 ? "blue" : "gray"}
             onClick={handleAddCriterion}
             leftIcon={<AddIcon fontSize="xs" />}
             boxShadow="base"
+            transition="background .2s"
           >
             Add
           </Button>
