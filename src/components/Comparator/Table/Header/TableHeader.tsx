@@ -1,4 +1,16 @@
-import { Icon, IconButton, Td, Text, Thead, Tr } from "@chakra-ui/react";
+import {
+  Icon,
+  IconButton,
+  Td,
+  Text,
+  Thead,
+  Tr,
+  useToast,
+} from "@chakra-ui/react";
+import {
+  PRODUCTS_ITEMS_REMAINING_WARNING,
+  PRODUCTS_MAX_ITEMS,
+} from "../../../../constants/products";
 
 import { AddIcon } from "@chakra-ui/icons";
 import { GiAnvil as AnvilIcon } from "react-icons/gi";
@@ -13,7 +25,29 @@ const addButtonCellWidth = "50px";
 const TableHeader = () => {
   const { products, addProduct } = useContext(DataContext);
 
+  const toast = useToast();
+
+  const canAddProduct = products.length + 1 <= PRODUCTS_MAX_ITEMS;
+
   const handleAddProduct = () => {
+    if (!canAddProduct) {
+      toast({
+        status: "error",
+        title: "Cannot add another product",
+        description: `Maximum number of products reached (${PRODUCTS_MAX_ITEMS}/${PRODUCTS_MAX_ITEMS})`,
+      });
+      return;
+    }
+
+    if (products.length + 1 >= PRODUCTS_ITEMS_REMAINING_WARNING) {
+      toast({
+        status: "warning",
+        title: `${
+          PRODUCTS_MAX_ITEMS - PRODUCTS_ITEMS_REMAINING_WARNING - 1
+        } product(s) remaining`,
+      });
+    }
+
     addProduct(createEmptyProduct(products.length));
   };
 
