@@ -9,7 +9,7 @@ import { useContext } from "react";
 
 const PendingProgress = () => (
   <Box position="fixed" top={0} left={0} w="full">
-    <Progress size="xs" isIndeterminate />
+    <Progress size="sm" isIndeterminate />
   </Box>
 );
 
