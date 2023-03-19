@@ -7,6 +7,7 @@ import {
   useEffect,
   useMemo,
   useState,
+  useTransition,
 } from "react";
 import useHandleCriteria, {
   useHandleCriteriaFunctions,
@@ -21,9 +22,11 @@ import useHandleProductsWithCriteria, {
 import { TCriterion } from "../types/criteria";
 import { TProduct } from "../types/products";
 import { TProductWithCriterion } from "../types/productsWithCriteria";
+import { compareCriteriaByDefaultRowIdxFn } from "../utils/criteria/criteria";
 import { compareProductsByDefaultColumnIdxFn } from "../utils/products/products";
 import cordlessVacuumCleaner from "../data/cordlessVacuumCleaner";
 import { rankProducts } from "../utils/products/rankProducts";
+import { useBoolean } from "@chakra-ui/react";
 
 /**
  * * 0 - Example data
@@ -79,37 +82,44 @@ export const DataContextProvider = (props: { children: ReactNode }) => {
     productsWithCriteriaFromDB
   );
 
+  const [rankedProducts, setRankedProducts] = useState(productsFromDB);
+  const [productsWithCriteriaRankPts, setProductsWithCriteriaRankPts] =
+    useState(productsWithCriteriaFromDB);
+
+  const [isRanking, setIsRanking] = useBoolean();
+
+  const [isPending, startTransition] = useTransition();
+
   const compareProductsFn = compareProductsByDefaultColumnIdxFn();
+
+  const compareCriteriaFn = compareCriteriaByDefaultRowIdxFn();
 
   /**
    * -- Ranking logic
    */
 
-  // const { rankedProducts, productsWithCriteriaRankPts } = useMemo(
-  //   () => rankProducts(products, criteria, productsWithCriteria),
-  //   [criteria, products, productsWithCriteria]
-  // );
+  useEffect(() => {
+    console.log("Ranking products");
 
-  // const rankProductsCallback = useCallback(() => {
-  //   console.log("Rank products");
+    setIsRanking.on();
 
-  //   const { rankedProducts, productsWithCriteriaRankPts } = rankProducts(
-  //     [...products],
-  //     [...criteria],
-  //     [...productsWithCriteria]
-  //   );
+    const { rankedProducts, productsWithCriteriaRankPts } = rankProducts(
+      [...products],
+      [...criteria],
+      [...productsWithCriteria]
+    );
 
-  //   const rankedProductsSorted = [...rankedProducts].sort(compareProductsFn);
+    startTransition(() => {
+      setRankedProducts(rankedProducts);
+      setProductsWithCriteriaRankPts(productsWithCriteriaRankPts);
+    });
 
-  //   setProducts(rankedProductsSorted);
+    setIsRanking.off();
 
-  //   setProductsWithCriteria(productsWithCriteriaRankPts);
-  // }, [compareProductsFn, criteria, products, productsWithCriteria]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [products, criteria, productsWithCriteria]);
 
-  // useEffect(() => {
-  //   rankProductsCallback();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+  console.log({ isRanking, isPending });
 
   /**
    * -- Memoized setState functions
@@ -167,26 +177,23 @@ export const DataContextProvider = (props: { children: ReactNode }) => {
     addProductWithCriteria
   );
 
-  const { rankedProducts, productsWithCriteriaRankPts } = useMemo(() => {
-    console.log("Ranking products");
+  /**
+   * -- Res
+   */
 
-    return rankProducts(
-      [...products],
-      [...criteria],
-      [...productsWithCriteria]
-    );
-  }, [products, criteria, productsWithCriteria]);
+  const sortedCriteria = criteria.sort(compareCriteriaFn);
+  const sortedProducts = rankedProducts.sort(compareProductsFn);
 
   return (
     <DataContext.Provider
       value={{
         // --
-        criteria,
+        criteria: sortedCriteria,
         addCriterion,
         updateCriterion,
         removeCriterion,
         // --
-        products: rankedProducts,
+        products: sortedProducts,
         addProduct,
         updateProduct,
         removeProduct,
