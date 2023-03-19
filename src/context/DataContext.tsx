@@ -5,6 +5,7 @@ import {
   createContext,
   useCallback,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 import useHandleCriteria, {
@@ -38,9 +39,6 @@ type ContextType = {
   criteria: TCriterion[];
   products: TProduct[];
   productsWithCriteria: TProductWithCriterion[];
-  setCriteria: Dispatch<SetStateAction<TCriterion[]>>;
-  setProducts: Dispatch<SetStateAction<TProduct[]>>;
-  setProductsWithCriteria: Dispatch<SetStateAction<TProductWithCriterion[]>>;
 } & useHandleCriteriaFunctions &
   useHandleProductsFunctions &
   useHandleProductsWithCriteriaFunctions;
@@ -54,19 +52,16 @@ const defaultValue: ContextType = {
   addCriterion: () => {},
   updateCriterion: () => {},
   removeCriterion: () => {},
-  setCriteria: () => {},
   // --
   products: [],
   addProduct: () => {},
   updateProduct: () => {},
   removeProduct: () => {},
-  setProducts: () => {},
   // --
   productsWithCriteria: [],
   addProductWithCriteria: () => {},
   setProductCriterionValue: () => {},
   removeProductWithCriteria: () => {},
-  setProductsWithCriteria: () => {},
 };
 
 /**
@@ -87,30 +82,34 @@ export const DataContextProvider = (props: { children: ReactNode }) => {
   const compareProductsFn = compareProductsByDefaultColumnIdxFn();
 
   /**
-   * -- Rank products on first render
+   * -- Ranking logic
    */
 
-  // TODO: Fix & Apply
-  const onRankProducts = useCallback(() => {
-    console.log("Rank products");
+  // const { rankedProducts, productsWithCriteriaRankPts } = useMemo(
+  //   () => rankProducts(products, criteria, productsWithCriteria),
+  //   [criteria, products, productsWithCriteria]
+  // );
 
-    const { rankedProducts, productsWithCriteriaRankPts } = rankProducts(
-      products,
-      criteria,
-      productsWithCriteria
-    );
+  // const rankProductsCallback = useCallback(() => {
+  //   console.log("Rank products");
 
-    const rankedProductsSorted = [...rankedProducts].sort(compareProductsFn);
+  //   const { rankedProducts, productsWithCriteriaRankPts } = rankProducts(
+  //     [...products],
+  //     [...criteria],
+  //     [...productsWithCriteria]
+  //   );
 
-    setProducts(rankedProductsSorted);
+  //   const rankedProductsSorted = [...rankedProducts].sort(compareProductsFn);
 
-    setProductsWithCriteria(productsWithCriteriaRankPts);
-  }, [compareProductsFn, criteria, products, productsWithCriteria]);
+  //   setProducts(rankedProductsSorted);
 
-  useEffect(() => {
-    onRankProducts();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  //   setProductsWithCriteria(productsWithCriteriaRankPts);
+  // }, [compareProductsFn, criteria, products, productsWithCriteria]);
+
+  // useEffect(() => {
+  //   rankProductsCallback();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   /**
    * -- Memoized setState functions
@@ -168,6 +167,16 @@ export const DataContextProvider = (props: { children: ReactNode }) => {
     addProductWithCriteria
   );
 
+  const { rankedProducts, productsWithCriteriaRankPts } = useMemo(() => {
+    console.log("Ranking products");
+
+    return rankProducts(
+      [...products],
+      [...criteria],
+      [...productsWithCriteria]
+    );
+  }, [products, criteria, productsWithCriteria]);
+
   return (
     <DataContext.Provider
       value={{
@@ -176,19 +185,16 @@ export const DataContextProvider = (props: { children: ReactNode }) => {
         addCriterion,
         updateCriterion,
         removeCriterion,
-        setCriteria: onSetCriteria,
         // --
-        products,
+        products: rankedProducts,
         addProduct,
         updateProduct,
         removeProduct,
-        setProducts: onSetProducts,
         // --
-        productsWithCriteria,
+        productsWithCriteria: productsWithCriteriaRankPts,
         addProductWithCriteria,
         setProductCriterionValue,
         removeProductWithCriteria,
-        setProductsWithCriteria: onSetProductsWithCriteria,
       }}
       {...props}
     />

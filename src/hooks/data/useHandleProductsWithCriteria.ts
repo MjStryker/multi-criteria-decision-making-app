@@ -18,7 +18,6 @@ const useHandleProductsWithCriteria = (
     (productWithCriteria: TProductWithCriterion) => {
       setProductsWithCriteria((prev) => [...prev, productWithCriteria]);
     },
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
@@ -35,20 +34,19 @@ const useHandleProductsWithCriteria = (
 
       setProductsWithCriteria(res);
     },
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [productsWithCriteria]
   );
 
   const removeProductWithCriteria = useCallback(
-    (product: TProduct, criterion: TCriterion) =>
-      setProductsWithCriteria((prev) =>
+    (product: TProduct, criterion: TCriterion) => {
+      return setProductsWithCriteria((prev) =>
         prev.filter(
           ({ productId, criterionId }) =>
             product.id !== productId && criterion.id !== criterionId
         )
-      ),
-
+      );
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );

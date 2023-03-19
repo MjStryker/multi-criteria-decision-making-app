@@ -23,9 +23,8 @@ const useHandleProducts = (
         );
       });
     },
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [criteria]
   );
 
   const updateProduct = useCallback(
