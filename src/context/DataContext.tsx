@@ -26,7 +26,6 @@ import { compareCriteriaByDefaultRowIdxFn } from "../utils/criteria/criteria";
 import { compareProductsByDefaultColumnIdxFn } from "../utils/products/products";
 import cordlessVacuumCleaner from "../data/cordlessVacuumCleaner";
 import { rankProducts } from "../utils/products/rankProducts";
-import { useBoolean } from "@chakra-ui/react";
 
 /**
  * * 0 - Example data
@@ -39,6 +38,7 @@ const productsWithCriteriaFromDB = cordlessVacuumCleaner.productsWithCriteria;
  * * 1 - Type
  */
 type ContextType = {
+  isPending: boolean;
   criteria: TCriterion[];
   products: TProduct[];
   productsWithCriteria: TProductWithCriterion[];
@@ -50,6 +50,7 @@ type ContextType = {
  * * 2 - Default value
  */
 const defaultValue: ContextType = {
+  isPending: false,
   // --
   criteria: [],
   addCriterion: () => {},
@@ -86,8 +87,6 @@ export const DataContextProvider = (props: { children: ReactNode }) => {
   const [productsWithCriteriaRankPts, setProductsWithCriteriaRankPts] =
     useState(productsWithCriteriaFromDB);
 
-  const [isRanking, setIsRanking] = useBoolean();
-
   const [isPending, startTransition] = useTransition();
 
   const compareProductsFn = compareProductsByDefaultColumnIdxFn();
@@ -101,8 +100,6 @@ export const DataContextProvider = (props: { children: ReactNode }) => {
   useEffect(() => {
     console.log("Ranking products");
 
-    setIsRanking.on();
-
     const { rankedProducts, productsWithCriteriaRankPts } = rankProducts(
       [...products],
       [...criteria],
@@ -114,30 +111,21 @@ export const DataContextProvider = (props: { children: ReactNode }) => {
       setProductsWithCriteriaRankPts(productsWithCriteriaRankPts);
     });
 
-    setIsRanking.off();
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [products, criteria, productsWithCriteria]);
-
-  console.log({ isRanking, isPending });
 
   /**
    * -- Memoized setState functions
    */
 
   const onSetCriteria: Dispatch<SetStateAction<TCriterion[]>> = useCallback(
-    (newState) => {
-      setCriteria(newState);
-    },
+    (newState) => setCriteria(newState),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const onSetProducts: Dispatch<SetStateAction<TProduct[]>> = useCallback(
-    (newState) => {
-      setProducts(newState);
-    },
+    (newState) => setProducts(newState),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
@@ -145,9 +133,7 @@ export const DataContextProvider = (props: { children: ReactNode }) => {
   const onSetProductsWithCriteria: Dispatch<
     SetStateAction<TProductWithCriterion[]>
   > = useCallback(
-    (newState) => {
-      setProductsWithCriteria(newState);
-    },
+    (newState) => setProductsWithCriteria(newState),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
@@ -187,6 +173,7 @@ export const DataContextProvider = (props: { children: ReactNode }) => {
   return (
     <DataContext.Provider
       value={{
+        isPending,
         // --
         criteria: sortedCriteria,
         addCriterion,
