@@ -1,24 +1,44 @@
-import { Button, Td, Tfoot, Tr } from "@chakra-ui/react";
+import { Button, Td, Tfoot, Tr, useToast } from "@chakra-ui/react";
+import {
+  CRITERIA_ITEMS_REMAINING_WARNING,
+  CRITERIA_MAX_ITEMS,
+} from "../../../../constants/criteria";
 
 import { AddIcon } from "@chakra-ui/icons";
-import { TCriterion } from "../../../../types/criteria";
-import { TProduct } from "../../../../types/products";
+import { DataContext } from "../../../../context/DataContext";
 import TableFooterCell from "./TableFooterCell";
 import { createEmptyCriterion } from "../../../../utils/criteria/criteria";
+import { useContext } from "react";
 
-type TableFooterProps = {
-  criteria: TCriterion[];
-  products: TProduct[];
-  addCriterion: Function;
-};
+const TableFooter = () => {
+  const { products, criteria, addCriterion } = useContext(DataContext);
 
-const TableFooter = ({
-  criteria,
-  products,
-  addCriterion,
-}: TableFooterProps) => {
+  const toast = useToast();
+
+  const nbCriteria = criteria.length;
+
+  const nbCriteriaRemaining = CRITERIA_MAX_ITEMS - nbCriteria;
+
   const handleAddCriterion = () => {
-    addCriterion(createEmptyCriterion(criteria.length));
+    if (nbCriteriaRemaining === 0) {
+      toast({
+        status: "error",
+        title: "Cannot add another criterion",
+        description: `Maximum number of criteria reached (${CRITERIA_MAX_ITEMS}/${CRITERIA_MAX_ITEMS})`,
+      });
+      return;
+    }
+
+    if (nbCriteriaRemaining - 1 <= CRITERIA_ITEMS_REMAINING_WARNING) {
+      const label = nbCriteriaRemaining - 1 === 1 ? "criterion" : "criteria";
+
+      toast({
+        status: "warning",
+        title: `${nbCriteriaRemaining - 1} ${label} remaining`,
+      });
+    }
+
+    addCriterion(createEmptyCriterion(nbCriteria));
   };
 
   return (
@@ -31,10 +51,11 @@ const TableFooter = ({
           <Button
             w="full"
             size="sm"
-            colorScheme="blue"
+            colorScheme={nbCriteriaRemaining > 0 ? "blue" : "gray"}
             onClick={handleAddCriterion}
             leftIcon={<AddIcon fontSize="xs" />}
             boxShadow="base"
+            transition="background .2s"
           >
             Add
           </Button>

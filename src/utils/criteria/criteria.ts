@@ -1,14 +1,15 @@
 import { clamp, isValidNumber } from "../numbers";
 
 import { CRITERION } from "../../constants/criteria";
+import { SORT_BY } from "../../constants/arrays";
 import { TCriterion } from "../../types/criteria";
-import { TSortBy } from "../../types/arrays";
 import { areDefined } from "../objects";
 import { compareFn } from "../arrays";
 import { uuid } from "../uuid";
 
 export const compareCriteriaByDefaultRowIdxFn =
-  (sortBy: TSortBy) => (a: TCriterion, b: TCriterion) =>
+  (sortBy = SORT_BY.ASC) =>
+  (a: TCriterion, b: TCriterion) =>
     compareFn(sortBy)(a.defaultRowIdx, b.defaultRowIdx);
 
 export function createEmptyCriterion(defaultRowIdx: number): TCriterion {

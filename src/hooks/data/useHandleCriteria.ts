@@ -2,53 +2,74 @@ import {
   calculateCriteriaNormalizedWeights,
   updateCriteriaDefaultRowIdx,
 } from "../../utils/criteria/criteria";
+import useHandleProductsWithCriteria, {
+  useHandleProductsWithCriteriaFunctions,
+} from "./useHandleProductsWithCriteria";
 
 import { TCriterion } from "../../types/criteria";
 import { TProduct } from "../../types/products";
 import { createEmptyProductCriterionValue } from "../../utils/productsWithCriteria/productsWithCriteria";
-import useHandleProductsWithCriteria from "./useHandleProductsWithCriteria";
+import { useCallback } from "react";
 
 export type useHandleCriteriaFunctions = ReturnType<typeof useHandleCriteria>;
 
 const useHandleCriteria = (
   setCriteria: React.Dispatch<React.SetStateAction<TCriterion[]>>,
   products: TProduct[],
-  addProductWithCriterion: ReturnType<
-    typeof useHandleProductsWithCriteria
-  >["addProductWithCriteria"]
+  addProductWithCriterion: useHandleProductsWithCriteriaFunctions["addProductWithCriterion"],
+  removeAllValuesAssociatedToCriterionId: useHandleProductsWithCriteriaFunctions["removeAllValuesAssociatedToCriterionId"]
 ) => {
-  const updateCriteriaNormalizedWeights = () => {
-    setCriteria((prev) => calculateCriteriaNormalizedWeights(prev));
-  };
+  const updateCriteriaNormalizedWeights = useCallback(
+    () => {
+      setCriteria((prev) => calculateCriteriaNormalizedWeights(prev));
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
 
-  const addCriterion = (criteria: TCriterion) => {
-    setCriteria((prev) => [...prev, criteria]);
-    products.forEach((product) => {
-      addProductWithCriterion(
-        createEmptyProductCriterionValue(product, criteria)
+  const addCriterion = useCallback(
+    (criterion: TCriterion) => {
+      setCriteria((prev) => [...prev, criterion]);
+      products.forEach((product) => {
+        addProductWithCriterion(
+          createEmptyProductCriterionValue(product, criterion)
+        );
+      });
+
+      updateCriteriaNormalizedWeights();
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [products]
+  );
+
+  const updateCriterion = useCallback(
+    (criterion: TCriterion) => {
+      setCriteria((prev) => {
+        const newCriteriaIdx = prev.findIndex((p) => criterion.id === p.id);
+        prev[newCriteriaIdx] = criterion;
+
+        return updateCriteriaDefaultRowIdx(prev);
+      });
+
+      updateCriteriaNormalizedWeights();
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
+
+  const removeCriterion = useCallback(
+    ({ id }: TCriterion) => {
+      setCriteria((prev) =>
+        updateCriteriaDefaultRowIdx(prev.filter((c) => c.id !== id))
       );
-    });
-    updateCriteriaNormalizedWeights();
-  };
 
-  const updateCriterion = (criterion: TCriterion) => {
-    setCriteria((prev) => {
-      const newCriteriaIdx = prev.findIndex((p) => criterion.id === p.id);
-      prev[newCriteriaIdx] = criterion;
+      updateCriteriaNormalizedWeights();
 
-      return updateCriteriaDefaultRowIdx(prev);
-    });
-
-    updateCriteriaNormalizedWeights();
-  };
-
-  const removeCriterion = ({ id }: TCriterion) => {
-    setCriteria((prev) =>
-      updateCriteriaDefaultRowIdx(prev.filter((c) => c.id !== id))
-    );
-
-    updateCriteriaNormalizedWeights();
-  };
+      removeAllValuesAssociatedToCriterionId(id);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
 
   return {
     addCriterion,

@@ -56,7 +56,7 @@ export function rankProducts(
   products: TProduct[],
   criteria: TCriterion[],
   productsWithCriteria: TProductWithCriterion[]
-): TProduct[] {
+) {
   let lastRankPts: number | undefined = undefined;
   let lastPos = 0;
 
@@ -65,7 +65,7 @@ export function rankProducts(
     productsWithCriteria
   );
 
-  const res = [...products]
+  const rankedProducts = [...products]
     .map((product) => {
       const rankPts = productsWithCriteriaRankPts
         .filter(({ productId }) => productId === product.id)
@@ -86,5 +86,5 @@ export function rankProducts(
       return { ...product, rank: pos, rankPts };
     });
 
-  return res;
+  return { rankedProducts, productsWithCriteriaRankPts };
 }

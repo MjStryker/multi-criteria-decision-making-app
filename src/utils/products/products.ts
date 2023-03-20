@@ -1,15 +1,15 @@
+import { SORT_BY } from "../../constants/arrays";
 import { TProduct } from "../../types/products";
-import { TSortBy } from "../../types/arrays";
 import { compareFn } from "../arrays";
 import { uuid } from "../uuid";
 
 export const compareProductsByDefaultColumnIdxFn =
-  (sortBy: TSortBy) =>
+  (sortBy = SORT_BY.ASC) =>
   (a: TProduct, b: TProduct): number =>
     compareFn(sortBy)(a.defaultColumnIdx, b.defaultColumnIdx);
 
 export const compareProductsByRankFn =
-  (sortBy: TSortBy) =>
+  (sortBy = SORT_BY.ASC) =>
   (a: TProduct, b: TProduct): number =>
     compareFn(sortBy)(a.rank, b.rank);
 

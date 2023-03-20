@@ -11,21 +11,19 @@ import {
   useBoolean,
 } from "@chakra-ui/react";
 import { DeleteIcon, TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useContext, useEffect, useState } from "react";
 
+import { DataContext } from "../../../../../context/DataContext";
 import { TCriterion } from "../../../../../types/criteria";
 import TextInput from "../../../global/form/TextInput";
 import { isValidNonEmptyString } from "../../../../../utils/strings";
 import { useBooleanSetState } from "../../../../../types/chakra";
-import { useHandleCriteriaFunctions } from "../../../../../hooks/data/useHandleCriteria";
 
 type EditCriterionFormProps = {
   firstFieldRef: any;
   setParentIsDirty: useBooleanSetState;
   onParentClose: VoidFunction;
   criterion: TCriterion;
-  updateCriterion: useHandleCriteriaFunctions["updateCriterion"];
-  removeCriterion: useHandleCriteriaFunctions["removeCriterion"];
 };
 
 const EditCriterionForm = ({
@@ -33,9 +31,9 @@ const EditCriterionForm = ({
   setParentIsDirty,
   criterion,
   onParentClose,
-  updateCriterion,
-  removeCriterion,
 }: EditCriterionFormProps) => {
+  const { updateCriterion, removeCriterion } = useContext(DataContext);
+
   const [name, setName] = useState<string | undefined>(criterion.name);
   const [unit, setUnit] = useState<string | undefined>(criterion.unit);
   const [beneficial, setBeneficial] = useState<boolean | undefined>(

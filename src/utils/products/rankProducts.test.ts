@@ -236,7 +236,7 @@ describe("rankProducts(...)", () => {
       [{}, [100, 100, 100]],
     ]);
 
-    const rankedProducts = rankProducts(
+    const { rankedProducts } = rankProducts(
       products,
       criteriaToUse,
       productsWithCriteriaToUse
@@ -255,7 +255,7 @@ describe("rankProducts(...)", () => {
       [{}, [100, 100, 100]],
     ]);
 
-    const rankedProducts = rankProducts(
+    const { rankedProducts } = rankProducts(
       products,
       criteriaToUse,
       productsWithCriteriaToUse
@@ -274,7 +274,7 @@ describe("rankProducts(...)", () => {
       [{}, [100, 100, 100]],
     ]);
 
-    const rankedProducts = rankProducts(
+    const { rankedProducts } = rankProducts(
       products,
       criteriaToUse,
       productsWithCriteriaToUse
@@ -293,7 +293,7 @@ describe("rankProducts(...)", () => {
       [{}, [100, 100, 100]],
     ]);
 
-    const rankedProducts = rankProducts(
+    const { rankedProducts } = rankProducts(
       products,
       criteriaToUse,
       productsWithCriteriaToUse
@@ -312,7 +312,7 @@ describe("rankProducts(...)", () => {
       [{}, [100, 100, 100]],
     ]);
 
-    const rankedProducts = rankProducts(
+    const { rankedProducts } = rankProducts(
       products,
       criteriaToUse,
       productsWithCriteriaToUse
@@ -331,7 +331,7 @@ describe("rankProducts(...)", () => {
       [{}, [100, 100, undefined]],
     ]);
 
-    const rankedProducts = rankProducts(
+    const { rankedProducts } = rankProducts(
       products,
       criteriaToUse,
       productsWithCriteriaToUse

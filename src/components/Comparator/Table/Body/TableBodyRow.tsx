@@ -3,34 +3,20 @@ import { Td, Tr } from "@chakra-ui/react";
 import CriterionNameUnitCell from "./Cells/CriterionNameUnitCell";
 import CriterionProductValueCell from "./Cells/CriterionProductValueCell";
 import CriterionWeightCell from "./Cells/CriterionWeightCell";
+import { DataContext } from "../../../../context/DataContext";
 import { TCriterion } from "../../../../types/criteria";
-import { TProduct } from "../../../../types/products";
-import { TProductWithCriterion } from "../../../../types/productsWithCriteria";
 import { createEmptyProductCriterionValue } from "../../../../utils/productsWithCriteria/productsWithCriteria";
-import { useHandleCriteriaFunctions } from "../../../../hooks/data/useHandleCriteria";
-import { useHandleProductsWithCriteriaFunctions } from "../../../../hooks/data/useHandleProductsWithCriteria";
+import { useContext } from "react";
 
 type TableBodyRowProps = {
-  criterion: TCriterion;
-  products: TProduct[];
-  productsWithCriteria: TProductWithCriterion[];
   rowIdx: number;
+  criterion: TCriterion;
   maxWeight: number;
-  updateCriterion: useHandleCriteriaFunctions["updateCriterion"];
-  removeCriterion: useHandleCriteriaFunctions["removeCriterion"];
-  setProductCriterionValue: useHandleProductsWithCriteriaFunctions["setProductCriterionValue"];
 };
 
-const TableBodyRow = ({
-  criterion,
-  products,
-  productsWithCriteria,
-  rowIdx,
-  maxWeight,
-  updateCriterion,
-  removeCriterion,
-  setProductCriterionValue,
-}: TableBodyRowProps) => {
+const TableBodyRow = ({ rowIdx, criterion, maxWeight }: TableBodyRowProps) => {
+  const { products, productsWithCriteria } = useContext(DataContext);
+
   return (
     <Tr key={criterion.id}>
       {/*
@@ -40,17 +26,12 @@ const TableBodyRow = ({
         criterion={criterion}
         rowIdx={rowIdx}
         maxWeight={maxWeight}
-        updateCriterion={updateCriterion}
-        removeCriterion={removeCriterion}
       />
 
       {/*
        * CRITERION - WEIGHT
        */}
-      <CriterionWeightCell
-        criterion={criterion}
-        updateCriterion={updateCriterion}
-      />
+      <CriterionWeightCell criterion={criterion} />
 
       {/*
        * PRODUCTS - CRITERION VALUES
@@ -68,7 +49,6 @@ const TableBodyRow = ({
             criterion={criterion}
             product={product}
             criterionProductValue={criterionProductValue}
-            setProductCriterionValue={setProductCriterionValue}
           />
         );
       })}

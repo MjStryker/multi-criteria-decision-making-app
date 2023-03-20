@@ -3,24 +3,16 @@ import { Box, SimpleGrid, Td, Text, VStack } from "@chakra-ui/react";
 import EditProductButton from "./EditProductButton";
 import { TProduct } from "../../../../types/products";
 import { isValidNonEmptyString } from "../../../../utils/strings";
-import { useHandleProductsFunctions } from "../../../../hooks/data/useHandleProducts";
+
+const cellWidth = "150px";
 
 type TableHeaderCellProps = {
   columnIdx: number;
   product: TProduct;
-  updateProduct: useHandleProductsFunctions["updateProduct"];
-  removeProduct: useHandleProductsFunctions["removeProduct"];
 };
 
-const TableHeaderCell = ({
-  columnIdx,
-  product,
-  updateProduct,
-  removeProduct,
-}: TableHeaderCellProps) => {
+const TableHeaderCell = ({ columnIdx, product }: TableHeaderCellProps) => {
   const hasName = isValidNonEmptyString(product.name);
-
-  const cellWidth = "150px";
 
   const defaultName = `Produit ${columnIdx + 1}`;
 
@@ -54,11 +46,7 @@ const TableHeaderCell = ({
           </Text>
 
           <Box>
-            <EditProductButton
-              product={product}
-              updateProduct={updateProduct}
-              removeProduct={removeProduct}
-            />
+            <EditProductButton product={product} />
           </Box>
         </SimpleGrid>
 

@@ -1,30 +1,56 @@
-import { Icon, IconButton, Td, Text, Thead, Tr } from "@chakra-ui/react";
+import {
+  Icon,
+  IconButton,
+  Td,
+  Text,
+  Thead,
+  Tr,
+  useToast,
+} from "@chakra-ui/react";
+import {
+  PRODUCTS_ITEMS_REMAINING_WARNING,
+  PRODUCTS_MAX_ITEMS,
+} from "../../../../constants/products";
 
 import { AddIcon } from "@chakra-ui/icons";
 import { GiAnvil as AnvilIcon } from "react-icons/gi";
 import { CRITERION } from "../../../../constants/criteria";
-import { TProduct } from "../../../../types/products";
+import { DataContext } from "../../../../context/DataContext";
 import TableHeaderCell from "./TableHeaderCell";
 import { createEmptyProduct } from "../../../../utils/products/products";
-import { useHandleProductsFunctions } from "../../../../hooks/data/useHandleProducts";
+import { useContext } from "react";
 
-type TableHeaderProps = {
-  products: TProduct[];
-  addProduct: useHandleProductsFunctions["addProduct"];
-  updateProduct: useHandleProductsFunctions["updateProduct"];
-  removeProduct: useHandleProductsFunctions["removeProduct"];
-};
+const addButtonCellWidth = "50px";
 
-const TableHeader = ({
-  products,
-  addProduct,
-  updateProduct,
-  removeProduct,
-}: TableHeaderProps) => {
-  const addButtonCellWidth = "50px";
+const TableHeader = () => {
+  const { products, addProduct } = useContext(DataContext);
+
+  const toast = useToast();
+
+  const nbProducts = products.length;
+
+  const nbProductsRemaining = PRODUCTS_MAX_ITEMS - nbProducts;
 
   const handleAddProduct = () => {
-    addProduct(createEmptyProduct(products.length));
+    if (nbProductsRemaining === 0) {
+      toast({
+        status: "error",
+        title: "Cannot add another product",
+        description: `Maximum number of products reached (${PRODUCTS_MAX_ITEMS}/${PRODUCTS_MAX_ITEMS})`,
+      });
+      return;
+    }
+
+    if (nbProductsRemaining - 1 <= PRODUCTS_ITEMS_REMAINING_WARNING) {
+      const label = nbProductsRemaining - 1 === 1 ? "product" : "products";
+
+      toast({
+        status: "warning",
+        title: `${nbProductsRemaining - 1} ${label} remaining`,
+      });
+    }
+
+    addProduct(createEmptyProduct(nbProducts));
   };
 
   return (
@@ -50,13 +76,7 @@ const TableHeader = ({
          * PRODUCTS
          */}
         {products.map((product, idx) => (
-          <TableHeaderCell
-            key={product.id}
-            columnIdx={idx}
-            product={product}
-            updateProduct={updateProduct}
-            removeProduct={removeProduct}
-          />
+          <TableHeaderCell key={product.id} columnIdx={idx} product={product} />
         ))}
 
         {/*
@@ -69,12 +89,13 @@ const TableHeader = ({
           maxW={addButtonCellWidth}
         >
           <IconButton
-            colorScheme="blue"
+            colorScheme={nbProductsRemaining > 0 ? "blue" : "gray"}
             aria-label="Add product"
             size="sm"
             icon={<AddIcon />}
             onClick={handleAddProduct}
             boxShadow="base"
+            transition="background .2s"
           />
         </Td>
       </Tr>

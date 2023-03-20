@@ -6,8 +6,9 @@ import {
   Text,
   useBoolean,
 } from "@chakra-ui/react";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useContext, useEffect, useState } from "react";
 
+import { DataContext } from "../../../../context/DataContext";
 import { DeleteIcon } from "@chakra-ui/icons";
 import { TProduct } from "../../../../types/products";
 import TextInput from "../../global/form/TextInput";
@@ -19,8 +20,6 @@ type EditProductFormProps = {
   setParentIsDirty: useBooleanSetState;
   onParentClose: VoidFunction;
   product: TProduct;
-  updateProduct: (product: TProduct) => void;
-  removeProduct: (product: TProduct) => void;
 };
 
 const EditProductForm = ({
@@ -28,9 +27,9 @@ const EditProductForm = ({
   setParentIsDirty,
   product,
   onParentClose,
-  updateProduct,
-  removeProduct,
 }: EditProductFormProps) => {
+  const { updateProduct, removeProduct } = useContext(DataContext);
+
   const [name, setName] = useState<string | undefined>(product.name);
 
   const [reference, setReference] = useState<string | undefined>(
@@ -142,8 +141,7 @@ const EditProductForm = ({
                 aria-label="Delete product"
                 onClick={
                   !isValidNonEmptyString(name) &&
-                  !isValidNonEmptyString(reference) &&
-                  product.rankPts === 0
+                  !isValidNonEmptyString(reference)
                     ? // * If fields are empty + product does not have any value
                       onDelete
                     : // * Else go through confirm process

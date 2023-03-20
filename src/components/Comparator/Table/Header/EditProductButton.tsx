@@ -19,15 +19,9 @@ import { TProduct } from "../../../../types/products";
 
 type EditProductButtonProps = {
   product: TProduct;
-  updateProduct: (product: TProduct) => void;
-  removeProduct: (product: TProduct) => void;
 };
 
-const EditProductButton = ({
-  product,
-  updateProduct,
-  removeProduct,
-}: EditProductButtonProps) => {
+const EditProductButton = ({ product }: EditProductButtonProps) => {
   const { isAnyEditDialogOpened, toggleIsAnyEditDialogOpened } = useContext(
     IsAnyEditDialogOpenedContext
   );
@@ -84,8 +78,6 @@ const EditProductButton = ({
             setParentIsDirty={setIsFormDirty}
             onParentClose={handleClose}
             product={product}
-            updateProduct={updateProduct}
-            removeProduct={removeProduct}
           />
         </FocusLock>
       </PopoverContent>

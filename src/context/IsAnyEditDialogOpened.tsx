@@ -3,7 +3,7 @@ import { ReactNode, createContext, useCallback } from "react";
 import { useBoolean } from "@chakra-ui/react";
 
 /**
- * * Type
+ * * 1 - Type
  */
 type ContextType = {
   isAnyEditDialogOpened: boolean;
@@ -11,7 +11,7 @@ type ContextType = {
 };
 
 /**
- * * Default value
+ * * 2 - Default value
  */
 const defaultValue: ContextType = {
   isAnyEditDialogOpened: false,
@@ -19,13 +19,13 @@ const defaultValue: ContextType = {
 };
 
 /**
- * * Context
+ * * 3 - Context
  */
 export const IsAnyEditDialogOpenedContext =
   createContext<ContextType>(defaultValue);
 
 /**
- * * Provider
+ * * 4 - Provider
  */
 export const IsAnyEditDialogOpenedContextProvider = (props: {
   children: ReactNode;
