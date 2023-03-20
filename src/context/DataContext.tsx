@@ -40,7 +40,7 @@ const defaultValues = useVacuumExample
   : [];
 
 /**
- * * 1 - Type
+ * * 1 - Context Type
  */
 
 type ContextType = {
@@ -53,7 +53,7 @@ type ContextType = {
   useHandleProductsWithCriteriaFunctions;
 
 /**
- * * 2 - Default value
+ * * 2 - Context Default Value
  */
 
 const defaultValue: ContextType = {
@@ -82,7 +82,7 @@ const defaultValue: ContextType = {
 export const DataContext = createContext<ContextType>(defaultValue);
 
 /**
- * * 4 - Provider
+ * * 4 - Context Provider
  */
 
 export const DataContextProvider = (props: { children: ReactNode }) => {
