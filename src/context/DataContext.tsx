@@ -105,10 +105,6 @@ export const DataContextProvider = (props: { children: ReactNode }) => {
 
   const compareCriteriaFn = compareCriteriaByDefaultRowIdxFn();
 
-  useEffect(() => {
-    console.log({ nbValues: productsWithCriteriaRankPts.length });
-  }, [productsWithCriteriaRankPts]);
-
   /**
    * -- Ranking logic
    */
