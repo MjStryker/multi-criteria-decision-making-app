@@ -70,9 +70,11 @@ const defaultValue: ContextType = {
   removeProduct: () => {},
   // --
   productsWithCriteria: [],
-  addProductWithCriteria: () => {},
+  addProductWithCriterion: () => {},
   setProductCriterionValue: () => {},
   removeProductWithCriteria: () => {},
+  removeAllValuesAssociatedToCriterionId: () => {},
+  removeAllValuesAssociatedToProductId: () => {},
 };
 
 /**
@@ -102,6 +104,10 @@ export const DataContextProvider = (props: { children: ReactNode }) => {
   const compareProductsFn = compareProductsByDefaultColumnIdxFn();
 
   const compareCriteriaFn = compareCriteriaByDefaultRowIdxFn();
+
+  useEffect(() => {
+    console.log({ nbValues: productsWithCriteriaRankPts.length });
+  }, [productsWithCriteriaRankPts]);
 
   /**
    * -- Ranking logic
@@ -155,9 +161,11 @@ export const DataContextProvider = (props: { children: ReactNode }) => {
    */
 
   const {
-    addProductWithCriteria,
+    addProductWithCriterion,
     setProductCriterionValue,
     removeProductWithCriteria,
+    removeAllValuesAssociatedToCriterionId,
+    removeAllValuesAssociatedToProductId,
   } = useHandleProductsWithCriteria(
     productsWithCriteria,
     onSetProductsWithCriteria
@@ -166,13 +174,15 @@ export const DataContextProvider = (props: { children: ReactNode }) => {
   const { addCriterion, updateCriterion, removeCriterion } = useHandleCriteria(
     onSetCriteria,
     products,
-    addProductWithCriteria
+    addProductWithCriterion,
+    removeAllValuesAssociatedToCriterionId
   );
 
   const { addProduct, updateProduct, removeProduct } = useHandleProducts(
     onSetProducts,
     criteria,
-    addProductWithCriteria
+    addProductWithCriterion,
+    removeAllValuesAssociatedToProductId
   );
 
   /**
@@ -198,9 +208,11 @@ export const DataContextProvider = (props: { children: ReactNode }) => {
         removeProduct,
         // --
         productsWithCriteria: productsWithCriteriaRankPts,
-        addProductWithCriteria,
+        addProductWithCriterion,
         setProductCriterionValue,
         removeProductWithCriteria,
+        removeAllValuesAssociatedToCriterionId,
+        removeAllValuesAssociatedToProductId,
       }}
       {...props}
     />

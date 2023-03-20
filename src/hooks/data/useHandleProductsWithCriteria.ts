@@ -14,9 +14,9 @@ const useHandleProductsWithCriteria = (
     React.SetStateAction<TProductWithCriterion[]>
   >
 ) => {
-  const addProductWithCriteria = useCallback(
-    (productWithCriteria: TProductWithCriterion) => {
-      setProductsWithCriteria((prev) => [...prev, productWithCriteria]);
+  const addProductWithCriterion = useCallback(
+    (productWithCriterion: TProductWithCriterion) => {
+      setProductsWithCriteria((prev) => [...prev, productWithCriterion]);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
@@ -40,7 +40,7 @@ const useHandleProductsWithCriteria = (
 
   const removeProductWithCriteria = useCallback(
     (product: TProduct, criterion: TCriterion) => {
-      return setProductsWithCriteria((prev) =>
+      setProductsWithCriteria((prev) =>
         prev.filter(
           ({ productId, criterionId }) =>
             product.id !== productId && criterion.id !== criterionId
@@ -51,10 +51,32 @@ const useHandleProductsWithCriteria = (
     []
   );
 
+  const removeAllValuesAssociatedToProductId = useCallback(
+    (id: TProduct["id"]) => {
+      setProductsWithCriteria((prev) =>
+        prev.filter(({ productId }) => id !== productId)
+      );
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
+
+  const removeAllValuesAssociatedToCriterionId = useCallback(
+    (id: TCriterion["id"]) => {
+      setProductsWithCriteria((prev) =>
+        prev.filter(({ criterionId }) => id !== criterionId)
+      );
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
+
   return {
-    addProductWithCriteria,
+    addProductWithCriterion,
     setProductCriterionValue,
     removeProductWithCriteria,
+    removeAllValuesAssociatedToCriterionId,
+    removeAllValuesAssociatedToProductId,
   };
 };
 

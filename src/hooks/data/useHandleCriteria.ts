@@ -2,21 +2,22 @@ import {
   calculateCriteriaNormalizedWeights,
   updateCriteriaDefaultRowIdx,
 } from "../../utils/criteria/criteria";
+import useHandleProductsWithCriteria, {
+  useHandleProductsWithCriteriaFunctions,
+} from "./useHandleProductsWithCriteria";
 
 import { TCriterion } from "../../types/criteria";
 import { TProduct } from "../../types/products";
 import { createEmptyProductCriterionValue } from "../../utils/productsWithCriteria/productsWithCriteria";
 import { useCallback } from "react";
-import useHandleProductsWithCriteria from "./useHandleProductsWithCriteria";
 
 export type useHandleCriteriaFunctions = ReturnType<typeof useHandleCriteria>;
 
 const useHandleCriteria = (
   setCriteria: React.Dispatch<React.SetStateAction<TCriterion[]>>,
   products: TProduct[],
-  addProductWithCriterion: ReturnType<
-    typeof useHandleProductsWithCriteria
-  >["addProductWithCriteria"]
+  addProductWithCriterion: useHandleProductsWithCriteriaFunctions["addProductWithCriterion"],
+  removeAllValuesAssociatedToCriterionId: useHandleProductsWithCriteriaFunctions["removeAllValuesAssociatedToCriterionId"]
 ) => {
   const updateCriteriaNormalizedWeights = useCallback(
     () => {
@@ -63,6 +64,8 @@ const useHandleCriteria = (
       );
 
       updateCriteriaNormalizedWeights();
+
+      removeAllValuesAssociatedToCriterionId(id);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
