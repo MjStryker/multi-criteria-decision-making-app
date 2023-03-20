@@ -2,14 +2,12 @@ import {
   calculateCriteriaNormalizedWeights,
   updateCriteriaDefaultRowIdx,
 } from "../../utils/criteria/criteria";
-import useHandleProductsWithCriteria, {
-  useHandleProductsWithCriteriaFunctions,
-} from "./useHandleProductsWithCriteria";
+import { useHandleProductsWithCriteriaFunctions } from "./useHandleProductsWithCriteria";
 
+import { useCallback } from "react";
 import { TCriterion } from "../../types/criteria";
 import { TProduct } from "../../types/products";
 import { createEmptyProductCriterionValue } from "../../utils/productsWithCriteria/productsWithCriteria";
-import { useCallback } from "react";
 
 export type useHandleCriteriaFunctions = ReturnType<typeof useHandleCriteria>;
 

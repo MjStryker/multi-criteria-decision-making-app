@@ -1,12 +1,9 @@
-import useHandleProductsWithCriteria, {
-  useHandleProductsWithCriteriaFunctions,
-} from "./useHandleProductsWithCriteria";
-
 import { TCriterion } from "../../types/criteria";
 import { TProduct } from "../../types/products";
 import { createEmptyProductCriterionValue } from "../../utils/productsWithCriteria/productsWithCriteria";
 import { updateProductsDefaultColumnIdx } from "../../utils/products/products";
 import { useCallback } from "react";
+import { useHandleProductsWithCriteriaFunctions } from "./useHandleProductsWithCriteria";
 
 export type useHandleProductsFunctions = ReturnType<typeof useHandleProducts>;
 
