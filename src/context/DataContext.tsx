@@ -24,6 +24,7 @@ import { TProductWithCriterion } from "../types/productsWithCriteria";
 import { compareCriteriaByDefaultRowIdxFn } from "../utils/criteria/criteria";
 import { compareProductsByDefaultColumnIdxFn } from "../utils/products/products";
 import cordlessVacuumCleaner from "../data/cordlessVacuumCleaner";
+import { deepEqual } from "../utils/objects";
 import { rankProducts } from "../utils/products/rankProducts";
 import useLocalStorage from "../hooks/global/useLocalStorage";
 
@@ -110,11 +111,13 @@ export const DataContextProvider = (props: { children: ReactNode }) => {
   useEffect(() => {
     console.log("Ranking products");
 
+    setRankedProducts(products);
+
     startTransition(() => {
       const { rankedProducts, productsWithCriteriaRankPts } = rankProducts(
-        products,
-        criteria,
-        productsWithCriteria
+        [...products],
+        [...criteria],
+        [...productsWithCriteria]
       );
 
       setRankedProducts(rankedProducts);
