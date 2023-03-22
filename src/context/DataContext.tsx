@@ -63,6 +63,7 @@ const defaultValue: ContextType = {
   addCriterion: () => {},
   updateCriterion: () => {},
   removeCriterion: () => {},
+  sortCriteriaByWeight: () => {},
   // --
   products: [],
   addProduct: () => {},
@@ -167,7 +168,12 @@ export const DataContextProvider = (props: { children: ReactNode }) => {
     onSetProductsWithCriteria
   );
 
-  const { addCriterion, updateCriterion, removeCriterion } = useHandleCriteria(
+  const {
+    addCriterion,
+    updateCriterion,
+    removeCriterion,
+    sortCriteriaByWeight,
+  } = useHandleCriteria(
     onSetCriteria,
     products,
     addProductWithCriterion,
@@ -197,6 +203,7 @@ export const DataContextProvider = (props: { children: ReactNode }) => {
         addCriterion,
         updateCriterion,
         removeCriterion,
+        sortCriteriaByWeight,
         // --
         products: sortedProducts,
         addProduct,

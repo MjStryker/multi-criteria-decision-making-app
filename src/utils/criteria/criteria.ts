@@ -12,6 +12,11 @@ export const compareCriteriaByDefaultRowIdxFn =
   (a: TCriterion, b: TCriterion) =>
     compareFn(sortBy)(a.defaultRowIdx, b.defaultRowIdx);
 
+export const compareCriteriaByWeightFn =
+  (sortBy = SORT_BY.DESC) =>
+  (a: TCriterion, b: TCriterion) =>
+    compareFn(sortBy)(a.weight, b.weight);
+
 export function createEmptyCriterion(defaultRowIdx: number): TCriterion {
   return {
     id: uuid(),
