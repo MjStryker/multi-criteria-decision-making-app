@@ -66,8 +66,8 @@ const TableHeader = () => {
         {/*
          * SORT BUTTON
          */}
-        <Td>
-          <ButtonGroup variant="outline" size="sm" isAttached>
+        <Td px={2}>
+          <ButtonGroup variant="outline" size="sm" color="gray.500" isAttached>
             <IconButton
               aria-label="Sort criteria by weight"
               icon={<SortDownIcon />}
