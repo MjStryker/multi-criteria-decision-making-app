@@ -1,9 +1,9 @@
 import { areDefined, isDefined } from "./objects";
 
-import { TSortBy } from "../types/arrays";
+import { SORT_BY } from "../constants/arrays";
 
 export const compareFn =
-  (sortBy: TSortBy) =>
+  (sortBy: SORT_BY) =>
   <T>(a: T, b: T): number => {
     if (typeof a === "string" && typeof b === "string") {
       return compareStringFn(sortBy)(a, b);
@@ -15,7 +15,7 @@ export const compareFn =
   };
 
 const compareStringFn =
-  (sortBy: TSortBy) =>
+  (sortBy: SORT_BY) =>
   (a: string, b: string): number => {
     let res = 0;
     if (areDefined([a, b])) {
@@ -31,7 +31,7 @@ const compareStringFn =
   };
 
 const compareNumberFn =
-  (sortBy: TSortBy) =>
+  (sortBy: SORT_BY) =>
   (a: number, b: number): number => {
     let res = 0;
     if (areDefined([a, b])) {
