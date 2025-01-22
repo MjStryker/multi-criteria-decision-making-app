@@ -1,5 +1,5 @@
-import { TCriterion } from "../../types/criteria";
-import { TProduct } from "../../types/products";
+import { Criterion } from "../../types/Criterion";
+import { Product } from "../../types/Product";
 import { createEmptyProductCriterionValue } from "../../utils/productsWithCriteria/productsWithCriteria";
 import { updateProductsDefaultColumnIdx } from "../../utils/products/products";
 import { useCallback } from "react";
@@ -8,13 +8,13 @@ import { useHandleProductsWithCriteriaFunctions } from "./useHandleProductsWithC
 export type useHandleProductsFunctions = ReturnType<typeof useHandleProducts>;
 
 const useHandleProducts = (
-  setProducts: React.Dispatch<React.SetStateAction<TProduct[]>>,
-  criteria: TCriterion[],
+  setProducts: React.Dispatch<React.SetStateAction<Product[]>>,
+  criteria: Criterion[],
   addProductWithCriteria: useHandleProductsWithCriteriaFunctions["addProductWithCriterion"],
   removeAllValuesAssociatedToProductId: useHandleProductsWithCriteriaFunctions["removeAllValuesAssociatedToProductId"]
 ) => {
   const addProduct = useCallback(
-    (product: TProduct) => {
+    (product: Product) => {
       setProducts((prev) => [...prev, product]);
       criteria.forEach((criterion) => {
         addProductWithCriteria(
@@ -27,7 +27,7 @@ const useHandleProducts = (
   );
 
   const updateProduct = useCallback(
-    (product: TProduct) => {
+    (product: Product) => {
       setProducts((prev) => {
         const newProductIdx = prev.findIndex((p) => product.id === p.id);
         prev[newProductIdx] = product;
@@ -40,7 +40,7 @@ const useHandleProducts = (
   );
 
   const removeProduct = useCallback(
-    ({ id }: TProduct) => {
+    ({ id }: Product) => {
       setProducts((prev) =>
         updateProductsDefaultColumnIdx(prev.filter((p) => p.id !== id))
       );

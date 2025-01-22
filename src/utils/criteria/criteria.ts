@@ -1,23 +1,22 @@
-import { clamp, isValidNumber } from "../numbers";
-
-import { CRITERION } from "../../constants/criteria";
-import { SORT_BY } from "../../constants/arrays";
-import { TCriterion } from "../../types/criteria";
-import { areDefined } from "../objects";
-import { compareFn } from "../arrays";
-import { uuid } from "../uuid";
+import { SORT_BY } from "@/@Config/Constants/Array";
+import { CRITERION } from "@/@Config/Constants/Criteria";
+import { compareFn } from "@/@Shared/@Utils/Array";
+import { clamp, isValidNumber } from "@/@Shared/@Utils/Number";
+import { areDefined } from "@/@Shared/@Utils/Object";
+import { uuid } from "@/@Shared/@Utils/Uuid";
+import { Criterion } from "@/types/Criterion";
 
 export const compareCriteriaByDefaultRowIdxFn =
   (sortBy = SORT_BY.ASC) =>
-  (a: TCriterion, b: TCriterion) =>
+  (a: Criterion, b: Criterion) =>
     compareFn(sortBy)(a.defaultRowIdx, b.defaultRowIdx);
 
 export const compareCriteriaByWeightFn =
   (sortBy = SORT_BY.DESC) =>
-  (a: TCriterion, b: TCriterion) =>
+  (a: Criterion, b: Criterion) =>
     compareFn(sortBy)(a.weight, b.weight);
 
-export function createEmptyCriterion(defaultRowIdx: number): TCriterion {
+export function createEmptyCriterion(defaultRowIdx: number): Criterion {
   return {
     id: uuid(),
     name: undefined,
@@ -33,14 +32,14 @@ export function clampCriterionWeightValue(value: number): number {
   return clamp(value, CRITERION.WEIGHT.MIN, CRITERION.WEIGHT.MAX);
 }
 
-export function sumCriteriaWeight(criteria: TCriterion[]): number {
+export function sumCriteriaWeight(criteria: Criterion[]): number {
   return criteria.reduce(
     (total, criterion) => total + (criterion.weight ?? 0),
     0
   );
 }
 
-export function sumCriteriaNormalizedWeight(criteria: TCriterion[]): number {
+export function sumCriteriaNormalizedWeight(criteria: Criterion[]): number {
   return criteria.reduce(
     (total, criterion) => total + (criterion.normalizedWeight ?? 0),
     0
@@ -48,8 +47,8 @@ export function sumCriteriaNormalizedWeight(criteria: TCriterion[]): number {
 }
 
 export function calculateCriteriaNormalizedWeights(
-  criteria: TCriterion[]
-): TCriterion[] {
+  criteria: Criterion[]
+): Criterion[] {
   const weightTotal = sumCriteriaWeight(criteria);
 
   return criteria.map((criterion) => ({
@@ -60,7 +59,7 @@ export function calculateCriteriaNormalizedWeights(
   }));
 }
 
-export function getCriteriaMaxWeight(criteria: TCriterion[]) {
+export function getCriteriaMaxWeight(criteria: Criterion[]) {
   return Math.max(...criteria.map(({ weight }) => weight || 0));
 }
 
@@ -73,6 +72,6 @@ export function getCriterionWeightRelativeToMax(
     : 0;
 }
 
-export function updateCriteriaDefaultRowIdx(criteria: TCriterion[]) {
+export function updateCriteriaDefaultRowIdx(criteria: Criterion[]) {
   return criteria.map((c, idx) => ({ ...c, defaultRowIdx: idx }));
 }

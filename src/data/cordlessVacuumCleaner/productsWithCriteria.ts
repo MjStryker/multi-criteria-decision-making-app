@@ -1,6 +1,6 @@
-import { TProductWithCriterion } from "../../types/productsWithCriteria";
+import { ProductCriterionValue } from "../../types/ProductCriterionValue";
 
-const productsWithCriteria: TProductWithCriterion[] = [
+const productsWithCriteria: ProductCriterionValue[] = [
   /**
    * Prix
    */

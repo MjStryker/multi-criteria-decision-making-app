@@ -1,17 +1,17 @@
-import { SORT_BY } from "../../constants/arrays";
-import { TCriterion } from "../../types/criteria";
-import { TProduct } from "../../types/products";
-import { TProductWithCriterion } from "../../types/productsWithCriteria";
-import { compareFn } from "../arrays";
-import { isDefined } from "../objects";
+import { SORT_BY } from "../../@Config/Constants/Array";
+import { Criterion } from "../../types/Criterion";
+import { Product } from "../../types/Product";
+import { ProductCriterionValue } from "../../types/ProductCriterionValue";
+import { compareFn } from "../Array";
+import { isDefined } from "../Object";
 
 /**
  * Rank products for each criteria
  */
 export function calculateProductsCriteriaRankPts(
-  criteria: TCriterion[],
-  productsWithCriteria: TProductWithCriterion[]
-): TProductWithCriterion[] {
+  criteria: Criterion[],
+  productsWithCriteria: ProductCriterionValue[]
+): ProductCriterionValue[] {
   const res = [...productsWithCriteria];
 
   [...criteria].forEach((criterion) => {
@@ -53,9 +53,9 @@ export function calculateProductsCriteriaRankPts(
 }
 
 export function rankProducts(
-  products: TProduct[],
-  criteria: TCriterion[],
-  productsWithCriteria: TProductWithCriterion[]
+  products: Product[],
+  criteria: Criterion[],
+  productsWithCriteria: ProductCriterionValue[]
 ) {
   let lastRankPts: number | undefined = undefined;
   let lastPos = 0;

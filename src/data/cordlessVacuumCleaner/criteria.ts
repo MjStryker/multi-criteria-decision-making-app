@@ -1,6 +1,6 @@
-import { TCriterion } from "../../types/criteria";
+import { Criterion } from "../../types/Criterion";
 
-const criteria: TCriterion[] = [
+const criteria: Criterion[] = [
   {
     id: "prix123",
     name: "prix",

@@ -7,10 +7,10 @@ import {
   sumCriteriaWeight,
 } from "./criteria";
 
-import { SORT_BY } from "../../constants/arrays";
-import { TCriterion } from "../../types/criteria";
+import { SORT_BY } from "../../@Config/Constants/Array";
+import { Criterion } from "../../types/Criterion";
 
-const c1: TCriterion = {
+const c1: Criterion = {
   id: "id-c1",
   name: "c1",
   unit: undefined,
@@ -20,7 +20,7 @@ const c1: TCriterion = {
   defaultRowIdx: 2,
 };
 
-const c2: TCriterion = {
+const c2: Criterion = {
   id: "id-c2",
   name: "c2",
   unit: undefined,
@@ -30,7 +30,7 @@ const c2: TCriterion = {
   defaultRowIdx: 1,
 };
 
-const c3: TCriterion = {
+const c3: Criterion = {
   id: "id-c3",
   name: "c3",
   unit: undefined,
@@ -40,14 +40,14 @@ const c3: TCriterion = {
   defaultRowIdx: 3,
 };
 
-const criteria: TCriterion[] = [c1, c2, c3];
+const criteria: Criterion[] = [c1, c2, c3];
 
 const ASC = SORT_BY.ASC;
 const DESC = SORT_BY.DESC;
 
 const criteriaSortedByDefaultRowIdx = {
-  ASC: [c2, c1, c3] as TCriterion[],
-  DESC: [c3, c1, c2] as TCriterion[],
+  ASC: [c2, c1, c3] as Criterion[],
+  DESC: [c3, c1, c2] as Criterion[],
 };
 
 describe("compareCriteriaByDefaultRowIdxFn(...)", () => {

@@ -1,12 +1,12 @@
-import { TCriterion } from "../../types/criteria";
-import { TProduct } from "../../types/products";
-import { TProductWithCriterion } from "../../types/productsWithCriteria";
-import { uuid } from "../uuid";
+import { Criterion } from "../../types/Criterion";
+import { Product } from "../../types/Product";
+import { ProductCriterionValue } from "../../types/ProductCriterionValue";
+import { uuid } from "../Uuid";
 
 export function createEmptyProductCriterionValue(
-  { id: productId }: TProduct,
-  { id: criterionId }: TCriterion
-): TProductWithCriterion {
+  { id: productId }: Product,
+  { id: criterionId }: Criterion
+): ProductCriterionValue {
   return {
     id: uuid(),
     productId,
@@ -17,10 +17,10 @@ export function createEmptyProductCriterionValue(
 }
 
 export function findProductWithCriterion(
-  product: TProduct,
-  criterion: TCriterion,
-  productsWithCriteria: TProductWithCriterion[]
-): TProductWithCriterion | undefined {
+  product: Product,
+  criterion: Criterion,
+  productsWithCriteria: ProductCriterionValue[]
+): ProductCriterionValue | undefined {
   return productsWithCriteria.find(
     ({ productId, criterionId }) =>
       product.id === productId && criterion.id === criterionId

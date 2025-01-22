@@ -4,19 +4,19 @@ import {
   updateCriteriaDefaultRowIdx,
 } from "../../utils/criteria/criteria";
 
-import { SORT_BY } from "../../constants/arrays";
-import { TCriterion } from "../../types/criteria";
-import { TProduct } from "../../types/products";
+import { SORT_BY } from "../../@Config/Constants/Array";
+import { Criterion } from "../../types/Criterion";
+import { Product } from "../../types/Product";
 import { createEmptyProductCriterionValue } from "../../utils/productsWithCriteria/productsWithCriteria";
-import { deepEqual } from "../../utils/objects";
+import { deepEqual } from "../../utils/Object";
 import { useCallback } from "react";
 import { useHandleProductsWithCriteriaFunctions } from "./useHandleProductsWithCriteria";
 
 export type useHandleCriteriaFunctions = ReturnType<typeof useHandleCriteria>;
 
 const useHandleCriteria = (
-  setCriteria: React.Dispatch<React.SetStateAction<TCriterion[]>>,
-  products: TProduct[],
+  setCriteria: React.Dispatch<React.SetStateAction<Criterion[]>>,
+  products: Product[],
   addProductWithCriterion: useHandleProductsWithCriteriaFunctions["addProductWithCriterion"],
   removeAllValuesAssociatedToCriterionId: useHandleProductsWithCriteriaFunctions["removeAllValuesAssociatedToCriterionId"]
 ) => {
@@ -29,7 +29,7 @@ const useHandleCriteria = (
   );
 
   const addCriterion = useCallback(
-    (criterion: TCriterion) => {
+    (criterion: Criterion) => {
       setCriteria((prev) => [...prev, criterion]);
       products.forEach((product) => {
         addProductWithCriterion(
@@ -44,7 +44,7 @@ const useHandleCriteria = (
   );
 
   const updateCriterion = useCallback(
-    (criterion: TCriterion) => {
+    (criterion: Criterion) => {
       setCriteria((prev) => {
         const newCriteriaIdx = prev.findIndex((p) => criterion.id === p.id);
         prev[newCriteriaIdx] = criterion;
@@ -59,7 +59,7 @@ const useHandleCriteria = (
   );
 
   const removeCriterion = useCallback(
-    ({ id }: TCriterion) => {
+    ({ id }: Criterion) => {
       setCriteria((prev) =>
         updateCriteriaDefaultRowIdx(prev.filter((c) => c.id !== id))
       );

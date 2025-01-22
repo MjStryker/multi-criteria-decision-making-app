@@ -18,9 +18,9 @@ import useHandleProductsWithCriteria, {
   useHandleProductsWithCriteriaFunctions,
 } from "../hooks/data/useHandleProductsWithCriteria";
 
-import { TCriterion } from "../types/criteria";
-import { TProduct } from "../types/products";
-import { TProductWithCriterion } from "../types/productsWithCriteria";
+import { Criterion } from "../types/Criterion";
+import { Product } from "../types/Product";
+import { ProductCriterionValue } from "../types/ProductCriterionValue";
 import { compareCriteriaByDefaultRowIdxFn } from "../utils/criteria/criteria";
 import { compareProductsByDefaultColumnIdxFn } from "../utils/products/products";
 import cordlessVacuumCleaner from "../data/cordlessVacuumCleaner";
@@ -45,9 +45,9 @@ const defaultValues = useVacuumExample
 
 type ContextType = {
   isPending: boolean;
-  criteria: TCriterion[];
-  products: TProduct[];
-  productsWithCriteria: TProductWithCriterion[];
+  criteria: Criterion[];
+  products: Product[];
+  productsWithCriteria: ProductCriterionValue[];
 } & useHandleCriteriaFunctions &
   useHandleProductsFunctions &
   useHandleProductsWithCriteriaFunctions;
@@ -133,20 +133,20 @@ export const DataContextProvider = (props: { children: ReactNode }) => {
    * -- Memoized setState functions
    */
 
-  const onSetCriteria: Dispatch<SetStateAction<TCriterion[]>> = useCallback(
+  const onSetCriteria: Dispatch<SetStateAction<Criterion[]>> = useCallback(
     (newState) => setCriteria(newState),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
-  const onSetProducts: Dispatch<SetStateAction<TProduct[]>> = useCallback(
+  const onSetProducts: Dispatch<SetStateAction<Product[]>> = useCallback(
     (newState) => setProducts(newState),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
   const onSetProductsWithCriteria: Dispatch<
-    SetStateAction<TProductWithCriterion[]>
+    SetStateAction<ProductCriterionValue[]>
   > = useCallback(
     (newState) => setProductsWithCriteria(newState),
     // eslint-disable-next-line react-hooks/exhaustive-deps

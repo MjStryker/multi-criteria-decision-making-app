@@ -1,9 +1,9 @@
-import { TCriterion } from "../../types/criteria";
-import { TProduct } from "../../types/products";
-import { TProductWithCriterion } from "../../types/productsWithCriteria";
+import { Criterion } from "../../types/Criterion";
+import { Product } from "../../types/Product";
+import { ProductCriterionValue } from "../../types/ProductCriterionValue";
 import { findProductWithCriterion } from "./productsWithCriteria";
 
-export const productsWithCriteria: TProductWithCriterion[] = [
+export const productsWithCriteria: ProductCriterionValue[] = [
   /**
    * Criterion - 1
    */
@@ -80,7 +80,7 @@ export const productsWithCriteria: TProductWithCriterion[] = [
   },
 ];
 
-export const c2: TCriterion = {
+export const c2: Criterion = {
   id: "id-c2",
   name: "c2",
   unit: undefined,
@@ -90,7 +90,7 @@ export const c2: TCriterion = {
   defaultRowIdx: 1,
 };
 
-export const p3: TProduct = {
+export const p3: Product = {
   id: "id-p3",
   name: "p3",
   reference: undefined,
@@ -101,7 +101,7 @@ export const p3: TProduct = {
 
 describe("findProductCriterionValue(...)", () => {
   it("Return matched item", () => {
-    const matchingResult: TProductWithCriterion = {
+    const matchingResult: ProductCriterionValue = {
       id: "id-c2-p3",
       criterionId: "id-c2",
       productId: "id-p3",
@@ -115,7 +115,7 @@ describe("findProductCriterionValue(...)", () => {
   });
 
   it("Product does not exist", () => {
-    const pUnmatched: TProduct = {
+    const pUnmatched: Product = {
       id: "id-pUnmatched",
       name: "pUnmatched",
       reference: undefined,
@@ -130,7 +130,7 @@ describe("findProductCriterionValue(...)", () => {
   });
 
   it("Criterion does not exist", () => {
-    const cUnmatched: TCriterion = {
+    const cUnmatched: Criterion = {
       id: "id-Unmatched",
       name: "Unmatched",
       unit: undefined,

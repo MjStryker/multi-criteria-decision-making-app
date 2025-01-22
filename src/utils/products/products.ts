@@ -1,19 +1,19 @@
-import { SORT_BY } from "../../constants/arrays";
-import { TProduct } from "../../types/products";
-import { compareFn } from "../arrays";
-import { uuid } from "../uuid";
+import { SORT_BY } from "../../@Config/Constants/Array";
+import { Product } from "../../types/Product";
+import { compareFn } from "../Array";
+import { uuid } from "../Uuid";
 
 export const compareProductsByDefaultColumnIdxFn =
   (sortBy = SORT_BY.ASC) =>
-  (a: TProduct, b: TProduct): number =>
+  (a: Product, b: Product): number =>
     compareFn(sortBy)(a.defaultColumnIdx, b.defaultColumnIdx);
 
 export const compareProductsByRankFn =
   (sortBy = SORT_BY.ASC) =>
-  (a: TProduct, b: TProduct): number =>
+  (a: Product, b: Product): number =>
     compareFn(sortBy)(a.rank, b.rank);
 
-export function createEmptyProduct(defaultColumnIdx: number): TProduct {
+export function createEmptyProduct(defaultColumnIdx: number): Product {
   return {
     id: uuid(),
     name: undefined,
@@ -24,6 +24,6 @@ export function createEmptyProduct(defaultColumnIdx: number): TProduct {
   };
 }
 
-export function updateProductsDefaultColumnIdx(products: TProduct[]) {
+export function updateProductsDefaultColumnIdx(products: Product[]) {
   return products.map((p, idx) => ({ ...p, defaultColumnIdx: idx }));
 }

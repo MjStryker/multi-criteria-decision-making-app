@@ -1,6 +1,6 @@
-import { TProduct } from "../../types/products";
+import { Product } from "../../types/Product";
 
-const products: TProduct[] = [
+const products: Product[] = [
   {
     id: "dyson123",
     name: "Dyson v15 Detect",

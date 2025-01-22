@@ -1,10 +1,10 @@
-import { TCriterion } from "../../types/criteria";
-import { TProduct } from "../../types/products";
-import { TProductWithCriterion } from "../../types/productsWithCriteria";
+import { Criterion } from "../../types/Criterion";
+import { Product } from "../../types/Product";
+import { ProductCriterionValue } from "../../types/ProductCriterionValue";
 import { rankProducts } from "./rankProducts";
 import { sumCriteriaNormalizedWeight } from "../criteria/criteria";
 
-const c1: TCriterion = {
+const c1: Criterion = {
   id: "id-c1",
   name: "c1",
   unit: undefined,
@@ -14,7 +14,7 @@ const c1: TCriterion = {
   defaultRowIdx: 2,
 };
 
-const c2: TCriterion = {
+const c2: Criterion = {
   id: "id-c2",
   name: "c2",
   unit: undefined,
@@ -24,7 +24,7 @@ const c2: TCriterion = {
   defaultRowIdx: 1,
 };
 
-const c3: TCriterion = {
+const c3: Criterion = {
   id: "id-c3",
   name: "c3",
   unit: undefined,
@@ -34,7 +34,7 @@ const c3: TCriterion = {
   defaultRowIdx: 3,
 };
 
-const c4: TCriterion = {
+const c4: Criterion = {
   id: "id-c4",
   name: "c4",
   unit: undefined,
@@ -44,9 +44,9 @@ const c4: TCriterion = {
   defaultRowIdx: 3,
 };
 
-const criteria: TCriterion[] = [c1, c2, c3, c4];
+const criteria: Criterion[] = [c1, c2, c3, c4];
 
-const p1: TProduct = {
+const p1: Product = {
   id: "id-p1",
   name: "p1",
   reference: undefined,
@@ -55,7 +55,7 @@ const p1: TProduct = {
   defaultColumnIdx: 2,
 };
 
-const p2: TProduct = {
+const p2: Product = {
   id: "id-p2",
   name: "p2",
   reference: undefined,
@@ -64,7 +64,7 @@ const p2: TProduct = {
   defaultColumnIdx: 1,
 };
 
-const p3: TProduct = {
+const p3: Product = {
   id: "id-p3",
   name: "p3",
   reference: undefined,
@@ -73,9 +73,9 @@ const p3: TProduct = {
   defaultColumnIdx: 3,
 };
 
-const products: TProduct[] = [p1, p2, p3];
+const products: Product[] = [p1, p2, p3];
 
-const productsWithCriteria: TProductWithCriterion[] = [
+const productsWithCriteria: ProductCriterionValue[] = [
   /**
    * Criterion - 1
    */
@@ -180,10 +180,10 @@ const productsWithCriteria: TProductWithCriterion[] = [
 type TProductValue = number | undefined;
 
 function getTestValues(
-  values: [criterionData: Partial<TCriterion>, productValues: TProductValue[]][]
+  values: [criterionData: Partial<Criterion>, productValues: TProductValue[]][]
 ): {
-  criteriaToUse: TCriterion[];
-  productsWithCriteriaToUse: TProductWithCriterion[];
+  criteriaToUse: Criterion[];
+  productsWithCriteriaToUse: ProductCriterionValue[];
 } {
   expect(values.length).toBe(criteria.length);
 

@@ -1,6 +1,6 @@
-import { TCriterion } from "../../types/criteria";
-import { TProduct } from "../../types/products";
-import { TProductWithCriterion } from "../../types/productsWithCriteria";
+import { Criterion } from "../../types/Criterion";
+import { Product } from "../../types/Product";
+import { ProductCriterionValue } from "../../types/ProductCriterionValue";
 import { createEmptyProductCriterionValue } from "../../utils/productsWithCriteria/productsWithCriteria";
 import { useCallback } from "react";
 
@@ -9,13 +9,13 @@ export type useHandleProductsWithCriteriaFunctions = ReturnType<
 >;
 
 const useHandleProductsWithCriteria = (
-  productsWithCriteria: TProductWithCriterion[],
+  productsWithCriteria: ProductCriterionValue[],
   setProductsWithCriteria: React.Dispatch<
-    React.SetStateAction<TProductWithCriterion[]>
+    React.SetStateAction<ProductCriterionValue[]>
   >
 ) => {
   const addProductWithCriterion = useCallback(
-    (productWithCriterion: TProductWithCriterion) => {
+    (productWithCriterion: ProductCriterionValue) => {
       setProductsWithCriteria((prev) => [...prev, productWithCriterion]);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -23,7 +23,7 @@ const useHandleProductsWithCriteria = (
   );
 
   const setProductCriterionValue = useCallback(
-    (product: TProduct, criterion: TCriterion, value: number | null) => {
+    (product: Product, criterion: Criterion, value: number | null) => {
       const res = [...productsWithCriteria];
       const productWithCriteria =
         res.find(
@@ -39,7 +39,7 @@ const useHandleProductsWithCriteria = (
   );
 
   const removeProductWithCriteria = useCallback(
-    (product: TProduct, criterion: TCriterion) => {
+    (product: Product, criterion: Criterion) => {
       setProductsWithCriteria((prev) =>
         prev.filter(
           ({ productId, criterionId }) =>
@@ -52,7 +52,7 @@ const useHandleProductsWithCriteria = (
   );
 
   const removeAllValuesAssociatedToProductId = useCallback(
-    (id: TProduct["id"]) => {
+    (id: Product["id"]) => {
       setProductsWithCriteria((prev) =>
         prev.filter(({ productId }) => id !== productId)
       );
@@ -62,7 +62,7 @@ const useHandleProductsWithCriteria = (
   );
 
   const removeAllValuesAssociatedToCriterionId = useCallback(
-    (id: TCriterion["id"]) => {
+    (id: Criterion["id"]) => {
       setProductsWithCriteria((prev) =>
         prev.filter(({ criterionId }) => id !== criterionId)
       );

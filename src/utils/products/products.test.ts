@@ -3,10 +3,10 @@ import {
   compareProductsByRankFn,
 } from "./products";
 
-import { SORT_BY } from "../../constants/arrays";
-import { TProduct } from "../../types/products";
+import { SORT_BY } from "../../@Config/Constants/Array";
+import { Product } from "../../types/Product";
 
-const p1: TProduct = {
+const p1: Product = {
   id: "id-p1",
   name: "p1",
   reference: undefined,
@@ -15,7 +15,7 @@ const p1: TProduct = {
   defaultColumnIdx: 2,
 };
 
-const p2: TProduct = {
+const p2: Product = {
   id: "id-p2",
   name: "p2",
   reference: undefined,
@@ -24,7 +24,7 @@ const p2: TProduct = {
   defaultColumnIdx: 1,
 };
 
-const p3: TProduct = {
+const p3: Product = {
   id: "id-p3",
   name: "p3",
   reference: undefined,
@@ -37,8 +37,8 @@ const ASC = SORT_BY.ASC;
 const DESC = SORT_BY.DESC;
 
 const productsSortedByDefaultColumnIdx = {
-  ASC: [p2, p1, p3] as TProduct[],
-  DESC: [p3, p1, p2] as TProduct[],
+  ASC: [p2, p1, p3] as Product[],
+  DESC: [p3, p1, p2] as Product[],
 };
 
 describe("compareProductsByDefaultColumnIdxFn(...)", () => {
@@ -76,8 +76,8 @@ describe("compareProductsByDefaultColumnIdxFn(...)", () => {
 });
 
 const productsSortedByRank = {
-  ASC: [p3, p2, p1] as TProduct[],
-  DESC: [p1, p2, p3] as TProduct[],
+  ASC: [p3, p2, p1] as Product[],
+  DESC: [p1, p2, p3] as Product[],
 };
 
 describe("compareProductsByRankFn(...)", () => {
