@@ -7,13 +7,13 @@ import {
   sumCriteriaWeight,
 } from "./criteria";
 
-import { SORT_BY } from "../../@Config/Constants/Array";
+import { SortByEnum } from "../../@Config/Array";
 import { Criterion } from "../../types/Criterion";
 
 const c1: Criterion = {
   id: "id-c1",
   name: "c1",
-  unit: undefined,
+  unit: null,
   weight: 2,
   normalizedWeight: 0.5,
   beneficial: false,
@@ -23,7 +23,7 @@ const c1: Criterion = {
 const c2: Criterion = {
   id: "id-c2",
   name: "c2",
-  unit: undefined,
+  unit: null,
   weight: 1,
   normalizedWeight: 0.25,
   beneficial: true,
@@ -33,7 +33,7 @@ const c2: Criterion = {
 const c3: Criterion = {
   id: "id-c3",
   name: "c3",
-  unit: undefined,
+  unit: null,
   weight: 1,
   normalizedWeight: 0.25,
   beneficial: true,
@@ -42,8 +42,8 @@ const c3: Criterion = {
 
 const criteria: Criterion[] = [c1, c2, c3];
 
-const ASC = SORT_BY.ASC;
-const DESC = SORT_BY.DESC;
+const ASC = SortByEnum.ASC;
+const DESC = SortByEnum.DESC;
 
 const criteriaSortedByDefaultRowIdx = {
   ASC: [c2, c1, c3] as Criterion[],

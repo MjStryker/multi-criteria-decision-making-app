@@ -1,5 +1,5 @@
-import { SORT_BY } from "@/@Config/Constants/Array";
-import { CRITERION } from "@/@Config/Constants/Criteria";
+import { CRITERION } from "@/@Config/Criteria";
+import { SortByEnum } from "@/@Shared/@Enums/SortBy.enum";
 import { compareFn } from "@/@Shared/@Utils/Array";
 import { clamp, isValidNumber } from "@/@Shared/@Utils/Number";
 import { areDefined } from "@/@Shared/@Utils/Object";
@@ -7,22 +7,22 @@ import { uuid } from "@/@Shared/@Utils/Uuid";
 import { Criterion } from "@/types/Criterion";
 
 export const compareCriteriaByDefaultRowIdxFn =
-  (sortBy = SORT_BY.ASC) =>
+  (sortBy = SortByEnum.ASC) =>
   (a: Criterion, b: Criterion) =>
     compareFn(sortBy)(a.defaultRowIdx, b.defaultRowIdx);
 
 export const compareCriteriaByWeightFn =
-  (sortBy = SORT_BY.DESC) =>
+  (sortBy = SortByEnum.DESC) =>
   (a: Criterion, b: Criterion) =>
     compareFn(sortBy)(a.weight, b.weight);
 
 export function createEmptyCriterion(defaultRowIdx: number): Criterion {
   return {
     id: uuid(),
-    name: undefined,
+    name: null,
     weight: 1,
-    normalizedWeight: undefined,
-    unit: undefined,
+    normalizedWeight: null,
+    unit: null,
     beneficial: true,
     defaultRowIdx,
   };
@@ -55,7 +55,7 @@ export function calculateCriteriaNormalizedWeights(
     ...criterion,
     normalizedWeight: isValidNumber(criterion.weight)
       ? criterion.weight / weightTotal
-      : undefined,
+      : null,
   }));
 }
 
@@ -64,7 +64,7 @@ export function getCriteriaMaxWeight(criteria: Criterion[]) {
 }
 
 export function getCriterionWeightRelativeToMax(
-  criterionWeight: number | undefined,
+  criterionWeight: number | null,
   maxWeight: number
 ): number {
   return areDefined([criterionWeight, maxWeight])

@@ -24,7 +24,6 @@
     "jotai": "^2.11.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-focus-lock": "^2.9.2",
     "react-icons": "^4.7.1",
     "react-scripts": "5.0.1",
     "typescript": "^4.9.5",

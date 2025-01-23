@@ -1,25 +1,25 @@
-import { SORT_BY } from "../../@Config/Constants/Array";
+import { SortByEnum } from "../../@Config/Array";
 import { Product } from "../../types/Product";
 import { compareFn } from "../Array";
 import { uuid } from "../Uuid";
 
 export const compareProductsByDefaultColumnIdxFn =
-  (sortBy = SORT_BY.ASC) =>
+  (sortBy = SortByEnum.ASC) =>
   (a: Product, b: Product): number =>
     compareFn(sortBy)(a.defaultColumnIdx, b.defaultColumnIdx);
 
 export const compareProductsByRankFn =
-  (sortBy = SORT_BY.ASC) =>
+  (sortBy = SortByEnum.ASC) =>
   (a: Product, b: Product): number =>
     compareFn(sortBy)(a.rank, b.rank);
 
 export function createEmptyProduct(defaultColumnIdx: number): Product {
   return {
     id: uuid(),
-    name: undefined,
-    reference: undefined,
-    rank: undefined,
-    rankPts: undefined,
+    name: null,
+    reference: null,
+    rank: null,
+    rankPts: null,
     defaultColumnIdx,
   };
 }

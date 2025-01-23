@@ -5,53 +5,32 @@ import {
   PopoverCloseButton,
   PopoverContent,
   PopoverTrigger,
-  useBoolean,
-  useDisclosure,
 } from "@chakra-ui/react";
-import { useContext, useRef } from "react";
+import { useRef, useState } from "react";
 
+import { Product } from "@/types/Product";
 import { SmallCloseIcon as CloseIcon } from "@chakra-ui/icons";
+
 import { MdEdit as EditIcon } from "react-icons/md";
 import EditProductForm from "./EditProductForm";
-import FocusLock from "react-focus-lock";
-import { IsAnyEditDialogOpenedContext } from "../../../../../context/IsAnyEditDialogOpened";
-import { TProduct } from "../../../../../types/products";
 
-type EditProductButtonProps = {
-  product: TProduct;
+type Props = {
+  product: Product;
 };
 
-const EditProductButton = ({ product }: EditProductButtonProps) => {
-  const { isAnyEditDialogOpened, toggleIsAnyEditDialogOpened } = useContext(
-    IsAnyEditDialogOpenedContext
-  );
-
+const EditProductButton = ({ product }: Props) => {
   const firstFieldRef = useRef(null);
 
-  const [isFormDirty, setIsFormDirty] = useBoolean();
+  const [isFormDirty, setIsFormDirty] = useState(false);
 
-  const { onOpen, onClose, isOpen } = useDisclosure();
-
-  const handleOpen = () => {
-    if (isOpen || isAnyEditDialogOpened) return;
-
-    onOpen();
-    toggleIsAnyEditDialogOpened();
-  };
-
-  const handleClose = () => {
-    if (!isOpen) return;
-
-    onClose();
-    toggleIsAnyEditDialogOpened();
-  };
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <Popover
       isOpen={isOpen}
       initialFocusRef={firstFieldRef}
-      onOpen={handleOpen}
-      onClose={handleClose}
+      onOpen={() => setIsOpen(true)}
+      onClose={() => setIsOpen(false)}
       placement="right"
       closeOnBlur={!isFormDirty}
       closeOnEsc
@@ -70,16 +49,14 @@ const EditProductButton = ({ product }: EditProductButtonProps) => {
       </PopoverTrigger>
 
       <PopoverContent p={5}>
-        <FocusLock returnFocus persistentFocus={false}>
-          <PopoverArrow />
-          <PopoverCloseButton />
-          <EditProductForm
-            firstFieldRef={firstFieldRef}
-            setParentIsDirty={setIsFormDirty}
-            onParentClose={handleClose}
-            product={product}
-          />
-        </FocusLock>
+        <PopoverArrow />
+        <PopoverCloseButton />
+        <EditProductForm
+          firstFieldRef={firstFieldRef}
+          setParentIsDirty={setIsFormDirty}
+          onParentClose={() => setIsOpen(false)}
+          product={product}
+        />
       </PopoverContent>
     </Popover>
   );

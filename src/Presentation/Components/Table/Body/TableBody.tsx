@@ -1,18 +1,20 @@
-import { useContext, useMemo } from "react";
-
-import { DataContext } from "../../../../../context/DataContext";
-import TableBodyRow from "./TableBodyRow";
+import UseGetCriterionListQuery from "@/Application/Queries/UseGetCriterionList.query";
+import { getCriteriaMaxWeight } from "@/utils/criteria/criteria";
 import { Tbody } from "@chakra-ui/react";
-import { getCriteriaMaxWeight } from "../../../../../utils/criteria/criteria";
+import { useMemo } from "react";
+import TableBodyRow from "./TableBodyRow";
 
 const TableBody = () => {
-  const { criteria } = useContext(DataContext);
+  const criterionList = UseGetCriterionListQuery();
 
-  const maxWeight = useMemo(() => getCriteriaMaxWeight(criteria), [criteria]);
+  const maxWeight = useMemo(
+    () => getCriteriaMaxWeight(criterionList),
+    [criterionList]
+  );
 
   return (
     <Tbody>
-      {criteria.map((criterion, rowIdx) => (
+      {criterionList.map((criterion, rowIdx) => (
         <TableBodyRow
           key={criterion.id}
           rowIdx={rowIdx}

@@ -17,10 +17,6 @@ const CriterionNameUnitCell = ({
   rowIdx,
   maxWeight,
 }: CriterionNameUnitCellProps) => {
-  const hasName = isValidNotEmptyString(criterion.name);
-
-  const defaultName = `Critère ${rowIdx + 1}`;
-
   return (
     <Td
       position="relative"
@@ -42,7 +38,9 @@ const CriterionNameUnitCell = ({
             wordBreak="break-word"
             fontWeight="semibold"
           >
-            {!hasName ? defaultName : capitalize(criterion.name)}
+            {isValidNotEmptyString(criterion.name)
+              ? capitalize(criterion.name)
+              : capitalize(`criterion ${rowIdx + 1}`)}
           </Text>
 
           {/*

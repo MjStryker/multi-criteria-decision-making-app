@@ -1,21 +1,16 @@
+import { DEBUG } from "@/@Config/Global";
+import { Product } from "@/types/Product";
 import { HStack, Tag, Td, Text } from "@chakra-ui/react";
-
-import { DEBUG } from "../../../../../constants/global";
 import DebugValue from "../DebugValue";
-import { TProduct } from "../../../../../types/products";
-import { isDefined } from "../../../../../utils/objects";
 
 type TableFooterCellProps = {
-  product: TProduct;
+  product: Product;
 };
 
-const TableFooterCell = ({ product }: TableFooterCellProps) => {
-  const productRank = product.rank;
-  const productRankPts = product.rankPts;
-
+export default function TableFooterCell({ product }: TableFooterCellProps) {
   return (
     <Td textAlign="center" px={2} border="1px" borderColor="gray.100">
-      {isDefined(productRank) ? (
+      {product.rank === null ? null : (
         <HStack justifyContent={DEBUG ? "flex-end" : "center"}>
           <Tag
             as={HStack}
@@ -25,39 +20,35 @@ const TableFooterCell = ({ product }: TableFooterCellProps) => {
             variant="outline"
             colorScheme="black"
             boxShadow="none"
-            {...([1, 2, 3].includes(productRank)
+            {...([1, 2, 3].includes(product.rank)
               ? {
                   variant: "solid",
                   colorScheme: "teal",
                   boxShadow: "base",
                   bgColor:
-                    productRank === 1
+                    product.rank === 1
                       ? "teal.600"
-                      : productRank === 2
+                      : product.rank === 2
                       ? "teal.500"
-                      : productRank === 3
+                      : product.rank === 3
                       ? "teal.400"
                       : "inherit",
                 }
-              : undefined)}
+              : null)}
           >
             <Text as="span">#</Text>
-            <Text as="span">{productRank}</Text>
+            <Text as="span">{product.rank}</Text>
           </Tag>
 
           {DEBUG ? (
             <DebugValue
-              value={`${productRankPts} pts`}
+              value={`${product.rankPts} pts`}
               bgColor="gray.600"
               color="white"
             />
           ) : null}
         </HStack>
-      ) : (
-        ""
       )}
     </Td>
   );
-};
-
-export default TableFooterCell;
+}

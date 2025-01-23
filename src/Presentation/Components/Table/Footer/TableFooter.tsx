@@ -1,45 +1,24 @@
-import { Button, Td, Tfoot, Tr, useToast } from "@chakra-ui/react";
-import {
-  CRITERIA_ITEMS_REMAINING_WARNING,
-  CRITERIA_MAX_ITEMS,
-} from "../../../../../constants/criteria";
-
+import UseAddCriterionCommand from "@/Application/Commands/UseAddCriterion.command";
+import UseGetProductListQuery from "@/Application/Queries/UseGetProductList.query";
+import { createEmptyCriterion } from "@/utils/criteria/criteria";
 import { AddIcon } from "@chakra-ui/icons";
-import { DataContext } from "../../../../../context/DataContext";
+import { Button, Td, Tfoot, Tr } from "@chakra-ui/react";
 import TableFooterCell from "./TableFooterCell";
-import { createEmptyCriterion } from "../../../../../utils/criteria/criteria";
-import { useContext } from "react";
+import UseGetCriterionListQuery from "@/Application/Queries/UseGetCriterionList.query";
+import { CRITERIA_MAX_ITEMS } from "@/@Config/Criteria";
 
-const TableFooter = () => {
-  const { products, criteria, addCriterion } = useContext(DataContext);
+export default function TableFooter() {
+  const productList = UseGetProductListQuery();
+  const criterionList = UseGetCriterionListQuery();
+  const addCriterionCommand = UseAddCriterionCommand();
 
-  const toast = useToast();
-
-  const nbCriteria = criteria.length;
-
+  const nbCriteria = criterionList.length;
   const nbCriteriaRemaining = CRITERIA_MAX_ITEMS - nbCriteria;
 
-  const handleAddCriterion = () => {
-    if (nbCriteriaRemaining === 0) {
-      toast({
-        status: "error",
-        title: "Cannot add another criterion",
-        description: `Maximum number of criteria reached (${CRITERIA_MAX_ITEMS}/${CRITERIA_MAX_ITEMS})`,
-      });
-      return;
-    }
-
-    if (nbCriteriaRemaining - 1 <= CRITERIA_ITEMS_REMAINING_WARNING) {
-      const label = nbCriteriaRemaining - 1 === 1 ? "criterion" : "criteria";
-
-      toast({
-        status: "warning",
-        title: `${nbCriteriaRemaining - 1} ${label} remaining`,
-      });
-    }
-
-    addCriterion(createEmptyCriterion(nbCriteria));
-  };
+  function handleAddCriterion() {
+    const newCriterion = createEmptyCriterion(nbCriteria);
+    addCriterionCommand(newCriterion);
+  }
 
   return (
     <Tfoot>
@@ -52,7 +31,7 @@ const TableFooter = () => {
             w="full"
             size="sm"
             colorScheme={nbCriteriaRemaining > 0 ? "blue" : "gray"}
-            onClick={handleAddCriterion}
+            onClick={() => handleAddCriterion()}
             leftIcon={<AddIcon fontSize="xs" />}
             boxShadow="base"
             transition="background .2s"
@@ -64,7 +43,7 @@ const TableFooter = () => {
         {/*
          * PRODUCTS - RANK
          */}
-        {products.map((product) => (
+        {productList.map((product) => (
           <TableFooterCell key={product.id} product={product} />
         ))}
 
@@ -75,6 +54,4 @@ const TableFooter = () => {
       </Tr>
     </Tfoot>
   );
-};
-
-export default TableFooter;
+}

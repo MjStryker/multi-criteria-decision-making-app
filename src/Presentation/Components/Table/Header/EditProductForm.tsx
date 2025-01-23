@@ -1,3 +1,7 @@
+import { isValidNotEmptyString } from "@/@Shared/@Utils/String";
+import { DataContext } from "@/context/DataContext";
+import { Product } from "@/types/Product";
+import { DeleteIcon } from "@chakra-ui/icons";
 import {
   Button,
   HStack,
@@ -6,20 +10,21 @@ import {
   Text,
   useBoolean,
 } from "@chakra-ui/react";
-import { FormEvent, useContext, useEffect, useState } from "react";
-
-import { DataContext } from "../../../../../context/DataContext";
-import { DeleteIcon } from "@chakra-ui/icons";
-import { TProduct } from "../../../../../types/products";
+import {
+  Dispatch,
+  FormEvent,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import TextInput from "../../Form/TextInput";
-import { isValidNotEmptyString } from "../../../../../utils/strings";
-import { useBooleanSetState } from "../../../../../types/chakra";
 
 type EditProductFormProps = {
   firstFieldRef: any;
-  setParentIsDirty: useBooleanSetState;
+  setParentIsDirty: Dispatch<SetStateAction<boolean>>;
   onParentClose: VoidFunction;
-  product: TProduct;
+  product: Product;
 };
 
 const EditProductForm = ({
@@ -30,11 +35,9 @@ const EditProductForm = ({
 }: EditProductFormProps) => {
   const { updateProduct, removeProduct } = useContext(DataContext);
 
-  const [name, setName] = useState<string | undefined>(product.name);
+  const [name, setName] = useState<string | null>(product.name);
 
-  const [reference, setReference] = useState<string | undefined>(
-    product.reference
-  );
+  const [reference, setReference] = useState<string | null>(product.reference);
 
   const [confirmDelete, setConfirmDelete] = useBoolean();
 
@@ -44,7 +47,7 @@ const EditProductForm = ({
    * * Update parent props
    */
   useEffect(() => {
-    isDirty ? setParentIsDirty.on() : setParentIsDirty.off();
+    setParentIsDirty(isDirty);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDirty]);
 
@@ -53,12 +56,12 @@ const EditProductForm = ({
    */
   useEffect(() => {
     setName(product.name);
-    return () => setName(undefined);
+    return () => setName(null);
   }, [product.name]);
 
   useEffect(() => {
     setReference(product.reference);
-    return () => setReference(undefined);
+    return () => setReference(null);
   }, [product.reference]);
 
   /**

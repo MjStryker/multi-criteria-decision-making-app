@@ -9,21 +9,21 @@ const productsWithCriteria: ProductCriterionValue[] = [
     criterionId: "prix123",
     productId: "dyson123",
     value: 800,
-    criterionRankPts: undefined,
+    criterionRankPts: null,
   },
   {
     id: "prixDreame123",
     criterionId: "prix123",
     productId: "dreame123",
     value: 300,
-    criterionRankPts: undefined,
+    criterionRankPts: null,
   },
   {
     id: "prixRowenta123",
     criterionId: "prix123",
     productId: "rowenta123",
     value: 500,
-    criterionRankPts: undefined,
+    criterionRankPts: null,
   },
 
   /**
@@ -34,21 +34,21 @@ const productsWithCriteria: ProductCriterionValue[] = [
     criterionId: "puissanceAspiration123",
     productId: "dyson123",
     value: 180,
-    criterionRankPts: undefined,
+    criterionRankPts: null,
   },
   {
     id: "puissanceAspirationDreame123",
     criterionId: "puissanceAspiration123",
     productId: "dreame123",
     value: 210,
-    criterionRankPts: undefined,
+    criterionRankPts: null,
   },
   {
     id: "puissanceAspirationRowenta123",
     criterionId: "puissanceAspiration123",
     productId: "rowenta123",
     value: 200,
-    criterionRankPts: undefined,
+    criterionRankPts: null,
   },
 
   /**
@@ -59,21 +59,21 @@ const productsWithCriteria: ProductCriterionValue[] = [
     criterionId: "autonomie123",
     productId: "dyson123",
     value: 60,
-    criterionRankPts: undefined,
+    criterionRankPts: null,
   },
   {
     id: "autonomieDreame123",
     criterionId: "autonomie123",
     productId: "dreame123",
     value: 80,
-    criterionRankPts: undefined,
+    criterionRankPts: null,
   },
   {
     id: "autonomieRowenta123",
     criterionId: "autonomie123",
     productId: "rowenta123",
     value: 70,
-    criterionRankPts: undefined,
+    criterionRankPts: null,
   },
 
   // /**
@@ -133,7 +133,7 @@ const productsWithCriteria: ProductCriterionValue[] = [
   //   id: "batterieAmovibleDreame123",
   //   criteriaId: "batterieAmovible123",
   //   productId: "dreame123",
-  //   value: undefined
+  //   value: null
   // },
   // {
   //   id: "batterieAmovibleRowenta123",

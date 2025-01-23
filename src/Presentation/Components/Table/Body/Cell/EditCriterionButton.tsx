@@ -10,7 +10,6 @@ import { useRef, useState } from "react";
 
 import { Criterion } from "@/types/Criterion";
 import { SmallCloseIcon as CloseIcon } from "@chakra-ui/icons";
-import FocusLock from "react-focus-lock";
 import { MdEdit as EditIcon } from "react-icons/md";
 import EditCriterionForm from "./EditCriterionForm";
 
@@ -49,16 +48,14 @@ const EditCriterionButton = ({ criterion }: EditCriterionButtonProps) => {
       </PopoverTrigger>
 
       <PopoverContent p={5}>
-        <FocusLock returnFocus persistentFocus={false}>
-          <PopoverArrow />
-          <PopoverCloseButton />
-          <EditCriterionForm
-            firstFieldRef={firstFieldRef}
-            setParentIsDirty={setIsFormDirty}
-            onParentClose={() => setIsOpen(false)}
-            criterion={criterion}
-          />
-        </FocusLock>
+        <PopoverArrow />
+        <PopoverCloseButton />
+        <EditCriterionForm
+          firstFieldRef={firstFieldRef}
+          setParentIsDirty={setIsFormDirty}
+          onParentClose={() => setIsOpen(false)}
+          criterion={criterion}
+        />
       </PopoverContent>
     </Popover>
   );

@@ -1,8 +1,10 @@
-import { DEBUG } from "@/@Config/Constants/Global";
-import { EDITABLE_MIN_WIDTH } from "@/@Config/Constants/Table";
-import { isValidNumber } from "@/@Shared/@Utils/Number";
+import { DEBUG } from "@/@Config/Global";
+import { EDITABLE_MIN_WIDTH } from "@/@Config/Table";
 import { isValidNotEmptyString } from "@/@Shared/@Utils/String";
+import UseUpdateProductCriterionValueCommand from "@/Application/Commands/UseUpdateProductCriterionValue.command";
 import { Criterion } from "@/types/Criterion";
+import { Product } from "@/types/Product";
+import { ProductCriterionValue } from "@/types/ProductCriterionValue";
 import {
   Editable,
   EditableInput,
@@ -12,10 +14,8 @@ import {
   Td,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import DebugValue from "../../DebugValue";
-import { Product } from "@/types/Product";
-import { ProductCriterionValue } from "@/types/ProductCriterionValue";
 
 type CriterionProductValueCellProps = {
   criterion: Criterion;
@@ -28,19 +28,17 @@ const CriterionProductValueCell = ({
   product,
   criterionProductValue,
 }: CriterionProductValueCellProps) => {
-  const getValueFromProps = () =>
-    isValidNumber(criterionProductValue?.value)
-      ? criterionProductValue?.value?.toString() || null
-      : null;
+  const setProductCriterionValue = UseUpdateProductCriterionValueCommand();
 
-  const [value, setValue] = useState<string | null>(getValueFromProps);
+  const [value, setValue] = useState<number | null>(
+    criterionProductValue?.value ?? null
+  );
 
   /**
    * * Sync local state on props change
    */
   useEffect(() => {
-    setValue(getValueFromProps);
-    return () => setValue(null);
+    setValue(criterionProductValue?.value ?? null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [criterionProductValue]);
 
@@ -48,13 +46,13 @@ const CriterionProductValueCell = ({
    * * Handle Inputs change / validation
    */
   const onChange = (nextValue: string) => {
-    setValue(nextValue);
+    setValue(isValidNotEmptyString(nextValue) ? Number(nextValue) : null);
   };
 
   const onSubmit = () => {
     const newValue = isValidNotEmptyString(value) ? Number(value) : null;
 
-    setProductCriterionValue(product, criterion, newValue);
+    setProductCriterionValue(product.id, criterion.id, newValue);
   };
 
   return (
@@ -62,7 +60,7 @@ const CriterionProductValueCell = ({
       <HStack spacing={1} justifyContent="flex-end">
         <Editable
           flex={1}
-          value={value || "-"}
+          value={value?.toString() || "-"}
           onChange={onChange}
           onSubmit={onSubmit}
         >
@@ -85,7 +83,7 @@ const CriterionProductValueCell = ({
           />
         </Editable>
 
-        {DEBUG && isValidNumber(criterionProductValue?.criterionRankPts) ? (
+        {DEBUG && criterionProductValue?.criterionRankPts !== null ? (
           <DebugValue
             value={`${criterionProductValue?.criterionRankPts.toFixed(0)} pts`}
             variant="outline"

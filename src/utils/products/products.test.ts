@@ -3,38 +3,38 @@ import {
   compareProductsByRankFn,
 } from "./products";
 
-import { SORT_BY } from "../../@Config/Constants/Array";
+import { SortByEnum } from "../../@Config/Array";
 import { Product } from "../../types/Product";
 
 const p1: Product = {
   id: "id-p1",
   name: "p1",
-  reference: undefined,
+  reference: null,
   rank: 3,
-  rankPts: undefined,
+  rankPts: null,
   defaultColumnIdx: 2,
 };
 
 const p2: Product = {
   id: "id-p2",
   name: "p2",
-  reference: undefined,
+  reference: null,
   rank: 2,
-  rankPts: undefined,
+  rankPts: null,
   defaultColumnIdx: 1,
 };
 
 const p3: Product = {
   id: "id-p3",
   name: "p3",
-  reference: undefined,
+  reference: null,
   rank: 1,
-  rankPts: undefined,
+  rankPts: null,
   defaultColumnIdx: 3,
 };
 
-const ASC = SORT_BY.ASC;
-const DESC = SORT_BY.DESC;
+const ASC = SortByEnum.ASC;
+const DESC = SortByEnum.DESC;
 
 const productsSortedByDefaultColumnIdx = {
   ASC: [p2, p1, p3] as Product[],

@@ -5,8 +5,8 @@ describe("deepEqual(...)", () => {
     expect(deepEqual(true, false)).toBe(false);
     expect(deepEqual(false, true)).toBe(false);
 
-    expect(deepEqual(null, undefined)).toBe(false);
-    expect(deepEqual(undefined, null)).toBe(false);
+    expect(deepEqual(null, null)).toBe(false);
+    expect(deepEqual(null, null)).toBe(false);
 
     expect(deepEqual("", " ")).toBe(false);
     expect(deepEqual("1", 1)).toBe(false);
@@ -85,7 +85,7 @@ describe("deepEqual(...)", () => {
     expect(deepEqual(false, false)).toBe(true);
 
     expect(deepEqual(null, null)).toBe(true);
-    expect(deepEqual(undefined, undefined)).toBe(true);
+    expect(deepEqual(null, null)).toBe(true);
 
     expect(deepEqual("", "")).toBe(true);
     expect(deepEqual(" ", " ")).toBe(true);
@@ -163,7 +163,7 @@ describe("deepEqual(...)", () => {
 describe("isDefined(...)", () => {
   test("Returning false", () => {
     expect(isDefined(null)).toBe(false);
-    expect(isDefined(undefined)).toBe(false);
+    expect(isDefined(null)).toBe(false);
   });
 
   test("Returning true", () => {
@@ -185,19 +185,19 @@ describe("isDefined(...)", () => {
 describe("areDefined(...)", () => {
   test("Returning false", () => {
     expect(areDefined([null])).toBe(false);
-    expect(areDefined([undefined])).toBe(false);
+    expect(areDefined([null])).toBe(false);
 
     expect(areDefined([null, null, null])).toBe(false);
-    expect(areDefined([undefined, undefined, undefined])).toBe(false);
+    expect(areDefined([null, null, null])).toBe(false);
 
     expect(areDefined(["", "", null])).toBe(false);
-    expect(areDefined(["", "", undefined])).toBe(false);
+    expect(areDefined(["", "", null])).toBe(false);
 
     expect(areDefined([[], [], null])).toBe(false);
-    expect(areDefined([[], [], undefined])).toBe(false);
+    expect(areDefined([[], [], null])).toBe(false);
 
     expect(areDefined([{}, {}, null])).toBe(false);
-    expect(areDefined([{}, {}, undefined])).toBe(false);
+    expect(areDefined([{}, {}, null])).toBe(false);
   });
 
   test("Returning true", () => {

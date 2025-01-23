@@ -7,7 +7,7 @@ import { sumCriteriaNormalizedWeight } from "../criteria/criteria";
 const c1: Criterion = {
   id: "id-c1",
   name: "c1",
-  unit: undefined,
+  unit: null,
   weight: 1,
   normalizedWeight: 0.25,
   beneficial: true,
@@ -17,7 +17,7 @@ const c1: Criterion = {
 const c2: Criterion = {
   id: "id-c2",
   name: "c2",
-  unit: undefined,
+  unit: null,
   weight: 1,
   normalizedWeight: 0.25,
   beneficial: true,
@@ -27,7 +27,7 @@ const c2: Criterion = {
 const c3: Criterion = {
   id: "id-c3",
   name: "c3",
-  unit: undefined,
+  unit: null,
   weight: 1,
   normalizedWeight: 0.25,
   beneficial: true,
@@ -37,7 +37,7 @@ const c3: Criterion = {
 const c4: Criterion = {
   id: "id-c4",
   name: "c4",
-  unit: undefined,
+  unit: null,
   weight: 1,
   normalizedWeight: 0.25,
   beneficial: true,
@@ -49,27 +49,27 @@ const criteria: Criterion[] = [c1, c2, c3, c4];
 const p1: Product = {
   id: "id-p1",
   name: "p1",
-  reference: undefined,
-  rank: undefined,
-  rankPts: undefined,
+  reference: null,
+  rank: null,
+  rankPts: null,
   defaultColumnIdx: 2,
 };
 
 const p2: Product = {
   id: "id-p2",
   name: "p2",
-  reference: undefined,
-  rank: undefined,
-  rankPts: undefined,
+  reference: null,
+  rank: null,
+  rankPts: null,
   defaultColumnIdx: 1,
 };
 
 const p3: Product = {
   id: "id-p3",
   name: "p3",
-  reference: undefined,
-  rank: undefined,
-  rankPts: undefined,
+  reference: null,
+  rank: null,
+  rankPts: null,
   defaultColumnIdx: 3,
 };
 
@@ -84,21 +84,21 @@ const productsWithCriteria: ProductCriterionValue[] = [
     criterionId: "id-c1",
     productId: "id-p1",
     value: 100,
-    criterionRankPts: undefined,
+    criterionRankPts: null,
   },
   {
     id: "id-c1-p2",
     criterionId: "id-c1",
     productId: "id-p2",
     value: 100,
-    criterionRankPts: undefined,
+    criterionRankPts: null,
   },
   {
     id: "id-c1-p3",
     criterionId: "id-c1",
     productId: "id-p3",
     value: 100,
-    criterionRankPts: undefined,
+    criterionRankPts: null,
   },
 
   /**
@@ -109,21 +109,21 @@ const productsWithCriteria: ProductCriterionValue[] = [
     criterionId: "id-c2",
     productId: "id-p1",
     value: 100,
-    criterionRankPts: undefined,
+    criterionRankPts: null,
   },
   {
     id: "id-c2-p2",
     criterionId: "id-c2",
     productId: "id-p2",
     value: 100,
-    criterionRankPts: undefined,
+    criterionRankPts: null,
   },
   {
     id: "id-c2-p3",
     criterionId: "id-c2",
     productId: "id-p3",
     value: 100,
-    criterionRankPts: undefined,
+    criterionRankPts: null,
   },
 
   /**
@@ -134,21 +134,21 @@ const productsWithCriteria: ProductCriterionValue[] = [
     criterionId: "id-c3",
     productId: "id-p1",
     value: 100,
-    criterionRankPts: undefined,
+    criterionRankPts: null,
   },
   {
     id: "id-c3-p2",
     criterionId: "id-c3",
     productId: "id-p2",
     value: 100,
-    criterionRankPts: undefined,
+    criterionRankPts: null,
   },
   {
     id: "id-c3-p3",
     criterionId: "id-c3",
     productId: "id-p3",
     value: 100,
-    criterionRankPts: undefined,
+    criterionRankPts: null,
   },
 
   /**
@@ -159,25 +159,25 @@ const productsWithCriteria: ProductCriterionValue[] = [
     criterionId: "id-c4",
     productId: "id-p1",
     value: 100,
-    criterionRankPts: undefined,
+    criterionRankPts: null,
   },
   {
     id: "id-c4-p2",
     criterionId: "id-c4",
     productId: "id-p2",
     value: 100,
-    criterionRankPts: undefined,
+    criterionRankPts: null,
   },
   {
     id: "id-c4-p3",
     criterionId: "id-c4",
     productId: "id-p3",
     value: 100,
-    criterionRankPts: undefined,
+    criterionRankPts: null,
   },
 ];
 
-type TProductValue = number | undefined;
+type TProductValue = number | null;
 
 function getTestValues(
   values: [criterionData: Partial<Criterion>, productValues: TProductValue[]][]
@@ -223,7 +223,7 @@ describe("rankProducts(...)", () => {
 
     it("Ensure products have no ranks", () => {
       products.forEach(({ rank }) => {
-        expect(rank).toBeUndefined();
+        expect(rank).toBenull();
       });
     });
   });
@@ -325,10 +325,10 @@ describe("rankProducts(...)", () => {
 
   it("test 6", () => {
     const { criteriaToUse, productsWithCriteriaToUse } = getTestValues([
-      [{}, [100, 100, undefined]],
-      [{}, [100, 100, undefined]],
-      [{}, [100, 100, undefined]],
-      [{}, [100, 100, undefined]],
+      [{}, [100, 100, null]],
+      [{}, [100, 100, null]],
+      [{}, [100, 100, null]],
+      [{}, [100, 100, null]],
     ]);
 
     const { rankedProducts } = rankProducts(

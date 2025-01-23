@@ -2,7 +2,7 @@ import { capitalize, isValidNotEmptyString } from "./String";
 
 describe("isValidNotEmptyString", () => {
   test("Returning false", () => {
-    expect(isValidNotEmptyString(undefined)).toBe(false);
+    expect(isValidNotEmptyString(null)).toBe(false);
     expect(isValidNotEmptyString(null)).toBe(false);
     expect(isValidNotEmptyString("")).toBe(false);
   });

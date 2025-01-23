@@ -3,7 +3,7 @@ import { clamp, isValidNumber } from "./Number";
 describe("isValidNumber(...)", () => {
   test("Returning false", () => {
     expect(isValidNumber(null)).toBe(false);
-    expect(isValidNumber(undefined)).toBe(false);
+    expect(isValidNumber(null)).toBe(false);
   });
 
   test("Returning true", () => {

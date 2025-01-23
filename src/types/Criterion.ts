@@ -1,9 +1,9 @@
 export type Criterion = {
   id: string;
-  name: string | undefined;
-  weight: number | undefined;
-  normalizedWeight: number | undefined;
-  unit: string | undefined;
-  beneficial: boolean | undefined;
+  name: string | null;
+  weight: number | null;
+  normalizedWeight: number | null;
+  unit: string | null;
+  beneficial: boolean | null;
   defaultRowIdx: number;
 };

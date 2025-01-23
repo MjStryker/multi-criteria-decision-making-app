@@ -1,8 +1,6 @@
 import { isDefined } from "./Object";
 
-export function isValidNumber(
-  value: number | undefined | null
-): value is number {
+export function isValidNumber(value: number | null | null): value is number {
   return isDefined(value) && typeof value === "number" && !isNaN(value);
 }
 

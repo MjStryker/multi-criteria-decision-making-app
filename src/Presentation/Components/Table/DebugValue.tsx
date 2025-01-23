@@ -1,7 +1,7 @@
 import { Tag, TagLabel, TagLabelProps, TagProps } from "@chakra-ui/react";
 
 type DebugValueProps = {
-  value: number | string | null | undefined;
+  value: number | string | null | null;
   labelProps?: Partial<TagLabelProps>;
 };
 

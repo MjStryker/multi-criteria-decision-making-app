@@ -1,4 +1,4 @@
-export enum SORT_BY {
+export enum SortByEnum {
   ASC = 1,
   DESC = -1,
 }

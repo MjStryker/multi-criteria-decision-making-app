@@ -4,13 +4,14 @@ import {
   updateCriteriaDefaultRowIdx,
 } from "../../utils/criteria/criteria";
 
-import { SORT_BY } from "../../@Config/Constants/Array";
 import { Criterion } from "../../types/Criterion";
 import { Product } from "../../types/Product";
 import { createEmptyProductCriterionValue } from "../../utils/productsWithCriteria/productsWithCriteria";
-import { deepEqual } from "../../utils/Object";
+
 import { useCallback } from "react";
 import { useHandleProductsWithCriteriaFunctions } from "./useHandleProductsWithCriteria";
+import { SortByEnum } from "@/@Shared/@Enums/SortBy.enum";
+import { deepEqual } from "@/@Shared/@Utils/Object";
 
 export type useHandleCriteriaFunctions = ReturnType<typeof useHandleCriteria>;
 
@@ -72,7 +73,7 @@ const useHandleCriteria = (
     []
   );
 
-  const sortCriteriaByWeight = useCallback((sortBy?: SORT_BY) => {
+  const sortCriteriaByWeight = useCallback((sortBy?: SortByEnum) => {
     setCriteria((prev) => {
       const sorted = [...prev].sort(compareCriteriaByWeightFn(sortBy));
 

@@ -30,7 +30,7 @@ const useHandleProductsWithCriteria = (
           (e) => e.productId === product.id && e.criterionId === criterion.id
         ) ?? createEmptyProductCriterionValue(product, criterion);
 
-      productWithCriteria.value = value ?? undefined;
+      productWithCriteria.value = value ?? null;
 
       setProductsWithCriteria(res);
     },

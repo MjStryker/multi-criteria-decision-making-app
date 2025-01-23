@@ -1,21 +1,21 @@
-import { SORT_BY } from "../constants/arrays";
+import { SortByEnum } from "../@Enums/SortBy.enum";
 import { compareFn } from "./Array";
 
-const ASC = SORT_BY.ASC;
-const DESC = SORT_BY.DESC;
+const ASC = SortByEnum.ASC;
+const DESC = SortByEnum.DESC;
 
 const sortedStringArray = {
-  ASC: ["a", "b", "c", undefined],
-  DESC: ["c", "b", "a", undefined],
+  ASC: ["a", "b", "c", null],
+  DESC: ["c", "b", "a", null],
 };
 
 const sortedNumberArray = {
-  ASC: [-1, 0, 1, undefined],
-  DESC: [1, 0, -1, undefined],
+  ASC: [-1, 0, 1, null],
+  DESC: [1, 0, -1, null],
 };
 
-describe("compareFn(...)", () => {
-  describe("Comparing string[])", () => {
+describe("compareFn", () => {
+  describe("Comparing strings)", () => {
     describe("ASC", () => {
       it("Already sorted string array", () => {
         expect(sortedStringArray.ASC.sort(compareFn(ASC))).toStrictEqual(
@@ -24,7 +24,7 @@ describe("compareFn(...)", () => {
       });
 
       it("Unsorted string array", () => {
-        expect(["b", "a", undefined, "c"].sort(compareFn(ASC))).toStrictEqual(
+        expect(["b", "a", null, "c"].sort(compareFn(ASC))).toStrictEqual(
           sortedStringArray.ASC
         );
       });
@@ -38,14 +38,14 @@ describe("compareFn(...)", () => {
       });
 
       it("Unsorted string array", () => {
-        expect(["b", undefined, "a", "c"].sort(compareFn(DESC))).toStrictEqual(
+        expect(["b", null, "a", "c"].sort(compareFn(DESC))).toStrictEqual(
           sortedStringArray.DESC
         );
       });
     });
   });
 
-  describe("Comparing number[])", () => {
+  describe("Comparing numbers)", () => {
     describe("ASC", () => {
       it("Already sorted number array", () => {
         expect(sortedNumberArray.ASC.sort(compareFn(ASC))).toStrictEqual(
@@ -54,7 +54,7 @@ describe("compareFn(...)", () => {
       });
 
       it("Unsorted number array", () => {
-        expect([0, -1, undefined, 1].sort(compareFn(ASC))).toStrictEqual(
+        expect([0, -1, null, 1].sort(compareFn(ASC))).toStrictEqual(
           sortedNumberArray.ASC
         );
       });
@@ -68,7 +68,7 @@ describe("compareFn(...)", () => {
       });
 
       it("Unsorted number array", () => {
-        expect([0, undefined, -1, 1].sort(compareFn(DESC))).toStrictEqual(
+        expect([0, null, -1, 1].sort(compareFn(DESC))).toStrictEqual(
           sortedNumberArray.DESC
         );
       });

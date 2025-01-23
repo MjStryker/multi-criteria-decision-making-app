@@ -1,63 +1,26 @@
-import {
-  ButtonGroup,
-  Icon,
-  IconButton,
-  Td,
-  Text,
-  Thead,
-  Tr,
-  useToast,
-} from "@chakra-ui/react";
-import {
-  PRODUCTS_ITEMS_REMAINING_WARNING,
-  PRODUCTS_MAX_ITEMS,
-} from "../../../../../constants/products";
-import {
-  FaSortAmountDown as SortDownIcon,
-  FaSortAmountUpAlt as SortUpIcon,
-} from "react-icons/fa";
+import { Icon, IconButton, Td, Text, Thead, Tr } from "@chakra-ui/react";
 
+import { CRITERION } from "@/@Config/Criteria";
+import { PRODUCTS_MAX_ITEMS } from "@/@Config/Product";
+import UseAddProductCommand from "@/Application/Commands/UseAddProduct.command";
+import UseGetProductListQuery from "@/Application/Queries/UseGetProductList.query";
+import { createEmptyProduct } from "@/utils/products/products";
 import { AddIcon } from "@chakra-ui/icons";
 import { GiAnvil as AnvilIcon } from "react-icons/gi";
-import { CRITERION } from "../../../../../constants/criteria";
-import { DataContext } from "../../../../../context/DataContext";
-import { SORT_BY } from "../../../../../constants/arrays";
 import TableHeaderCell from "./TableHeaderCell";
-import { createEmptyProduct } from "../../../../../utils/products/products";
-import { useContext } from "react";
 
 const addButtonCellWidth = "50px";
 
 const TableHeader = () => {
-  const { products, addProduct, sortCriteriaByWeight } =
-    useContext(DataContext);
+  const productList = UseGetProductListQuery();
+  const addProductCommand = UseAddProductCommand();
 
-  const toast = useToast();
-
-  const nbProducts = products.length;
-
+  const nbProducts = productList.length;
   const nbProductsRemaining = PRODUCTS_MAX_ITEMS - nbProducts;
 
   const handleAddProduct = () => {
-    if (nbProductsRemaining === 0) {
-      toast({
-        status: "error",
-        title: "Cannot add another product",
-        description: `Maximum number of products reached (${PRODUCTS_MAX_ITEMS}/${PRODUCTS_MAX_ITEMS})`,
-      });
-      return;
-    }
-
-    if (nbProductsRemaining - 1 <= PRODUCTS_ITEMS_REMAINING_WARNING) {
-      const label = nbProductsRemaining - 1 === 1 ? "product" : "products";
-
-      toast({
-        status: "warning",
-        title: `${nbProductsRemaining - 1} ${label} remaining`,
-      });
-    }
-
-    addProduct(createEmptyProduct(nbProducts));
+    const newProduct = createEmptyProduct(nbProducts);
+    addProductCommand(newProduct);
   };
 
   return (
@@ -67,18 +30,18 @@ const TableHeader = () => {
          * SORT BUTTON
          */}
         <Td px={2}>
-          <ButtonGroup variant="outline" size="sm" color="gray.500" isAttached>
+          {/* <ButtonGroup variant="outline" size="sm" color="gray.500" isAttached>
             <IconButton
               aria-label="Sort criteria by weight"
               icon={<SortDownIcon />}
-              onClick={() => sortCriteriaByWeight(SORT_BY.DESC)}
+              onClick={() => sortCriteriaByWeight(SortByEnum.DESC)}
             />
             <IconButton
               aria-label="Sort criteria by weight"
               icon={<SortUpIcon />}
-              onClick={() => sortCriteriaByWeight(SORT_BY.ASC)}
+              onClick={() => sortCriteriaByWeight(SortByEnum.ASC)}
             />
-          </ButtonGroup>
+          </ButtonGroup> */}
         </Td>
 
         {/*
@@ -95,7 +58,7 @@ const TableHeader = () => {
         {/*
          * PRODUCTS
          */}
-        {products.map((product, idx) => (
+        {productList.map((product, idx) => (
           <TableHeaderCell key={product.id} columnIdx={idx} product={product} />
         ))}
 

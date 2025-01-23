@@ -1,3 +1,10 @@
+import { DEBUG } from "@/@Config/Global";
+import { EDITABLE_MIN_WIDTH } from "@/@Config/Table";
+import { isValidNumber } from "@/@Shared/@Utils/Number";
+import { isDefined } from "@/@Shared/@Utils/Object";
+import { DataContext } from "@/context/DataContext";
+import { Criterion } from "@/types/Criterion";
+import { clampCriterionWeightValue } from "@/utils/criteria/criteria";
 import {
   Editable,
   EditableInput,
@@ -8,16 +15,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useContext, useEffect, useState } from "react";
-
-import { DEBUG } from "../../../../../../constants/global";
-import { DataContext } from "../../../../../../context/DataContext";
 import DebugValue from "../../DebugValue";
-import { EDITABLE_MIN_WIDTH } from "../../../../../../constants/table";
-import { TCriterion } from "../../../../../../types/criteria";
-import { clampCriterionWeightValue } from "../../../../../../utils/criteria/criteria";
-import { isDefined } from "../../../../../../utils/objects";
-import { isValidNumber } from "../../../../../../utils/numbers";
-import { parseStringAsNumber } from "../../../../../../utils/strings";
 
 const cellWidth = "100px";
 
@@ -28,15 +26,13 @@ type CriterionWeightCellProps = {
 const CriterionWeightCell = ({ criterion }: CriterionWeightCellProps) => {
   const { updateCriterion } = useContext(DataContext);
 
-  const getValueFromProps = () => criterion.weight || null;
-
-  const [weight, setWeight] = useState<number | null>(getValueFromProps);
+  const [weight, setWeight] = useState<number | null>(criterion.weight || null);
 
   /**
    * * Sync local state on props change
    */
   useEffect(() => {
-    setWeight(getValueFromProps);
+    setWeight(criterion.weight || null);
     return () => setWeight(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [criterion.weight]);
@@ -45,7 +41,7 @@ const CriterionWeightCell = ({ criterion }: CriterionWeightCellProps) => {
    * * Handle Inputs change / validation
    */
   const onChange = (nextValue: string) => {
-    const newWeight = parseStringAsNumber(nextValue);
+    const newWeight = parseFloat(nextValue);
 
     setWeight(
       isDefined(newWeight) ? clampCriterionWeightValue(newWeight) : null
@@ -55,7 +51,7 @@ const CriterionWeightCell = ({ criterion }: CriterionWeightCellProps) => {
   const onSubmit = () => {
     const newWeight = isValidNumber(weight)
       ? clampCriterionWeightValue(weight)
-      : undefined;
+      : null;
 
     updateCriterion({ ...criterion, weight: newWeight });
   };
@@ -103,7 +99,7 @@ const CriterionWeightCell = ({ criterion }: CriterionWeightCellProps) => {
           />
         </Editable>
 
-        {DEBUG && isValidNumber(criterion.normalizedWeight) ? (
+        {DEBUG && criterion.normalizedWeight !== null ? (
           <DebugValue
             value={criterion.normalizedWeight.toFixed(2)}
             variant="solid"

@@ -12,21 +12,21 @@ export const productsWithCriteria: ProductCriterionValue[] = [
     criterionId: "id-c1",
     productId: "id-p1",
     value: 100,
-    criterionRankPts: undefined,
+    criterionRankPts: null,
   },
   {
     id: "id-c1-p2",
     criterionId: "id-c1",
     productId: "id-p2",
     value: 100,
-    criterionRankPts: undefined,
+    criterionRankPts: null,
   },
   {
     id: "id-c1-p3",
     criterionId: "id-c1",
     productId: "id-p3",
     value: 100,
-    criterionRankPts: undefined,
+    criterionRankPts: null,
   },
 
   /**
@@ -37,21 +37,21 @@ export const productsWithCriteria: ProductCriterionValue[] = [
     criterionId: "id-c2",
     productId: "id-p1",
     value: 100,
-    criterionRankPts: undefined,
+    criterionRankPts: null,
   },
   {
     id: "id-c2-p2",
     criterionId: "id-c2",
     productId: "id-p2",
     value: 100,
-    criterionRankPts: undefined,
+    criterionRankPts: null,
   },
   {
     id: "id-c2-p3",
     criterionId: "id-c2",
     productId: "id-p3",
     value: 100,
-    criterionRankPts: undefined,
+    criterionRankPts: null,
   },
 
   /**
@@ -62,28 +62,28 @@ export const productsWithCriteria: ProductCriterionValue[] = [
     criterionId: "id-c3",
     productId: "id-p1",
     value: 100,
-    criterionRankPts: undefined,
+    criterionRankPts: null,
   },
   {
     id: "id-c3-p2",
     criterionId: "id-c3",
     productId: "id-p2",
     value: 100,
-    criterionRankPts: undefined,
+    criterionRankPts: null,
   },
   {
     id: "id-c3-p3",
     criterionId: "id-c3",
     productId: "id-p3",
     value: 100,
-    criterionRankPts: undefined,
+    criterionRankPts: null,
   },
 ];
 
 export const c2: Criterion = {
   id: "id-c2",
   name: "c2",
-  unit: undefined,
+  unit: null,
   weight: 1,
   normalizedWeight: 1,
   beneficial: true,
@@ -93,9 +93,9 @@ export const c2: Criterion = {
 export const p3: Product = {
   id: "id-p3",
   name: "p3",
-  reference: undefined,
-  rank: undefined,
-  rankPts: undefined,
+  reference: null,
+  rank: null,
+  rankPts: null,
   defaultColumnIdx: 3,
 };
 
@@ -106,7 +106,7 @@ describe("findProductCriterionValue(...)", () => {
       criterionId: "id-c2",
       productId: "id-p3",
       value: 100,
-      criterionRankPts: undefined,
+      criterionRankPts: null,
     };
 
     expect(
@@ -118,22 +118,22 @@ describe("findProductCriterionValue(...)", () => {
     const pUnmatched: Product = {
       id: "id-pUnmatched",
       name: "pUnmatched",
-      reference: undefined,
-      rank: undefined,
-      rankPts: undefined,
+      reference: null,
+      rank: null,
+      rankPts: null,
       defaultColumnIdx: -1,
     };
 
     expect(
       findProductWithCriterion(pUnmatched, c2, productsWithCriteria)
-    ).toBeUndefined();
+    ).toBenull();
   });
 
   it("Criterion does not exist", () => {
     const cUnmatched: Criterion = {
       id: "id-Unmatched",
       name: "Unmatched",
-      unit: undefined,
+      unit: null,
       weight: -1,
       normalizedWeight: -1,
       beneficial: true,
@@ -142,6 +142,6 @@ describe("findProductCriterionValue(...)", () => {
 
     expect(
       findProductWithCriterion(p3, cUnmatched, productsWithCriteria)
-    ).toBeUndefined();
+    ).toBenull();
   });
 });

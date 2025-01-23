@@ -1,8 +1,8 @@
 export type Product = {
   id: string;
-  name: string | undefined;
-  reference: string | undefined;
-  rank: number | undefined;
-  rankPts: number | undefined;
+  name: string | null;
+  reference: string | null;
+  rank: number | null;
+  rankPts: number | null;
   defaultColumnIdx: number;
 };

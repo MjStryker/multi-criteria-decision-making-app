@@ -38,9 +38,9 @@ const EditCriterionForm = ({
 }: EditCriterionFormProps) => {
   const { updateCriterion, removeCriterion } = useContext(DataContext);
 
-  const [name, setName] = useState<string | undefined>(criterion.name);
-  const [unit, setUnit] = useState<string | undefined>(criterion.unit);
-  const [beneficial, setBeneficial] = useState<boolean | undefined>(
+  const [name, setName] = useState<string | null>(criterion.name);
+  const [unit, setUnit] = useState<string | null>(criterion.unit);
+  const [beneficial, setBeneficial] = useState<boolean | null>(
     criterion.beneficial
   );
 
@@ -64,17 +64,14 @@ const EditCriterionForm = ({
    */
   useEffect(() => {
     setName(criterion.name);
-    return () => setName(undefined);
   }, [criterion.name]);
 
   useEffect(() => {
     setUnit(criterion.unit);
-    return () => setUnit(undefined);
   }, [criterion.unit]);
 
   useEffect(() => {
     setBeneficial(criterion.beneficial);
-    return () => setBeneficial(undefined);
   }, [criterion.beneficial]);
 
   /**

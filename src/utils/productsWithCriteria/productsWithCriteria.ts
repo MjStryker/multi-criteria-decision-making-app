@@ -11,8 +11,8 @@ export function createEmptyProductCriterionValue(
     id: uuid(),
     productId,
     criterionId,
-    value: undefined,
-    criterionRankPts: undefined,
+    value: null,
+    criterionRankPts: null,
   };
 }
 
@@ -20,7 +20,7 @@ export function findProductWithCriterion(
   product: Product,
   criterion: Criterion,
   productsWithCriteria: ProductCriterionValue[]
-): ProductCriterionValue | undefined {
+): ProductCriterionValue | null {
   return productsWithCriteria.find(
     ({ productId, criterionId }) =>
       product.id === productId && criterion.id === criterionId

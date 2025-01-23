@@ -1,4 +1,4 @@
-import { SORT_BY } from "../../@Config/Constants/Array";
+import { SortByEnum } from "../../@Config/Array";
 import { Criterion } from "../../types/Criterion";
 import { Product } from "../../types/Product";
 import { ProductCriterionValue } from "../../types/ProductCriterionValue";
@@ -19,12 +19,12 @@ export function calculateProductsCriteriaRankPts(
       ({ criterionId }) => criterionId === criterion.id
     );
 
-    let lastValue: number | undefined = undefined;
+    let lastValue: number | null = null;
     let lastPos = 0;
 
     products
       .sort((p1, p2) =>
-        compareFn(SORT_BY[criterion.beneficial === true ? "ASC" : "DESC"])(
+        compareFn(SortByEnum[criterion.beneficial === true ? "ASC" : "DESC"])(
           p1.value,
           p2.value
         )
@@ -57,7 +57,7 @@ export function rankProducts(
   criteria: Criterion[],
   productsWithCriteria: ProductCriterionValue[]
 ) {
-  let lastRankPts: number | undefined = undefined;
+  let lastRankPts: number | null = null;
   let lastPos = 0;
 
   const productsWithCriteriaRankPts = calculateProductsCriteriaRankPts(
@@ -76,7 +76,7 @@ export function rankProducts(
 
       return { ...product, rankPts };
     })
-    .sort((p1, p2) => compareFn(SORT_BY.DESC)(p1.rankPts, p2.rankPts))
+    .sort((p1, p2) => compareFn(SortByEnum.DESC)(p1.rankPts, p2.rankPts))
     .map(({ rankPts, rank, ...product }) => {
       const pos = rankPts !== lastRankPts ? lastPos + 1 : lastPos;
 

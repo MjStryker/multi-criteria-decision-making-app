@@ -1,9 +1,8 @@
+import { SortByEnum } from "../@Enums/SortBy.enum";
 import { areDefined, isDefined } from "./Object";
 
-import { SORT_BY } from "../constants/arrays";
-
 export const compareFn =
-  (sortBy: SORT_BY) =>
+  (sortBy: SortByEnum) =>
   <T>(a: T, b: T): number => {
     if (typeof a === "string" && typeof b === "string") {
       return compareStringFn(sortBy)(a, b);
@@ -15,7 +14,7 @@ export const compareFn =
   };
 
 const compareStringFn =
-  (sortBy: SORT_BY) =>
+  (sortBy: SortByEnum) =>
   (a: string, b: string): number => {
     let res = 0;
     if (areDefined([a, b])) {
@@ -31,7 +30,7 @@ const compareStringFn =
   };
 
 const compareNumberFn =
-  (sortBy: SORT_BY) =>
+  (sortBy: SortByEnum) =>
   (a: number, b: number): number => {
     let res = 0;
     if (areDefined([a, b])) {
