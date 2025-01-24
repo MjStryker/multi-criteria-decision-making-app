@@ -14,7 +14,6 @@ import {
 import {
   Dispatch,
   FormEvent,
-  Ref,
   SetStateAction,
   useEffect,
   useState,
@@ -22,14 +21,12 @@ import {
 import TextInput from "../../Form/TextInput";
 
 type Props = {
-  firstFieldRef: Ref<HTMLInputElement>;
   setParentIsDirty: Dispatch<SetStateAction<boolean>>;
   onParentClose: VoidFunction;
   product: Product;
 };
 
 export default function EditProductForm({
-  firstFieldRef,
   setParentIsDirty,
   product,
   onParentClose,
@@ -107,7 +104,6 @@ export default function EditProductForm({
         <TextInput
           label="Name"
           id="product-name"
-          ref={firstFieldRef}
           type="text"
           value={name}
           onChange={onNameChange}

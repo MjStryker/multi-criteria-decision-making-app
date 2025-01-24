@@ -6,7 +6,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@chakra-ui/react";
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 import { Product } from "@/types/Product";
 import { SmallCloseIcon as CloseIcon } from "@chakra-ui/icons";
@@ -18,9 +18,7 @@ type Props = {
   product: Product;
 };
 
-const EditProductButton = ({ product }: Props) => {
-  const firstFieldRef = useRef(null);
-
+export default function EditProductButton({ product }: Props) {
   const [isFormDirty, setIsFormDirty] = useState(false);
 
   const [isOpen, setIsOpen] = useState(false);
@@ -28,7 +26,6 @@ const EditProductButton = ({ product }: Props) => {
   return (
     <Popover
       isOpen={isOpen}
-      initialFocusRef={firstFieldRef}
       onOpen={() => setIsOpen(true)}
       onClose={() => setIsOpen(false)}
       placement="right"
@@ -52,7 +49,6 @@ const EditProductButton = ({ product }: Props) => {
         <PopoverArrow />
         <PopoverCloseButton />
         <EditProductForm
-          firstFieldRef={firstFieldRef}
           setParentIsDirty={setIsFormDirty}
           onParentClose={() => setIsOpen(false)}
           product={product}
@@ -60,6 +56,4 @@ const EditProductButton = ({ product }: Props) => {
       </PopoverContent>
     </Popover>
   );
-};
-
-export default EditProductButton;
+}

@@ -6,7 +6,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@chakra-ui/react";
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 import { Criterion } from "@/types/Criterion";
 import { SmallCloseIcon as CloseIcon } from "@chakra-ui/icons";
@@ -18,8 +18,6 @@ type EditCriterionButtonProps = {
 };
 
 const EditCriterionButton = ({ criterion }: EditCriterionButtonProps) => {
-  const firstFieldRef = useRef(null);
-
   const [isFormDirty, setIsFormDirty] = useState(false);
 
   const [isOpen, setIsOpen] = useState(false);
@@ -29,7 +27,6 @@ const EditCriterionButton = ({ criterion }: EditCriterionButtonProps) => {
       isOpen={isOpen}
       onOpen={() => setIsOpen(true)}
       onClose={() => setIsOpen(false)}
-      initialFocusRef={firstFieldRef}
       placement="right"
       closeOnBlur={!isFormDirty}
       closeOnEsc
@@ -51,7 +48,6 @@ const EditCriterionButton = ({ criterion }: EditCriterionButtonProps) => {
         <PopoverArrow />
         <PopoverCloseButton />
         <EditCriterionForm
-          firstFieldRef={firstFieldRef}
           setParentIsDirty={setIsFormDirty}
           onParentClose={() => setIsOpen(false)}
           criterion={criterion}

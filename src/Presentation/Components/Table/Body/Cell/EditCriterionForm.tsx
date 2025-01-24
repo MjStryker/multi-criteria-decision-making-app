@@ -18,21 +18,18 @@ import {
 import {
   Dispatch,
   FormEvent,
-  Ref,
   SetStateAction,
   useEffect,
   useState,
 } from "react";
 
 type Props = {
-  firstFieldRef: Ref<HTMLInputElement>;
   setParentIsDirty: Dispatch<SetStateAction<boolean>>;
   onParentClose: VoidFunction;
   criterion: Criterion;
 };
 
 export default function EditCriterionForm({
-  firstFieldRef,
   setParentIsDirty,
   criterion,
   onParentClose,
@@ -121,7 +118,6 @@ export default function EditCriterionForm({
         <TextInput
           label="Name"
           id="criterion-name"
-          ref={firstFieldRef}
           type="text"
           value={name}
           onChange={onNameChange}

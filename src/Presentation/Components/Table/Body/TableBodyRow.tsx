@@ -1,20 +1,21 @@
-import { DataContext } from "@/context/DataContext";
+import UseGetProductCriterionValueListQuery from "@/Application/Queries/UseGetProductCriterionValueList.query";
+import UseGetProductListQuery from "@/Application/Queries/UseGetProductList.query";
 import { Criterion } from "@/types/Criterion";
 import { createEmptyProductCriterionValue } from "@/utils/productsWithCriteria/productsWithCriteria";
 import { Td, Tr } from "@chakra-ui/react";
-import { useContext } from "react";
 import CriterionNameUnitCell from "./Cell/CriterionNameUnitCell";
 import CriterionProductValueCell from "./Cell/CriterionProductValueCell";
 import CriterionWeightCell from "./Cell/CriterionWeightCell";
 
-type TableBodyRowProps = {
+type Props = {
   rowIdx: number;
   criterion: Criterion;
   maxWeight: number;
 };
 
-const TableBodyRow = ({ rowIdx, criterion, maxWeight }: TableBodyRowProps) => {
-  const { products, productsWithCriteria } = useContext(DataContext);
+export default function TableBodyRow({ rowIdx, criterion, maxWeight }: Props) {
+  const productList = UseGetProductListQuery();
+  const productCriterionValueList = UseGetProductCriterionValueListQuery();
 
   return (
     <Tr key={criterion.id}>
@@ -35,9 +36,9 @@ const TableBodyRow = ({ rowIdx, criterion, maxWeight }: TableBodyRowProps) => {
       {/*
        * PRODUCTS - CRITERION VALUES
        */}
-      {products.map((product) => {
+      {productList.map((product) => {
         const criterionProductValue =
-          productsWithCriteria.find(
+          productCriterionValueList.find(
             ({ criterionId: criteriaId, productId }) =>
               criteriaId === criterion.id && productId === product.id
           ) ?? createEmptyProductCriterionValue(product, criterion);
@@ -58,6 +59,4 @@ const TableBodyRow = ({ rowIdx, criterion, maxWeight }: TableBodyRowProps) => {
       <Td border="none" />
     </Tr>
   );
-};
-
-export default TableBodyRow;
+}
