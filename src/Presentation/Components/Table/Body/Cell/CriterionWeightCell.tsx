@@ -2,7 +2,7 @@ import { DEBUG } from "@/@Config/Global";
 import { EDITABLE_MIN_WIDTH } from "@/@Config/Table";
 import { isValidNumber } from "@/@Shared/@Utils/Number";
 import { isDefined } from "@/@Shared/@Utils/Object";
-import { DataContext } from "@/context/DataContext";
+import UseUpdateCriterionCommand from "@/Application/Commands/UseUpdateCriterion.command";
 import { Criterion } from "@/types/Criterion";
 import { clampCriterionWeightValue } from "@/utils/criteria/criteria";
 import {
@@ -14,7 +14,7 @@ import {
   Td,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import DebugValue from "../../DebugValue";
 
 const cellWidth = "100px";
@@ -24,7 +24,7 @@ type CriterionWeightCellProps = {
 };
 
 const CriterionWeightCell = ({ criterion }: CriterionWeightCellProps) => {
-  const { updateCriterion } = useContext(DataContext);
+  const updateCriterion = UseUpdateCriterionCommand();
 
   const [weight, setWeight] = useState<number | null>(criterion.weight || null);
 
@@ -32,9 +32,7 @@ const CriterionWeightCell = ({ criterion }: CriterionWeightCellProps) => {
    * * Sync local state on props change
    */
   useEffect(() => {
-    setWeight(criterion.weight || null);
-    return () => setWeight(null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setWeight(criterion.weight ?? null);
   }, [criterion.weight]);
 
   /**

@@ -1,8 +1,10 @@
 import { Criterion } from "../../types/Criterion";
 import { Product } from "../../types/Product";
 import { ProductCriterionValue } from "../../types/ProductCriterionValue";
-import { rankProducts } from "./rankProducts";
 import { sumCriteriaNormalizedWeight } from "../criteria/criteria";
+import { rankProducts } from "./rankProducts";
+
+import { describe, expect, it } from "vitest";
 
 const c1: Criterion = {
   id: "id-c1",
@@ -223,7 +225,7 @@ describe("rankProducts(...)", () => {
 
     it("Ensure products have no ranks", () => {
       products.forEach(({ rank }) => {
-        expect(rank).toBenull();
+        expect(rank).toBeNull();
       });
     });
   });

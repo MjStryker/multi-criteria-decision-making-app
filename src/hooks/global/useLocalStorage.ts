@@ -10,7 +10,8 @@ const useLocalStorage = <T>(key: string, defaultValue: T) => {
       currentValue = JSON.parse(
         localStorage.getItem(key) || String(defaultValue)
       );
-    } catch (error) {
+    } catch (err) {
+      console.log(err);
       currentValue = defaultValue;
     }
 

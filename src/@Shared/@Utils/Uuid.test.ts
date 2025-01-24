@@ -1,5 +1,7 @@
 import { uuid } from "./Uuid";
 
+import { describe, it, expect } from "vitest";
+
 describe("uuid(...)", () => {
   it("Return unique IDs", () => {
     const size = 100_000;

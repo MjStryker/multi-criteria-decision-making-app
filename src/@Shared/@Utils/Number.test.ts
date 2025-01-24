@@ -1,5 +1,7 @@
 import { clamp, isValidNumber } from "./Number";
 
+import { describe, test, expect } from "vitest";
+
 describe("isValidNumber(...)", () => {
   test("Returning false", () => {
     expect(isValidNumber(null)).toBe(false);

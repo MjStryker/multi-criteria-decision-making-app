@@ -1,9 +1,9 @@
-import { SortByEnum } from "../../@Config/Array";
-import { Criterion } from "../../types/Criterion";
-import { Product } from "../../types/Product";
-import { ProductCriterionValue } from "../../types/ProductCriterionValue";
-import { compareFn } from "../Array";
-import { isDefined } from "../Object";
+import { SortByEnum } from "@/@Shared/@Enums/SortBy.enum";
+import { compareFn } from "@/@Shared/@Utils/Array";
+import { isDefined } from "@/@Shared/@Utils/Object";
+import { Criterion } from "@/types/Criterion";
+import { Product } from "@/types/Product";
+import { ProductCriterionValue } from "@/types/ProductCriterionValue";
 
 /**
  * Rank products for each criteria
@@ -77,7 +77,7 @@ export function rankProducts(
       return { ...product, rankPts };
     })
     .sort((p1, p2) => compareFn(SortByEnum.DESC)(p1.rankPts, p2.rankPts))
-    .map(({ rankPts, rank, ...product }) => {
+    .map(({ rankPts, ...product }) => {
       const pos = rankPts !== lastRankPts ? lastPos + 1 : lastPos;
 
       lastRankPts = rankPts;

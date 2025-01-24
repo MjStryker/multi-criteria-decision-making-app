@@ -1,21 +1,18 @@
 import { Box, SimpleGrid, Td, Text, VStack } from "@chakra-ui/react";
 
 import EditProductButton from "./EditProductButton";
-import { TProduct } from "../../../../../types/products";
-import { isValidNotEmptyString } from "../../../../../utils/strings";
+
+import { Product } from "@/types/Product";
+import { isValidNotEmptyString } from "@/@Shared/@Utils/String";
 
 const cellWidth = "150px";
 
 type TableHeaderCellProps = {
   columnIdx: number;
-  product: TProduct;
+  product: Product;
 };
 
 const TableHeaderCell = ({ columnIdx, product }: TableHeaderCellProps) => {
-  const hasName = isValidNotEmptyString(product.name);
-
-  const defaultName = `Produit ${columnIdx + 1}`;
-
   return (
     <Td
       w={cellWidth}
@@ -42,7 +39,9 @@ const TableHeaderCell = ({ columnIdx, product }: TableHeaderCellProps) => {
             wordBreak="break-word"
             fontWeight="semibold"
           >
-            {!hasName ? defaultName : product.name}
+            {isValidNotEmptyString(product.name)
+              ? product.name
+              : `Product ${columnIdx + 1}`}
           </Text>
 
           <Box>

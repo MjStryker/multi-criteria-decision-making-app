@@ -1,12 +1,13 @@
+import { describe, expect, test } from "vitest";
+
 import { areDefined, deepEqual, isDefined } from "./Object";
 
-describe("deepEqual(...)", () => {
+describe("deepEqual", () => {
   test("Returning false", () => {
     expect(deepEqual(true, false)).toBe(false);
     expect(deepEqual(false, true)).toBe(false);
 
-    expect(deepEqual(null, null)).toBe(false);
-    expect(deepEqual(null, null)).toBe(false);
+    expect(deepEqual(null, undefined)).toBe(false);
 
     expect(deepEqual("", " ")).toBe(false);
     expect(deepEqual("1", 1)).toBe(false);
@@ -160,7 +161,7 @@ describe("deepEqual(...)", () => {
   });
 });
 
-describe("isDefined(...)", () => {
+describe("isDefined", () => {
   test("Returning false", () => {
     expect(isDefined(null)).toBe(false);
     expect(isDefined(null)).toBe(false);
@@ -182,7 +183,7 @@ describe("isDefined(...)", () => {
   });
 });
 
-describe("areDefined(...)", () => {
+describe("areDefined", () => {
   test("Returning false", () => {
     expect(areDefined([null])).toBe(false);
     expect(areDefined([null])).toBe(false);

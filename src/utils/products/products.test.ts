@@ -3,8 +3,9 @@ import {
   compareProductsByRankFn,
 } from "./products";
 
-import { SortByEnum } from "../../@Config/Array";
+import { describe, it, expect } from "vitest";
 import { Product } from "../../types/Product";
+import { SortByEnum } from "@/@Shared/@Enums/SortBy.enum";
 
 const p1: Product = {
   id: "id-p1",
@@ -41,7 +42,7 @@ const productsSortedByDefaultColumnIdx = {
   DESC: [p3, p1, p2] as Product[],
 };
 
-describe("compareProductsByDefaultColumnIdxFn(...)", () => {
+describe("compareProductsByDefaultColumnIdxFn", () => {
   describe("ASC", () => {
     it("Already sorted products array", () => {
       expect(
@@ -80,7 +81,7 @@ const productsSortedByRank = {
   DESC: [p1, p2, p3] as Product[],
 };
 
-describe("compareProductsByRankFn(...)", () => {
+describe("compareProductsByRankFn", () => {
   describe("ASC", () => {
     it("Already sorted products array", () => {
       expect(

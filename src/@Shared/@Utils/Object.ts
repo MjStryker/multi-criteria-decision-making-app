@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function deepEqual(x: any, y: any, verbose = false): boolean {
   if (x === y) {
     return true;

@@ -1,5 +1,7 @@
 import { capitalize, isValidNotEmptyString } from "./String";
 
+import { describe, test, expect } from "vitest";
+
 describe("isValidNotEmptyString", () => {
   test("Returning false", () => {
     expect(isValidNotEmptyString(null)).toBe(false);

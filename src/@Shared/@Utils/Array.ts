@@ -10,6 +10,12 @@ export const compareFn =
     if (typeof a === "number" && typeof b === "number") {
       return compareNumberFn(sortBy)(a, b);
     }
+    if (a !== null && a !== undefined && (b === null || b === undefined)) {
+      return 1;
+    }
+    if ((a === null || a === undefined) && b !== null && b !== undefined) {
+      return -1;
+    }
     return 0;
   };
 

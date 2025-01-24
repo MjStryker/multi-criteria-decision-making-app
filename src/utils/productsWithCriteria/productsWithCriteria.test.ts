@@ -99,6 +99,8 @@ export const p3: Product = {
   defaultColumnIdx: 3,
 };
 
+import { describe, it, expect } from "vitest";
+
 describe("findProductCriterionValue(...)", () => {
   it("Return matched item", () => {
     const matchingResult: ProductCriterionValue = {
@@ -126,7 +128,7 @@ describe("findProductCriterionValue(...)", () => {
 
     expect(
       findProductWithCriterion(pUnmatched, c2, productsWithCriteria)
-    ).toBenull();
+    ).toBeNull();
   });
 
   it("Criterion does not exist", () => {
@@ -142,6 +144,6 @@ describe("findProductCriterionValue(...)", () => {
 
     expect(
       findProductWithCriterion(p3, cUnmatched, productsWithCriteria)
-    ).toBenull();
+    ).toBeNull();
   });
 });

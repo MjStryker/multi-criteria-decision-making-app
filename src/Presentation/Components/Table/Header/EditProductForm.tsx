@@ -1,5 +1,6 @@
 import { isValidNotEmptyString } from "@/@Shared/@Utils/String";
-import { DataContext } from "@/context/DataContext";
+import UseRemoveProductCommand from "@/Application/Commands/UseRemoveProduct.command";
+import UseUpdateProductCommand from "@/Application/Commands/UseUpdateProduct.command";
 import { Product } from "@/types/Product";
 import { DeleteIcon } from "@chakra-ui/icons";
 import {
@@ -13,27 +14,28 @@ import {
 import {
   Dispatch,
   FormEvent,
+  Ref,
   SetStateAction,
-  useContext,
   useEffect,
   useState,
 } from "react";
 import TextInput from "../../Form/TextInput";
 
-type EditProductFormProps = {
-  firstFieldRef: any;
+type Props = {
+  firstFieldRef: Ref<HTMLInputElement>;
   setParentIsDirty: Dispatch<SetStateAction<boolean>>;
   onParentClose: VoidFunction;
   product: Product;
 };
 
-const EditProductForm = ({
+export default function EditProductForm({
   firstFieldRef,
   setParentIsDirty,
   product,
   onParentClose,
-}: EditProductFormProps) => {
-  const { updateProduct, removeProduct } = useContext(DataContext);
+}: Props) {
+  const updateProduct = UseUpdateProductCommand();
+  const removeProduct = UseRemoveProductCommand();
 
   const [name, setName] = useState<string | null>(product.name);
 
@@ -170,6 +172,4 @@ const EditProductForm = ({
       </Stack>
     </form>
   );
-};
-
-export default EditProductForm;
+}

@@ -6,9 +6,10 @@ import {
   sumCriteriaNormalizedWeight,
   sumCriteriaWeight,
 } from "./criteria";
+import { describe, it, expect } from "vitest";
 
-import { SortByEnum } from "../../@Config/Array";
 import { Criterion } from "../../types/Criterion";
+import { SortByEnum } from "@/@Shared/@Enums/SortBy.enum";
 
 const c1: Criterion = {
   id: "id-c1",

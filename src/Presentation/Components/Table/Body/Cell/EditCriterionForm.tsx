@@ -1,5 +1,6 @@
 import { isValidNotEmptyString } from "@/@Shared/@Utils/String";
-import { DataContext } from "@/context/DataContext";
+import UseRemoveCriterionCommand from "@/Application/Commands/UseRemoveCriterion.command";
+import UseUpdateCriterionCommand from "@/Application/Commands/UseUpdateCriterion.command";
 import TextInput from "@/Presentation/Components/Form/TextInput";
 import { Criterion } from "@/types/Criterion";
 import { DeleteIcon, TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
@@ -17,26 +18,27 @@ import {
 import {
   Dispatch,
   FormEvent,
+  Ref,
   SetStateAction,
-  useContext,
   useEffect,
   useState,
 } from "react";
 
-type EditCriterionFormProps = {
-  firstFieldRef: any;
+type Props = {
+  firstFieldRef: Ref<HTMLInputElement>;
   setParentIsDirty: Dispatch<SetStateAction<boolean>>;
   onParentClose: VoidFunction;
   criterion: Criterion;
 };
 
-const EditCriterionForm = ({
+export default function EditCriterionForm({
   firstFieldRef,
   setParentIsDirty,
   criterion,
   onParentClose,
-}: EditCriterionFormProps) => {
-  const { updateCriterion, removeCriterion } = useContext(DataContext);
+}: Props) {
+  const updateCriterion = UseUpdateCriterionCommand();
+  const removeCriterion = UseRemoveCriterionCommand();
 
   const [name, setName] = useState<string | null>(criterion.name);
   const [unit, setUnit] = useState<string | null>(criterion.unit);
@@ -218,6 +220,4 @@ const EditCriterionForm = ({
       </Stack>
     </form>
   );
-};
-
-export default EditCriterionForm;
+}

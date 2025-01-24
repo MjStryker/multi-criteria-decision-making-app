@@ -1,7 +1,7 @@
-import { SortByEnum } from "../../@Config/Array";
-import { Product } from "../../types/Product";
-import { compareFn } from "../Array";
-import { uuid } from "../Uuid";
+import { SortByEnum } from "@/@Shared/@Enums/SortBy.enum";
+import { compareFn } from "@/@Shared/@Utils/Array";
+import { uuid } from "@/@Shared/@Utils/Uuid";
+import { Product } from "@/types/Product";
 
 export const compareProductsByDefaultColumnIdxFn =
   (sortBy = SortByEnum.ASC) =>

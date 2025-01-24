@@ -39,7 +39,6 @@ const CriterionProductValueCell = ({
    */
   useEffect(() => {
     setValue(criterionProductValue?.value ?? null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [criterionProductValue]);
 
   /**
