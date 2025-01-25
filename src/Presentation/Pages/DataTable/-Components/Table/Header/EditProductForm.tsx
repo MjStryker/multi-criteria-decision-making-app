@@ -18,7 +18,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import TextInput from "../../Form/TextInput";
+import TextInput from "../../../../../Components/Form/TextInput";
 
 type Props = {
   setParentIsDirty: Dispatch<SetStateAction<boolean>>;

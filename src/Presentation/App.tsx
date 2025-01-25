@@ -1,6 +1,6 @@
 import { ChakraProvider, Flex } from "@chakra-ui/react";
 
-import DataTable from "./Components/DataTable";
+import DataTable from "./Pages/DataTable";
 
 function App() {
   return (
