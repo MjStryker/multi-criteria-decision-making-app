@@ -1,9 +1,11 @@
+import atomWithLocalStorage from "@/Infrastructure/AtomWithLocalStorage";
 import { Product } from "@/types/Product";
-import { atom, useAtomValue } from "jotai";
+import { useAtomValue } from "jotai";
 
-// TODO: LocalStorage
-
-export const ProductListAtom = atom<Product[]>([]);
+export const ProductListAtom = atomWithLocalStorage<Product[]>(
+  "productList",
+  []
+);
 
 export default function UseGetProductListQuery() {
   const productList = useAtomValue(ProductListAtom);

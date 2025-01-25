@@ -1,9 +1,11 @@
+import atomWithLocalStorage from "@/Infrastructure/AtomWithLocalStorage";
 import { Criterion } from "@/types/Criterion";
-import { atom, useAtomValue } from "jotai";
+import { useAtomValue } from "jotai";
 
-// TODO: LocalStorage
-
-export const CriterionListAtom = atom<Criterion[]>([]);
+export const CriterionListAtom = atomWithLocalStorage<Criterion[]>(
+  "criterionList",
+  []
+);
 
 export default function UseGetCriterionListQuery() {
   const criterionList = useAtomValue(CriterionListAtom);
