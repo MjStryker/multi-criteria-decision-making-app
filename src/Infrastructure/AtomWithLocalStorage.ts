@@ -1,7 +1,7 @@
 import { atom } from "jotai";
 
 export default function atomWithLocalStorage<T>(key: string, initialValue: T) {
-  const getInitialValue = () => {
+  const getInitialValue = (): T => {
     const item = localStorage.getItem(key);
     if (item !== null) {
       try {
@@ -17,9 +17,11 @@ export default function atomWithLocalStorage<T>(key: string, initialValue: T) {
   const baseAtom = atom(getInitialValue());
   const derivedAtom = atom(
     (get) => get(baseAtom),
-    (get, set, update) => {
+    (get, set, update: T | ((prev: T) => T)) => {
       const nextValue =
-        typeof update === "function" ? update(get(baseAtom)) : update;
+        typeof update === "function"
+          ? (update as (prev: T) => T)(get(baseAtom))
+          : update;
       set(baseAtom, nextValue);
       localStorage.setItem(key, JSON.stringify(nextValue));
     }

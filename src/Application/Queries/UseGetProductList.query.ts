@@ -9,8 +9,5 @@ export const ProductListAtom = atomWithLocalStorage<Product[]>(
 
 export default function UseGetProductListQuery() {
   const productList = useAtomValue(ProductListAtom);
-
-  // TODO: Sort list
-
   return productList;
 }

@@ -17,17 +17,17 @@ import {
 import { useEffect, useState } from "react";
 import DebugValue from "../../DebugValue";
 
-type CriterionProductValueCellProps = {
+type Props = {
   criterion: Criterion;
   product: Product;
   criterionProductValue: ProductCriterionValue | null;
 };
 
-const CriterionProductValueCell = ({
+export default function ProductCriterionValueCell({
   criterion,
   product,
   criterionProductValue,
-}: CriterionProductValueCellProps) => {
+}: Props) {
   const setProductCriterionValue = UseUpdateProductCriterionValueCommand();
 
   const [value, setValue] = useState<number | null>(
@@ -42,43 +42,45 @@ const CriterionProductValueCell = ({
   }, [criterionProductValue]);
 
   /**
-   * * Handle Inputs change / validation
+   * * Handle Input change / validation
    */
-  const onChange = (nextValue: string) => {
-    setValue(isValidNotEmptyString(nextValue) ? Number(nextValue) : null);
+  const onChange = (stringValue: string) => {
+    setValue(isValidNotEmptyString(stringValue) ? Number(stringValue) : null);
   };
 
   const onSubmit = () => {
-    const newValue = isValidNotEmptyString(value) ? Number(value) : null;
-
-    setProductCriterionValue(product.id, criterion.id, newValue);
+    setProductCriterionValue(product.id, criterion.id, value);
   };
 
   return (
-    <Td isNumeric px={2} border="1px" borderColor="gray.100">
-      <HStack spacing={1} justifyContent="flex-end">
+    <Td isNumeric p={0} border="1px" borderColor="gray.100">
+      <HStack gap={1} h="50px" justifyContent="flex-end">
         <Editable
           flex={1}
-          value={value?.toString() || "-"}
+          h="full"
+          value={value?.toString()}
           onChange={onChange}
           onSubmit={onSubmit}
         >
           <EditablePreview
-            py={2}
-            px={2}
+            py="18px"
+            px={3}
             w="full"
             minW={EDITABLE_MIN_WIDTH}
+            h="full"
+            rounded="none"
             _hover={{
-              background: useColorModeValue("gray.100", "gray.700"),
+              bg: useColorModeValue("gray.50", "gray.700"),
             }}
           />
 
           <Input
             as={EditableInput}
             type="number"
-            borderRadius="base"
+            // borderRadius="base"
             size="sm"
-            px={2}
+            h="full"
+            px="11px"
           />
         </Editable>
 
@@ -92,6 +94,4 @@ const CriterionProductValueCell = ({
       </HStack>
     </Td>
   );
-};
-
-export default CriterionProductValueCell;
+}

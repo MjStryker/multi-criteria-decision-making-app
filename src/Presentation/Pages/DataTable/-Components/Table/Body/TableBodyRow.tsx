@@ -4,7 +4,7 @@ import { Criterion } from "@/types/Criterion";
 import { createEmptyProductCriterionValue } from "@/utils/productsWithCriteria/productsWithCriteria";
 import { Td, Tr } from "@chakra-ui/react";
 import CriterionNameUnitCell from "./Cell/CriterionNameUnitCell";
-import CriterionProductValueCell from "./Cell/CriterionProductValueCell";
+import CriterionProductValueCell from "./Cell/ProductCriterionValueCell";
 import CriterionWeightCell from "./Cell/CriterionWeightCell";
 
 type Props = {

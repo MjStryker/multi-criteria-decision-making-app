@@ -7,18 +7,22 @@ export default function UseUpdateProductCriterionValueCommand() {
   const updateProductCriterionValue = useCallback(
     (productId: string, criterionId: string, newValue: number | null) => {
       setProductCriterionValueList((prev) => {
-        const currentValue = prev.find(
+        const index = prev.findIndex(
           (item) =>
             item.productId === productId && item.criterionId === criterionId
         );
 
-        if (!currentValue) {
+        if (index === -1) {
           return prev;
         }
 
-        currentValue.value = newValue;
+        const newProductCriterionValueList = [...prev];
+        newProductCriterionValueList[index] = {
+          ...newProductCriterionValueList[index],
+          value: newValue,
+        };
 
-        return [...prev];
+        return newProductCriterionValueList;
       });
     },
     [setProductCriterionValueList]

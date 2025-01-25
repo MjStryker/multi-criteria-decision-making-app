@@ -9,8 +9,5 @@ export const CriterionListAtom = atomWithLocalStorage<Criterion[]>(
 
 export default function UseGetCriterionListQuery() {
   const criterionList = useAtomValue(CriterionListAtom);
-
-  // TODO: Sort list
-
   return criterionList;
 }

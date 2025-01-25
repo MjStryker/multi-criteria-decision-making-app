@@ -9,6 +9,7 @@ export default function UseUpdateCriterionCommand() {
     (criterion: Criterion) => {
       setCriterionListCommand((prev) => {
         const index = prev.findIndex((c) => c.id === criterion.id);
+
         if (index === -1) {
           return prev;
         }
