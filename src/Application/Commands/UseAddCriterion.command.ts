@@ -4,6 +4,8 @@ import { useToast } from '@chakra-ui/react';
 import { useCallback } from 'react';
 import UseGetCriterionListQuery from '../Queries/UseGetCriterionList.query';
 import UseSetCriterionListCommand from './UseSetCriterionList.command';
+import { EventService } from '@/@Event/EventService';
+import { CriterionAddedEvent } from '../Events/CriterionAdded.event';
 
 export default function UseAddCriterionCommand() {
   const setCriterionListCommand = UseSetCriterionListCommand();
@@ -35,6 +37,10 @@ export default function UseAddCriterionCommand() {
       }
 
       setCriterionListCommand(criterions => [...criterions, criterion]);
+
+      console.log('command >> add >> criterion', criterion);
+
+      EventService.emit(new CriterionAddedEvent(criterion));
     },
     [nbCriteriaRemaining, setCriterionListCommand, toast]
   );

@@ -4,6 +4,9 @@ import { PRODUCTS_MAX_ITEMS, PRODUCTS_ITEMS_REMAINING_WARNING } from '@/@Config/
 import UseGetProductListQuery from '../Queries/UseGetProductList.query';
 import { useToast } from '@chakra-ui/react';
 import { ProductDto } from '../Dtos/Product.dto';
+import { EventService } from '@/@Event/EventService';
+import { CriterionAddedEvent } from '../Events/CriterionAdded.event';
+import { ProductAddedEvent } from '../Events/ProductAdded.event';
 
 export default function UseAddProductCommand() {
   const productList = UseGetProductListQuery();
@@ -35,6 +38,10 @@ export default function UseAddProductCommand() {
       }
 
       setProductListCommand(products => [...products, product]);
+
+      console.log('command >> add >> product', product);
+
+      EventService.emit(new ProductAddedEvent(product));
     },
     [nbProductsRemaining, setProductListCommand, toast]
   );
