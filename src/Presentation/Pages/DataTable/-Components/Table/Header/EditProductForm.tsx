@@ -1,25 +1,12 @@
-import { isValidNotEmptyString } from "@/@Shared/@Utils/String";
-import UseRemoveProductCommand from "@/Application/Commands/UseRemoveProduct.command";
-import UseUpdateProductCommand from "@/Application/Commands/UseUpdateProduct.command";
+import { isValidNotEmptyString } from '@/@Shared/@Utils/String';
+import UseRemoveProductCommand from '@/Application/Commands/UseRemoveProduct.command';
+import UseUpdateProductCommand from '@/Application/Commands/UseUpdateProduct.command';
 
-import { ProductDto } from "@/Application/Dtos/Product.dto";
-import { DeleteIcon } from "@chakra-ui/icons";
-import {
-  Button,
-  HStack,
-  IconButton,
-  Stack,
-  Text,
-  useBoolean,
-} from "@chakra-ui/react";
-import {
-  Dispatch,
-  FormEvent,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react";
-import TextInput from "../../../../../Components/Form/TextInput";
+import { ProductDto } from '@/Application/Dtos/Product.dto';
+import { DeleteIcon } from '@chakra-ui/icons';
+import { Button, HStack, IconButton, Stack, Text, useBoolean } from '@chakra-ui/react';
+import { Dispatch, FormEvent, SetStateAction, useEffect, useState } from 'react';
+import TextInput from '../../../../../Components/Form/TextInput';
 
 type Props = {
   setParentIsDirty: Dispatch<SetStateAction<boolean>>;
@@ -27,11 +14,7 @@ type Props = {
   product: ProductDto;
 };
 
-export default function EditProductForm({
-  setParentIsDirty,
-  product,
-  onParentClose,
-}: Props) {
+export default function EditProductForm({ setParentIsDirty, product, onParentClose }: Props) {
   const updateProduct = UseUpdateProductCommand();
   const removeProduct = UseRemoveProductCommand();
 
@@ -67,11 +50,9 @@ export default function EditProductForm({
   /**
    * * Handle Inputs change
    */
-  const onNameChange = (e: FormEvent<HTMLInputElement>) =>
-    setName(e.currentTarget.value);
+  const onNameChange = (e: FormEvent<HTMLInputElement>) => setName(e.currentTarget.value);
 
-  const onReferenceChange = (e: FormEvent<HTMLInputElement>) =>
-    setReference(e.currentTarget.value);
+  const onReferenceChange = (e: FormEvent<HTMLInputElement>) => setReference(e.currentTarget.value);
 
   /**
    * * Dialog actions
@@ -142,8 +123,7 @@ export default function EditProductForm({
                 icon={<DeleteIcon />}
                 aria-label="Delete product"
                 onClick={
-                  !isValidNotEmptyString(name) &&
-                  !isValidNotEmptyString(reference)
+                  !isValidNotEmptyString(name) && !isValidNotEmptyString(reference)
                     ? // * If fields are empty + product does not have any value
                       onDelete
                     : // * Else go through confirm process
@@ -155,12 +135,7 @@ export default function EditProductForm({
                 Cancel
               </Button>
 
-              <Button
-                flex={1}
-                type="submit"
-                colorScheme="teal"
-                isDisabled={!isDirty}
-              >
+              <Button flex={1} type="submit" colorScheme="teal" isDisabled={!isDirty}>
                 Save
               </Button>
             </>

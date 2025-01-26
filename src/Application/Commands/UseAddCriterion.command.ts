@@ -1,12 +1,9 @@
-import {
-  CRITERIA_ITEMS_REMAINING_WARNING,
-  CRITERIA_MAX_ITEMS,
-} from "@/@Config/Criteria";
-import { CriterionDto } from "@/Application/Dtos/Criterion.dto";
-import { useToast } from "@chakra-ui/react";
-import { useCallback } from "react";
-import UseGetCriterionListQuery from "../Queries/UseGetCriterionList.query";
-import UseSetCriterionListCommand from "./UseSetCriterionList.command";
+import { CRITERIA_ITEMS_REMAINING_WARNING, CRITERIA_MAX_ITEMS } from '@/@Config/Criteria';
+import { CriterionDto } from '@/Application/Dtos/Criterion.dto';
+import { useToast } from '@chakra-ui/react';
+import { useCallback } from 'react';
+import UseGetCriterionListQuery from '../Queries/UseGetCriterionList.query';
+import UseSetCriterionListCommand from './UseSetCriterionList.command';
 
 export default function UseAddCriterionCommand() {
   const setCriterionListCommand = UseSetCriterionListCommand();
@@ -22,22 +19,22 @@ export default function UseAddCriterionCommand() {
     (criterion: CriterionDto) => {
       if (nbCriteriaRemaining === 0) {
         toast({
-          status: "error",
-          title: "Cannot add another criterion",
-          description: `Maximum number of criteria reached (${CRITERIA_MAX_ITEMS}/${CRITERIA_MAX_ITEMS})`,
+          status: 'error',
+          title: 'Cannot add another criterion',
+          description: `Maximum number of criteria reached (${CRITERIA_MAX_ITEMS}/${CRITERIA_MAX_ITEMS})`
         });
         return;
       }
 
       if (nbCriteriaRemaining - 1 <= CRITERIA_ITEMS_REMAINING_WARNING) {
-        const label = nbCriteriaRemaining - 1 === 1 ? "criterion" : "criteria";
+        const label = nbCriteriaRemaining - 1 === 1 ? 'criterion' : 'criteria';
         toast({
-          status: "warning",
-          title: `${nbCriteriaRemaining - 1} ${label} remaining`,
+          status: 'warning',
+          title: `${nbCriteriaRemaining - 1} ${label} remaining`
         });
       }
 
-      setCriterionListCommand((criterions) => [...criterions, criterion]);
+      setCriterionListCommand(criterions => [...criterions, criterion]);
     },
     [nbCriteriaRemaining, setCriterionListCommand, toast]
   );

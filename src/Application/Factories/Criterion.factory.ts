@@ -1,5 +1,5 @@
-import { Uuid } from "@/@Shared/@Utils/Uuid";
-import { CriterionDto } from "../Dtos/Criterion.dto";
+import { Uuid } from '@/@Shared/@Utils/Uuid';
+import { CriterionDto } from '../Dtos/Criterion.dto';
 
 export class CriterionFactory {
   public static newEmpty(defaultRowIdx: number): CriterionDto {
@@ -10,7 +10,7 @@ export class CriterionFactory {
       normalizedWeight: null,
       unit: null,
       beneficial: true,
-      defaultRowIdx,
+      defaultRowIdx
     };
   }
 }

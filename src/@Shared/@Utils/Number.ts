@@ -1,7 +1,7 @@
-import { isDefined } from "./Object";
+import { isDefined } from './Object';
 
 export function isValidNumber(value: number | null | null): value is number {
-  return isDefined(value) && typeof value === "number" && !isNaN(value);
+  return isDefined(value) && typeof value === 'number' && !isNaN(value);
 }
 
 export function clamp(value: number, min: number, max: number): number {

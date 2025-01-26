@@ -1,28 +1,12 @@
-import { isValidNotEmptyString } from "@/@Shared/@Utils/String";
-import UseRemoveCriterionCommand from "@/Application/Commands/UseRemoveCriterion.command";
-import UseUpdateCriterionCommand from "@/Application/Commands/UseUpdateCriterion.command";
-import { CriterionDto } from "@/Application/Dtos/Criterion.dto";
-import TextInput from "@/Presentation/Components/Form/TextInput";
+import { isValidNotEmptyString } from '@/@Shared/@Utils/String';
+import UseRemoveCriterionCommand from '@/Application/Commands/UseRemoveCriterion.command';
+import UseUpdateCriterionCommand from '@/Application/Commands/UseUpdateCriterion.command';
+import { CriterionDto } from '@/Application/Dtos/Criterion.dto';
+import TextInput from '@/Presentation/Components/Form/TextInput';
 
-import { DeleteIcon, TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
-import {
-  Button,
-  ButtonGroup,
-  FormControl,
-  FormLabel,
-  HStack,
-  IconButton,
-  Stack,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
-import {
-  Dispatch,
-  FormEvent,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react";
+import { DeleteIcon, TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons';
+import { Button, ButtonGroup, FormControl, FormLabel, HStack, IconButton, Stack, Text, VStack } from '@chakra-ui/react';
+import { Dispatch, FormEvent, SetStateAction, useEffect, useState } from 'react';
 
 type Props = {
   setParentIsDirty: Dispatch<SetStateAction<boolean>>;
@@ -30,26 +14,17 @@ type Props = {
   criterion: CriterionDto;
 };
 
-export default function EditCriterionForm({
-  setParentIsDirty,
-  criterion,
-  onParentClose,
-}: Props) {
+export default function EditCriterionForm({ setParentIsDirty, criterion, onParentClose }: Props) {
   const updateCriterion = UseUpdateCriterionCommand();
   const removeCriterion = UseRemoveCriterionCommand();
 
   const [name, setName] = useState<string | null>(criterion.name);
   const [unit, setUnit] = useState<string | null>(criterion.unit);
-  const [beneficial, setBeneficial] = useState<boolean | null>(
-    criterion.beneficial
-  );
+  const [beneficial, setBeneficial] = useState<boolean | null>(criterion.beneficial);
 
   const [confirmDelete, setConfirmDelete] = useState(false);
 
-  const isDirty =
-    name !== criterion.name ||
-    unit !== criterion.unit ||
-    beneficial !== criterion.beneficial;
+  const isDirty = name !== criterion.name || unit !== criterion.unit || beneficial !== criterion.beneficial;
 
   /**
    * * Update parent props
@@ -77,14 +52,12 @@ export default function EditCriterionForm({
   /**
    * * Handle Inputs change
    */
-  const onNameChange = (e: FormEvent<HTMLInputElement>) =>
-    setName(e.currentTarget.value);
+  const onNameChange = (e: FormEvent<HTMLInputElement>) => setName(e.currentTarget.value);
 
-  const onUnitChange = (e: FormEvent<HTMLInputElement>) =>
-    setUnit(e.currentTarget.value);
+  const onUnitChange = (e: FormEvent<HTMLInputElement>) => setUnit(e.currentTarget.value);
 
   const toggleBeneficial = () => {
-    setBeneficial((prev) => !prev);
+    setBeneficial(prev => !prev);
   };
 
   /**
@@ -137,18 +110,12 @@ export default function EditCriterionForm({
         <FormControl as={VStack} spacing={0} alignItems="stretch">
           <FormLabel>Best value</FormLabel>
 
-          <ButtonGroup
-            colorScheme={beneficial === false ? "orange" : "blue"}
-            isAttached
-            isDisabled={confirmDelete}
-          >
+          <ButtonGroup colorScheme={beneficial === false ? 'orange' : 'blue'} isAttached isDisabled={confirmDelete}>
             <Button
               flex={1}
               aria-label="Non beneficial"
-              variant={beneficial === false ? "solid" : "outline"}
-              rightIcon={
-                beneficial === false ? <TriangleDownIcon /> : undefined
-              }
+              variant={beneficial === false ? 'solid' : 'outline'}
+              rightIcon={beneficial === false ? <TriangleDownIcon /> : undefined}
               onClick={toggleBeneficial}
             >
               Lowest
@@ -156,7 +123,7 @@ export default function EditCriterionForm({
             <Button
               flex={1}
               aria-label="Beneficial"
-              variant={beneficial === true ? "solid" : "outline"}
+              variant={beneficial === true ? 'solid' : 'outline'}
               rightIcon={beneficial === true ? <TriangleUpIcon /> : undefined}
               onClick={toggleBeneficial}
             >
@@ -172,11 +139,7 @@ export default function EditCriterionForm({
                 Delete?
               </Text>
 
-              <Button
-                flex={1}
-                variant="outline"
-                onClick={() => setConfirmDelete(false)}
-              >
+              <Button flex={1} variant="outline" onClick={() => setConfirmDelete(false)}>
                 No
               </Button>
 
@@ -203,12 +166,7 @@ export default function EditCriterionForm({
                 Cancel
               </Button>
 
-              <Button
-                flex={1}
-                type="submit"
-                colorScheme="teal"
-                isDisabled={!isDirty}
-              >
+              <Button flex={1} type="submit" colorScheme="teal" isDisabled={!isDirty}>
                 Save
               </Button>
             </>

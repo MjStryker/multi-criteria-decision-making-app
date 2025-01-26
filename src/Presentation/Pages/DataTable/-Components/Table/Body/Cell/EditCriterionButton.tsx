@@ -4,14 +4,14 @@ import {
   PopoverArrow,
   PopoverCloseButton,
   PopoverContent,
-  PopoverTrigger,
-} from "@chakra-ui/react";
-import { useState } from "react";
+  PopoverTrigger
+} from '@chakra-ui/react';
+import { useState } from 'react';
 
-import { SmallCloseIcon as CloseIcon } from "@chakra-ui/icons";
-import { MdEdit as EditIcon } from "react-icons/md";
-import EditCriterionForm from "./EditCriterionForm";
-import { CriterionDto } from "@/Application/Dtos/Criterion.dto";
+import { SmallCloseIcon as CloseIcon } from '@chakra-ui/icons';
+import { MdEdit as EditIcon } from 'react-icons/md';
+import EditCriterionForm from './EditCriterionForm';
+import { CriterionDto } from '@/Application/Dtos/Criterion.dto';
 
 type Props = {
   criterion: CriterionDto;

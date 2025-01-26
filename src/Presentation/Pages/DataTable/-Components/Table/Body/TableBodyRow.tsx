@@ -1,11 +1,11 @@
-import UseGetProductCriterionValueListQuery from "@/Application/Queries/UseGetProductCriterionValueList.query";
-import UseGetProductListQuery from "@/Application/Queries/UseGetProductList.query";
+import UseGetProductCriterionValueListQuery from '@/Application/Queries/UseGetProductCriterionValueList.query';
+import UseGetProductListQuery from '@/Application/Queries/UseGetProductList.query';
 
-import { Td, Tr } from "@chakra-ui/react";
-import CriterionNameUnitCell from "./Cell/CriterionNameUnitCell";
-import CriterionProductValueCell from "./Cell/ProductCriterionValueCell";
-import CriterionWeightCell from "./Cell/CriterionWeightCell";
-import { CriterionDto } from "@/Application/Dtos/Criterion.dto";
+import { Td, Tr } from '@chakra-ui/react';
+import CriterionNameUnitCell from './Cell/CriterionNameUnitCell';
+import CriterionProductValueCell from './Cell/ProductCriterionValueCell';
+import CriterionWeightCell from './Cell/CriterionWeightCell';
+import { CriterionDto } from '@/Application/Dtos/Criterion.dto';
 
 type Props = {
   rowIdx: number;
@@ -22,11 +22,7 @@ export default function TableBodyRow({ rowIdx, criterion, maxWeight }: Props) {
       {/*
        * CRITERION - NAME / UNIT
        */}
-      <CriterionNameUnitCell
-        criterion={criterion}
-        rowIdx={rowIdx}
-        maxWeight={maxWeight}
-      />
+      <CriterionNameUnitCell criterion={criterion} rowIdx={rowIdx} maxWeight={maxWeight} />
 
       {/*
        * CRITERION - WEIGHT
@@ -36,10 +32,9 @@ export default function TableBodyRow({ rowIdx, criterion, maxWeight }: Props) {
       {/*
        * PRODUCTS - CRITERION VALUES
        */}
-      {productList.map((product) => {
+      {productList.map(product => {
         const criterionProductValue = productCriterionValueList.find(
-          ({ criterionUuid, productUuid }) =>
-            criterion.uuid === criterionUuid && product.uuid === productUuid
+          ({ criterionUuid, productUuid }) => criterion.uuid === criterionUuid && product.uuid === productUuid
         );
 
         if (!criterionProductValue) {

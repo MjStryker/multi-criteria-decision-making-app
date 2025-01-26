@@ -1,5 +1,5 @@
-import { Uuid } from "@/@Shared/@Utils/Uuid";
-import { ProductDto } from "../Dtos/Product.dto";
+import { Uuid } from '@/@Shared/@Utils/Uuid';
+import { ProductDto } from '../Dtos/Product.dto';
 
 export class ProductFactory {
   public static newEmpty(defaultColumnIdx: number): ProductDto {
@@ -9,7 +9,7 @@ export class ProductFactory {
       reference: null,
       rank: null,
       rankPts: null,
-      defaultColumnIdx,
+      defaultColumnIdx
     };
   }
 }

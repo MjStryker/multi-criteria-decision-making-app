@@ -2,12 +2,7 @@
 export function deepEqual(x: any, y: any, verbose = false): boolean {
   if (x === y) {
     return true;
-  } else if (
-    typeof x == "object" &&
-    isDefined(x) &&
-    typeof y == "object" &&
-    isDefined(y)
-  ) {
+  } else if (typeof x == 'object' && isDefined(x) && typeof y == 'object' && isDefined(y)) {
     if (Object.keys(x).length !== Object.keys(y).length) {
       return false;
     }
@@ -41,8 +36,6 @@ export function isDefined<T>(obj: T): obj is Exclude<T, null | null> {
   return obj !== null && obj !== null;
 }
 
-export function areDefined(
-  obj: unknown[]
-): obj is Exclude<Exclude<unknown, null | null>[], null | null> {
+export function areDefined(obj: unknown[]): obj is Exclude<Exclude<unknown, null | null>[], null | null> {
   return obj.every(isDefined);
 }

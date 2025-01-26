@@ -1,4 +1,4 @@
-import { Box, Progress } from "@chakra-ui/react";
+import { Box, Progress } from '@chakra-ui/react';
 
 export default function ComputingRanksIndicator() {
   const isPending = false; // TODO

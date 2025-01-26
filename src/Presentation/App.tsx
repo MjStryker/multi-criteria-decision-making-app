@@ -1,17 +1,11 @@
-import { ChakraProvider, Flex } from "@chakra-ui/react";
+import { ChakraProvider, Flex } from '@chakra-ui/react';
 
-import DataTable from "./Pages/DataTable";
+import DataTable from './Pages/DataTable';
 
 function App() {
   return (
     <ChakraProvider>
-      <Flex
-        className="AppContainer"
-        width="full"
-        height="100vh"
-        alignItems="center"
-        justifyContent="center"
-      >
+      <Flex className="AppContainer" width="full" height="100vh" alignItems="center" justifyContent="center">
         <DataTable />
       </Flex>
     </ChakraProvider>

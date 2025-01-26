@@ -1,13 +1,13 @@
-import { SortByEnum } from "../@Enums/SortBy.enum";
-import { areDefined, isDefined } from "./Object";
+import { SortByEnum } from '../@Enums/SortBy.enum';
+import { areDefined, isDefined } from './Object';
 
 export const compareFn =
   (sortBy: SortByEnum) =>
   <T>(a: T, b: T): number => {
-    if (typeof a === "string" && typeof b === "string") {
+    if (typeof a === 'string' && typeof b === 'string') {
       return compareStringFn(sortBy)(a, b);
     }
-    if (typeof a === "number" && typeof b === "number") {
+    if (typeof a === 'number' && typeof b === 'number') {
       return compareNumberFn(sortBy)(a, b);
     }
     if (a !== null && a !== undefined && (b === null || b === undefined)) {

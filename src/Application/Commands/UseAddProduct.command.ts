@@ -1,12 +1,9 @@
-import { useCallback } from "react";
-import UseSetProductListCommand from "./UseSetProductList.command";
-import {
-  PRODUCTS_MAX_ITEMS,
-  PRODUCTS_ITEMS_REMAINING_WARNING,
-} from "@/@Config/Product";
-import UseGetProductListQuery from "../Queries/UseGetProductList.query";
-import { useToast } from "@chakra-ui/react";
-import { ProductDto } from "../Dtos/Product.dto";
+import { useCallback } from 'react';
+import UseSetProductListCommand from './UseSetProductList.command';
+import { PRODUCTS_MAX_ITEMS, PRODUCTS_ITEMS_REMAINING_WARNING } from '@/@Config/Product';
+import UseGetProductListQuery from '../Queries/UseGetProductList.query';
+import { useToast } from '@chakra-ui/react';
+import { ProductDto } from '../Dtos/Product.dto';
 
 export default function UseAddProductCommand() {
   const productList = UseGetProductListQuery();
@@ -21,23 +18,23 @@ export default function UseAddProductCommand() {
     (product: ProductDto) => {
       if (nbProductsRemaining === 0) {
         toast({
-          status: "error",
-          title: "Cannot add another product",
-          description: `Maximum number of products reached (${PRODUCTS_MAX_ITEMS}/${PRODUCTS_MAX_ITEMS})`,
+          status: 'error',
+          title: 'Cannot add another product',
+          description: `Maximum number of products reached (${PRODUCTS_MAX_ITEMS}/${PRODUCTS_MAX_ITEMS})`
         });
         return;
       }
 
       if (nbProductsRemaining - 1 <= PRODUCTS_ITEMS_REMAINING_WARNING) {
-        const label = nbProductsRemaining - 1 === 1 ? "product" : "products";
+        const label = nbProductsRemaining - 1 === 1 ? 'product' : 'products';
 
         toast({
-          status: "warning",
-          title: `${nbProductsRemaining - 1} ${label} remaining`,
+          status: 'warning',
+          title: `${nbProductsRemaining - 1} ${label} remaining`
         });
       }
 
-      setProductListCommand((products) => [...products, product]);
+      setProductListCommand(products => [...products, product]);
     },
     [nbProductsRemaining, setProductListCommand, toast]
   );

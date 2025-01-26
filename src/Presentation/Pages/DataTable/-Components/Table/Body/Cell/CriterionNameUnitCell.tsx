@@ -1,10 +1,10 @@
-import { capitalize, isValidNotEmptyString } from "@/@Shared/@Utils/String";
-import { CriterionDto } from "@/Application/Dtos/Criterion.dto";
-import { getCriterionWeightRelativeToMax } from "@/utils/criteria/criteria";
-import { Box, Flex, HStack, Progress, Td, Text } from "@chakra-ui/react";
-import EditCriterionButton from "./EditCriterionButton";
+import { capitalize, isValidNotEmptyString } from '@/@Shared/@Utils/String';
+import { CriterionDto } from '@/Application/Dtos/Criterion.dto';
+import { getCriterionWeightRelativeToMax } from '@/utils/criteria/criteria';
+import { Box, Flex, HStack, Progress, Td, Text } from '@chakra-ui/react';
+import EditCriterionButton from './EditCriterionButton';
 
-const cellWidth = "240px";
+const cellWidth = '240px';
 
 type Props = {
   criterion: CriterionDto;
@@ -12,11 +12,7 @@ type Props = {
   maxWeight: number;
 };
 
-export default function CriterionNameUnitCell({
-  criterion,
-  rowIdx,
-  maxWeight,
-}: Props) {
+export default function CriterionNameUnitCell({ criterion, rowIdx, maxWeight }: Props) {
   return (
     <Td
       position="relative"
@@ -33,14 +29,8 @@ export default function CriterionNameUnitCell({
           {/*
            * -- Name
            */}
-          <Text
-            whiteSpace="break-spaces"
-            wordBreak="break-word"
-            fontWeight="semibold"
-          >
-            {isValidNotEmptyString(criterion.name)
-              ? capitalize(criterion.name)
-              : capitalize(`criterion ${rowIdx + 1}`)}
+          <Text whiteSpace="break-spaces" wordBreak="break-word" fontWeight="semibold">
+            {isValidNotEmptyString(criterion.name) ? capitalize(criterion.name) : capitalize(`criterion ${rowIdx + 1}`)}
           </Text>
 
           {/*
@@ -73,13 +63,13 @@ export default function CriterionNameUnitCell({
         <Progress
           size="xs"
           borderRadius="base"
-          colorScheme={criterion.beneficial === false ? "orange" : "blue"}
+          colorScheme={criterion.beneficial === false ? 'orange' : 'blue'}
           value={getCriterionWeightRelativeToMax(criterion.weight, maxWeight)}
           opacity={0.7}
           sx={{
-            "& > div": {
-              transition: "width .5s ease-in-out",
-            },
+            '& > div': {
+              transition: 'width .5s ease-in-out'
+            }
           }}
         />
       </Box>

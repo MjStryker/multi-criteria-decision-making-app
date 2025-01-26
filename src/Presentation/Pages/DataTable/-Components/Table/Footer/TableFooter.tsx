@@ -1,12 +1,12 @@
-import UseAddCriterionCommand from "@/Application/Commands/UseAddCriterion.command";
-import UseGetProductListQuery from "@/Application/Queries/UseGetProductList.query";
+import UseAddCriterionCommand from '@/Application/Commands/UseAddCriterion.command';
+import UseGetProductListQuery from '@/Application/Queries/UseGetProductList.query';
 
-import { CRITERIA_MAX_ITEMS } from "@/@Config/Criteria";
-import { CriterionFactory } from "@/Application/Factories/Criterion.factory";
-import UseGetCriterionListQuery from "@/Application/Queries/UseGetCriterionList.query";
-import { AddIcon } from "@chakra-ui/icons";
-import { Button, Td, Tfoot, Tr } from "@chakra-ui/react";
-import TableFooterCell from "./TableFooterCell";
+import { CRITERIA_MAX_ITEMS } from '@/@Config/Criteria';
+import { CriterionFactory } from '@/Application/Factories/Criterion.factory';
+import UseGetCriterionListQuery from '@/Application/Queries/UseGetCriterionList.query';
+import { AddIcon } from '@chakra-ui/icons';
+import { Button, Td, Tfoot, Tr } from '@chakra-ui/react';
+import TableFooterCell from './TableFooterCell';
 
 export default function TableFooter() {
   const productList = UseGetProductListQuery();
@@ -30,7 +30,7 @@ export default function TableFooter() {
           <Button
             w="full"
             size="sm"
-            colorScheme={nbCriteriaRemaining > 0 ? "blue" : "gray"}
+            colorScheme={nbCriteriaRemaining > 0 ? 'blue' : 'gray'}
             onClick={() => handleAddCriterion()}
             leftIcon={<AddIcon fontSize="xs" />}
             boxShadow="base"
@@ -43,7 +43,7 @@ export default function TableFooter() {
         {/*
          * PRODUCTS - RANK
          */}
-        {productList.map((product) => (
+        {productList.map(product => (
           <TableFooterCell key={product.uuid} product={product} />
         ))}
 

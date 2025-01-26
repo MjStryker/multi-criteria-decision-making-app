@@ -4,15 +4,15 @@ import {
   PopoverArrow,
   PopoverCloseButton,
   PopoverContent,
-  PopoverTrigger,
-} from "@chakra-ui/react";
-import { useState } from "react";
+  PopoverTrigger
+} from '@chakra-ui/react';
+import { useState } from 'react';
 
-import { SmallCloseIcon as CloseIcon } from "@chakra-ui/icons";
+import { SmallCloseIcon as CloseIcon } from '@chakra-ui/icons';
 
-import { MdEdit as EditIcon } from "react-icons/md";
-import EditProductForm from "./EditProductForm";
-import { ProductDto } from "@/Application/Dtos/Product.dto";
+import { MdEdit as EditIcon } from 'react-icons/md';
+import EditProductForm from './EditProductForm';
+import { ProductDto } from '@/Application/Dtos/Product.dto';
 
 type Props = {
   product: ProductDto;
@@ -48,11 +48,7 @@ export default function EditProductButton({ product }: Props) {
       <PopoverContent p={5}>
         <PopoverArrow />
         <PopoverCloseButton />
-        <EditProductForm
-          setParentIsDirty={setIsFormDirty}
-          onParentClose={() => setIsOpen(false)}
-          product={product}
-        />
+        <EditProductForm setParentIsDirty={setIsFormDirty} onParentClose={() => setIsOpen(false)} product={product} />
       </PopoverContent>
     </Popover>
   );
