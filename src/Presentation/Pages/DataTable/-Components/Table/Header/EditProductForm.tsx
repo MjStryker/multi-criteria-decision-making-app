@@ -18,11 +18,11 @@ export default function EditProductForm({ setParentIsDirty, product, onParentClo
   const updateProduct = UseUpdateProductCommand();
   const removeProduct = UseRemoveProductCommand();
 
-  const [name, setName] = useState<string | null>(product.name);
+  const [name, setName] = useState<string>(product.name || '');
 
-  const [reference, setReference] = useState<string | null>(product.reference);
+  const [reference, setReference] = useState<string>(product.reference || '');
 
-  const [confirmDelete, setConfirmDelete] = useBoolean();
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   const isDirty = name !== product.name || reference !== product.reference;
 
@@ -38,13 +38,11 @@ export default function EditProductForm({ setParentIsDirty, product, onParentClo
    * * Sync local state on props change
    */
   useEffect(() => {
-    setName(product.name);
-    return () => setName(null);
+    setName(product.name || '');
   }, [product.name]);
 
   useEffect(() => {
-    setReference(product.reference);
-    return () => setReference(null);
+    setReference(product.reference || '');
   }, [product.reference]);
 
   /**
@@ -58,7 +56,7 @@ export default function EditProductForm({ setParentIsDirty, product, onParentClo
    * * Dialog actions
    */
   const onClose = () => {
-    setConfirmDelete.off();
+    setConfirmDelete(false);
     onParentClose();
   };
 
@@ -108,7 +106,7 @@ export default function EditProductForm({ setParentIsDirty, product, onParentClo
                 Delete?
               </Text>
 
-              <Button flex={1} variant="outline" onClick={setConfirmDelete.off}>
+              <Button flex={1} variant="outline" onClick={() => setConfirmDelete(false)}>
                 No
               </Button>
 
@@ -122,12 +120,12 @@ export default function EditProductForm({ setParentIsDirty, product, onParentClo
                 colorScheme="red"
                 icon={<DeleteIcon />}
                 aria-label="Delete product"
-                onClick={
+                onClick={() =>
                   !isValidNotEmptyString(name) && !isValidNotEmptyString(reference)
                     ? // * If fields are empty + product does not have any value
                       onDelete
                     : // * Else go through confirm process
-                      setConfirmDelete.on
+                      setConfirmDelete(true)
                 }
               />
 

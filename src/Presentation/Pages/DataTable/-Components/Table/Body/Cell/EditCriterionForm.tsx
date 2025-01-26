@@ -18,8 +18,8 @@ export default function EditCriterionForm({ setParentIsDirty, criterion, onParen
   const updateCriterion = UseUpdateCriterionCommand();
   const removeCriterion = UseRemoveCriterionCommand();
 
-  const [name, setName] = useState<string | null>(criterion.name);
-  const [unit, setUnit] = useState<string | null>(criterion.unit);
+  const [name, setName] = useState<string>(criterion.name || '');
+  const [unit, setUnit] = useState<string>(criterion.unit || '');
   const [beneficial, setBeneficial] = useState<boolean | null>(criterion.beneficial);
 
   const [confirmDelete, setConfirmDelete] = useState(false);
@@ -38,11 +38,11 @@ export default function EditCriterionForm({ setParentIsDirty, criterion, onParen
    * * Sync local state on props change
    */
   useEffect(() => {
-    setName(criterion.name);
+    setName(criterion.name || '');
   }, [criterion.name]);
 
   useEffect(() => {
-    setUnit(criterion.unit);
+    setUnit(criterion.unit || '');
   }, [criterion.unit]);
 
   useEffect(() => {
