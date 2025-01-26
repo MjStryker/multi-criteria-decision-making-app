@@ -2,9 +2,10 @@ import { DEBUG } from "@/@Config/Global";
 import { EDITABLE_MIN_WIDTH } from "@/@Config/Table";
 import { isValidNotEmptyString } from "@/@Shared/@Utils/String";
 import UseUpdateProductCriterionValueCommand from "@/Application/Commands/UseUpdateProductCriterionValue.command";
-import { Criterion } from "@/types/Criterion";
-import { Product } from "@/types/Product";
-import { ProductCriterionValue } from "@/types/ProductCriterionValue";
+
+import { CriterionDto } from "@/Application/Dtos/Criterion.dto";
+import { ProductDto } from "@/Application/Dtos/Product.dto";
+import { ProductCriterionValueDto } from "@/Application/Dtos/ProductCriteriaValue.dto";
 import {
   Editable,
   EditableInput,
@@ -18,9 +19,9 @@ import { useEffect, useState } from "react";
 import DebugValue from "../../DebugValue";
 
 type Props = {
-  criterion: Criterion;
-  product: Product;
-  criterionProductValue: ProductCriterionValue | null;
+  criterion: CriterionDto;
+  product: ProductDto;
+  criterionProductValue: ProductCriterionValueDto | null;
 };
 
 export default function ProductCriterionValueCell({
@@ -49,7 +50,7 @@ export default function ProductCriterionValueCell({
   };
 
   const onSubmit = () => {
-    setProductCriterionValue(product.id, criterion.id, value);
+    setProductCriterionValue(product.uuid, criterion.uuid, value);
   };
 
   return (

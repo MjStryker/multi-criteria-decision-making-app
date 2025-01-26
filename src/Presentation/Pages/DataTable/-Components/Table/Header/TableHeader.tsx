@@ -4,10 +4,11 @@ import { CRITERION } from "@/@Config/Criteria";
 import { PRODUCTS_MAX_ITEMS } from "@/@Config/Product";
 import UseAddProductCommand from "@/Application/Commands/UseAddProduct.command";
 import UseGetProductListQuery from "@/Application/Queries/UseGetProductList.query";
-import { createEmptyProduct } from "@/utils/products/products";
+
 import { AddIcon } from "@chakra-ui/icons";
 import { GiAnvil as AnvilIcon } from "react-icons/gi";
 import TableHeaderCell from "./TableHeaderCell";
+import { ProductFactory } from "@/Application/Factories/Product.factory";
 
 const addButtonCellWidth = "50px";
 
@@ -19,8 +20,7 @@ const TableHeader = () => {
   const nbProductsRemaining = PRODUCTS_MAX_ITEMS - nbProducts;
 
   const handleAddProduct = () => {
-    const newProduct = createEmptyProduct(nbProducts);
-    addProductCommand(newProduct);
+    addProductCommand(ProductFactory.newEmpty(nbProducts));
   };
 
   return (
@@ -59,7 +59,11 @@ const TableHeader = () => {
          * PRODUCTS
          */}
         {productList.map((product, idx) => (
-          <TableHeaderCell key={product.id} columnIdx={idx} product={product} />
+          <TableHeaderCell
+            key={product.uuid}
+            columnIdx={idx}
+            product={product}
+          />
         ))}
 
         {/*

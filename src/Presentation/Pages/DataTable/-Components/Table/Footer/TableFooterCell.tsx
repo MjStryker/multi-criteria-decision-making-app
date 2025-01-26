@@ -1,13 +1,13 @@
 import { DEBUG } from "@/@Config/Global";
-import { Product } from "@/types/Product";
 import { HStack, Tag, Td, Text } from "@chakra-ui/react";
 import DebugValue from "../DebugValue";
+import { ProductDto } from "@/Application/Dtos/Product.dto";
 
-type TableFooterCellProps = {
-  product: Product;
+type Props = {
+  product: ProductDto;
 };
 
-export default function TableFooterCell({ product }: TableFooterCellProps) {
+export default function TableFooterCell({ product }: Props) {
   return (
     <Td textAlign="center" px={2} border="1px" borderColor="gray.100">
       {product.rank === null ? null : (

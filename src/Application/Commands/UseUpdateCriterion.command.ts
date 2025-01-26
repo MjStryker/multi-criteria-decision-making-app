@@ -1,4 +1,4 @@
-import { Criterion } from "@/types/Criterion";
+import { CriterionDto } from "@/Application/Dtos/Criterion.dto";
 import { useCallback } from "react";
 import UseSetCriterionListCommand from "./UseSetCriterionList.command";
 
@@ -6,12 +6,12 @@ export default function UseUpdateCriterionCommand() {
   const setCriterionListCommand = UseSetCriterionListCommand();
 
   const updateCriterionCommand = useCallback(
-    (criterion: Criterion) => {
+    (criterion: CriterionDto) => {
       setCriterionListCommand((prev) => {
-        const index = prev.findIndex((c) => c.id === criterion.id);
+        const index = prev.findIndex((c) => c.uuid === criterion.uuid);
 
         if (index === -1) {
-          return prev;
+          throw Error("Criterion not found");
         }
 
         const newCriterionList = [...prev];

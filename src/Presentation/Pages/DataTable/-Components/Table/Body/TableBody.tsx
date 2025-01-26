@@ -16,7 +16,7 @@ const TableBody = () => {
     <Tbody>
       {criterionList.map((criterion, rowIdx) => (
         <TableBodyRow
-          key={criterion.id}
+          key={criterion.uuid}
           rowIdx={rowIdx}
           criterion={criterion}
           maxWeight={maxWeight}

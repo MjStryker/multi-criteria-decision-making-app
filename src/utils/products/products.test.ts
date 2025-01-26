@@ -4,11 +4,12 @@ import {
 } from "./products";
 
 import { describe, it, expect } from "vitest";
-import { Product } from "../../types/Product";
-import { SortByEnum } from "@/@Shared/@Enums/SortBy.enum";
 
-const p1: Product = {
-  id: "id-p1",
+import { SortByEnum } from "@/@Shared/@Enums/SortBy.enum";
+import { ProductDto } from "@/Application/Dtos/Product.dto";
+
+const p1: ProductDto = {
+  uuid: "id-p1",
   name: "p1",
   reference: null,
   rank: 3,
@@ -16,8 +17,8 @@ const p1: Product = {
   defaultColumnIdx: 2,
 };
 
-const p2: Product = {
-  id: "id-p2",
+const p2: ProductDto = {
+  uuid: "id-p2",
   name: "p2",
   reference: null,
   rank: 2,
@@ -25,8 +26,8 @@ const p2: Product = {
   defaultColumnIdx: 1,
 };
 
-const p3: Product = {
-  id: "id-p3",
+const p3: ProductDto = {
+  uuid: "id-p3",
   name: "p3",
   reference: null,
   rank: 1,
@@ -38,8 +39,8 @@ const ASC = SortByEnum.ASC;
 const DESC = SortByEnum.DESC;
 
 const productsSortedByDefaultColumnIdx = {
-  ASC: [p2, p1, p3] as Product[],
-  DESC: [p3, p1, p2] as Product[],
+  ASC: [p2, p1, p3] as ProductDto[],
+  DESC: [p3, p1, p2] as ProductDto[],
 };
 
 describe("compareProductsByDefaultColumnIdxFn", () => {
@@ -77,8 +78,8 @@ describe("compareProductsByDefaultColumnIdxFn", () => {
 });
 
 const productsSortedByRank = {
-  ASC: [p3, p2, p1] as Product[],
-  DESC: [p1, p2, p3] as Product[],
+  ASC: [p3, p2, p1] as ProductDto[],
+  DESC: [p1, p2, p3] as ProductDto[],
 };
 
 describe("compareProductsByRankFn", () => {

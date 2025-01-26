@@ -1,5 +1,5 @@
-export type Criterion = {
-  id: string;
+export type CriterionDto = {
+  uuid: string;
   name: string | null;
   weight: number | null;
   normalizedWeight: number | null;

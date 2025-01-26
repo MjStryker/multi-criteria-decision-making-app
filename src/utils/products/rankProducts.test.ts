@@ -1,13 +1,13 @@
-import { Criterion } from "../../types/Criterion";
-import { Product } from "../../types/Product";
-import { ProductCriterionValue } from "../../types/ProductCriterionValue";
+import { CriterionDto } from "@/Application/Dtos/Criterion.dto";
 import { sumCriteriaNormalizedWeight } from "../criteria/criteria";
 import { rankProducts } from "./rankProducts";
 
 import { describe, expect, it } from "vitest";
+import { ProductDto } from "@/Application/Dtos/Product.dto";
+import { ProductCriterionValueDto } from "@/Application/Dtos/ProductCriteriaValue.dto";
 
-const c1: Criterion = {
-  id: "id-c1",
+const c1: CriterionDto = {
+  uuid: "id-c1",
   name: "c1",
   unit: null,
   weight: 1,
@@ -16,8 +16,8 @@ const c1: Criterion = {
   defaultRowIdx: 2,
 };
 
-const c2: Criterion = {
-  id: "id-c2",
+const c2: CriterionDto = {
+  uuid: "id-c2",
   name: "c2",
   unit: null,
   weight: 1,
@@ -26,8 +26,8 @@ const c2: Criterion = {
   defaultRowIdx: 1,
 };
 
-const c3: Criterion = {
-  id: "id-c3",
+const c3: CriterionDto = {
+  uuid: "id-c3",
   name: "c3",
   unit: null,
   weight: 1,
@@ -36,8 +36,8 @@ const c3: Criterion = {
   defaultRowIdx: 3,
 };
 
-const c4: Criterion = {
-  id: "id-c4",
+const c4: CriterionDto = {
+  uuid: "id-c4",
   name: "c4",
   unit: null,
   weight: 1,
@@ -46,10 +46,10 @@ const c4: Criterion = {
   defaultRowIdx: 3,
 };
 
-const criteria: Criterion[] = [c1, c2, c3, c4];
+const criteria: CriterionDto[] = [c1, c2, c3, c4];
 
-const p1: Product = {
-  id: "id-p1",
+const p1: ProductDto = {
+  uuid: "id-p1",
   name: "p1",
   reference: null,
   rank: null,
@@ -57,8 +57,8 @@ const p1: Product = {
   defaultColumnIdx: 2,
 };
 
-const p2: Product = {
-  id: "id-p2",
+const p2: ProductDto = {
+  uuid: "id-p2",
   name: "p2",
   reference: null,
   rank: null,
@@ -66,8 +66,8 @@ const p2: Product = {
   defaultColumnIdx: 1,
 };
 
-const p3: Product = {
-  id: "id-p3",
+const p3: ProductDto = {
+  uuid: "id-p3",
   name: "p3",
   reference: null,
   rank: null,
@@ -75,30 +75,30 @@ const p3: Product = {
   defaultColumnIdx: 3,
 };
 
-const products: Product[] = [p1, p2, p3];
+const productList: ProductDto[] = [p1, p2, p3];
 
-const productsWithCriteria: ProductCriterionValue[] = [
+const productCriterionValueList: ProductCriterionValueDto[] = [
   /**
    * Criterion - 1
    */
   {
-    id: "id-c1-p1",
-    criterionId: "id-c1",
-    productId: "id-p1",
+    uuid: "id-c1-p1",
+    criterionUuid: "id-c1",
+    productUuid: "id-p1",
     value: 100,
     criterionRankPts: null,
   },
   {
-    id: "id-c1-p2",
-    criterionId: "id-c1",
-    productId: "id-p2",
+    uuid: "id-c1-p2",
+    criterionUuid: "id-c1",
+    productUuid: "id-p2",
     value: 100,
     criterionRankPts: null,
   },
   {
-    id: "id-c1-p3",
-    criterionId: "id-c1",
-    productId: "id-p3",
+    uuid: "id-c1-p3",
+    criterionUuid: "id-c1",
+    productUuid: "id-p3",
     value: 100,
     criterionRankPts: null,
   },
@@ -107,23 +107,23 @@ const productsWithCriteria: ProductCriterionValue[] = [
    * Criterion - 2
    */
   {
-    id: "id-c2-p1",
-    criterionId: "id-c2",
-    productId: "id-p1",
+    uuid: "id-c2-p1",
+    criterionUuid: "id-c2",
+    productUuid: "id-p1",
     value: 100,
     criterionRankPts: null,
   },
   {
-    id: "id-c2-p2",
-    criterionId: "id-c2",
-    productId: "id-p2",
+    uuid: "id-c2-p2",
+    criterionUuid: "id-c2",
+    productUuid: "id-p2",
     value: 100,
     criterionRankPts: null,
   },
   {
-    id: "id-c2-p3",
-    criterionId: "id-c2",
-    productId: "id-p3",
+    uuid: "id-c2-p3",
+    criterionUuid: "id-c2",
+    productUuid: "id-p3",
     value: 100,
     criterionRankPts: null,
   },
@@ -132,23 +132,23 @@ const productsWithCriteria: ProductCriterionValue[] = [
    * Criterion - 3
    */
   {
-    id: "id-c3-p1",
-    criterionId: "id-c3",
-    productId: "id-p1",
+    uuid: "id-c3-p1",
+    criterionUuid: "id-c3",
+    productUuid: "id-p1",
     value: 100,
     criterionRankPts: null,
   },
   {
-    id: "id-c3-p2",
-    criterionId: "id-c3",
-    productId: "id-p2",
+    uuid: "id-c3-p2",
+    criterionUuid: "id-c3",
+    productUuid: "id-p2",
     value: 100,
     criterionRankPts: null,
   },
   {
-    id: "id-c3-p3",
-    criterionId: "id-c3",
-    productId: "id-p3",
+    uuid: "id-c3-p3",
+    criterionUuid: "id-c3",
+    productUuid: "id-p3",
     value: 100,
     criterionRankPts: null,
   },
@@ -157,23 +157,23 @@ const productsWithCriteria: ProductCriterionValue[] = [
    * Criterion - 4
    */
   {
-    id: "id-c4-p1",
-    criterionId: "id-c4",
-    productId: "id-p1",
+    uuid: "id-c4-p1",
+    criterionUuid: "id-c4",
+    productUuid: "id-p1",
     value: 100,
     criterionRankPts: null,
   },
   {
-    id: "id-c4-p2",
-    criterionId: "id-c4",
-    productId: "id-p2",
+    uuid: "id-c4-p2",
+    criterionUuid: "id-c4",
+    productUuid: "id-p2",
     value: 100,
     criterionRankPts: null,
   },
   {
-    id: "id-c4-p3",
-    criterionId: "id-c4",
-    productId: "id-p3",
+    uuid: "id-c4-p3",
+    criterionUuid: "id-c4",
+    productUuid: "id-p3",
     value: 100,
     criterionRankPts: null,
   },
@@ -182,15 +182,18 @@ const productsWithCriteria: ProductCriterionValue[] = [
 type TProductValue = number | null;
 
 function getTestValues(
-  values: [criterionData: Partial<Criterion>, productValues: TProductValue[]][]
+  values: [
+    criterionData: Partial<CriterionDto>,
+    productValues: TProductValue[]
+  ][]
 ): {
-  criteriaToUse: Criterion[];
-  productsWithCriteriaToUse: ProductCriterionValue[];
+  criteriaToUse: CriterionDto[];
+  productsWithCriteriaToUse: ProductCriterionValueDto[];
 } {
   expect(values.length).toBe(criteria.length);
 
   values.forEach(
-    (val) => expect(val[1].length).toBe(products.length) // productValues
+    (val) => expect(val[1].length).toBe(productList.length) // productValues
   );
 
   const criteriaToUse = [...criteria].map((criterion, idx) => ({
@@ -200,7 +203,7 @@ function getTestValues(
 
   const productValues = values.map((val) => val[1]).flat();
 
-  const productsWithCriteriaToUse = [...productsWithCriteria].map(
+  const productsWithCriteriaToUse = [...productCriterionValueList].map(
     (elt, idx) => ({
       ...elt,
       value: productValues[idx],
@@ -213,7 +216,7 @@ function getTestValues(
   };
 }
 
-function getProductFromName(productName: string, list = products) {
+function getProductFromName(productName: string, list = productList) {
   return list?.find(({ name }) => name === productName);
 }
 
@@ -224,7 +227,7 @@ describe("rankProducts(...)", () => {
     });
 
     it("Ensure products have no ranks", () => {
-      products.forEach(({ rank }) => {
+      productList.forEach(({ rank }) => {
         expect(rank).toBeNull();
       });
     });
@@ -239,7 +242,7 @@ describe("rankProducts(...)", () => {
     ]);
 
     const { rankedProducts } = rankProducts(
-      products,
+      productList,
       criteriaToUse,
       productsWithCriteriaToUse
     );
@@ -258,7 +261,7 @@ describe("rankProducts(...)", () => {
     ]);
 
     const { rankedProducts } = rankProducts(
-      products,
+      productList,
       criteriaToUse,
       productsWithCriteriaToUse
     );
@@ -277,7 +280,7 @@ describe("rankProducts(...)", () => {
     ]);
 
     const { rankedProducts } = rankProducts(
-      products,
+      productList,
       criteriaToUse,
       productsWithCriteriaToUse
     );
@@ -296,7 +299,7 @@ describe("rankProducts(...)", () => {
     ]);
 
     const { rankedProducts } = rankProducts(
-      products,
+      productList,
       criteriaToUse,
       productsWithCriteriaToUse
     );
@@ -315,7 +318,7 @@ describe("rankProducts(...)", () => {
     ]);
 
     const { rankedProducts } = rankProducts(
-      products,
+      productList,
       criteriaToUse,
       productsWithCriteriaToUse
     );
@@ -334,7 +337,7 @@ describe("rankProducts(...)", () => {
     ]);
 
     const { rankedProducts } = rankProducts(
-      products,
+      productList,
       criteriaToUse,
       productsWithCriteriaToUse
     );

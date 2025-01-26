@@ -1,7 +1,8 @@
 import { isValidNotEmptyString } from "@/@Shared/@Utils/String";
 import UseRemoveProductCommand from "@/Application/Commands/UseRemoveProduct.command";
 import UseUpdateProductCommand from "@/Application/Commands/UseUpdateProduct.command";
-import { Product } from "@/types/Product";
+
+import { ProductDto } from "@/Application/Dtos/Product.dto";
 import { DeleteIcon } from "@chakra-ui/icons";
 import {
   Button,
@@ -23,7 +24,7 @@ import TextInput from "../../../../../Components/Form/TextInput";
 type Props = {
   setParentIsDirty: Dispatch<SetStateAction<boolean>>;
   onParentClose: VoidFunction;
-  product: Product;
+  product: ProductDto;
 };
 
 export default function EditProductForm({

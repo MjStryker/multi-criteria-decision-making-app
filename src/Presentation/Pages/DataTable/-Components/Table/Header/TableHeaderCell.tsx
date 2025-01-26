@@ -2,22 +2,22 @@ import { Box, SimpleGrid, Td, Text, VStack } from "@chakra-ui/react";
 
 import EditProductButton from "./EditProductButton";
 
-import { Product } from "@/types/Product";
 import { isValidNotEmptyString } from "@/@Shared/@Utils/String";
+import { ProductDto } from "@/Application/Dtos/Product.dto";
 
-const cellWidth = "150px";
+const CELL_WIDTH = "150px";
 
-type TableHeaderCellProps = {
+type Props = {
   columnIdx: number;
-  product: Product;
+  product: ProductDto;
 };
 
-const TableHeaderCell = ({ columnIdx, product }: TableHeaderCellProps) => {
+export default function TableHeaderCell({ columnIdx, product }: Props) {
   return (
     <Td
-      w={cellWidth}
-      minW={cellWidth}
-      maxW={cellWidth}
+      w={CELL_WIDTH}
+      minW={CELL_WIDTH}
+      maxW={CELL_WIDTH}
       px={2}
       border="1px"
       borderColor="gray.100"
@@ -55,6 +55,4 @@ const TableHeaderCell = ({ columnIdx, product }: TableHeaderCellProps) => {
       </VStack>
     </Td>
   );
-};
-
-export default TableHeaderCell;
+}

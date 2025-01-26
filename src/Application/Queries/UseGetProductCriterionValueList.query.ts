@@ -1,9 +1,10 @@
 import atomWithLocalStorage from "@/Infrastructure/AtomWithLocalStorage";
-import { ProductCriterionValue } from "@/types/ProductCriterionValue";
+
 import { useAtomValue } from "jotai";
+import { ProductCriterionValueDto } from "../Dtos/ProductCriteriaValue.dto";
 
 export const ProductCriterionValueListAtom = atomWithLocalStorage<
-  ProductCriterionValue[]
+  ProductCriterionValueDto[]
 >("productCriterionValueList", []);
 
 export default function UseGetProductCriterionValueListQuery() {

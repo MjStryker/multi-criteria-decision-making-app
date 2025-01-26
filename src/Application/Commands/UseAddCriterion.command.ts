@@ -2,7 +2,7 @@ import {
   CRITERIA_ITEMS_REMAINING_WARNING,
   CRITERIA_MAX_ITEMS,
 } from "@/@Config/Criteria";
-import { Criterion } from "@/types/Criterion";
+import { CriterionDto } from "@/Application/Dtos/Criterion.dto";
 import { useToast } from "@chakra-ui/react";
 import { useCallback } from "react";
 import UseGetCriterionListQuery from "../Queries/UseGetCriterionList.query";
@@ -19,7 +19,7 @@ export default function UseAddCriterionCommand() {
   const nbCriteriaRemaining = CRITERIA_MAX_ITEMS - nbCriteria;
 
   const addCriterion = useCallback(
-    (criterion: Criterion) => {
+    (criterion: CriterionDto) => {
       if (nbCriteriaRemaining === 0) {
         toast({
           status: "error",

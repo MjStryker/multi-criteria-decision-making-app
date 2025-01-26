@@ -1,13 +1,17 @@
-import { ProductCriterionValue } from "@/types/ProductCriterionValue";
 import { useCallback } from "react";
 import UseSetProductCriterionValueListCommand from "./UseSetProductCriterionValueList.command";
+import { ProductCriterionValueDto } from "../Dtos/ProductCriteriaValue.dto";
 
 export default function UseAddProductCriterionValueCommand() {
-  const setProductCriterionValueListCommand = UseSetProductCriterionValueListCommand();
+  const setProductCriterionValueListCommand =
+    UseSetProductCriterionValueListCommand();
 
   const addProductCriterionValue = useCallback(
-    (productCriterionValue: ProductCriterionValue) => {
-      setProductCriterionValueListCommand((productCriterionValues) => [...productCriterionValues, productCriterionValue]);
+    (productCriterionValue: ProductCriterionValueDto) => {
+      setProductCriterionValueListCommand((productCriterionValues) => [
+        ...productCriterionValues,
+        productCriterionValue,
+      ]);
     },
     [setProductCriterionValueListCommand]
   );

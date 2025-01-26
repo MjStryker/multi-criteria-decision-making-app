@@ -1,22 +1,22 @@
 import { capitalize, isValidNotEmptyString } from "@/@Shared/@Utils/String";
-import { Criterion } from "@/types/Criterion";
+import { CriterionDto } from "@/Application/Dtos/Criterion.dto";
 import { getCriterionWeightRelativeToMax } from "@/utils/criteria/criteria";
 import { Box, Flex, HStack, Progress, Td, Text } from "@chakra-ui/react";
 import EditCriterionButton from "./EditCriterionButton";
 
 const cellWidth = "240px";
 
-type CriterionNameUnitCellProps = {
-  criterion: Criterion;
+type Props = {
+  criterion: CriterionDto;
   rowIdx: number;
   maxWeight: number;
 };
 
-const CriterionNameUnitCell = ({
+export default function CriterionNameUnitCell({
   criterion,
   rowIdx,
   maxWeight,
-}: CriterionNameUnitCellProps) => {
+}: Props) {
   return (
     <Td
       position="relative"
@@ -85,6 +85,4 @@ const CriterionNameUnitCell = ({
       </Box>
     </Td>
   );
-};
-
-export default CriterionNameUnitCell;
+}

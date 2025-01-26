@@ -1,11 +1,12 @@
 import UseAddCriterionCommand from "@/Application/Commands/UseAddCriterion.command";
 import UseGetProductListQuery from "@/Application/Queries/UseGetProductList.query";
-import { createEmptyCriterion } from "@/utils/criteria/criteria";
+
+import { CRITERIA_MAX_ITEMS } from "@/@Config/Criteria";
+import { CriterionFactory } from "@/Application/Factories/Criterion.factory";
+import UseGetCriterionListQuery from "@/Application/Queries/UseGetCriterionList.query";
 import { AddIcon } from "@chakra-ui/icons";
 import { Button, Td, Tfoot, Tr } from "@chakra-ui/react";
 import TableFooterCell from "./TableFooterCell";
-import UseGetCriterionListQuery from "@/Application/Queries/UseGetCriterionList.query";
-import { CRITERIA_MAX_ITEMS } from "@/@Config/Criteria";
 
 export default function TableFooter() {
   const productList = UseGetProductListQuery();
@@ -16,8 +17,7 @@ export default function TableFooter() {
   const nbCriteriaRemaining = CRITERIA_MAX_ITEMS - nbCriteria;
 
   function handleAddCriterion() {
-    const newCriterion = createEmptyCriterion(nbCriteria);
-    addCriterionCommand(newCriterion);
+    addCriterionCommand(CriterionFactory.newEmpty(nbCriteria));
   }
 
   return (
@@ -44,7 +44,7 @@ export default function TableFooter() {
          * PRODUCTS - RANK
          */}
         {productList.map((product) => (
-          <TableFooterCell key={product.id} product={product} />
+          <TableFooterCell key={product.uuid} product={product} />
         ))}
 
         {/*

@@ -1,8 +1,9 @@
 import atomWithLocalStorage from "@/Infrastructure/AtomWithLocalStorage";
-import { Criterion } from "@/types/Criterion";
-import { useAtomValue } from "jotai";
 
-export const CriterionListAtom = atomWithLocalStorage<Criterion[]>(
+import { useAtomValue } from "jotai";
+import { CriterionDto } from "../Dtos/Criterion.dto";
+
+export const CriterionListAtom = atomWithLocalStorage<CriterionDto[]>(
   "criterionList",
   []
 );

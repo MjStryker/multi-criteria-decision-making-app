@@ -1,4 +1,3 @@
-import { Product } from "@/types/Product";
 import { useCallback } from "react";
 import UseSetProductListCommand from "./UseSetProductList.command";
 import {
@@ -7,6 +6,7 @@ import {
 } from "@/@Config/Product";
 import UseGetProductListQuery from "../Queries/UseGetProductList.query";
 import { useToast } from "@chakra-ui/react";
+import { ProductDto } from "../Dtos/Product.dto";
 
 export default function UseAddProductCommand() {
   const productList = UseGetProductListQuery();
@@ -18,7 +18,7 @@ export default function UseAddProductCommand() {
   const nbProductsRemaining = PRODUCTS_MAX_ITEMS - nbProducts;
 
   const addProduct = useCallback(
-    (product: Product) => {
+    (product: ProductDto) => {
       if (nbProductsRemaining === 0) {
         toast({
           status: "error",

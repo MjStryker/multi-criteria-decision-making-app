@@ -3,7 +3,7 @@ import { EDITABLE_MIN_WIDTH } from "@/@Config/Table";
 import { isValidNumber } from "@/@Shared/@Utils/Number";
 import { isDefined } from "@/@Shared/@Utils/Object";
 import UseUpdateCriterionCommand from "@/Application/Commands/UseUpdateCriterion.command";
-import { Criterion } from "@/types/Criterion";
+import { CriterionDto } from "@/Application/Dtos/Criterion.dto";
 import { clampCriterionWeightValue } from "@/utils/criteria/criteria";
 import {
   Editable,
@@ -17,13 +17,13 @@ import {
 import { useEffect, useState } from "react";
 import DebugValue from "../../DebugValue";
 
-const cellWidth = "100px";
+const CELL_WIDTH = "100px";
 
-type CriterionWeightCellProps = {
-  criterion: Criterion;
+type Props = {
+  criterion: CriterionDto;
 };
 
-const CriterionWeightCell = ({ criterion }: CriterionWeightCellProps) => {
+export default function CriterionWeightCell({ criterion }: Props) {
   const updateCriterion = UseUpdateCriterionCommand();
 
   const [weight, setWeight] = useState<number | null>(criterion.weight || null);
@@ -57,9 +57,9 @@ const CriterionWeightCell = ({ criterion }: CriterionWeightCellProps) => {
   return (
     <Td
       isNumeric
-      w={cellWidth}
-      minW={cellWidth}
-      maxW={cellWidth}
+      w={CELL_WIDTH}
+      minW={CELL_WIDTH}
+      maxW={CELL_WIDTH}
       px={2}
       border="1px"
       borderColor="gray.100"
@@ -107,6 +107,4 @@ const CriterionWeightCell = ({ criterion }: CriterionWeightCellProps) => {
       </HStack>
     </Td>
   );
-};
-
-export default CriterionWeightCell;
+}

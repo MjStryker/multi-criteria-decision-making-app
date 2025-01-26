@@ -1,15 +1,15 @@
 import UseGetProductCriterionValueListQuery from "@/Application/Queries/UseGetProductCriterionValueList.query";
 import UseGetProductListQuery from "@/Application/Queries/UseGetProductList.query";
-import { Criterion } from "@/types/Criterion";
-import { createEmptyProductCriterionValue } from "@/utils/productsWithCriteria/productsWithCriteria";
+
 import { Td, Tr } from "@chakra-ui/react";
 import CriterionNameUnitCell from "./Cell/CriterionNameUnitCell";
 import CriterionProductValueCell from "./Cell/ProductCriterionValueCell";
 import CriterionWeightCell from "./Cell/CriterionWeightCell";
+import { CriterionDto } from "@/Application/Dtos/Criterion.dto";
 
 type Props = {
   rowIdx: number;
-  criterion: Criterion;
+  criterion: CriterionDto;
   maxWeight: number;
 };
 
@@ -18,7 +18,7 @@ export default function TableBodyRow({ rowIdx, criterion, maxWeight }: Props) {
   const productCriterionValueList = UseGetProductCriterionValueListQuery();
 
   return (
-    <Tr key={criterion.id}>
+    <Tr key={criterion.uuid}>
       {/*
        * CRITERION - NAME / UNIT
        */}
@@ -37,15 +37,18 @@ export default function TableBodyRow({ rowIdx, criterion, maxWeight }: Props) {
        * PRODUCTS - CRITERION VALUES
        */}
       {productList.map((product) => {
-        const criterionProductValue =
-          productCriterionValueList.find(
-            ({ criterionId: criteriaId, productId }) =>
-              criteriaId === criterion.id && productId === product.id
-          ) ?? createEmptyProductCriterionValue(product, criterion);
+        const criterionProductValue = productCriterionValueList.find(
+          ({ criterionUuid, productUuid }) =>
+            criterion.uuid === criterionUuid && product.uuid === productUuid
+        );
+
+        if (!criterionProductValue) {
+          return <Td key={product.uuid} />;
+        }
 
         return (
           <CriterionProductValueCell
-            key={criterionProductValue.id}
+            key={criterionProductValue.uuid}
             criterion={criterion}
             product={product}
             criterionProductValue={criterionProductValue}

@@ -5,14 +5,14 @@ export default function UseRemoveAllValuesAssociatedToProductCommand() {
   const setProductCriterionValueCommand =
     UseSetProductCriterionValueListCommand();
 
-  const removeAllValuesAssociatedToProductId = useCallback(
-    (productId: string) => {
+  const removeAllValuesAssociatedToProductUuid = useCallback(
+    (productUuid: string) => {
       setProductCriterionValueCommand((values) =>
-        values.filter((value) => value.productId !== productId)
+        values.filter((value) => value.productUuid !== productUuid)
       );
     },
     [setProductCriterionValueCommand]
   );
 
-  return removeAllValuesAssociatedToProductId;
+  return removeAllValuesAssociatedToProductUuid;
 }

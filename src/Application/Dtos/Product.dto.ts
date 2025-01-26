@@ -1,5 +1,5 @@
-export type Product = {
-  id: string;
+export type ProductDto = {
+  uuid: string;
   name: string | null;
   reference: string | null;
   rank: number | null;

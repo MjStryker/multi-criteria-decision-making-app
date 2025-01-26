@@ -8,16 +8,16 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 
-import { Criterion } from "@/types/Criterion";
 import { SmallCloseIcon as CloseIcon } from "@chakra-ui/icons";
 import { MdEdit as EditIcon } from "react-icons/md";
 import EditCriterionForm from "./EditCriterionForm";
+import { CriterionDto } from "@/Application/Dtos/Criterion.dto";
 
-type EditCriterionButtonProps = {
-  criterion: Criterion;
+type Props = {
+  criterion: CriterionDto;
 };
 
-const EditCriterionButton = ({ criterion }: EditCriterionButtonProps) => {
+export default function EditCriterionButton({ criterion }: Props) {
   const [isFormDirty, setIsFormDirty] = useState(false);
 
   const [isOpen, setIsOpen] = useState(false);
@@ -55,6 +55,4 @@ const EditCriterionButton = ({ criterion }: EditCriterionButtonProps) => {
       </PopoverContent>
     </Popover>
   );
-};
-
-export default EditCriterionButton;
+}

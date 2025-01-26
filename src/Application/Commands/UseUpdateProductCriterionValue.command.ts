@@ -5,15 +5,16 @@ export default function UseUpdateProductCriterionValueCommand() {
   const setProductCriterionValueList = UseSetProductCriterionValueListCommand();
 
   const updateProductCriterionValue = useCallback(
-    (productId: string, criterionId: string, newValue: number | null) => {
+    (productUuid: string, criterionUuid: string, newValue: number | null) => {
       setProductCriterionValueList((prev) => {
         const index = prev.findIndex(
           (item) =>
-            item.productId === productId && item.criterionId === criterionId
+            item.productUuid === productUuid &&
+            item.criterionUuid === criterionUuid
         );
 
         if (index === -1) {
-          return prev;
+          throw Error("Product criterion value not found");
         }
 
         const newProductCriterionValueList = [...prev];

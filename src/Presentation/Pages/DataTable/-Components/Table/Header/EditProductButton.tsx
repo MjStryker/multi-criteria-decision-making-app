@@ -8,14 +8,14 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 
-import { Product } from "@/types/Product";
 import { SmallCloseIcon as CloseIcon } from "@chakra-ui/icons";
 
 import { MdEdit as EditIcon } from "react-icons/md";
 import EditProductForm from "./EditProductForm";
+import { ProductDto } from "@/Application/Dtos/Product.dto";
 
 type Props = {
-  product: Product;
+  product: ProductDto;
 };
 
 export default function EditProductButton({ product }: Props) {

@@ -1,30 +1,25 @@
-import { Criterion } from "../../types/Criterion";
-import { Product } from "../../types/Product";
-import { ProductCriterionValue } from "../../types/ProductCriterionValue";
-import { findProductWithCriterion } from "./productsWithCriteria";
-
-export const productsWithCriteria: ProductCriterionValue[] = [
+export const productsWithCriteria: ProductCriterionValueDto[] = [
   /**
    * Criterion - 1
    */
   {
-    id: "id-c1-p1",
-    criterionId: "id-c1",
-    productId: "id-p1",
+    uuid: "id-c1-p1",
+    criterionUuid: "id-c1",
+    productUuid: "id-p1",
     value: 100,
     criterionRankPts: null,
   },
   {
-    id: "id-c1-p2",
-    criterionId: "id-c1",
-    productId: "id-p2",
+    uuid: "id-c1-p2",
+    criterionUuid: "id-c1",
+    productUuid: "id-p2",
     value: 100,
     criterionRankPts: null,
   },
   {
-    id: "id-c1-p3",
-    criterionId: "id-c1",
-    productId: "id-p3",
+    uuid: "id-c1-p3",
+    criterionUuid: "id-c1",
+    productUuid: "id-p3",
     value: 100,
     criterionRankPts: null,
   },
@@ -33,23 +28,23 @@ export const productsWithCriteria: ProductCriterionValue[] = [
    * Criterion - 2
    */
   {
-    id: "id-c2-p1",
-    criterionId: "id-c2",
-    productId: "id-p1",
+    uuid: "id-c2-p1",
+    criterionUuid: "id-c2",
+    productUuid: "id-p1",
     value: 100,
     criterionRankPts: null,
   },
   {
-    id: "id-c2-p2",
-    criterionId: "id-c2",
-    productId: "id-p2",
+    uuid: "id-c2-p2",
+    criterionUuid: "id-c2",
+    productUuid: "id-p2",
     value: 100,
     criterionRankPts: null,
   },
   {
-    id: "id-c2-p3",
-    criterionId: "id-c2",
-    productId: "id-p3",
+    uuid: "id-c2-p3",
+    criterionUuid: "id-c2",
+    productUuid: "id-p3",
     value: 100,
     criterionRankPts: null,
   },
@@ -58,30 +53,30 @@ export const productsWithCriteria: ProductCriterionValue[] = [
    * Criterion - 3
    */
   {
-    id: "id-c3-p1",
-    criterionId: "id-c3",
-    productId: "id-p1",
+    uuid: "id-c3-p1",
+    criterionUuid: "id-c3",
+    productUuid: "id-p1",
     value: 100,
     criterionRankPts: null,
   },
   {
-    id: "id-c3-p2",
-    criterionId: "id-c3",
-    productId: "id-p2",
+    uuid: "id-c3-p2",
+    criterionUuid: "id-c3",
+    productUuid: "id-p2",
     value: 100,
     criterionRankPts: null,
   },
   {
-    id: "id-c3-p3",
-    criterionId: "id-c3",
-    productId: "id-p3",
+    uuid: "id-c3-p3",
+    criterionUuid: "id-c3",
+    productUuid: "id-p3",
     value: 100,
     criterionRankPts: null,
   },
 ];
 
-export const c2: Criterion = {
-  id: "id-c2",
+export const c2: CriterionDto = {
+  uuid: "id-c2",
   name: "c2",
   unit: null,
   weight: 1,
@@ -90,8 +85,8 @@ export const c2: Criterion = {
   defaultRowIdx: 1,
 };
 
-export const p3: Product = {
-  id: "id-p3",
+export const p3: ProductDto = {
+  uuid: "id-p3",
   name: "p3",
   reference: null,
   rank: null,
@@ -99,14 +94,18 @@ export const p3: Product = {
   defaultColumnIdx: 3,
 };
 
+import { CriterionDto } from "@/Application/Dtos/Criterion.dto";
+import { ProductDto } from "@/Application/Dtos/Product.dto";
+import { ProductCriterionValueDto } from "@/Application/Dtos/ProductCriteriaValue.dto";
 import { describe, it, expect } from "vitest";
+import { findProductWithCriterion } from "./productsWithCriteria";
 
 describe("findProductCriterionValue(...)", () => {
   it("Return matched item", () => {
-    const matchingResult: ProductCriterionValue = {
-      id: "id-c2-p3",
-      criterionId: "id-c2",
-      productId: "id-p3",
+    const matchingResult: ProductCriterionValueDto = {
+      uuid: "id-c2-p3",
+      criterionUuid: "id-c2",
+      productUuid: "id-p3",
       value: 100,
       criterionRankPts: null,
     };
@@ -117,8 +116,8 @@ describe("findProductCriterionValue(...)", () => {
   });
 
   it("Product does not exist", () => {
-    const pUnmatched: Product = {
-      id: "id-pUnmatched",
+    const pUnmatched: ProductDto = {
+      uuid: "id-pUnmatched",
       name: "pUnmatched",
       reference: null,
       rank: null,
@@ -132,8 +131,8 @@ describe("findProductCriterionValue(...)", () => {
   });
 
   it("Criterion does not exist", () => {
-    const cUnmatched: Criterion = {
-      id: "id-Unmatched",
+    const cUnmatched: CriterionDto = {
+      uuid: "id-Unmatched",
       name: "Unmatched",
       unit: null,
       weight: -1,

@@ -1,8 +1,9 @@
 import { isValidNotEmptyString } from "@/@Shared/@Utils/String";
 import UseRemoveCriterionCommand from "@/Application/Commands/UseRemoveCriterion.command";
 import UseUpdateCriterionCommand from "@/Application/Commands/UseUpdateCriterion.command";
+import { CriterionDto } from "@/Application/Dtos/Criterion.dto";
 import TextInput from "@/Presentation/Components/Form/TextInput";
-import { Criterion } from "@/types/Criterion";
+
 import { DeleteIcon, TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import {
   Button,
@@ -26,7 +27,7 @@ import {
 type Props = {
   setParentIsDirty: Dispatch<SetStateAction<boolean>>;
   onParentClose: VoidFunction;
-  criterion: Criterion;
+  criterion: CriterionDto;
 };
 
 export default function EditCriterionForm({

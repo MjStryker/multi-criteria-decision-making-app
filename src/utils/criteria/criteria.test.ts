@@ -8,11 +8,11 @@ import {
 } from "./criteria";
 import { describe, it, expect } from "vitest";
 
-import { Criterion } from "../../types/Criterion";
 import { SortByEnum } from "@/@Shared/@Enums/SortBy.enum";
+import { CriterionDto } from "@/Application/Dtos/Criterion.dto";
 
-const c1: Criterion = {
-  id: "id-c1",
+const c1: CriterionDto = {
+  uuid: "id-c1",
   name: "c1",
   unit: null,
   weight: 2,
@@ -21,8 +21,8 @@ const c1: Criterion = {
   defaultRowIdx: 2,
 };
 
-const c2: Criterion = {
-  id: "id-c2",
+const c2: CriterionDto = {
+  uuid: "id-c2",
   name: "c2",
   unit: null,
   weight: 1,
@@ -31,8 +31,8 @@ const c2: Criterion = {
   defaultRowIdx: 1,
 };
 
-const c3: Criterion = {
-  id: "id-c3",
+const c3: CriterionDto = {
+  uuid: "id-c3",
   name: "c3",
   unit: null,
   weight: 1,
@@ -41,14 +41,14 @@ const c3: Criterion = {
   defaultRowIdx: 3,
 };
 
-const criteria: Criterion[] = [c1, c2, c3];
+const criteria: CriterionDto[] = [c1, c2, c3];
 
 const ASC = SortByEnum.ASC;
 const DESC = SortByEnum.DESC;
 
 const criteriaSortedByDefaultRowIdx = {
-  ASC: [c2, c1, c3] as Criterion[],
-  DESC: [c3, c1, c2] as Criterion[],
+  ASC: [c2, c1, c3] as CriterionDto[],
+  DESC: [c3, c1, c2] as CriterionDto[],
 };
 
 describe("compareCriteriaByDefaultRowIdxFn(...)", () => {

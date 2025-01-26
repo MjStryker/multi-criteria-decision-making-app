@@ -1,8 +1,9 @@
 import atomWithLocalStorage from "@/Infrastructure/AtomWithLocalStorage";
-import { Product } from "@/types/Product";
-import { useAtomValue } from "jotai";
 
-export const ProductListAtom = atomWithLocalStorage<Product[]>(
+import { useAtomValue } from "jotai";
+import { ProductDto } from "../Dtos/Product.dto";
+
+export const ProductListAtom = atomWithLocalStorage<ProductDto[]>(
   "productList",
   []
 );

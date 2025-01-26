@@ -1,30 +1,16 @@
-import { uuid } from "@/@Shared/@Utils/Uuid";
-import { Criterion } from "../../types/Criterion";
-import { Product } from "../../types/Product";
-import { ProductCriterionValue } from "../../types/ProductCriterionValue";
-
-export function createEmptyProductCriterionValue(
-  { id: productId }: Product,
-  { id: criterionId }: Criterion
-): ProductCriterionValue {
-  return {
-    id: uuid(),
-    productId,
-    criterionId,
-    value: null,
-    criterionRankPts: null,
-  };
-}
+import { CriterionDto } from "@/Application/Dtos/Criterion.dto";
+import { ProductDto } from "@/Application/Dtos/Product.dto";
+import { ProductCriterionValueDto } from "@/Application/Dtos/ProductCriteriaValue.dto";
 
 export function findProductWithCriterion(
-  product: Product,
-  criterion: Criterion,
-  productsWithCriteria: ProductCriterionValue[]
-): ProductCriterionValue | null {
+  product: ProductDto,
+  criterion: CriterionDto,
+  productCriterionValueList: ProductCriterionValueDto[]
+): ProductCriterionValueDto | null {
   return (
-    productsWithCriteria.find(
-      ({ productId, criterionId }) =>
-        product.id === productId && criterion.id === criterionId
+    productCriterionValueList.find(
+      (v) =>
+        product.uuid === v.productUuid && criterion.uuid === v.criterionUuid
     ) ?? null
   );
 }

@@ -1,16 +1,17 @@
-import { Product } from "@/types/Product";
 import { useCallback } from "react";
 import UseSetProductListCommand from "./UseSetProductList.command";
+import { ProductDto } from "../Dtos/Product.dto";
 
 export default function UseUpdateProductCommand() {
   const setProductListCommand = UseSetProductListCommand();
 
   const updateProductCommand = useCallback(
-    (product: Product) => {
+    (product: ProductDto) => {
       setProductListCommand((prev) => {
-        const index = prev.findIndex((c) => c.id === product.id);
+        const index = prev.findIndex((c) => c.uuid === product.uuid);
+
         if (index === -1) {
-          return prev;
+          throw Error("Product not found");
         }
 
         const newProductList = [...prev];

@@ -1,29 +1,17 @@
 import { SortByEnum } from "@/@Shared/@Enums/SortBy.enum";
 import { compareFn } from "@/@Shared/@Utils/Array";
-import { uuid } from "@/@Shared/@Utils/Uuid";
-import { Product } from "@/types/Product";
+import { ProductDto } from "@/Application/Dtos/Product.dto";
 
 export const compareProductsByDefaultColumnIdxFn =
   (sortBy = SortByEnum.ASC) =>
-  (a: Product, b: Product): number =>
+  (a: ProductDto, b: ProductDto): number =>
     compareFn(sortBy)(a.defaultColumnIdx, b.defaultColumnIdx);
 
 export const compareProductsByRankFn =
   (sortBy = SortByEnum.ASC) =>
-  (a: Product, b: Product): number =>
+  (a: ProductDto, b: ProductDto): number =>
     compareFn(sortBy)(a.rank, b.rank);
 
-export function createEmptyProduct(defaultColumnIdx: number): Product {
-  return {
-    id: uuid(),
-    name: null,
-    reference: null,
-    rank: null,
-    rankPts: null,
-    defaultColumnIdx,
-  };
-}
-
-export function updateProductsDefaultColumnIdx(products: Product[]) {
+export function updateProductsDefaultColumnIdx(products: ProductDto[]) {
   return products.map((p, idx) => ({ ...p, defaultColumnIdx: idx }));
 }

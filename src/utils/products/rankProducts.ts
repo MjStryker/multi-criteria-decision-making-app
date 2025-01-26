@@ -1,22 +1,22 @@
 import { SortByEnum } from "@/@Shared/@Enums/SortBy.enum";
 import { compareFn } from "@/@Shared/@Utils/Array";
 import { isDefined } from "@/@Shared/@Utils/Object";
-import { Criterion } from "@/types/Criterion";
-import { Product } from "@/types/Product";
-import { ProductCriterionValue } from "@/types/ProductCriterionValue";
+import { CriterionDto } from "@/Application/Dtos/Criterion.dto";
+import { ProductDto } from "@/Application/Dtos/Product.dto";
+import { ProductCriterionValueDto } from "@/Application/Dtos/ProductCriteriaValue.dto";
 
 /**
  * Rank products for each criteria
  */
 export function calculateProductsCriteriaRankPts(
-  criteria: Criterion[],
-  productsWithCriteria: ProductCriterionValue[]
-): ProductCriterionValue[] {
-  const res = [...productsWithCriteria];
+  criterionList: CriterionDto[],
+  productCriterionValueList: ProductCriterionValueDto[]
+): ProductCriterionValueDto[] {
+  const res = [...productCriterionValueList];
 
-  [...criteria].forEach((criterion) => {
+  [...criterionList].forEach((criterion) => {
     const products = res.filter(
-      ({ criterionId }) => criterionId === criterion.id
+      ({ criterionUuid }) => criterion.uuid === criterionUuid
     );
 
     let lastValue: number | null = null;
@@ -53,22 +53,22 @@ export function calculateProductsCriteriaRankPts(
 }
 
 export function rankProducts(
-  products: Product[],
-  criteria: Criterion[],
-  productsWithCriteria: ProductCriterionValue[]
+  productList: ProductDto[],
+  criterionList: CriterionDto[],
+  productCriterionList: ProductCriterionValueDto[]
 ) {
   let lastRankPts: number | null = null;
   let lastPos = 0;
 
   const productsWithCriteriaRankPts = calculateProductsCriteriaRankPts(
-    criteria,
-    productsWithCriteria
+    criterionList,
+    productCriterionList
   );
 
-  const rankedProducts = [...products]
+  const rankedProducts = [...productList]
     .map((product) => {
       const rankPts = productsWithCriteriaRankPts
-        .filter(({ productId }) => productId === product.id)
+        .filter(({ productUuid }) => product.uuid === productUuid)
         .reduce(
           (total, current) => total + (current?.criterionRankPts ?? 0),
           0
