@@ -7,10 +7,18 @@ export class EventService {
   }
 
   static subscribe<T>(eventName: string, listener: (event: AbstractEvent<T>) => void) {
-    document.addEventListener(eventName, e => listener(e as AbstractEvent<T>));
+    console.log('event >> subscribe', { eventName });
+    document.addEventListener(eventName, e => {
+      console.log('event >> received', { event: e });
+      return listener(e as AbstractEvent<T>);
+    });
   }
 
   static unsubscribe<T>(eventName: string, listener: (event: AbstractEvent<T>) => void) {
-    document.removeEventListener(eventName, e => listener(e as AbstractEvent<T>));
+    console.log('event >> unsubscribe', { eventName });
+    document.removeEventListener(eventName, e => {
+      console.log('event >> received', { event: e });
+      return listener(e as AbstractEvent<T>);
+    });
   }
 }
