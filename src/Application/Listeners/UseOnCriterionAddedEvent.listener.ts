@@ -5,7 +5,7 @@ import { CriterionAddedEvent } from '../Events/CriterionAdded.event';
 export default function UseOnCriterionAddedEventListener() {
   useEffect(() => {
     const handleCriterionAddedEvent = (event: CriterionAddedEvent) => {
-      console.log('Criterion added event received', event);
+      console.log(event.key, event.detail);
     };
 
     EventService.subscribe(CriterionAddedEvent.name, handleCriterionAddedEvent);
