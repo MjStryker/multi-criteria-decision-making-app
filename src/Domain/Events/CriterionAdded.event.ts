@@ -1,5 +1,5 @@
 import { AbstractEvent } from '@/@Event/AbstractEvent';
-import { CriterionDto } from '../Dtos/Criterion.dto';
+import { CriterionDto } from '@/Application/Dtos/Criterion.dto';
 
 export class CriterionAddedEvent extends AbstractEvent<CriterionDto> {
   constructor(detail: CriterionDto) {
