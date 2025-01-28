@@ -4,7 +4,7 @@ import UseUpdateProductCommand from '@/Application/Product/Commands/UseUpdatePro
 
 import { ProductDto } from '@/Application/Product/Dtos/Product.dto';
 import { DeleteIcon } from '@chakra-ui/icons';
-import { Button, HStack, IconButton, Stack, Text, useBoolean } from '@chakra-ui/react';
+import { Button, HStack, IconButton, Stack, Text } from '@chakra-ui/react';
 import { Dispatch, FormEvent, SetStateAction, useEffect, useState } from 'react';
 import TextInput from '../../../../../Components/Form/TextInput';
 
