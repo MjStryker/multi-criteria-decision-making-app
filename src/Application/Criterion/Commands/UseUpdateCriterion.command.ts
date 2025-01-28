@@ -1,4 +1,4 @@
-import { CriterionDto } from '@/Application/Dtos/Criterion.dto';
+import { CriterionDto } from '@/Application/Criterion/Dtos/Criterion.dto';
 import { useCallback } from 'react';
 import UseSetCriterionListCommand from './UseSetCriterionList.command';
 

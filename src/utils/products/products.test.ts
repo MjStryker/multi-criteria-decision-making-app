@@ -3,7 +3,7 @@ import { compareProductsByDefaultColumnIdxFn, compareProductsByRankFn } from './
 import { describe, it, expect } from 'vitest';
 
 import { SortByEnum } from '@/@Shared/@Enums/SortBy.enum';
-import { ProductDto } from '@/Application/Dtos/Product.dto';
+import { ProductDto } from '@/Application/Product/Dtos/Product.dto';
 
 const p1: ProductDto = {
   uuid: 'id-p1',

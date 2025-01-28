@@ -11,7 +11,7 @@ import { useState } from 'react';
 import { SmallCloseIcon as CloseIcon } from '@chakra-ui/icons';
 import { MdEdit as EditIcon } from 'react-icons/md';
 import EditCriterionForm from './EditCriterionForm';
-import { CriterionDto } from '@/Application/Dtos/Criterion.dto';
+import { CriterionDto } from '@/Application/Criterion/Dtos/Criterion.dto';
 
 type Props = {
   criterion: CriterionDto;

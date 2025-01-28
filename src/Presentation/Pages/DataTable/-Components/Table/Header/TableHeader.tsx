@@ -2,13 +2,13 @@ import { Icon, IconButton, Td, Text, Thead, Tr } from '@chakra-ui/react';
 
 import { CRITERION } from '@/@Config/Criteria';
 import { PRODUCTS_MAX_ITEMS } from '@/@Config/Product';
-import UseAddProductCommand from '@/Application/Commands/UseAddProduct.command';
-import UseGetProductListQuery from '@/Application/Queries/UseGetProductList.query';
+import UseAddProductCommand from '@/Application/Product/Commands/UseAddProduct.command';
+import UseGetProductListQuery from '@/Application/Product/Queries/UseGetProductList.query';
 
 import { AddIcon } from '@chakra-ui/icons';
 import { GiAnvil as AnvilIcon } from 'react-icons/gi';
 import TableHeaderCell from './TableHeaderCell';
-import { ProductFactory } from '@/Application/Factories/Product.factory';
+import { ProductDtoFactory } from '@/Application/Product/Dtos/ProductDto.factory';
 
 const addButtonCellWidth = '50px';
 
@@ -20,7 +20,7 @@ const TableHeader = () => {
   const nbProductsRemaining = PRODUCTS_MAX_ITEMS - nbProducts;
 
   const handleAddProduct = () => {
-    addProductCommand(ProductFactory.newEmpty(nbProducts));
+    addProductCommand(ProductDtoFactory.newEmpty(nbProducts));
   };
 
   return (

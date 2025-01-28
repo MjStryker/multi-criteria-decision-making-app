@@ -3,7 +3,7 @@ import { Box, SimpleGrid, Td, Text, VStack } from '@chakra-ui/react';
 import EditProductButton from './EditProductButton';
 
 import { isValidNotEmptyString } from '@/@Shared/@Utils/String';
-import { ProductDto } from '@/Application/Dtos/Product.dto';
+import { ProductDto } from '@/Application/Product/Dtos/Product.dto';
 
 const CELL_WIDTH = '150px';
 

@@ -9,7 +9,7 @@ import {
 import { describe, it, expect } from 'vitest';
 
 import { SortByEnum } from '@/@Shared/@Enums/SortBy.enum';
-import { CriterionDto } from '@/Application/Dtos/Criterion.dto';
+import { CriterionDto } from '@/Application/Criterion/Dtos/Criterion.dto';
 
 const c1: CriterionDto = {
   uuid: 'id-c1',

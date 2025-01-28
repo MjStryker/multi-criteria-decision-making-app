@@ -1,7 +1,7 @@
 import { Uuid } from '@/@Shared/@Utils/Uuid';
-import { ProductCriterionValueDto } from '../Dtos/ProductCriteriaValue.dto';
+import { ProductCriterionValueDto } from '@/Application/ProductCriterionValue/Dtos/ProductCriteriaValue.dto';
 
-export class ProductCriterionValueFactory {
+export class ProductCriterionValueDtoFactory {
   public static newEmpty(productUuid: string, criterionUuid: string): ProductCriterionValueDto {
     return {
       uuid: Uuid.newRandom(),

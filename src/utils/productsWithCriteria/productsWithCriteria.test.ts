@@ -94,9 +94,9 @@ export const p3: ProductDto = {
   defaultColumnIdx: 3
 };
 
-import { CriterionDto } from '@/Application/Dtos/Criterion.dto';
-import { ProductDto } from '@/Application/Dtos/Product.dto';
-import { ProductCriterionValueDto } from '@/Application/Dtos/ProductCriteriaValue.dto';
+import { CriterionDto } from '@/Application/Criterion/Dtos/Criterion.dto';
+import { ProductDto } from '@/Application/Product/Dtos/Product.dto';
+import { ProductCriterionValueDto } from '@/Application/ProductCriterionValue/Dtos/ProductCriteriaValue.dto';
 import { describe, it, expect } from 'vitest';
 import { findProductWithCriterion } from './productsWithCriteria';
 

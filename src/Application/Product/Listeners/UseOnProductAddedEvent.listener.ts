@@ -1,6 +1,6 @@
 import { EventService } from '@/@Event/EventService';
+import { ProductAddedEvent } from '@/Application/Product/Events/ProductAdded.event';
 import { useEffect } from 'react';
-import { ProductAddedEvent } from '../Events/ProductAdded.event';
 
 export default function UseOnProductAddedEventListener() {
   useEffect(() => {

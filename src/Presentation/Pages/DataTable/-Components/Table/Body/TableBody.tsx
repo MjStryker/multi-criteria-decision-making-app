@@ -1,4 +1,4 @@
-import UseGetCriterionListQuery from '@/Application/Queries/UseGetCriterionList.query';
+import UseGetCriterionListQuery from '@/Application/Criterion/Queries/UseGetCriterionList.query';
 import { getCriteriaMaxWeight } from '@/utils/criteria/criteria';
 import { Tbody } from '@chakra-ui/react';
 import { useMemo } from 'react';

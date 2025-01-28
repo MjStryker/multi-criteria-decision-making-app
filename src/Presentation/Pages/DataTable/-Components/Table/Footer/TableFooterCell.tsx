@@ -1,7 +1,7 @@
 import { DEBUG } from '@/@Config/Global';
 import { HStack, Tag, Td, Text } from '@chakra-ui/react';
 import DebugValue from '../DebugValue';
-import { ProductDto } from '@/Application/Dtos/Product.dto';
+import { ProductDto } from '@/Application/Product/Dtos/Product.dto';
 
 type Props = {
   product: ProductDto;

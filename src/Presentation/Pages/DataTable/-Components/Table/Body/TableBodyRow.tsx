@@ -1,11 +1,11 @@
-import UseGetProductCriterionValueListQuery from '@/Application/Queries/UseGetProductCriterionValueList.query';
-import UseGetProductListQuery from '@/Application/Queries/UseGetProductList.query';
+import UseGetProductCriterionValueListQuery from '@/Application/ProductCriterionValue/Queries/UseGetProductCriterionValueList.query';
+import UseGetProductListQuery from '@/Application/Product/Queries/UseGetProductList.query';
 
 import { Td, Tr } from '@chakra-ui/react';
 import CriterionNameUnitCell from './Cell/CriterionNameUnitCell';
 import CriterionProductValueCell from './Cell/ProductCriterionValueCell';
 import CriterionWeightCell from './Cell/CriterionWeightCell';
-import { CriterionDto } from '@/Application/Dtos/Criterion.dto';
+import { CriterionDto } from '@/Application/Criterion/Dtos/Criterion.dto';
 
 type Props = {
   rowIdx: number;

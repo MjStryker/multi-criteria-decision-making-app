@@ -1,7 +1,7 @@
 import { Uuid } from '@/@Shared/@Utils/Uuid';
-import { ProductDto } from '../Dtos/Product.dto';
+import { ProductDto } from '@/Application/Product/Dtos/Product.dto';
 
-export class ProductFactory {
+export class ProductDtoFactory {
   public static newEmpty(defaultColumnIdx: number): ProductDto {
     return {
       uuid: Uuid.newRandom(),

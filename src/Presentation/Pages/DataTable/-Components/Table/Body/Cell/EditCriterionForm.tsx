@@ -1,7 +1,7 @@
 import { isValidNotEmptyString } from '@/@Shared/@Utils/String';
-import UseRemoveCriterionCommand from '@/Application/Commands/UseRemoveCriterion.command';
-import UseUpdateCriterionCommand from '@/Application/Commands/UseUpdateCriterion.command';
-import { CriterionDto } from '@/Application/Dtos/Criterion.dto';
+import UseRemoveCriterionCommand from '@/Application/Criterion/Commands/UseRemoveCriterion.command';
+import UseUpdateCriterionCommand from '@/Application/Criterion/Commands/UseUpdateCriterion.command';
+import { CriterionDto } from '@/Application/Criterion/Dtos/Criterion.dto';
 import TextInput from '@/Presentation/Components/Form/TextInput';
 
 import { DeleteIcon, TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons';

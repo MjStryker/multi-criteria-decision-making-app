@@ -1,5 +1,5 @@
 import { capitalize, isValidNotEmptyString } from '@/@Shared/@Utils/String';
-import { CriterionDto } from '@/Application/Dtos/Criterion.dto';
+import { CriterionDto } from '@/Application/Criterion/Dtos/Criterion.dto';
 import { getCriterionWeightRelativeToMax } from '@/utils/criteria/criteria';
 import { Box, Flex, HStack, Progress, Td, Text } from '@chakra-ui/react';
 import EditCriterionButton from './EditCriterionButton';

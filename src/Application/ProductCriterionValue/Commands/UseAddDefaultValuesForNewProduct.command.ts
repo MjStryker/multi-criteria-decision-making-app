@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { ProductCriterionValueDto } from '../Dtos/ProductCriteriaValue.dto';
-import { ProductCriterionValueFactory } from '../Factories/ProductCriterionValue.factory';
-import UseGetCriterionListQuery from '../Queries/UseGetCriterionList.query';
+import { ProductCriterionValueDtoFactory } from '../Dtos/ProductCriterionValueDto.factory';
+import UseGetCriterionListQuery from '../../Criterion/Queries/UseGetCriterionList.query';
 import UseSetProductCriterionValueListCommand from './UseSetProductCriterionValueList.command';
 
 export default function UseAddDefaultValuesForNewProductCommand() {
@@ -13,7 +13,7 @@ export default function UseAddDefaultValuesForNewProductCommand() {
       const newProductCriterionValues: ProductCriterionValueDto[] = [];
 
       criterionList.forEach(criterion => {
-        newProductCriterionValues.push(ProductCriterionValueFactory.newEmpty(productUuid, criterion.uuid));
+        newProductCriterionValues.push(ProductCriterionValueDtoFactory.newEmpty(productUuid, criterion.uuid));
       });
 
       setProductCriterionValueListCommand(values => [...values, ...newProductCriterionValues]);

@@ -12,7 +12,7 @@ import { SmallCloseIcon as CloseIcon } from '@chakra-ui/icons';
 
 import { MdEdit as EditIcon } from 'react-icons/md';
 import EditProductForm from './EditProductForm';
-import { ProductDto } from '@/Application/Dtos/Product.dto';
+import { ProductDto } from '@/Application/Product/Dtos/Product.dto';
 
 type Props = {
   product: ProductDto;

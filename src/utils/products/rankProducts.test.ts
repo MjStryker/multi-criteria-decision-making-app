@@ -1,10 +1,10 @@
-import { CriterionDto } from '@/Application/Dtos/Criterion.dto';
+import { CriterionDto } from '@/Application/Criterion/Dtos/Criterion.dto';
 import { sumCriteriaNormalizedWeight } from '../criteria/criteria';
 import { rankProducts } from './rankProducts';
 
 import { describe, expect, it } from 'vitest';
-import { ProductDto } from '@/Application/Dtos/Product.dto';
-import { ProductCriterionValueDto } from '@/Application/Dtos/ProductCriteriaValue.dto';
+import { ProductDto } from '@/Application/Product/Dtos/Product.dto';
+import { ProductCriterionValueDto } from '@/Application/ProductCriterionValue/Dtos/ProductCriteriaValue.dto';
 
 const c1: CriterionDto = {
   uuid: 'id-c1',

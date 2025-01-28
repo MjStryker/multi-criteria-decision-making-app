@@ -1,9 +1,9 @@
-import UseAddCriterionCommand from '@/Application/Commands/UseAddCriterion.command';
-import UseGetProductListQuery from '@/Application/Queries/UseGetProductList.query';
+import UseAddCriterionCommand from '@/Application/Criterion/Commands/UseAddCriterion.command';
+import UseGetProductListQuery from '@/Application/Product/Queries/UseGetProductList.query';
 
 import { CRITERIA_MAX_ITEMS } from '@/@Config/Criteria';
-import { CriterionFactory } from '@/Application/Factories/Criterion.factory';
-import UseGetCriterionListQuery from '@/Application/Queries/UseGetCriterionList.query';
+import { CriterionDtoFactory } from '@/Application/Criterion/Dtos/CriterionDto.factory';
+import UseGetCriterionListQuery from '@/Application/Criterion/Queries/UseGetCriterionList.query';
 import { AddIcon } from '@chakra-ui/icons';
 import { Button, Td, Tfoot, Tr } from '@chakra-ui/react';
 import TableFooterCell from './TableFooterCell';
@@ -17,7 +17,7 @@ export default function TableFooter() {
   const nbCriteriaRemaining = CRITERIA_MAX_ITEMS - nbCriteria;
 
   function handleAddCriterion() {
-    addCriterionCommand(CriterionFactory.newEmpty(nbCriteria));
+    addCriterionCommand(CriterionDtoFactory.newEmpty(nbCriteria));
   }
 
   return (

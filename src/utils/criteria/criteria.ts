@@ -3,7 +3,7 @@ import { SortByEnum } from '@/@Shared/@Enums/SortBy.enum';
 import { compareFn } from '@/@Shared/@Utils/Array';
 import { clamp, isValidNumber } from '@/@Shared/@Utils/Number';
 import { areDefined } from '@/@Shared/@Utils/Object';
-import { CriterionDto } from '@/Application/Dtos/Criterion.dto';
+import { CriterionDto } from '@/Application/Criterion/Dtos/Criterion.dto';
 
 export const compareCriteriaByDefaultRowIdxFn =
   (sortBy = SortByEnum.ASC) =>

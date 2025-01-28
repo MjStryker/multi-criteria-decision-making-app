@@ -1,7 +1,7 @@
 import { ChakraProvider, Flex } from '@chakra-ui/react';
 
 import DataTable from './Pages/DataTable';
-import UseGlobalHooks from '@/Application/Global/UseGlobalHooks';
+import UseGlobalHooks from '@/Application/@Global/UseGlobalHooks';
 
 export default function App() {
   UseGlobalHooks();

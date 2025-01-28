@@ -3,10 +3,9 @@ import UseSetProductListCommand from './UseSetProductList.command';
 import { PRODUCTS_MAX_ITEMS, PRODUCTS_ITEMS_REMAINING_WARNING } from '@/@Config/Product';
 import UseGetProductListQuery from '../Queries/UseGetProductList.query';
 import { useToast } from '@chakra-ui/react';
-import { ProductDto } from '../Dtos/Product.dto';
 import { EventService } from '@/@Event/EventService';
-import { CriterionAddedEvent } from '../Events/CriterionAdded.event';
-import { ProductAddedEvent } from '../Events/ProductAdded.event';
+import { ProductDto } from '@/Application/Product/Dtos/Product.dto';
+import { ProductAddedEvent } from '@/Application/Product/Events/ProductAdded.event';
 
 export default function UseAddProductCommand() {
   const productList = UseGetProductListQuery();

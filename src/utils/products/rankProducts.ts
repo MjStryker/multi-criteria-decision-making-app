@@ -1,9 +1,9 @@
 import { SortByEnum } from '@/@Shared/@Enums/SortBy.enum';
 import { compareFn } from '@/@Shared/@Utils/Array';
 import { isDefined } from '@/@Shared/@Utils/Object';
-import { CriterionDto } from '@/Application/Dtos/Criterion.dto';
-import { ProductDto } from '@/Application/Dtos/Product.dto';
-import { ProductCriterionValueDto } from '@/Application/Dtos/ProductCriteriaValue.dto';
+import { CriterionDto } from '@/Application/Criterion/Dtos/Criterion.dto';
+import { ProductDto } from '@/Application/Product/Dtos/Product.dto';
+import { ProductCriterionValueDto } from '@/Application/ProductCriterionValue/Dtos/ProductCriteriaValue.dto';
 
 /**
  * Rank products for each criteria

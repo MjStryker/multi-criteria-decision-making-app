@@ -1,11 +1,11 @@
 import { DEBUG } from '@/@Config/Global';
 import { EDITABLE_MIN_WIDTH } from '@/@Config/Table';
 import { isValidNotEmptyString } from '@/@Shared/@Utils/String';
-import UseUpdateProductCriterionValueCommand from '@/Application/Commands/UseUpdateProductCriterionValue.command';
+import UseUpdateProductCriterionValueCommand from '@/Application/ProductCriterionValue/Commands/UseUpdateProductCriterionValue.command';
 
-import { CriterionDto } from '@/Application/Dtos/Criterion.dto';
-import { ProductDto } from '@/Application/Dtos/Product.dto';
-import { ProductCriterionValueDto } from '@/Application/Dtos/ProductCriteriaValue.dto';
+import { CriterionDto } from '@/Application/Criterion/Dtos/Criterion.dto';
+import { ProductDto } from '@/Application/Product/Dtos/Product.dto';
+import { ProductCriterionValueDto } from '@/Application/ProductCriterionValue/Dtos/ProductCriteriaValue.dto';
 import { Editable, EditableInput, EditablePreview, HStack, Input, Td, useColorModeValue } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import DebugValue from '../../DebugValue';

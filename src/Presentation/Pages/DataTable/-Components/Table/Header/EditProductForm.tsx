@@ -1,8 +1,8 @@
 import { isValidNotEmptyString } from '@/@Shared/@Utils/String';
-import UseRemoveProductCommand from '@/Application/Commands/UseRemoveProduct.command';
-import UseUpdateProductCommand from '@/Application/Commands/UseUpdateProduct.command';
+import UseRemoveProductCommand from '@/Application/Product/Commands/UseRemoveProduct.command';
+import UseUpdateProductCommand from '@/Application/Product/Commands/UseUpdateProduct.command';
 
-import { ProductDto } from '@/Application/Dtos/Product.dto';
+import { ProductDto } from '@/Application/Product/Dtos/Product.dto';
 import { DeleteIcon } from '@chakra-ui/icons';
 import { Button, HStack, IconButton, Stack, Text, useBoolean } from '@chakra-ui/react';
 import { Dispatch, FormEvent, SetStateAction, useEffect, useState } from 'react';

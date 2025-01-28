@@ -1,11 +1,11 @@
 import { CRITERIA_ITEMS_REMAINING_WARNING, CRITERIA_MAX_ITEMS } from '@/@Config/Criteria';
-import { CriterionDto } from '@/Application/Dtos/Criterion.dto';
+import { EventService } from '@/@Event/EventService';
+import { CriterionDto } from '@/Application/Criterion/Dtos/Criterion.dto';
+import { CriterionAddedEvent } from '@/Application/Criterion/Events/CriterionAdded.event';
 import { useToast } from '@chakra-ui/react';
 import { useCallback } from 'react';
 import UseGetCriterionListQuery from '../Queries/UseGetCriterionList.query';
 import UseSetCriterionListCommand from './UseSetCriterionList.command';
-import { EventService } from '@/@Event/EventService';
-import { CriterionAddedEvent } from '../Events/CriterionAdded.event';
 
 export default function UseAddCriterionCommand() {
   const setCriterionListCommand = UseSetCriterionListCommand();
