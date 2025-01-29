@@ -1,26 +1,29 @@
 import { useCallback } from 'react';
 import UseSetProductCriterionValueListCommand from './UseSetProductCriterionValueList.command';
+import { ProductCriterionValueDto } from '../Dtos/ProductCriteriaValue.dto';
+import { EventService } from '@/@Event/EventService';
+import { ProductCriterionValueUpdatedEvent } from '../Events/ProductCriterionValueUpdated.event';
 
 export default function UseUpdateProductCriterionValueCommand() {
   const setProductCriterionValueList = UseSetProductCriterionValueListCommand();
 
   const updateProductCriterionValue = useCallback(
-    (productUuid: string, criterionUuid: string, newValue: number | null) => {
+    (updatedProductCriterionValue: ProductCriterionValueDto) => {
       setProductCriterionValueList(prev => {
-        const index = prev.findIndex(item => item.productUuid === productUuid && item.criterionUuid === criterionUuid);
+        const index = prev.findIndex(item => item.uuid === updatedProductCriterionValue.uuid);
 
         if (index === -1) {
           throw Error('Product criterion value not found');
         }
 
-        const newProductCriterionValueList = [...prev];
-        newProductCriterionValueList[index] = {
-          ...newProductCriterionValueList[index],
-          value: newValue
-        };
+        prev[index] = updatedProductCriterionValue;
 
-        return newProductCriterionValueList;
+        return prev;
       });
+
+      console.log('command >> update >> productCriterionValue', updatedProductCriterionValue);
+
+      EventService.emit(new ProductCriterionValueUpdatedEvent(updatedProductCriterionValue));
     },
     [setProductCriterionValueList]
   );
