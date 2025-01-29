@@ -4,7 +4,7 @@ import { isValidNotEmptyString } from '@/@Shared/@Utils/String';
 import UseUpdateProductCriterionValueCommand from '@/Application/ProductCriterionValue/Commands/UseUpdateProductCriterionValue.command';
 
 import { CriterionDto } from '@/Application/Criterion/Dtos/Criterion.dto';
-import { ProductDto } from '@/Application/Product/Dtos/Product.dto';
+
 import { ProductCriterionValueDto } from '@/Application/ProductCriterionValue/Dtos/ProductCriteriaValue.dto';
 import { Editable, EditableInput, EditablePreview, HStack, Input, Td, useColorModeValue } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
@@ -12,11 +12,10 @@ import DebugValue from '../../DebugValue';
 
 type Props = {
   criterion: CriterionDto;
-  product: ProductDto;
-  criterionProductValue: ProductCriterionValueDto | null;
+  criterionProductValue: ProductCriterionValueDto;
 };
 
-export default function ProductCriterionValueCell({ criterion, product, criterionProductValue }: Props) {
+export default function ProductCriterionValueCell({ criterion, criterionProductValue }: Props) {
   const setProductCriterionValue = UseUpdateProductCriterionValueCommand();
 
   const [value, setValue] = useState<number | null>(criterionProductValue?.value ?? null);
@@ -36,7 +35,7 @@ export default function ProductCriterionValueCell({ criterion, product, criterio
   };
 
   const onSubmit = () => {
-    setProductCriterionValue(product.uuid, criterion.uuid, value);
+    setProductCriterionValue({ ...criterionProductValue, value });
   };
 
   return (
