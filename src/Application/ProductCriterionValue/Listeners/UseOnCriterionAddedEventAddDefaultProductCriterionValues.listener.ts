@@ -27,5 +27,6 @@ export default function UseOnCriterionAddedEventAddDefaultProductCriterionValues
     EventService.subscribe(CriterionAddedEvent.name, handle);
 
     return () => EventService.unsubscribe(CriterionAddedEvent.name, handle);
-  }, [productList, addProductCriterionValues]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 }
