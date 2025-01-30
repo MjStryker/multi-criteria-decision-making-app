@@ -4,7 +4,7 @@ import { EventService } from '@/@Event/EventService';
 import { ProductCriterionValuesRemovedEvent } from '../Events/ProductCriterionValuesRemoved.event';
 import { ProductCriterionValueDto } from '../Dtos/ProductCriteriaValue.dto';
 
-export default function UseRemoveAllValuesAssociatedToCriterionCommand() {
+export default function UseRemoveAllProductCriterionValuesAssociatedToCriterionCommand() {
   const setProductCriterionValueCommand = UseSetProductCriterionValueListCommand();
 
   const removeAllValuesAssociatedToCriterionUuid = useCallback(
