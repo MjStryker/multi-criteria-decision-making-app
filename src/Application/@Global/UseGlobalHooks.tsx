@@ -1,5 +1,5 @@
-import UseOnCriterionAddedEventAddDefaultProductCriterionValuesListener from '../Criterion/Listeners/UseOnCriterionAddedEventAddDefaultProductCriterionValues.listener';
-import UseOnProductAddedEventAddDefaultProductCriterionValuesListener from '../ProductCriterionValue/Listeners/UseOnProductAddedEventAddDefaultProductCriterionValues.listener';
+import UseOnCriterionAddedEventAddDefaultProductCriterionValuesListener from '@/Application/ProductCriterionValue/Listeners/UseOnCriterionAddedEventAddDefaultProductCriterionValues.listener';
+import UseOnProductAddedEventAddDefaultProductCriterionValuesListener from '@/Application/ProductCriterionValue/Listeners/UseOnProductAddedEventAddDefaultProductCriterionValues.listener';
 
 export default function UseGlobalHooks() {
   /**
