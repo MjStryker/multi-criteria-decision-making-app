@@ -1,5 +1,7 @@
 import UseOnCriterionAddedEventAddDefaultProductCriterionValuesListener from '@/Application/ProductCriterionValue/Listeners/UseOnCriterionAddedEventAddDefaultProductCriterionValues.listener';
 import UseOnProductAddedEventAddDefaultProductCriterionValuesListener from '@/Application/ProductCriterionValue/Listeners/UseOnProductAddedEventAddDefaultProductCriterionValues.listener';
+import UseOnCriterionRemovedEventRemoveAssociatedProductCriterionValuesListener from '@/Application/ProductCriterionValue/Listeners/UseOnCriterionRemovedEventRemoveAssociatedProductCriterionValues.listener';
+import UseOnProductRemovedEventRemoveAssociatedProductCriterionValuesListener from '@/Application/ProductCriterionValue/Listeners/UseOnProductRemovedEventRemoveAssociatedProductCriterionValues.listener';
 
 export default function UseGlobalHooks() {
   /**
@@ -7,4 +9,6 @@ export default function UseGlobalHooks() {
    */
   UseOnCriterionAddedEventAddDefaultProductCriterionValuesListener();
   UseOnProductAddedEventAddDefaultProductCriterionValuesListener();
+  UseOnCriterionRemovedEventRemoveAssociatedProductCriterionValuesListener();
+  UseOnProductRemovedEventRemoveAssociatedProductCriterionValuesListener();
 }
