@@ -4,7 +4,7 @@ import UseAddProductCriterionValuesCommand from '@/Application/ProductCriterionV
 import { ProductCriterionValueDto } from '@/Application/ProductCriterionValue/Dtos/ProductCriteriaValue.dto';
 import { ProductCriterionValueDtoFactory } from '@/Application/ProductCriterionValue/Dtos/ProductCriterionValueDto.factory';
 import { useEffect } from 'react';
-import { ProductAddedEvent } from '../Events/ProductAdded.event';
+import { ProductAddedEvent } from '@/Application/Product/Events/ProductAdded.event';
 
 export default function UseOnProductAddedEventAddDefaultProductCriterionValuesListener() {
   const criterionList = UseGetCriterionListQuery();

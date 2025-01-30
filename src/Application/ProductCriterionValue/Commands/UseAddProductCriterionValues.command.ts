@@ -9,6 +9,10 @@ export default function UseAddProductCriterionValuesCommand() {
 
   const addProductCriterionValue = useCallback(
     (newValues: ProductCriterionValueDto[]) => {
+      if (newValues.length === 0) {
+        return;
+      }
+
       setProductCriterionValueListCommand(currentValues => [...currentValues, ...newValues]);
 
       console.log('command >> add >> productCriterionValues', newValues);
