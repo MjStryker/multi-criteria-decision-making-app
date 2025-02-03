@@ -4,7 +4,7 @@ import { getCriterionWeightRelativeToMax } from '@/utils/criteria/criteria';
 import { Box, Flex, HStack, Progress, Td, Text } from '@chakra-ui/react';
 import EditCriterionButton from './EditCriterionButton';
 
-const cellWidth = '240px';
+const CELL_WIDTH = '240px';
 
 type Props = {
   criterion: CriterionDto;
@@ -18,12 +18,16 @@ export default function CriterionNameUnitCell({ criterion, rowIdx, maxWeight }: 
       position="relative"
       pl={2}
       pr={1}
-      w={cellWidth}
-      minW={cellWidth}
-      maxW={cellWidth}
+      w={CELL_WIDTH}
+      minW={CELL_WIDTH}
+      maxW={CELL_WIDTH}
       border="1px"
       borderColor="gray.100"
     >
+      <Text position="absolute" top={0} left={0}>
+        {criterion.defaultRowIdx}
+      </Text>
+
       <HStack justifyContent="space-between">
         <Flex flex={1} alignItems="center" justifyContent="space-between">
           {/*

@@ -14,7 +14,19 @@ type Props = {
 
 export default function TableHeaderCell({ columnIdx, product }: Props) {
   return (
-    <Td w={CELL_WIDTH} minW={CELL_WIDTH} maxW={CELL_WIDTH} px={2} border="1px" borderColor="gray.100">
+    <Td
+      position="relative"
+      w={CELL_WIDTH}
+      minW={CELL_WIDTH}
+      maxW={CELL_WIDTH}
+      px={2}
+      border="1px"
+      borderColor="gray.100"
+    >
+      <Text position="absolute" top={0} left={0}>
+        {columnIdx}
+      </Text>
+
       <VStack className="CellContainer" alignItems="stretch" justifyContent="space-between" minH="70px">
         <SimpleGrid className="FirstRowContainer" templateColumns="1fr auto" alignItems="center" gap={1}>
           <Text whiteSpace="break-spaces" wordBreak="break-word" fontWeight="semibold">

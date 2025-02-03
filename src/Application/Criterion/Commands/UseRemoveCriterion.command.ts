@@ -9,7 +9,13 @@ export default function UseRemoveCriterionCommand() {
 
   const removeCriterion = useCallback(
     (criterion: CriterionDto) => {
-      setCriterionListCommand(criterionList => criterionList.filter(c => c.uuid !== criterion.uuid));
+      setCriterionListCommand(criterionList =>
+        criterionList
+          // * Remove criterion
+          .filter(c => c.uuid !== criterion.uuid)
+          // * Recompute default indexes
+          .map((c, idx) => ({ ...c, defaultRowIdx: idx }))
+      );
 
       console.log('command >> remove >> criterion', criterion);
 

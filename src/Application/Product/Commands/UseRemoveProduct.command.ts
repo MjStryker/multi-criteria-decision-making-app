@@ -9,7 +9,13 @@ export default function UseRemoveProductCommand() {
 
   const removeProduct = useCallback(
     (product: ProductDto) => {
-      setProductListCommand(productList => productList.filter(p => p.uuid !== product.uuid));
+      setProductListCommand(productList =>
+        productList
+          // * Remove Product
+          .filter(p => p.uuid !== product.uuid)
+          // * Recompute default indexes
+          .map((p, idx) => ({ ...p, defaultRowIdx: idx }))
+      );
 
       console.log('command >> remove >> product', product);
 
