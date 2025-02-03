@@ -9,6 +9,7 @@ export default function UseOnProductRemovedEventRemoveAssociatedProductCriterion
 
   useEffect(() => {
     const handle = (event: ProductRemovedEvent) => {
+      console.log('listener >> onProductRemoved >> removeAssociatedProductCriterionValues');
       const productRemoved = event.detail;
       removeAllProductCriterionValuesAssociatedToProduct(productRemoved.uuid);
     };

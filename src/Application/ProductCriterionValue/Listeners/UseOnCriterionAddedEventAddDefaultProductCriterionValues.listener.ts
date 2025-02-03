@@ -13,6 +13,8 @@ export default function UseOnCriterionAddedEventAddDefaultProductCriterionValues
 
   useEffect(() => {
     const handle = (event: CriterionAddedEvent) => {
+      console.log('listener >> onCriterionAdded >> addDefaultProductCriterionValues');
+
       const criterionAdded = event.detail;
 
       const productCriterionValuesToAdd: ProductCriterionValueDto[] = [];
@@ -28,5 +30,5 @@ export default function UseOnCriterionAddedEventAddDefaultProductCriterionValues
 
     return () => EventService.unsubscribe(CriterionAddedEvent.name, handle);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [productList]);
 }

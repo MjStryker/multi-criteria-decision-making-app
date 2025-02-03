@@ -4,7 +4,7 @@ export class EventService {
   static container: HTMLElement | null = null;
 
   static emit<T>(event: AbstractEvent<T>) {
-    console.log('event >> emit', event);
+    console.log('event >> emit', { name: event.type, detail: event.detail });
     window.dispatchEvent(event);
   }
 
