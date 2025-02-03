@@ -39,29 +39,20 @@ export default function ProductCriterionValueCell({ criterion, criterionProductV
   };
 
   return (
-    <Td isNumeric p={0} border="1px" borderColor="gray.100">
-      <HStack gap={1} h="50px" justifyContent="flex-end">
-        <Editable flex={1} h="full" value={value?.toString()} onChange={onChange} onSubmit={onSubmit}>
+    <Td isNumeric px={2} border="1px" borderColor="gray.100">
+      <HStack spacing={1} justifyContent="flex-end">
+        <Editable flex={1} value={value?.toString() ?? '-'} onChange={onChange} onSubmit={onSubmit}>
           <EditablePreview
-            py="18px"
-            px={3}
+            py={2}
+            px={2}
             w="full"
             minW={EDITABLE_MIN_WIDTH}
-            h="full"
-            rounded="none"
             _hover={{
-              bg: useColorModeValue('gray.50', 'gray.700')
+              background: useColorModeValue('gray.100', 'gray.700')
             }}
           />
 
-          <Input
-            as={EditableInput}
-            type="number"
-            // borderRadius="base"
-            size="sm"
-            h="full"
-            px="11px"
-          />
+          <Input as={EditableInput} type="number" borderRadius="base" size="sm" px={2} />
         </Editable>
 
         {DEBUG && criterionProductValue?.criterionRankPts !== null ? (
