@@ -10,8 +10,16 @@ export default function DataTable() {
     <>
       <ComputingRanksIndicator />
 
-      <TableContainer className="TableContainer" flex={1} display="flex" overflowY="auto" h="full" p={4}>
-        <Table size="sm" w="auto" h="min-content" m="0 auto">
+      <TableContainer
+        className="TableContainer"
+        flex={1}
+        display="flex"
+        justifyContent="center"
+        overflowY="auto"
+        h="full"
+        p={4}
+      >
+        <Table size="sm" w="auto" h="min-content">
           <TableHeader />
 
           <TableBody />

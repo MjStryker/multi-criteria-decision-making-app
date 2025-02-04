@@ -1,31 +1,26 @@
-import { DEBUG } from '@/@Config/Global';
 import { EDITABLE_MIN_WIDTH } from '@/@Config/Table';
 import { isValidNotEmptyString } from '@/@Shared/@Utils/String';
 import UseUpdateProductCriterionValueCommand from '@/Application/ProductCriterionValue/Commands/UseUpdateProductCriterionValue.command';
 
-import { CriterionDto } from '@/Application/Criterion/Dtos/Criterion.dto';
-
 import { ProductCriterionValueDto } from '@/Application/ProductCriterionValue/Dtos/ProductCriteriaValue.dto';
-import { Editable, EditableInput, EditablePreview, HStack, Input, Td, useColorModeValue } from '@chakra-ui/react';
+import { Editable, EditableInput, EditablePreview, HStack, Input, Td, Text, useColorModeValue } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import DebugValue from '../../DebugValue';
 
 type Props = {
-  criterion: CriterionDto;
-  criterionProductValue: ProductCriterionValueDto;
+  productCriterionValue: ProductCriterionValueDto;
 };
 
-export default function ProductCriterionValueCell({ criterion, criterionProductValue }: Props) {
+export default function ProductCriterionValueCell({ productCriterionValue }: Props) {
   const setProductCriterionValue = UseUpdateProductCriterionValueCommand();
 
-  const [value, setValue] = useState<number | null>(criterionProductValue?.value ?? null);
+  const [value, setValue] = useState<number | null>(productCriterionValue?.value ?? null);
 
   /**
    * * Sync local state on props change
    */
   useEffect(() => {
-    setValue(criterionProductValue?.value ?? null);
-  }, [criterionProductValue]);
+    setValue(productCriterionValue?.value ?? null);
+  }, [productCriterionValue]);
 
   /**
    * * Handle Input change / validation
@@ -35,11 +30,15 @@ export default function ProductCriterionValueCell({ criterion, criterionProductV
   };
 
   const onSubmit = () => {
-    setProductCriterionValue({ ...criterionProductValue, value });
+    setProductCriterionValue({ ...productCriterionValue, value });
   };
 
   return (
-    <Td isNumeric px={2} border="1px" borderColor="gray.100">
+    <Td position="relative" isNumeric px={2} border="1px" borderColor="gray.100">
+      <Text position="absolute" top={0} left={0}>
+        {productCriterionValue.criterionRankPts}
+      </Text>
+
       <HStack spacing={1} justifyContent="flex-end">
         <Editable flex={1} value={value?.toString() ?? '-'} onChange={onChange} onSubmit={onSubmit}>
           <EditablePreview
@@ -54,14 +53,6 @@ export default function ProductCriterionValueCell({ criterion, criterionProductV
 
           <Input as={EditableInput} type="number" borderRadius="base" size="sm" px={2} />
         </Editable>
-
-        {DEBUG && criterionProductValue?.criterionRankPts !== null ? (
-          <DebugValue
-            value={`${criterionProductValue?.criterionRankPts.toFixed(0)} pts`}
-            variant="outline"
-            colorScheme={criterion.beneficial === false ? 'orange' : 'blue'}
-          />
-        ) : null}
       </HStack>
     </Td>
   );

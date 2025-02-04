@@ -2,6 +2,7 @@ import UseOnCriterionAddedEventAddDefaultProductCriterionValuesListener from '@/
 import UseOnProductAddedEventAddDefaultProductCriterionValuesListener from '@/Application/ProductCriterionValue/Listeners/UseOnProductAddedEventAddDefaultProductCriterionValues.listener';
 import UseOnCriterionRemovedEventRemoveAssociatedProductCriterionValuesListener from '@/Application/ProductCriterionValue/Listeners/UseOnCriterionRemovedEventRemoveAssociatedProductCriterionValues.listener';
 import UseOnProductRemovedEventRemoveAssociatedProductCriterionValuesListener from '@/Application/ProductCriterionValue/Listeners/UseOnProductRemovedEventRemoveAssociatedProductCriterionValues.listener';
+import UseOnProductCriterionValueUpdatedEventComputeCriterionRankPointsListener from '../ProductCriterionValue/Listeners/UseOnProductCriterionValueUpdatedEventComputeCriterionRankPoints.listener';
 
 export default function UseGlobalHooks() {
   /**
@@ -9,6 +10,9 @@ export default function UseGlobalHooks() {
    */
   UseOnCriterionAddedEventAddDefaultProductCriterionValuesListener();
   UseOnProductAddedEventAddDefaultProductCriterionValuesListener();
+
+  UseOnProductCriterionValueUpdatedEventComputeCriterionRankPointsListener();
+
   UseOnCriterionRemovedEventRemoveAssociatedProductCriterionValuesListener();
   UseOnProductRemovedEventRemoveAssociatedProductCriterionValuesListener();
 }

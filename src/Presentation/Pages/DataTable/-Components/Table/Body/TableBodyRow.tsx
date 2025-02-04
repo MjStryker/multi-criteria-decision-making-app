@@ -42,11 +42,7 @@ export default function TableBodyRow({ rowIdx, criterion, maxWeight }: Props) {
         }
 
         return (
-          <CriterionProductValueCell
-            key={criterionProductValue.uuid}
-            criterion={criterion}
-            criterionProductValue={criterionProductValue}
-          />
+          <CriterionProductValueCell key={criterionProductValue.uuid} productCriterionValue={criterionProductValue} />
         );
       })}
 
