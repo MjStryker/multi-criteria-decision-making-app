@@ -21,6 +21,8 @@ export function computeProductCriterionValueRankPts(
     let lastValue: number | null = null;
     let lastPos = 0;
 
+    console.log('compute', products);
+
     products
       .sort((p1, p2) => compareFn(SortByEnum[criterion.beneficial ? 'ASC' : 'DESC'])(p1.value, p2.value))
       .forEach((product, i) => {
