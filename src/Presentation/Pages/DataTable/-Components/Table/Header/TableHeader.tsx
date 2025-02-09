@@ -3,20 +3,21 @@ import { Icon, IconButton, Td, Text, Thead, Tr } from '@chakra-ui/react';
 import { CRITERION } from '@/@Config/Criteria';
 import { PRODUCTS_MAX_ITEMS } from '@/@Config/Product';
 import UseAddProductCommand from '@/Application/Product/Commands/UseAddProduct.command';
-import UseGetProductListQuery from '@/Application/Product/Queries/UseGetProductList.query';
+import { ProductListSplitAtom } from '@/Application/Product/Queries/UseGetProductList.query';
 
+import { ProductDtoFactory } from '@/Application/Product/Dtos/ProductDto.factory';
 import { AddIcon } from '@chakra-ui/icons';
+import { useAtom } from 'jotai';
 import { GiAnvil as AnvilIcon } from 'react-icons/gi';
 import TableHeaderCell from './TableHeaderCell';
-import { ProductDtoFactory } from '@/Application/Product/Dtos/ProductDto.factory';
 
-const addButtonCellWidth = '50px';
+const ADD_PRODUCT_CELL_WIDTH = '50px';
 
-const TableHeader = () => {
-  const productList = UseGetProductListQuery();
+export default function TableHeader() {
+  const [productListAtoms, dispatch] = useAtom(ProductListSplitAtom);
   const addProductCommand = UseAddProductCommand();
 
-  const nbProducts = productList.length;
+  const nbProducts = productListAtoms.length;
   const nbProductsRemaining = PRODUCTS_MAX_ITEMS - nbProducts;
 
   const handleAddProduct = () => {
@@ -55,14 +56,19 @@ const TableHeader = () => {
         {/*
          * PRODUCTS
          */}
-        {productList.map((product, idx) => (
-          <TableHeaderCell key={product.uuid} columnIdx={idx} product={product} />
+        {productListAtoms.map((productAtom, idx) => (
+          <TableHeaderCell
+            key={`${productAtom}`}
+            columnIdx={idx}
+            productAtom={productAtom}
+            remove={() => dispatch({ type: 'remove', atom: productAtom })}
+          />
         ))}
 
         {/*
          * PRODUCTS - ADD BUTTON
          */}
-        <Td border="none" w={addButtonCellWidth} minW={addButtonCellWidth} maxW={addButtonCellWidth}>
+        <Td border="none" w={ADD_PRODUCT_CELL_WIDTH} minW={ADD_PRODUCT_CELL_WIDTH} maxW={ADD_PRODUCT_CELL_WIDTH}>
           <IconButton
             colorScheme={nbProductsRemaining > 0 ? 'blue' : 'gray'}
             aria-label="Add product"
@@ -76,6 +82,4 @@ const TableHeader = () => {
       </Tr>
     </Thead>
   );
-};
-
-export default TableHeader;
+}

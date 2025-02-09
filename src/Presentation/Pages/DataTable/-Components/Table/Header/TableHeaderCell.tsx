@@ -4,15 +4,19 @@ import EditProductButton from './EditProductButton';
 
 import { isValidNotEmptyString } from '@/@Shared/@Utils/String';
 import { ProductDto } from '@/Application/Product/Dtos/Product.dto';
+import { PrimitiveAtom, useAtom } from 'jotai';
 
 const CELL_WIDTH = '150px';
 
 type Props = {
   columnIdx: number;
-  product: ProductDto;
+  productAtom: PrimitiveAtom<ProductDto>;
+  remove: () => void;
 };
 
-export default function TableHeaderCell({ columnIdx, product }: Props) {
+export default function TableHeaderCell({ columnIdx, productAtom, remove }: Props) {
+  const [product] = useAtom(productAtom);
+
   return (
     <Td
       position="relative"
@@ -34,7 +38,7 @@ export default function TableHeaderCell({ columnIdx, product }: Props) {
           </Text>
 
           <Box>
-            <EditProductButton product={product} />
+            <EditProductButton productAtom={productAtom} remove={remove} />
           </Box>
         </SimpleGrid>
 

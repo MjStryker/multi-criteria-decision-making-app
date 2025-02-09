@@ -10,18 +10,19 @@ import { useState } from 'react';
 
 import { SmallCloseIcon as CloseIcon } from '@chakra-ui/icons';
 
+import { ProductDto } from '@/Application/Product/Dtos/Product.dto';
+import { PrimitiveAtom } from 'jotai';
 import { MdEdit as EditIcon } from 'react-icons/md';
 import EditProductForm from './EditProductForm';
-import { ProductDto } from '@/Application/Product/Dtos/Product.dto';
 
 type Props = {
-  product: ProductDto;
+  productAtom: PrimitiveAtom<ProductDto>;
+  remove: () => void;
 };
 
-export default function EditProductButton({ product }: Props) {
-  const [isFormDirty, setIsFormDirty] = useState(false);
-
+export default function EditProductButton({ productAtom, remove }: Props) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isFormDirty, setIsFormDirty] = useState(false);
 
   return (
     <Popover
@@ -48,7 +49,12 @@ export default function EditProductButton({ product }: Props) {
       <PopoverContent p={5}>
         <PopoverArrow />
         <PopoverCloseButton />
-        <EditProductForm setParentIsDirty={setIsFormDirty} onParentClose={() => setIsOpen(false)} product={product} />
+        <EditProductForm
+          productAtom={productAtom}
+          remove={remove}
+          setParentIsDirty={setIsFormDirty}
+          onParentClose={() => setIsOpen(false)}
+        />
       </PopoverContent>
     </Popover>
   );

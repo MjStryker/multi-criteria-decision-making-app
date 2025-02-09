@@ -1,21 +1,22 @@
-import UseRemoveProductCommand from '@/Application/Product/Commands/UseRemoveProduct.command';
-import UseUpdateProductCommand from '@/Application/Product/Commands/UseUpdateProduct.command';
-
 import { ProductDto } from '@/Application/Product/Dtos/Product.dto';
 import { DeleteIcon } from '@chakra-ui/icons';
 import { Button, HStack, IconButton, Stack } from '@chakra-ui/react';
+import { PrimitiveAtom, useAtom } from 'jotai';
 import { Dispatch, FormEvent, SetStateAction, useEffect, useState } from 'react';
 import TextInput from '../../../../../Components/Form/TextInput';
 
 type Props = {
+  productAtom: PrimitiveAtom<ProductDto>;
+  remove: () => void;
   setParentIsDirty: Dispatch<SetStateAction<boolean>>;
   onParentClose: VoidFunction;
-  product: ProductDto;
 };
 
-export default function EditProductForm({ setParentIsDirty, product, onParentClose }: Props) {
-  const updateProduct = UseUpdateProductCommand();
-  const removeProduct = UseRemoveProductCommand();
+export default function EditProductForm({ setParentIsDirty, productAtom, remove, onParentClose }: Props) {
+  const [product, setProduct] = useAtom(productAtom);
+
+  // const updateProduct = UseUpdateProductCommand();
+  // const removeProduct = UseRemoveProductCommand();
 
   const [name, setName] = useState<string>(product.name || '');
 
@@ -46,7 +47,6 @@ export default function EditProductForm({ setParentIsDirty, product, onParentClo
    * * Handle Inputs change
    */
   const onNameChange = (e: FormEvent<HTMLInputElement>) => setName(e.currentTarget.value);
-
   const onReferenceChange = (e: FormEvent<HTMLInputElement>) => setReference(e.currentTarget.value);
 
   /**
@@ -57,12 +57,14 @@ export default function EditProductForm({ setParentIsDirty, product, onParentClo
   };
 
   const onSave = () => {
-    updateProduct({ ...product, name, reference });
+    // updateProduct({ ...product, name, reference });
+    setProduct({ ...product, name, reference });
     onClose();
   };
 
   const onDelete = () => {
-    removeProduct(product);
+    // removeProduct(product);
+    remove();
     onClose();
   };
 
@@ -88,7 +90,7 @@ export default function EditProductForm({ setParentIsDirty, product, onParentClo
         />
 
         <HStack>
-          <IconButton colorScheme="red" icon={<DeleteIcon />} aria-label="Delete product" onClick={() => onDelete()} />
+          <IconButton colorScheme="red" icon={<DeleteIcon />} aria-label="Delete product" onClick={onDelete} />
 
           <Button flex={1} variant="outline" onClick={onClose}>
             Cancel
