@@ -6,6 +6,7 @@ import { DeleteIcon, TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons';
 import { Button, ButtonGroup, FormControl, FormLabel, HStack, IconButton, Stack, VStack } from '@chakra-ui/react';
 import { PrimitiveAtom, useAtom, useSetAtom } from 'jotai';
 import { Dispatch, FormEvent, SetStateAction, useEffect, useState } from 'react';
+import { ProductCriterionValueListAtom } from '@/Application/ProductCriterionValue/Atoms/ProductCriterionValueList.atom';
 
 type Props = {
   criterionAtom: PrimitiveAtom<CriterionDto>;
@@ -16,6 +17,7 @@ type Props = {
 export default function EditCriterionForm({ criterionAtom, setParentIsDirty, onParentClose }: Props) {
   const [criterion, setCriterion] = useAtom(criterionAtom);
   const setCriterionList = useSetAtom(CriterionListAtom);
+  const setProductCriterionValueList = useSetAtom(ProductCriterionValueListAtom);
 
   const [name, setName] = useState<string>(criterion.name || '');
   const [unit, setUnit] = useState<string>(criterion.unit || '');
@@ -69,7 +71,11 @@ export default function EditCriterionForm({ criterionAtom, setParentIsDirty, onP
   };
 
   const onDelete = () => {
+    // Remove criterion from list
     setCriterionList(prev => prev.filter(c => c.uuid !== criterion.uuid));
+    // Remove product criterion values
+    setProductCriterionValueList(prev => prev.filter(p => p.criterionUuid !== criterion.uuid));
+    // Close dialog
     onClose();
   };
 

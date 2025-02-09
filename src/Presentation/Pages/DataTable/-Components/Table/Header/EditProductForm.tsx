@@ -1,10 +1,11 @@
+import { ProductListAtom } from '@/Application/Product/Atoms/ProductList.atom';
 import { ProductDto } from '@/Application/Product/Dtos/Product.dto';
+import { ProductCriterionValueListAtom } from '@/Application/ProductCriterionValue/Atoms/ProductCriterionValueList.atom';
 import { DeleteIcon } from '@chakra-ui/icons';
 import { Button, HStack, IconButton, Stack } from '@chakra-ui/react';
 import { PrimitiveAtom, useAtom, useSetAtom } from 'jotai';
 import { Dispatch, FormEvent, SetStateAction, useEffect, useState } from 'react';
 import TextInput from '../../../../../Components/Form/TextInput';
-import { ProductListAtom } from '@/Application/Product/Atoms/ProductList.atom';
 
 type Props = {
   productAtom: PrimitiveAtom<ProductDto>;
@@ -15,6 +16,7 @@ type Props = {
 export default function EditProductForm({ setParentIsDirty, productAtom, onParentClose }: Props) {
   const [product, setProduct] = useAtom(productAtom);
   const setProductList = useSetAtom(ProductListAtom);
+  const setProductCriterionValueList = useSetAtom(ProductCriterionValueListAtom);
 
   const [name, setName] = useState<string>(product.name || '');
 
@@ -60,7 +62,11 @@ export default function EditProductForm({ setParentIsDirty, productAtom, onParen
   };
 
   const onDelete = () => {
+    // Remove product from list
     setProductList(prev => prev.filter(p => p.uuid !== product.uuid));
+    // Remove product criterion values
+    setProductCriterionValueList(prev => prev.filter(p => p.productUuid !== product.uuid));
+    // Close dialog
     onClose();
   };
 
