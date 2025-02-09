@@ -3,5 +3,5 @@ export type ProductCriterionValueDto = {
   productUuid: string;
   criterionUuid: string;
   value: number | null;
-  criterionRankPts: number | null;
+  criterionRankPts: number;
 };

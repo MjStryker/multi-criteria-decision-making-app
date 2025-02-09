@@ -24,8 +24,8 @@ export default function CriterionNameUnitCell({ criterion, rowIdx, maxWeight }: 
       border="1px"
       borderColor="gray.100"
     >
-      <Text position="absolute" top={0} left={0}>
-        {criterion.defaultRowIdx}
+      <Text position="absolute" top={0} left={0} fontSize="xs" opacity={0.5}>
+        {criterion.defaultRowIdx} - {criterion.uuid.slice(0, 8)}
       </Text>
 
       <HStack justifyContent="space-between">

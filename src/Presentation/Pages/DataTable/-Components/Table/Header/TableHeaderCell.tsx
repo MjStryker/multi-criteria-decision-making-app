@@ -23,8 +23,8 @@ export default function TableHeaderCell({ columnIdx, product }: Props) {
       border="1px"
       borderColor="gray.100"
     >
-      <Text position="absolute" top={0} left={0}>
-        {columnIdx}
+      <Text position="absolute" top={0} left={0} fontSize="xs" opacity={0.5}>
+        {columnIdx} - {product.uuid.slice(0, 8)}
       </Text>
 
       <VStack className="CellContainer" alignItems="stretch" justifyContent="space-between" minH="70px">

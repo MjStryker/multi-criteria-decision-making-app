@@ -23,10 +23,7 @@ export default function UseOnProductCriterionValueUpdatedEventComputeCriterionRa
         return;
       }
 
-      setProductCriterionValueList(currentList => {
-        const newList = computeProductCriterionValueRankPts([criterion], [...currentList]);
-        return newList;
-      });
+      setProductCriterionValueList(currentList => computeProductCriterionValueRankPts([criterion], [...currentList]));
     };
 
     EventService.subscribe(ProductCriterionValueUpdatedEvent.name, handle);

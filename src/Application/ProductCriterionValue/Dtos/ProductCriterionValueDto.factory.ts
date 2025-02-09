@@ -8,7 +8,7 @@ export class ProductCriterionValueDtoFactory {
       productUuid,
       criterionUuid,
       value: null,
-      criterionRankPts: null
+      criterionRankPts: 0
     };
   }
 }
