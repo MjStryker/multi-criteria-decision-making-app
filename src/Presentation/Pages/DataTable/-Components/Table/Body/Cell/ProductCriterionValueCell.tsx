@@ -1,9 +1,13 @@
+import { computeProductCriterionValueRankPts } from '@/@Compute/ComputeProductCriterionValueRankPoints';
 import { EDITABLE_MIN_WIDTH } from '@/@Config/Table';
 import { isValidNotEmptyString } from '@/@Shared/@Utils/String';
+import { CriterionListAtom } from '@/Application/Criterion/Atoms/CriterionList.atom';
+import { ProductListAtom } from '@/Application/Product/Atoms/ProductList.atom';
+import { ProductCriterionValueListAtom } from '@/Application/ProductCriterionValue/Atoms/ProductCriterionValueList.atom';
 
 import { ProductCriterionValueDto } from '@/Application/ProductCriterionValue/Dtos/ProductCriteriaValue.dto';
 import { Editable, EditableInput, EditablePreview, HStack, Input, Td, Text, useColorModeValue } from '@chakra-ui/react';
-import { PrimitiveAtom, useAtom } from 'jotai';
+import { getDefaultStore, PrimitiveAtom, useAtom } from 'jotai';
 import { useState } from 'react';
 
 type Props = {
@@ -23,7 +27,19 @@ export default function ProductCriterionValueCell({ productCriterionValueAtom }:
   };
 
   const onSubmit = () => {
+    const store = getDefaultStore();
+    // Update value
     setProductCriterionValue({ ...productCriterionValue, value });
+    // Recompute criterion rank points
+    const criterion = store.get(CriterionListAtom).find(c => c.uuid === productCriterionValue.criterionUuid);
+    if (criterion) {
+      const updatedRankPts = computeProductCriterionValueRankPts(
+        [criterion],
+        store.get(ProductListAtom),
+        store.get(ProductCriterionValueListAtom)
+      );
+      store.set(ProductCriterionValueListAtom, updatedRankPts);
+    }
   };
 
   return (
