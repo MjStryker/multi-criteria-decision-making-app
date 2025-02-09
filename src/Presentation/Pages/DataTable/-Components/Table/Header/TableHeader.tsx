@@ -2,12 +2,14 @@ import { Icon, IconButton, Td, Text, Thead, Tr } from '@chakra-ui/react';
 
 import { CRITERION } from '@/@Config/Criteria';
 import { PRODUCTS_MAX_ITEMS } from '@/@Config/Product';
-import UseAddProductCommand from '@/Application/Product/Commands/UseAddProduct.command';
-import { ProductListSplitAtom } from '@/Application/Product/Queries/UseGetProductList.query';
+import { ProductListSplitAtom } from '@/Application/Product/Atoms/ProductList.atom';
 
+import { CriterionListAtom } from '@/Application/Criterion/Atoms/CriterionList.atom';
 import { ProductDtoFactory } from '@/Application/Product/Dtos/ProductDto.factory';
+import { ProductCriterionValueListAtom } from '@/Application/ProductCriterionValue/Atoms/ProductCriterionValueList.atom';
+import { ProductCriterionValueDtoFactory } from '@/Application/ProductCriterionValue/Dtos/ProductCriterionValueDto.factory';
 import { AddIcon } from '@chakra-ui/icons';
-import { useAtom } from 'jotai';
+import { getDefaultStore, useAtom, useSetAtom } from 'jotai';
 import { GiAnvil as AnvilIcon } from 'react-icons/gi';
 import TableHeaderCell from './TableHeaderCell';
 
@@ -15,13 +17,26 @@ const ADD_PRODUCT_CELL_WIDTH = '50px';
 
 export default function TableHeader() {
   const [productListAtoms, dispatch] = useAtom(ProductListSplitAtom);
-  const addProductCommand = UseAddProductCommand();
+  const setProductCriterionValueList = useSetAtom(ProductCriterionValueListAtom);
 
   const nbProducts = productListAtoms.length;
   const nbProductsRemaining = PRODUCTS_MAX_ITEMS - nbProducts;
 
   const handleAddProduct = () => {
-    addProductCommand(ProductDtoFactory.newEmpty(nbProducts));
+    const store = getDefaultStore();
+    const newProduct = ProductDtoFactory.newEmpty(nbProducts);
+    // Add product
+    dispatch({
+      type: 'insert',
+      value: newProduct
+    });
+    // Add default product criterion values
+    setProductCriterionValueList(prev => [
+      ...prev,
+      ...store
+        .get(CriterionListAtom)
+        .map(criterion => ProductCriterionValueDtoFactory.newEmpty(newProduct.uuid, criterion.uuid))
+    ]);
   };
 
   return (
@@ -57,12 +72,7 @@ export default function TableHeader() {
          * PRODUCTS
          */}
         {productListAtoms.map((productAtom, idx) => (
-          <TableHeaderCell
-            key={`${productAtom}`}
-            columnIdx={idx}
-            productAtom={productAtom}
-            remove={() => dispatch({ type: 'remove', atom: productAtom })}
-          />
+          <TableHeaderCell key={`${productAtom}`} columnIdx={idx} productAtom={productAtom} />
         ))}
 
         {/*

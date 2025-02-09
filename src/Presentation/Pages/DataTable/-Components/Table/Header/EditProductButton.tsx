@@ -17,10 +17,9 @@ import EditProductForm from './EditProductForm';
 
 type Props = {
   productAtom: PrimitiveAtom<ProductDto>;
-  remove: () => void;
 };
 
-export default function EditProductButton({ productAtom, remove }: Props) {
+export default function EditProductButton({ productAtom }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [isFormDirty, setIsFormDirty] = useState(false);
 
@@ -51,7 +50,6 @@ export default function EditProductButton({ productAtom, remove }: Props) {
         <PopoverCloseButton />
         <EditProductForm
           productAtom={productAtom}
-          remove={remove}
           setParentIsDirty={setIsFormDirty}
           onParentClose={() => setIsOpen(false)}
         />

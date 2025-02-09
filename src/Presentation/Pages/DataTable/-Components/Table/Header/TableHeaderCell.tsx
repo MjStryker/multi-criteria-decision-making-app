@@ -11,10 +11,9 @@ const CELL_WIDTH = '150px';
 type Props = {
   columnIdx: number;
   productAtom: PrimitiveAtom<ProductDto>;
-  remove: () => void;
 };
 
-export default function TableHeaderCell({ columnIdx, productAtom, remove }: Props) {
+export default function TableHeaderCell({ columnIdx, productAtom }: Props) {
   const [product] = useAtom(productAtom);
 
   return (
@@ -38,7 +37,7 @@ export default function TableHeaderCell({ columnIdx, productAtom, remove }: Prop
           </Text>
 
           <Box>
-            <EditProductButton productAtom={productAtom} remove={remove} />
+            <EditProductButton productAtom={productAtom} />
           </Box>
         </SimpleGrid>
 

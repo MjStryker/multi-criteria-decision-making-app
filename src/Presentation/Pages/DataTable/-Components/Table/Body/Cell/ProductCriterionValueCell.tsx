@@ -1,26 +1,19 @@
 import { EDITABLE_MIN_WIDTH } from '@/@Config/Table';
 import { isValidNotEmptyString } from '@/@Shared/@Utils/String';
-import UseUpdateProductCriterionValueCommand from '@/Application/ProductCriterionValue/Commands/UseUpdateProductCriterionValue.command';
 
 import { ProductCriterionValueDto } from '@/Application/ProductCriterionValue/Dtos/ProductCriteriaValue.dto';
 import { Editable, EditableInput, EditablePreview, HStack, Input, Td, Text, useColorModeValue } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { PrimitiveAtom, useAtom } from 'jotai';
+import { useState } from 'react';
 
 type Props = {
-  productCriterionValue: ProductCriterionValueDto;
+  productCriterionValueAtom: PrimitiveAtom<ProductCriterionValueDto>;
 };
 
-export default function ProductCriterionValueCell({ productCriterionValue }: Props) {
-  const setProductCriterionValue = UseUpdateProductCriterionValueCommand();
+export default function ProductCriterionValueCell({ productCriterionValueAtom }: Props) {
+  const [productCriterionValue, setProductCriterionValue] = useAtom(productCriterionValueAtom);
 
   const [value, setValue] = useState<number | null>(productCriterionValue?.value ?? null);
-
-  /**
-   * * Sync local state on props change
-   */
-  useEffect(() => {
-    setValue(productCriterionValue?.value ?? null);
-  }, [productCriterionValue]);
 
   /**
    * * Handle Input change / validation

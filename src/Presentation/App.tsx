@@ -1,11 +1,8 @@
 import { Button, ChakraProvider, Flex } from '@chakra-ui/react';
 
-import UseGlobalHooks from '@/Application/@Global/UseGlobalHooks';
 import DataTable from './Pages/DataTable';
 
 export default function App() {
-  UseGlobalHooks();
-
   return (
     <ChakraProvider>
       <Button size="sm" onClick={() => localStorage.clear()}>

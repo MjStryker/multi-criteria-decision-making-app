@@ -1,18 +1,27 @@
-import UseGetCriterionListQuery from '@/Application/Criterion/Queries/UseGetCriterionList.query';
-import { getCriteriaMaxWeight } from '@/utils/criteria/criteria';
+import { CriterionListAtom, CriterionListSplitAtom } from '@/Application/Criterion/Atoms/CriterionList.atom';
 import { Tbody } from '@chakra-ui/react';
-import { useMemo } from 'react';
+import { useAtom, useAtomValue } from 'jotai';
 import TableBodyRow from './TableBodyRow';
+import { useMemo } from 'react';
 
 const TableBody = () => {
-  const criterionList = UseGetCriterionListQuery();
+  const [criterionListAtoms] = useAtom(CriterionListSplitAtom);
+  const criterionList = useAtomValue(CriterionListAtom);
 
-  const maxWeight = useMemo(() => getCriteriaMaxWeight(criterionList), [criterionList]);
+  const criterionMaxWeight = useMemo(
+    () => criterionList.reduce((acc, curr) => Math.max(acc, curr.weight || 0), 0),
+    [criterionList]
+  );
 
   return (
     <Tbody>
-      {criterionList.map((criterion, rowIdx) => (
-        <TableBodyRow key={criterion.uuid} rowIdx={rowIdx} criterion={criterion} maxWeight={maxWeight} />
+      {criterionListAtoms.map((criterionAtom, rowIdx) => (
+        <TableBodyRow
+          key={`${criterionAtom}`}
+          rowIdx={rowIdx}
+          criterionAtom={criterionAtom}
+          criterionMaxWeight={criterionMaxWeight}
+        />
       ))}
     </Tbody>
   );

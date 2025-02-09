@@ -3,16 +3,19 @@ import { CriterionDto } from '@/Application/Criterion/Dtos/Criterion.dto';
 import { getCriterionWeightRelativeToMax } from '@/utils/criteria/criteria';
 import { Box, Flex, HStack, Progress, Td, Text } from '@chakra-ui/react';
 import EditCriterionButton from './EditCriterionButton';
+import { PrimitiveAtom, useAtomValue } from 'jotai';
 
 const CELL_WIDTH = '240px';
 
 type Props = {
-  criterion: CriterionDto;
+  criterionAtom: PrimitiveAtom<CriterionDto>;
   rowIdx: number;
   maxWeight: number;
 };
 
-export default function CriterionNameUnitCell({ criterion, rowIdx, maxWeight }: Props) {
+export default function CriterionNameUnitCell({ criterionAtom, rowIdx, maxWeight }: Props) {
+  const criterion = useAtomValue(criterionAtom);
+
   return (
     <Td
       position="relative"
@@ -50,7 +53,7 @@ export default function CriterionNameUnitCell({ criterion, rowIdx, maxWeight }: 
         {/*
          * -- Edit
          */}
-        <EditCriterionButton criterion={criterion} />
+        <EditCriterionButton criterionAtom={criterionAtom} />
       </HStack>
 
       <Box

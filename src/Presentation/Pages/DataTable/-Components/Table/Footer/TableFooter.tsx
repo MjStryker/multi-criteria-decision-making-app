@@ -1,23 +1,37 @@
-import UseAddCriterionCommand from '@/Application/Criterion/Commands/UseAddCriterion.command';
-import UseGetProductListQuery from '@/Application/Product/Queries/UseGetProductList.query';
-
 import { CRITERIA_MAX_ITEMS } from '@/@Config/Criteria';
+import { CriterionListSplitAtom } from '@/Application/Criterion/Atoms/CriterionList.atom';
 import { CriterionDtoFactory } from '@/Application/Criterion/Dtos/CriterionDto.factory';
-import UseGetCriterionListQuery from '@/Application/Criterion/Queries/UseGetCriterionList.query';
+import { ProductListAtom, ProductListSplitAtom } from '@/Application/Product/Atoms/ProductList.atom';
+import { ProductCriterionValueListAtom } from '@/Application/ProductCriterionValue/Atoms/ProductCriterionValueList.atom';
+import { ProductCriterionValueDtoFactory } from '@/Application/ProductCriterionValue/Dtos/ProductCriterionValueDto.factory';
 import { AddIcon } from '@chakra-ui/icons';
 import { Button, Td, Tfoot, Tr } from '@chakra-ui/react';
+import { getDefaultStore, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import TableFooterCell from './TableFooterCell';
 
 export default function TableFooter() {
-  const productList = UseGetProductListQuery();
-  const criterionList = UseGetCriterionListQuery();
-  const addCriterionCommand = UseAddCriterionCommand();
+  const productListAtoms = useAtomValue(ProductListSplitAtom);
+  const [criterionListAtoms, dispatch] = useAtom(CriterionListSplitAtom);
+  const setProductCriterionValueList = useSetAtom(ProductCriterionValueListAtom);
 
-  const nbCriteria = criterionList.length;
+  const nbCriteria = criterionListAtoms.length;
   const nbCriteriaRemaining = CRITERIA_MAX_ITEMS - nbCriteria;
 
   function handleAddCriterion() {
-    addCriterionCommand(CriterionDtoFactory.newEmpty(nbCriteria));
+    const store = getDefaultStore();
+    const newCriterion = CriterionDtoFactory.newEmpty(nbCriteria);
+    // Add criterion
+    dispatch({
+      type: 'insert',
+      value: newCriterion
+    });
+    // Add default product criterion values
+    setProductCriterionValueList(prev => [
+      ...prev,
+      ...store
+        .get(ProductListAtom)
+        .map(product => ProductCriterionValueDtoFactory.newEmpty(product.uuid, newCriterion.uuid))
+    ]);
   }
 
   return (
@@ -31,7 +45,7 @@ export default function TableFooter() {
             w="full"
             size="sm"
             colorScheme={nbCriteriaRemaining > 0 ? 'blue' : 'gray'}
-            onClick={() => handleAddCriterion()}
+            onClick={handleAddCriterion}
             leftIcon={<AddIcon fontSize="xs" />}
             boxShadow="base"
             transition="background .2s"
@@ -43,8 +57,8 @@ export default function TableFooter() {
         {/*
          * PRODUCTS - RANK
          */}
-        {productList.map(product => (
-          <TableFooterCell key={product.uuid} product={product} />
+        {productListAtoms.map(productAtom => (
+          <TableFooterCell key={`${productAtom}`} productAtom={productAtom} />
         ))}
 
         {/*

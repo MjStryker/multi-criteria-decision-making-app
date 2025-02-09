@@ -1,22 +1,20 @@
-import { DEBUG } from '@/@Config/Global';
 import { EDITABLE_MIN_WIDTH } from '@/@Config/Table';
 import { isValidNumber } from '@/@Shared/@Utils/Number';
 import { isDefined } from '@/@Shared/@Utils/Object';
-import UseUpdateCriterionCommand from '@/Application/Criterion/Commands/UseUpdateCriterion.command';
 import { CriterionDto } from '@/Application/Criterion/Dtos/Criterion.dto';
 import { clampCriterionWeightValue } from '@/utils/criteria/criteria';
 import { Editable, EditableInput, EditablePreview, HStack, Input, Td, useColorModeValue } from '@chakra-ui/react';
+import { PrimitiveAtom, useAtom } from 'jotai';
 import { useEffect, useState } from 'react';
-import DebugValue from '../../DebugValue';
 
 const CELL_WIDTH = '100px';
 
 type Props = {
-  criterion: CriterionDto;
+  criterionAtom: PrimitiveAtom<CriterionDto>;
 };
 
-export default function CriterionWeightCell({ criterion }: Props) {
-  const updateCriterion = UseUpdateCriterionCommand();
+export default function CriterionWeightCell({ criterionAtom }: Props) {
+  const [criterion, setCriterion] = useAtom(criterionAtom);
 
   const [weight, setWeight] = useState<number | null>(criterion.weight || null);
 
@@ -38,8 +36,7 @@ export default function CriterionWeightCell({ criterion }: Props) {
 
   const onSubmit = () => {
     const newWeight = isValidNumber(weight) ? clampCriterionWeightValue(weight) : null;
-
-    updateCriterion({ ...criterion, weight: newWeight });
+    setCriterion(prev => ({ ...prev, weight: newWeight }));
   };
 
   return (
@@ -76,14 +73,6 @@ export default function CriterionWeightCell({ criterion }: Props) {
             px={2}
           />
         </Editable>
-
-        {DEBUG && criterion.normalizedWeight !== null ? (
-          <DebugValue
-            value={criterion.normalizedWeight.toFixed(2)}
-            variant="solid"
-            colorScheme={criterion.beneficial === false ? 'orange' : 'blue'}
-          />
-        ) : null}
       </HStack>
     </Td>
   );

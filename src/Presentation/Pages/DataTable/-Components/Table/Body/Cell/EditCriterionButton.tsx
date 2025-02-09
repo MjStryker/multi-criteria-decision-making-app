@@ -8,19 +8,19 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 
+import { CriterionDto } from '@/Application/Criterion/Dtos/Criterion.dto';
 import { SmallCloseIcon as CloseIcon } from '@chakra-ui/icons';
+import { PrimitiveAtom } from 'jotai';
 import { MdEdit as EditIcon } from 'react-icons/md';
 import EditCriterionForm from './EditCriterionForm';
-import { CriterionDto } from '@/Application/Criterion/Dtos/Criterion.dto';
 
 type Props = {
-  criterion: CriterionDto;
+  criterionAtom: PrimitiveAtom<CriterionDto>;
 };
 
-export default function EditCriterionButton({ criterion }: Props) {
-  const [isFormDirty, setIsFormDirty] = useState(false);
-
+export default function EditCriterionButton({ criterionAtom }: Props) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isFormDirty, setIsFormDirty] = useState(false);
 
   return (
     <Popover
@@ -48,9 +48,9 @@ export default function EditCriterionButton({ criterion }: Props) {
         <PopoverArrow />
         <PopoverCloseButton />
         <EditCriterionForm
+          criterionAtom={criterionAtom}
           setParentIsDirty={setIsFormDirty}
           onParentClose={() => setIsOpen(false)}
-          criterion={criterion}
         />
       </PopoverContent>
     </Popover>

@@ -1,17 +1,18 @@
-import { DEBUG } from '@/@Config/Global';
-import { HStack, Tag, Td, Text } from '@chakra-ui/react';
-import DebugValue from '../DebugValue';
 import { ProductDto } from '@/Application/Product/Dtos/Product.dto';
+import { HStack, Tag, Td, Text } from '@chakra-ui/react';
+import { PrimitiveAtom, useAtomValue } from 'jotai';
 
 type Props = {
-  product: ProductDto;
+  productAtom: PrimitiveAtom<ProductDto>;
 };
 
-export default function TableFooterCell({ product }: Props) {
+export default function TableFooterCell({ productAtom }: Props) {
+  const product = useAtomValue(productAtom);
+
   return (
     <Td textAlign="center" px={2} border="1px" borderColor="gray.100">
       {product.rank === null ? null : (
-        <HStack justifyContent={DEBUG ? 'flex-end' : 'center'}>
+        <HStack justifyContent="center">
           <Tag
             as={HStack}
             spacing={1}
@@ -39,8 +40,6 @@ export default function TableFooterCell({ product }: Props) {
             <Text as="span">#</Text>
             <Text as="span">{product.rank}</Text>
           </Tag>
-
-          {DEBUG ? <DebugValue value={`${product.rankPts} pts`} bgColor="gray.600" color="white" /> : null}
         </HStack>
       )}
     </Td>

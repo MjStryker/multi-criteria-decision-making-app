@@ -1,22 +1,20 @@
 import { ProductDto } from '@/Application/Product/Dtos/Product.dto';
 import { DeleteIcon } from '@chakra-ui/icons';
 import { Button, HStack, IconButton, Stack } from '@chakra-ui/react';
-import { PrimitiveAtom, useAtom } from 'jotai';
+import { PrimitiveAtom, useAtom, useSetAtom } from 'jotai';
 import { Dispatch, FormEvent, SetStateAction, useEffect, useState } from 'react';
 import TextInput from '../../../../../Components/Form/TextInput';
+import { ProductListAtom } from '@/Application/Product/Atoms/ProductList.atom';
 
 type Props = {
   productAtom: PrimitiveAtom<ProductDto>;
-  remove: () => void;
   setParentIsDirty: Dispatch<SetStateAction<boolean>>;
   onParentClose: VoidFunction;
 };
 
-export default function EditProductForm({ setParentIsDirty, productAtom, remove, onParentClose }: Props) {
+export default function EditProductForm({ setParentIsDirty, productAtom, onParentClose }: Props) {
   const [product, setProduct] = useAtom(productAtom);
-
-  // const updateProduct = UseUpdateProductCommand();
-  // const removeProduct = UseRemoveProductCommand();
+  const setProductList = useSetAtom(ProductListAtom);
 
   const [name, setName] = useState<string>(product.name || '');
 
@@ -57,14 +55,12 @@ export default function EditProductForm({ setParentIsDirty, productAtom, remove,
   };
 
   const onSave = () => {
-    // updateProduct({ ...product, name, reference });
-    setProduct({ ...product, name, reference });
+    setProduct(prev => ({ ...prev, name, reference }));
     onClose();
   };
 
   const onDelete = () => {
-    // removeProduct(product);
-    remove();
+    setProductList(prev => prev.filter(p => p.uuid !== product.uuid));
     onClose();
   };
 
