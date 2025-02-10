@@ -1,7 +1,7 @@
 export type CriterionDto = {
   uuid: string;
   name: string | null;
-  weight: number | null;
+  weight: number;
   normalizedWeight: number | null;
   unit: string | null;
   beneficial: boolean | null;
