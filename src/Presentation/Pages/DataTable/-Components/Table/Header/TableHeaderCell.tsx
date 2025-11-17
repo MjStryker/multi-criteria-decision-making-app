@@ -2,11 +2,11 @@ import { Box, SimpleGrid, Td, Text, VStack } from '@chakra-ui/react';
 
 import EditProductButton from './EditProductButton';
 
+import { CELL_WIDTH } from '@/@Config/Table';
 import { isValidNotEmptyString } from '@/@Shared/@Utils/String';
 import { ProductDto } from '@/Application/Product/Dtos/Product.dto';
 import { PrimitiveAtom, useAtom } from 'jotai';
 
-const CELL_WIDTH = '150px';
 
 type Props = {
   columnIdx: number;
@@ -19,7 +19,6 @@ export default function TableHeaderCell({ columnIdx, productAtom }: Props) {
   return (
     <Td
       position="relative"
-      w={CELL_WIDTH}
       minW={CELL_WIDTH}
       maxW={CELL_WIDTH}
       px={2}

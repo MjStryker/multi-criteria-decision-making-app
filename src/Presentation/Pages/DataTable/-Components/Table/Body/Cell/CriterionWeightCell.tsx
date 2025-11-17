@@ -1,4 +1,4 @@
-import { EDITABLE_MIN_WIDTH } from '@/@Config/Table';
+import { CELL_HEIGHT } from '@/@Config/Table';
 import { isValidNumber } from '@/@Shared/@Utils/Number';
 import { isDefined } from '@/@Shared/@Utils/Object';
 import { CriterionDto } from '@/Application/Criterion/Dtos/Criterion.dto';
@@ -7,7 +7,7 @@ import { Editable, EditableInput, EditablePreview, HStack, Input, Td, useColorMo
 import { PrimitiveAtom, useAtom } from 'jotai';
 import { useEffect, useState } from 'react';
 
-const CELL_WIDTH = '100px';
+const CRITERION_WEIGHT_CELL_WIDTH = '100px';
 
 type Props = {
   criterionAtom: PrimitiveAtom<CriterionDto>;
@@ -40,7 +40,7 @@ export default function CriterionWeightCell({ criterionAtom }: Props) {
   };
 
   return (
-    <Td isNumeric w={CELL_WIDTH} minW={CELL_WIDTH} maxW={CELL_WIDTH} px={2} border="1px" borderColor="gray.100">
+    <Td isNumeric w={CRITERION_WEIGHT_CELL_WIDTH} h={CELL_HEIGHT} px={2} border="1px" borderColor="gray.100">
       <HStack spacing={1}>
         <Editable
           flex={1}
@@ -49,13 +49,16 @@ export default function CriterionWeightCell({ criterionAtom }: Props) {
           onSubmit={onSubmit}
         >
           <EditablePreview
+            display="flex"
+            alignItems="center" 
+            justifyContent="flex-end"
             py={2}
             px={2}
             w="full"
-            minW={EDITABLE_MIN_WIDTH}
+            h="full"
             fontSize="md"
             fontWeight="semibold"
-            textAlign="center"
+             borderRadius="sm"
             color={criterion.beneficial === false ? 'orange.600' : 'blue.600'}
             _hover={{
               background: useColorModeValue('gray.100', 'gray.700')
@@ -65,12 +68,11 @@ export default function CriterionWeightCell({ criterionAtom }: Props) {
           <Input
             as={EditableInput}
             type="number"
-            borderRadius="base"
+             borderRadius="sm"
             size="sm"
             w="full"
-            minW="full"
+            h="full"
             textAlign="center"
-            maxW={EDITABLE_MIN_WIDTH}
             px={2}
           />
         </Editable>

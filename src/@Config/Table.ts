@@ -1,1 +1,2 @@
-export const EDITABLE_MIN_WIDTH = '40px';
+export const CELL_WIDTH = '200px';
+export const CELL_HEIGHT = "48px"

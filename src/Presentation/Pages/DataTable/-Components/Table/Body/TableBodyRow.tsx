@@ -1,3 +1,4 @@
+import { CELL_HEIGHT, CELL_WIDTH } from '@/@Config/Table';
 import { CriterionDto } from '@/Application/Criterion/Dtos/Criterion.dto';
 import { ProductCriterionValueListAtom } from '@/Application/ProductCriterionValue/Atoms/ProductCriterionValueList.atom';
 import { ProductCriterionValueDto } from '@/Application/ProductCriterionValue/Dtos/ProductCriteriaValue.dto';
@@ -87,7 +88,7 @@ export default function TableBodyRow({ rowIdx, criterionAtom, criterionMaxWeight
       {/*
        * --------
        */}
-      <Td border="none" />
+      <Td w={CELL_WIDTH} h={CELL_HEIGHT} border="none" />
     </Tr>
   );
 }

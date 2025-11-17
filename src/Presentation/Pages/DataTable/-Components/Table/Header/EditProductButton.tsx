@@ -28,7 +28,7 @@ export default function EditProductButton({ productAtom }: Props) {
       isOpen={isOpen}
       onOpen={() => setIsOpen(true)}
       onClose={() => setIsOpen(false)}
-      placement="right"
+      placement="bottom"
       closeOnBlur={!isFormDirty}
       closeOnEsc
       returnFocusOnClose

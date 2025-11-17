@@ -1,11 +1,12 @@
+import { CELL_HEIGHT } from '@/@Config/Table';
 import { capitalize, isValidNotEmptyString } from '@/@Shared/@Utils/String';
 import { CriterionDto } from '@/Application/Criterion/Dtos/Criterion.dto';
 import { getCriterionWeightRelativeToMax } from '@/utils/criteria/criteria';
 import { Box, Flex, HStack, Progress, Td, Text } from '@chakra-ui/react';
-import EditCriterionButton from './EditCriterionButton';
 import { PrimitiveAtom, useAtomValue } from 'jotai';
+import EditCriterionButton from './EditCriterionButton';
 
-const CELL_WIDTH = '240px';
+const CRITERION_CELL_WIDTH = '240px';
 
 type Props = {
   criterionAtom: PrimitiveAtom<CriterionDto>;
@@ -20,10 +21,7 @@ export default function CriterionNameUnitCell({ criterionAtom, rowIdx, maxWeight
     <Td
       position="relative"
       pl={2}
-      pr={1}
-      w={CELL_WIDTH}
-      minW={CELL_WIDTH}
-      maxW={CELL_WIDTH}
+      pr={1} w={CRITERION_CELL_WIDTH} h={CELL_HEIGHT}
       border="1px"
       borderColor="gray.100"
     >

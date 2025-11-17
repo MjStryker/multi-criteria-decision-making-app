@@ -1,11 +1,8 @@
-import { computeProductCriterionValueRankPts } from '@/@Compute/ComputeProductCriterionValueRankPoints';
-import { EDITABLE_MIN_WIDTH } from '@/@Config/Table';
+import { CELL_HEIGHT, CELL_WIDTH } from '@/@Config/Table';
 import { isValidNotEmptyString } from '@/@Shared/@Utils/String';
-import { CriterionListAtom } from '@/Application/Criterion/Atoms/CriterionList.atom';
-import { ProductCriterionValueListAtom } from '@/Application/ProductCriterionValue/Atoms/ProductCriterionValueList.atom';
 
 import { ProductCriterionValueDto } from '@/Application/ProductCriterionValue/Dtos/ProductCriteriaValue.dto';
-import { Editable, EditableInput, EditablePreview, HStack, Input, Td, Text, useColorModeValue } from '@chakra-ui/react';
+import { Editable, EditableInput, EditablePreview, Input, Td, Text } from '@chakra-ui/react';
 import { getDefaultStore, PrimitiveAtom, useAtom } from 'jotai';
 import { useState } from 'react';
 
@@ -22,45 +19,56 @@ export default function ProductCriterionValueCell({ productCriterionValueAtom }:
    * * Handle Input change / validation
    */
   const onChange = (stringValue: string) => {
-    setValue(isValidNotEmptyString(stringValue) ? Number(stringValue) : null);
+    setValue(prev => {
+      const newVal = isValidNotEmptyString(stringValue) ? Number(stringValue) : null;
+      return prev !== newVal ? newVal : prev;
+    });
   };
 
   const onSubmit = () => {
     const store = getDefaultStore();
     // Update value
     setProductCriterionValue({ ...productCriterionValue, value });
-    // Recompute criterion rank points
-    const criterion = store.get(CriterionListAtom).find(c => c.uuid === productCriterionValue.criterionUuid);
-    if (criterion) {
-      const updatedRankPts = computeProductCriterionValueRankPts(
-        [criterion],
-        store.get(ProductCriterionValueListAtom)
-      );
-      store.set(ProductCriterionValueListAtom, updatedRankPts);
-    }
+    // // Recompute criterion rank points
+    // const criterion = store.get(CriterionListAtom).find(c => c.uuid === productCriterionValue.criterionUuid);
+    // if (criterion) {
+    //   const updatedRankPts = computeProductCriterionValueRankPts(
+    //     [criterion],
+    //     store.get(ProductCriterionValueListAtom)
+    //   );
+    //   store.set(ProductCriterionValueListAtom, updatedRankPts);
+    // }
   };
 
   return (
-    <Td position="relative" isNumeric px={2} border="1px" borderColor="gray.100">
-      <Text position="absolute" top={0} left={0}>
+    <Td position="relative" isNumeric p={0} 
+            w={CELL_WIDTH} h={CELL_HEIGHT}  border="1px" borderColor="gray.100">
+      <Text position="absolute" top={0} left={0} fontSize="xs" color="gray.500">
         {productCriterionValue.criterionRankPts}
       </Text>
 
-      <HStack spacing={1} justifyContent="flex-end">
-        <Editable flex={1} value={value?.toString() ?? '-'} onChange={onChange} onSubmit={onSubmit}>
+        <Editable flex={1} 
+            w={CELL_WIDTH}
+             h="full" value={value?.toString()} onChange={onChange} onSubmit={onSubmit}>
           <EditablePreview
+            display="flex"
+            alignItems="center" 
+            justifyContent="flex-end"
             py={2}
             px={2}
             w="full"
-            minW={EDITABLE_MIN_WIDTH}
+            h="full"
+            bg={value !== null ? "white": 'gray.50'}
+             borderRadius="sm"
             _hover={{
-              background: useColorModeValue('gray.100', 'gray.700')
+              border: '1px solid',
+              borderColor: 'gray.300',
             }}
           />
 
-          <Input as={EditableInput} type="number" borderRadius="base" size="sm" px={2} />
+          <Input as={EditableInput} type="number" borderRadius="sm" size="sm" 
+           px={2} w="full" h="full" />
         </Editable>
-      </HStack>
     </Td>
   );
 }

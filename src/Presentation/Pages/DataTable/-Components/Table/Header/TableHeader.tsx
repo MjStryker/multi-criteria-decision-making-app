@@ -13,7 +13,7 @@ import { getDefaultStore, useAtom, useSetAtom } from 'jotai';
 import { GiAnvil as AnvilIcon } from 'react-icons/gi';
 import TableHeaderCell from './TableHeaderCell';
 
-const ADD_PRODUCT_CELL_WIDTH = '50px';
+const ADD_PRODUCT_CELL_WIDTH = '64px';
 
 export default function TableHeader() {
   const [productListAtoms, dispatch] = useAtom(ProductListSplitAtom);

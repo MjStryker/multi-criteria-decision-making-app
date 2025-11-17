@@ -5,11 +5,14 @@ import DataTable from './Pages/DataTable';
 export default function App() {
   return (
     <ChakraProvider>
-      <Button size="sm" onClick={() => localStorage.clear()}>
+      <Flex className="AppContainer">
+        <Button position="absolute" top={3} left={3} size="sm" onClick={() => {
+        localStorage.clear()
+        window.location.reload()
+        }}>
         Reset
       </Button>
 
-      <Flex className="AppContainer" minW="full" minH="100svh" justifyContent="center">
         <DataTable />
       </Flex>
     </ChakraProvider>

@@ -14,12 +14,10 @@ export default function DataTable() {
         className="TableContainer"
         flex={1}
         display="flex"
-        justifyContent="center"
-        overflowY="auto"
+        overflow="auto"
         h="full"
-        p={4}
       >
-        <Table size="sm" w="auto" h="min-content">
+        <Table w="auto">
           <TableHeader />
 
           <TableBody />
