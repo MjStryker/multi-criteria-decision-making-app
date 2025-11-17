@@ -35,8 +35,8 @@ export default function CriterionWeightCell({ criterionAtom }: Props) {
   };
 
   const onSubmit = () => {
-    const newWeight = isValidNumber(weight) ? clampCriterionWeightValue(weight) : null;
-    setCriterion(prev => ({ ...prev, weight: newWeight }));
+    const newWeight = isValidNumber(weight) ? clampCriterionWeightValue(weight) : 0;
+    setCriterion(prev => ({ ...prev, weight: newWeight  }));
   };
 
   return (
@@ -68,6 +68,7 @@ export default function CriterionWeightCell({ criterionAtom }: Props) {
             borderRadius="base"
             size="sm"
             w="full"
+            minW="full"
             textAlign="center"
             maxW={EDITABLE_MIN_WIDTH}
             px={2}

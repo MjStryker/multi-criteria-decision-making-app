@@ -2,7 +2,6 @@ import { computeProductCriterionValueRankPts } from '@/@Compute/ComputeProductCr
 import { EDITABLE_MIN_WIDTH } from '@/@Config/Table';
 import { isValidNotEmptyString } from '@/@Shared/@Utils/String';
 import { CriterionListAtom } from '@/Application/Criterion/Atoms/CriterionList.atom';
-import { ProductListAtom } from '@/Application/Product/Atoms/ProductList.atom';
 import { ProductCriterionValueListAtom } from '@/Application/ProductCriterionValue/Atoms/ProductCriterionValueList.atom';
 
 import { ProductCriterionValueDto } from '@/Application/ProductCriterionValue/Dtos/ProductCriteriaValue.dto';
@@ -35,7 +34,6 @@ export default function ProductCriterionValueCell({ productCriterionValueAtom }:
     if (criterion) {
       const updatedRankPts = computeProductCriterionValueRankPts(
         [criterion],
-        store.get(ProductListAtom),
         store.get(ProductCriterionValueListAtom)
       );
       store.set(ProductCriterionValueListAtom, updatedRankPts);
