@@ -4,17 +4,17 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "vite build",
-    "check": "tsc --noEmit",
+    "check": "pnpm biome check --error-on-warnings",
+    "check:fix": "pnpm biome check --write",
+    "chakra:typegen": "pnpm @chakra-ui/cli typegen ./src/presentation/styles/theme/theme.ts",
+    "ts-check": "pnpm tsc --noEmit --incremental",
     "dev": "vite",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "format:check": "prettier --check .",
-    "format:fix": "prettier --write .",
+    "test": "vitest",
     "preview": "vite preview",
-    "test": "vitest"
+    "prepare": "husky"
   },
   "dependencies": {
+    "@biomejs/biome": "^2.3.6",
     "@chakra-ui/icons": "^2.0.17",
     "@chakra-ui/react": "^2.4.9",
     "@emotion/react": "^11.10.5",
@@ -40,6 +40,7 @@
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.18",
     "globals": "^15.14.0",
+    "husky": "^9.1.7",
     "prettier": "^3.4.2",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.20.0",

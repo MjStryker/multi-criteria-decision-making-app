@@ -1,6 +1,6 @@
-import { CriterionDto } from '@/Application/Criterion/Dtos/Criterion.dto';
-import { ProductDto } from '@/Application/Product/Dtos/Product.dto';
-import { ProductCriterionValueDto } from '@/Application/ProductCriterionValue/Dtos/ProductCriteriaValue.dto';
+import type { CriterionDto } from "@/Application/Dtos/Criterion.dto";
+import type { ProductDto } from "@/Application/Dtos/Product.dto";
+import type { ProductCriterionValueDto } from "@/Application/Dtos/ProductCriteriaValue.dto";
 
 export function findProductWithCriterion(
   product: ProductDto,
@@ -8,6 +8,8 @@ export function findProductWithCriterion(
   productCriterionValueList: ProductCriterionValueDto[]
 ): ProductCriterionValueDto | null {
   return (
-    productCriterionValueList.find(v => product.uuid === v.productUuid && criterion.uuid === v.criterionUuid) ?? null
+    productCriterionValueList.find(
+      v => product.uuid === v.productUuid && criterion.uuid === v.criterionUuid
+    ) ?? null
   );
 }

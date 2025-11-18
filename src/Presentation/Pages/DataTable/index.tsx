@@ -1,9 +1,9 @@
-import { Table, TableContainer } from '@chakra-ui/react';
+import { Table, TableContainer } from "@chakra-ui/react";
 
-import ComputingRanksIndicator from './-Components/ComputingRanksIndicator';
-import TableBody from './-Components/Table/Body/TableBody';
-import TableFooter from './-Components/Table/Footer/TableFooter';
-import TableHeader from './-Components/Table/Header/TableHeader';
+import ComputingRanksIndicator from "./-Components/ComputingRanksIndicator";
+import TableBody from "./-Components/Table/Body/TableBody";
+import TableFooter from "./-Components/Table/Footer/TableFooter";
+import TableHeader from "./-Components/Table/Header/TableHeader";
 
 export default function DataTable() {
   return (

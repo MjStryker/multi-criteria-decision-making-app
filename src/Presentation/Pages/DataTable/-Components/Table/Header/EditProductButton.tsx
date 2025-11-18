@@ -1,3 +1,4 @@
+import { SmallCloseIcon as CloseIcon } from "@chakra-ui/icons";
 import {
   IconButton,
   Popover,
@@ -5,15 +6,13 @@ import {
   PopoverCloseButton,
   PopoverContent,
   PopoverTrigger
-} from '@chakra-ui/react';
-import { useState } from 'react';
+} from "@chakra-ui/react";
+import type { PrimitiveAtom } from "jotai";
+import { useState } from "react";
+import { MdEdit as EditIcon } from "react-icons/md";
 
-import { SmallCloseIcon as CloseIcon } from '@chakra-ui/icons';
-
-import { ProductDto } from '@/Application/Product/Dtos/Product.dto';
-import { PrimitiveAtom } from 'jotai';
-import { MdEdit as EditIcon } from 'react-icons/md';
-import EditProductForm from './EditProductForm';
+import type { ProductDto } from "@/Application/Dtos/Product.dto";
+import EditProductForm from "./EditProductForm";
 
 type Props = {
   productAtom: PrimitiveAtom<ProductDto>;

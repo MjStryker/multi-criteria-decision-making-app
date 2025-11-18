@@ -1,3 +1,4 @@
+import { SmallCloseIcon as CloseIcon } from "@chakra-ui/icons";
 import {
   IconButton,
   Popover,
@@ -5,14 +6,13 @@ import {
   PopoverCloseButton,
   PopoverContent,
   PopoverTrigger
-} from '@chakra-ui/react';
-import { useState } from 'react';
+} from "@chakra-ui/react";
+import type { PrimitiveAtom } from "jotai";
+import { useState } from "react";
+import { MdEdit as EditIcon } from "react-icons/md";
 
-import { CriterionDto } from '@/Application/Criterion/Dtos/Criterion.dto';
-import { SmallCloseIcon as CloseIcon } from '@chakra-ui/icons';
-import { PrimitiveAtom } from 'jotai';
-import { MdEdit as EditIcon } from 'react-icons/md';
-import EditCriterionForm from './EditCriterionForm';
+import type { CriterionDto } from "@/Application/Dtos/Criterion.dto";
+import EditCriterionForm from "./EditCriterionForm";
 
 type Props = {
   criterionAtom: PrimitiveAtom<CriterionDto>;

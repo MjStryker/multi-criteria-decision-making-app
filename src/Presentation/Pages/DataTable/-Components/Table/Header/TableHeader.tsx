@@ -1,33 +1,34 @@
-import { Icon, IconButton, Td, Text, Thead, Tr } from '@chakra-ui/react';
+import { AddIcon } from "@chakra-ui/icons";
+import { Icon, IconButton, Td, Text, Thead, Tr } from "@chakra-ui/react";
+import { getDefaultStore, useAtom, useSetAtom } from "jotai";
+import { GiAnvil as AnvilIcon } from "react-icons/gi";
 
-import { CRITERION } from '@/@Config/Criteria';
-import { PRODUCTS_MAX_ITEMS } from '@/@Config/Product';
-import { ProductListSplitAtom } from '@/Application/Product/Atoms/ProductList.atom';
+import { CRITERION } from "@/@Config/Criteria";
+import { PRODUCTS_MAX_ITEMS } from "@/@Config/Product";
+import { CriterionListAtom } from "@/Application/Atoms/CriterionList.atom";
+import { ProductCriterionValueListAtom } from "@/Application/Atoms/ProductCriterionValueList.atom";
+import { ProductListSplitAtom } from "@/Application/Atoms/ProductList.atom";
+import { ProductDto } from "@/Application/Dtos/Product.dto";
+import { ProductCriterionValueDto } from "@/Application/Dtos/ProductCriteriaValue.dto";
+import TableHeaderCell from "./TableHeaderCell";
 
-import { CriterionListAtom } from '@/Application/Criterion/Atoms/CriterionList.atom';
-import { ProductDtoFactory } from '@/Application/Product/Dtos/ProductDto.factory';
-import { ProductCriterionValueListAtom } from '@/Application/ProductCriterionValue/Atoms/ProductCriterionValueList.atom';
-import { ProductCriterionValueDtoFactory } from '@/Application/ProductCriterionValue/Dtos/ProductCriterionValueDto.factory';
-import { AddIcon } from '@chakra-ui/icons';
-import { getDefaultStore, useAtom, useSetAtom } from 'jotai';
-import { GiAnvil as AnvilIcon } from 'react-icons/gi';
-import TableHeaderCell from './TableHeaderCell';
-
-const ADD_PRODUCT_CELL_WIDTH = '64px';
+const ADD_PRODUCT_CELL_WIDTH = "64px";
 
 export default function TableHeader() {
   const [productListAtoms, dispatch] = useAtom(ProductListSplitAtom);
-  const setProductCriterionValueList = useSetAtom(ProductCriterionValueListAtom);
+  const setProductCriterionValueList = useSetAtom(
+    ProductCriterionValueListAtom
+  );
 
   const nbProducts = productListAtoms.length;
   const nbProductsRemaining = PRODUCTS_MAX_ITEMS - nbProducts;
 
   const handleAddProduct = () => {
     const store = getDefaultStore();
-    const newProduct = ProductDtoFactory.newEmpty(nbProducts);
+    const newProduct = ProductDto.newEmpty(nbProducts);
     // Add product
     dispatch({
-      type: 'insert',
+      type: "insert",
       value: newProduct
     });
     // Add default product criterion values
@@ -35,7 +36,9 @@ export default function TableHeader() {
       ...prev,
       ...store
         .get(CriterionListAtom)
-        .map(criterion => ProductCriterionValueDtoFactory.newEmpty(newProduct.uuid, criterion.uuid))
+        .map(criterion =>
+          ProductCriterionValueDto.newEmpty(newProduct.uuid, criterion.uuid)
+        )
     ]);
   };
 
@@ -65,22 +68,34 @@ export default function TableHeader() {
          */}
         <Td textAlign="center">
           <Icon as={AnvilIcon} color="gray.400" fontSize="2xl" />
-          <Text fontSize="xs" color="gray.400">{`${CRITERION.WEIGHT.MIN} - ${CRITERION.WEIGHT.MAX}`}</Text>
+          <Text
+            fontSize="xs"
+            color="gray.400"
+          >{`${CRITERION.WEIGHT.MIN} - ${CRITERION.WEIGHT.MAX}`}</Text>
         </Td>
 
         {/*
          * PRODUCTS
          */}
         {productListAtoms.map((productAtom, idx) => (
-          <TableHeaderCell key={`${productAtom}`} columnIdx={idx} productAtom={productAtom} />
+          <TableHeaderCell
+            key={`${productAtom}`}
+            columnIdx={idx}
+            productAtom={productAtom}
+          />
         ))}
 
         {/*
          * PRODUCTS - ADD BUTTON
          */}
-        <Td border="none" w={ADD_PRODUCT_CELL_WIDTH} minW={ADD_PRODUCT_CELL_WIDTH} maxW={ADD_PRODUCT_CELL_WIDTH}>
+        <Td
+          border="none"
+          w={ADD_PRODUCT_CELL_WIDTH}
+          minW={ADD_PRODUCT_CELL_WIDTH}
+          maxW={ADD_PRODUCT_CELL_WIDTH}
+        >
           <IconButton
-            colorScheme={nbProductsRemaining > 0 ? 'blue' : 'gray'}
+            colorScheme={nbProductsRemaining > 0 ? "blue" : "gray"}
             aria-label="Add product"
             size="sm"
             icon={<AddIcon />}

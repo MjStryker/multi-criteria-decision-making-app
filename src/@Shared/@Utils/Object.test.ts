@@ -1,50 +1,50 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test } from "vitest";
 
-import { areDefined, deepEqual, isDefined } from './Object';
+import { areDefined, deepEqual, isDefined } from "./Object";
 
-describe('deepEqual', () => {
-  test('Returning false', () => {
+describe("deepEqual", () => {
+  test("Returning false", () => {
     expect(deepEqual(true, false)).toBe(false);
     expect(deepEqual(false, true)).toBe(false);
 
     expect(deepEqual(null, undefined)).toBe(false);
 
-    expect(deepEqual('', ' ')).toBe(false);
-    expect(deepEqual('1', 1)).toBe(false);
-    expect(deepEqual('null', null)).toBe(false);
+    expect(deepEqual("", " ")).toBe(false);
+    expect(deepEqual("1", 1)).toBe(false);
+    expect(deepEqual("null", null)).toBe(false);
 
     expect(deepEqual(0, 1)).toBe(false);
     expect(deepEqual(0.0, 0.1)).toBe(false);
 
-    expect(deepEqual(['a'], [])).toBe(false);
-    expect(deepEqual(['a'], ['b'])).toBe(false);
+    expect(deepEqual(["a"], [])).toBe(false);
+    expect(deepEqual(["a"], ["b"])).toBe(false);
 
-    expect(deepEqual({ a: '' }, {})).toBe(false);
-    expect(deepEqual({ a: '', b: '' }, { a: '' })).toBe(false);
-    expect(deepEqual({ a: '', b: '' }, { a: '', b: null })).toBe(false);
+    expect(deepEqual({ a: "" }, {})).toBe(false);
+    expect(deepEqual({ a: "", b: "" }, { a: "" })).toBe(false);
+    expect(deepEqual({ a: "", b: "" }, { a: "", b: null })).toBe(false);
 
     expect(
       deepEqual(
         {
           artPieces: [
             {
-              pieceName: 'Emo Flamingos',
+              pieceName: "Emo Flamingos",
               price: 30,
               ownerList: [
                 {
-                  name: 'John Ernest',
+                  name: "John Ernest",
                   userID: 23849,
-                  purchaseDate: '09/13/2021'
+                  purchaseDate: "09/13/2021"
                 },
                 {
-                  name: 'Eric Kruger',
+                  name: "Eric Kruger",
                   userID: 23510,
-                  purchaseDate: '09/13/2021'
+                  purchaseDate: "09/13/2021"
                 }
               ]
             },
             {
-              pieceName: 'Where is my bit wallet',
+              pieceName: "Where is my bit wallet",
               price: 100,
               ownerList: []
             }
@@ -54,23 +54,23 @@ describe('deepEqual', () => {
         {
           artPieces: [
             {
-              pieceName: 'Emo Flamingos',
+              pieceName: "Emo Flamingos",
               price: 30,
               ownerList: [
                 {
-                  name: 'John Ernest',
+                  name: "John Ernest",
                   userID: 23849,
-                  purchaseDate: '09/13/2021'
+                  purchaseDate: "09/13/2021"
                 },
                 {
-                  name: 'Eric Kruger',
+                  name: "Eric Kruger",
                   userID: 23510,
-                  purchaseDate: '09/13/2021'
+                  purchaseDate: "09/13/2021"
                 }
               ]
             },
             {
-              pieceName: 'Where is my bit wallet',
+              pieceName: "Where is my bit wallet",
               price: 101, // <-------------------- Diff here!
               ownerList: []
             }
@@ -81,49 +81,49 @@ describe('deepEqual', () => {
     ).toBe(false);
   });
 
-  test('Returning true', () => {
+  test("Returning true", () => {
     expect(deepEqual(true, true)).toBe(true);
     expect(deepEqual(false, false)).toBe(true);
 
     expect(deepEqual(null, null)).toBe(true);
     expect(deepEqual(null, null)).toBe(true);
 
-    expect(deepEqual('', '')).toBe(true);
-    expect(deepEqual(' ', ' ')).toBe(true);
-    expect(deepEqual('null', 'null')).toBe(true);
+    expect(deepEqual("", "")).toBe(true);
+    expect(deepEqual(" ", " ")).toBe(true);
+    expect(deepEqual("null", "null")).toBe(true);
 
     expect(deepEqual(0, 0)).toBe(true);
     expect(deepEqual(0.1, 0.1)).toBe(true);
 
     expect(deepEqual([], [])).toBe(true);
-    expect(deepEqual(['a'], ['a'])).toBe(true);
+    expect(deepEqual(["a"], ["a"])).toBe(true);
 
     expect(deepEqual({}, {})).toBe(true);
-    expect(deepEqual({ a: '' }, { a: '' })).toBe(true);
-    expect(deepEqual({ a: '', b: '' }, { a: '', b: '' })).toBe(true);
+    expect(deepEqual({ a: "" }, { a: "" })).toBe(true);
+    expect(deepEqual({ a: "", b: "" }, { a: "", b: "" })).toBe(true);
 
     expect(
       deepEqual(
         {
           artPieces: [
             {
-              pieceName: 'Emo Flamingos',
+              pieceName: "Emo Flamingos",
               price: 30,
               ownerList: [
                 {
-                  name: 'John Ernest',
+                  name: "John Ernest",
                   userID: 23849,
-                  purchaseDate: '09/13/2021'
+                  purchaseDate: "09/13/2021"
                 },
                 {
-                  name: 'Eric Kruger',
+                  name: "Eric Kruger",
                   userID: 23510,
-                  purchaseDate: '09/13/2021'
+                  purchaseDate: "09/13/2021"
                 }
               ]
             },
             {
-              pieceName: 'Where is my bit wallet',
+              pieceName: "Where is my bit wallet",
               price: 100,
               ownerList: []
             }
@@ -133,23 +133,23 @@ describe('deepEqual', () => {
         {
           artPieces: [
             {
-              pieceName: 'Emo Flamingos',
+              pieceName: "Emo Flamingos",
               price: 30,
               ownerList: [
                 {
-                  name: 'John Ernest',
+                  name: "John Ernest",
                   userID: 23849,
-                  purchaseDate: '09/13/2021'
+                  purchaseDate: "09/13/2021"
                 },
                 {
-                  name: 'Eric Kruger',
+                  name: "Eric Kruger",
                   userID: 23510,
-                  purchaseDate: '09/13/2021'
+                  purchaseDate: "09/13/2021"
                 }
               ]
             },
             {
-              pieceName: 'Where is my bit wallet',
+              pieceName: "Where is my bit wallet",
               price: 100,
               ownerList: []
             }
@@ -161,38 +161,38 @@ describe('deepEqual', () => {
   });
 });
 
-describe('isDefined', () => {
-  test('Returning false', () => {
+describe("isDefined", () => {
+  test("Returning false", () => {
     expect(isDefined(null)).toBe(false);
     expect(isDefined(null)).toBe(false);
   });
 
-  test('Returning true', () => {
+  test("Returning true", () => {
     expect(isDefined(1)).toBe(true);
     expect(isDefined(-1)).toBe(true);
 
-    expect(isDefined('')).toBe(true);
-    expect(isDefined('Lorem')).toBe(true);
-    expect(isDefined('  Lorem')).toBe(true);
+    expect(isDefined("")).toBe(true);
+    expect(isDefined("Lorem")).toBe(true);
+    expect(isDefined("  Lorem")).toBe(true);
 
     expect(isDefined([])).toBe(true);
     expect(isDefined([1, 2, 3])).toBe(true);
 
     expect(isDefined({})).toBe(true);
-    expect(isDefined({ a: '', b: '' })).toBe(true);
+    expect(isDefined({ a: "", b: "" })).toBe(true);
   });
 });
 
-describe('areDefined', () => {
-  test('Returning false', () => {
+describe("areDefined", () => {
+  test("Returning false", () => {
     expect(areDefined([null])).toBe(false);
     expect(areDefined([null])).toBe(false);
 
     expect(areDefined([null, null, null])).toBe(false);
     expect(areDefined([null, null, null])).toBe(false);
 
-    expect(areDefined(['', '', null])).toBe(false);
-    expect(areDefined(['', '', null])).toBe(false);
+    expect(areDefined(["", "", null])).toBe(false);
+    expect(areDefined(["", "", null])).toBe(false);
 
     expect(areDefined([[], [], null])).toBe(false);
     expect(areDefined([[], [], null])).toBe(false);
@@ -201,18 +201,18 @@ describe('areDefined', () => {
     expect(areDefined([{}, {}, null])).toBe(false);
   });
 
-  test('Returning true', () => {
+  test("Returning true", () => {
     expect(areDefined([])).toBe(true);
     expect(areDefined([1])).toBe(true);
-    expect(areDefined([''])).toBe(true);
-    expect(areDefined(['Lorem'])).toBe(true);
+    expect(areDefined([""])).toBe(true);
+    expect(areDefined(["Lorem"])).toBe(true);
     expect(areDefined([[]])).toBe(true);
     expect(areDefined([{}])).toBe(true);
 
-    expect(areDefined(['', '', ''])).toBe(true);
+    expect(areDefined(["", "", ""])).toBe(true);
     expect(areDefined([[], [], []])).toBe(true);
     expect(areDefined([{}, {}, {}])).toBe(true);
 
-    expect(areDefined(['', [], {}])).toBe(true);
+    expect(areDefined(["", [], {}])).toBe(true);
   });
 });

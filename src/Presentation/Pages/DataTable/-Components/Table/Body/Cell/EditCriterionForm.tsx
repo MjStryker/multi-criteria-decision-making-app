@@ -1,12 +1,27 @@
-import { CriterionDto } from '@/Application/Criterion/Dtos/Criterion.dto';
-import { CriterionListAtom } from '@/Application/Criterion/Atoms/CriterionList.atom';
-import TextInput from '@/Presentation/Components/Form/TextInput';
+import { DeleteIcon, TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
+import {
+  Button,
+  ButtonGroup,
+  FormControl,
+  FormLabel,
+  HStack,
+  IconButton,
+  Stack,
+  VStack
+} from "@chakra-ui/react";
+import { type PrimitiveAtom, useAtom, useSetAtom } from "jotai";
+import {
+  type Dispatch,
+  type FormEvent,
+  type SetStateAction,
+  useEffect,
+  useState
+} from "react";
 
-import { DeleteIcon, TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons';
-import { Button, ButtonGroup, FormControl, FormLabel, HStack, IconButton, Stack, VStack } from '@chakra-ui/react';
-import { PrimitiveAtom, useAtom, useSetAtom } from 'jotai';
-import { Dispatch, FormEvent, SetStateAction, useEffect, useState } from 'react';
-import { ProductCriterionValueListAtom } from '@/Application/ProductCriterionValue/Atoms/ProductCriterionValueList.atom';
+import { CriterionListAtom } from "@/Application/Atoms/CriterionList.atom";
+import { ProductCriterionValueListAtom } from "@/Application/Atoms/ProductCriterionValueList.atom";
+import type { CriterionDto } from "@/Application/Dtos/Criterion.dto";
+import TextInput from "@/Presentation/Components/Form/TextInput";
 
 type Props = {
   criterionAtom: PrimitiveAtom<CriterionDto>;
@@ -14,34 +29,44 @@ type Props = {
   onParentClose: VoidFunction;
 };
 
-export default function EditCriterionForm({ criterionAtom, setParentIsDirty, onParentClose }: Props) {
+export default function EditCriterionForm({
+  criterionAtom,
+  setParentIsDirty,
+  onParentClose
+}: Props) {
   const [criterion, setCriterion] = useAtom(criterionAtom);
   const setCriterionList = useSetAtom(CriterionListAtom);
-  const setProductCriterionValueList = useSetAtom(ProductCriterionValueListAtom);
+  const setProductCriterionValueList = useSetAtom(
+    ProductCriterionValueListAtom
+  );
 
-  const [name, setName] = useState<string>(criterion.name || '');
-  const [unit, setUnit] = useState<string>(criterion.unit || '');
-  const [beneficial, setBeneficial] = useState<boolean | null>(criterion.beneficial);
+  const [name, setName] = useState<string>(criterion.name || "");
+  const [unit, setUnit] = useState<string>(criterion.unit || "");
+  const [beneficial, setBeneficial] = useState<boolean | null>(
+    criterion.beneficial
+  );
 
-  const isDirty = name !== criterion.name || unit !== criterion.unit || beneficial !== criterion.beneficial;
+  const isDirty =
+    name !== criterion.name ||
+    unit !== criterion.unit ||
+    beneficial !== criterion.beneficial;
 
   /**
    * * Update parent props
    */
   useEffect(() => {
     setParentIsDirty(isDirty);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isDirty]);
+  }, [isDirty, setParentIsDirty]);
 
   /**
    * * Sync local state on props change
    */
   useEffect(() => {
-    setName(criterion.name || '');
+    setName(criterion.name || "");
   }, [criterion.name]);
 
   useEffect(() => {
-    setUnit(criterion.unit || '');
+    setUnit(criterion.unit || "");
   }, [criterion.unit]);
 
   useEffect(() => {
@@ -51,8 +76,10 @@ export default function EditCriterionForm({ criterionAtom, setParentIsDirty, onP
   /**
    * * Handle Inputs change
    */
-  const onNameChange = (e: FormEvent<HTMLInputElement>) => setName(e.currentTarget.value);
-  const onUnitChange = (e: FormEvent<HTMLInputElement>) => setUnit(e.currentTarget.value);
+  const onNameChange = (e: FormEvent<HTMLInputElement>) =>
+    setName(e.currentTarget.value);
+  const onUnitChange = (e: FormEvent<HTMLInputElement>) =>
+    setUnit(e.currentTarget.value);
 
   const toggleBeneficial = () => {
     setBeneficial(prev => !prev);
@@ -74,7 +101,9 @@ export default function EditCriterionForm({ criterionAtom, setParentIsDirty, onP
     // Remove criterion from list
     setCriterionList(prev => prev.filter(c => c.uuid !== criterion.uuid));
     // Remove product criterion values
-    setProductCriterionValueList(prev => prev.filter(p => p.criterionUuid !== criterion.uuid));
+    setProductCriterionValueList(prev =>
+      prev.filter(p => p.criterionUuid !== criterion.uuid)
+    );
     // Close dialog
     onClose();
   };
@@ -90,19 +119,36 @@ export default function EditCriterionForm({ criterionAtom, setParentIsDirty, onP
   return (
     <form onSubmit={onSubmit}>
       <Stack spacing={4}>
-        <TextInput label="Name" id="criterion-name" type="text" value={name} onChange={onNameChange} />
+        <TextInput
+          label="Name"
+          id="criterion-name"
+          type="text"
+          value={name}
+          onChange={onNameChange}
+        />
 
-        <TextInput label="Unit" id="criterion-unit" type="text" value={unit} onChange={onUnitChange} />
+        <TextInput
+          label="Unit"
+          id="criterion-unit"
+          type="text"
+          value={unit}
+          onChange={onUnitChange}
+        />
 
         <FormControl as={VStack} spacing={0} alignItems="stretch">
           <FormLabel>Best value</FormLabel>
 
-          <ButtonGroup colorScheme={beneficial === false ? 'orange' : 'blue'} isAttached>
+          <ButtonGroup
+            colorScheme={beneficial === false ? "orange" : "blue"}
+            isAttached
+          >
             <Button
               flex={1}
               aria-label="Non beneficial"
-              variant={beneficial === false ? 'solid' : 'outline'}
-              rightIcon={beneficial === false ? <TriangleDownIcon /> : undefined}
+              variant={beneficial === false ? "solid" : "outline"}
+              rightIcon={
+                beneficial === false ? <TriangleDownIcon /> : undefined
+              }
               onClick={toggleBeneficial}
             >
               Lowest
@@ -110,7 +156,7 @@ export default function EditCriterionForm({ criterionAtom, setParentIsDirty, onP
             <Button
               flex={1}
               aria-label="Beneficial"
-              variant={beneficial === true ? 'solid' : 'outline'}
+              variant={beneficial === true ? "solid" : "outline"}
               rightIcon={beneficial === true ? <TriangleUpIcon /> : undefined}
               onClick={toggleBeneficial}
             >
@@ -120,13 +166,23 @@ export default function EditCriterionForm({ criterionAtom, setParentIsDirty, onP
         </FormControl>
 
         <HStack>
-          <IconButton colorScheme="red" icon={<DeleteIcon />} aria-label="Delete criterion" onClick={onDelete} />
+          <IconButton
+            colorScheme="red"
+            icon={<DeleteIcon />}
+            aria-label="Delete criterion"
+            onClick={onDelete}
+          />
 
           <Button flex={1} variant="outline" onClick={onClose}>
             Cancel
           </Button>
 
-          <Button flex={1} type="submit" colorScheme="teal" isDisabled={!isDirty}>
+          <Button
+            flex={1}
+            type="submit"
+            colorScheme="teal"
+            isDisabled={!isDirty}
+          >
             Save
           </Button>
         </HStack>

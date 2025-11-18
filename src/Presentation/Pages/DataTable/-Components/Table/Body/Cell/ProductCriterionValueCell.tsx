@@ -1,32 +1,47 @@
-import { CELL_HEIGHT, CELL_WIDTH } from '@/@Config/Table';
-import { isValidNotEmptyString } from '@/@Shared/@Utils/String';
+import {
+  Editable,
+  EditableInput,
+  EditablePreview,
+  Input,
+  Td,
+  Text
+} from "@chakra-ui/react";
+import { getDefaultStore, type PrimitiveAtom, useAtom } from "jotai";
+import { useState } from "react";
 
-import { ProductCriterionValueDto } from '@/Application/ProductCriterionValue/Dtos/ProductCriteriaValue.dto';
-import { Editable, EditableInput, EditablePreview, Input, Td, Text } from '@chakra-ui/react';
-import { getDefaultStore, PrimitiveAtom, useAtom } from 'jotai';
-import { useState } from 'react';
+import { CELL_HEIGHT, CELL_WIDTH } from "@/@Config/Table";
+import { isValidNotEmptyString } from "@/@Shared/@Utils/String";
+import type { ProductCriterionValueDto } from "@/Application/Dtos/ProductCriteriaValue.dto";
 
 type Props = {
   productCriterionValueAtom: PrimitiveAtom<ProductCriterionValueDto>;
 };
 
-export default function ProductCriterionValueCell({ productCriterionValueAtom }: Props) {
-  const [productCriterionValue, setProductCriterionValue] = useAtom(productCriterionValueAtom);
+export default function ProductCriterionValueCell({
+  productCriterionValueAtom
+}: Props) {
+  const [productCriterionValue, setProductCriterionValue] = useAtom(
+    productCriterionValueAtom
+  );
 
-  const [value, setValue] = useState<number | null>(productCriterionValue?.value ?? null);
+  const [value, setValue] = useState<number | null>(
+    productCriterionValue?.value ?? null
+  );
 
   /**
    * * Handle Input change / validation
    */
   const onChange = (stringValue: string) => {
     setValue(prev => {
-      const newVal = isValidNotEmptyString(stringValue) ? Number(stringValue) : null;
+      const newVal = isValidNotEmptyString(stringValue)
+        ? Number(stringValue)
+        : null;
       return prev !== newVal ? newVal : prev;
     });
   };
 
   const onSubmit = () => {
-    const store = getDefaultStore();
+    const _store = getDefaultStore();
     // Update value
     setProductCriterionValue({ ...productCriterionValue, value });
     // // Recompute criterion rank points
@@ -41,34 +56,53 @@ export default function ProductCriterionValueCell({ productCriterionValueAtom }:
   };
 
   return (
-    <Td position="relative" isNumeric p={0} 
-            w={CELL_WIDTH} h={CELL_HEIGHT}  border="1px" borderColor="gray.100">
+    <Td
+      position="relative"
+      isNumeric
+      p={0}
+      w={CELL_WIDTH}
+      h={CELL_HEIGHT}
+      border="1px"
+      borderColor="gray.100"
+    >
       <Text position="absolute" top={0} left={0} fontSize="xs" color="gray.500">
         {productCriterionValue.criterionRankPts}
       </Text>
 
-        <Editable flex={1} 
-            w={CELL_WIDTH}
-             h="full" value={value?.toString()} onChange={onChange} onSubmit={onSubmit}>
-          <EditablePreview
-            display="flex"
-            alignItems="center" 
-            justifyContent="flex-end"
-            py={2}
-            px={2}
-            w="full"
-            h="full"
-            bg={value !== null ? "white": 'gray.50'}
-             borderRadius="sm"
-            _hover={{
-              border: '1px solid',
-              borderColor: 'gray.300',
-            }}
-          />
+      <Editable
+        flex={1}
+        w={CELL_WIDTH}
+        h="full"
+        value={value?.toString()}
+        onChange={onChange}
+        onSubmit={onSubmit}
+      >
+        <EditablePreview
+          display="flex"
+          alignItems="center"
+          justifyContent="flex-end"
+          py={2}
+          px={2}
+          w="full"
+          h="full"
+          bg={value !== null ? "white" : "gray.50"}
+          borderRadius="sm"
+          _hover={{
+            border: "1px solid",
+            borderColor: "gray.300"
+          }}
+        />
 
-          <Input as={EditableInput} type="number" borderRadius="sm" size="sm" 
-           px={2} w="full" h="full" />
-        </Editable>
+        <Input
+          as={EditableInput}
+          type="number"
+          borderRadius="sm"
+          size="sm"
+          px={2}
+          w="full"
+          h="full"
+        />
+      </Editable>
     </Td>
   );
 }

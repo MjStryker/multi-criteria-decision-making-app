@@ -1,11 +1,18 @@
-import { ProductListAtom } from '@/Application/Product/Atoms/ProductList.atom';
-import { ProductDto } from '@/Application/Product/Dtos/Product.dto';
-import { ProductCriterionValueListAtom } from '@/Application/ProductCriterionValue/Atoms/ProductCriterionValueList.atom';
-import { DeleteIcon } from '@chakra-ui/icons';
-import { Button, HStack, IconButton, Stack } from '@chakra-ui/react';
-import { PrimitiveAtom, useAtom, useSetAtom } from 'jotai';
-import { Dispatch, FormEvent, SetStateAction, useEffect, useState } from 'react';
-import TextInput from '../../../../../Components/Form/TextInput';
+import { DeleteIcon } from "@chakra-ui/icons";
+import { Button, HStack, IconButton, Stack } from "@chakra-ui/react";
+import { type PrimitiveAtom, useAtom, useSetAtom } from "jotai";
+import {
+  type Dispatch,
+  type FormEvent,
+  type SetStateAction,
+  useEffect,
+  useState
+} from "react";
+
+import { ProductCriterionValueListAtom } from "@/Application/Atoms/ProductCriterionValueList.atom";
+import { ProductListAtom } from "@/Application/Atoms/ProductList.atom";
+import type { ProductDto } from "@/Application/Dtos/Product.dto";
+import TextInput from "../../../../../Components/Form/TextInput";
 
 type Props = {
   productAtom: PrimitiveAtom<ProductDto>;
@@ -13,14 +20,20 @@ type Props = {
   onParentClose: VoidFunction;
 };
 
-export default function EditProductForm({ setParentIsDirty, productAtom, onParentClose }: Props) {
+export default function EditProductForm({
+  setParentIsDirty,
+  productAtom,
+  onParentClose
+}: Props) {
   const [product, setProduct] = useAtom(productAtom);
   const setProductList = useSetAtom(ProductListAtom);
-  const setProductCriterionValueList = useSetAtom(ProductCriterionValueListAtom);
+  const setProductCriterionValueList = useSetAtom(
+    ProductCriterionValueListAtom
+  );
 
-  const [name, setName] = useState<string>(product.name || '');
+  const [name, setName] = useState<string>(product.name || "");
 
-  const [reference, setReference] = useState<string>(product.reference || '');
+  const [reference, setReference] = useState<string>(product.reference || "");
 
   const isDirty = name !== product.name || reference !== product.reference;
 
@@ -29,25 +42,26 @@ export default function EditProductForm({ setParentIsDirty, productAtom, onParen
    */
   useEffect(() => {
     setParentIsDirty(isDirty);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isDirty]);
+  }, [isDirty, setParentIsDirty]);
 
   /**
    * * Sync local state on props change
    */
   useEffect(() => {
-    setName(product.name || '');
+    setName(product.name || "");
   }, [product.name]);
 
   useEffect(() => {
-    setReference(product.reference || '');
+    setReference(product.reference || "");
   }, [product.reference]);
 
   /**
    * * Handle Inputs change
    */
-  const onNameChange = (e: FormEvent<HTMLInputElement>) => setName(e.currentTarget.value);
-  const onReferenceChange = (e: FormEvent<HTMLInputElement>) => setReference(e.currentTarget.value);
+  const onNameChange = (e: FormEvent<HTMLInputElement>) =>
+    setName(e.currentTarget.value);
+  const onReferenceChange = (e: FormEvent<HTMLInputElement>) =>
+    setReference(e.currentTarget.value);
 
   /**
    * * Dialog actions
@@ -65,7 +79,9 @@ export default function EditProductForm({ setParentIsDirty, productAtom, onParen
     // Remove product from list
     setProductList(prev => prev.filter(p => p.uuid !== product.uuid));
     // Remove product criterion values
-    setProductCriterionValueList(prev => prev.filter(p => p.productUuid !== product.uuid));
+    setProductCriterionValueList(prev =>
+      prev.filter(p => p.productUuid !== product.uuid)
+    );
     // Close dialog
     onClose();
   };
@@ -81,7 +97,13 @@ export default function EditProductForm({ setParentIsDirty, productAtom, onParen
   return (
     <form onSubmit={onSubmit}>
       <Stack spacing={4}>
-        <TextInput label="Name" id="product-name" type="text" value={name} onChange={onNameChange} />
+        <TextInput
+          label="Name"
+          id="product-name"
+          type="text"
+          value={name}
+          onChange={onNameChange}
+        />
 
         <TextInput
           label="Reference"
@@ -92,13 +114,23 @@ export default function EditProductForm({ setParentIsDirty, productAtom, onParen
         />
 
         <HStack>
-          <IconButton colorScheme="red" icon={<DeleteIcon />} aria-label="Delete product" onClick={onDelete} />
+          <IconButton
+            colorScheme="red"
+            icon={<DeleteIcon />}
+            aria-label="Delete product"
+            onClick={onDelete}
+          />
 
           <Button flex={1} variant="outline" onClick={onClose}>
             Cancel
           </Button>
 
-          <Button flex={1} type="submit" colorScheme="teal" isDisabled={!isDirty}>
+          <Button
+            flex={1}
+            type="submit"
+            colorScheme="teal"
+            isDisabled={!isDirty}
+          >
             Save
           </Button>
         </HStack>

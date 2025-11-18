@@ -1,7 +1,7 @@
-import { SortByEnum } from '@/@Shared/@Enums/SortBy.enum';
-import { compareFn } from '@/@Shared/@Utils/Array';
-import { CriterionDto } from '@/Application/Criterion/Dtos/Criterion.dto';
-import { ProductCriterionValueDto } from '@/Application/ProductCriterionValue/Dtos/ProductCriteriaValue.dto';
+import { SortByEnum } from "@/@Shared/@Enums/SortBy.enum";
+import { compareFn } from "@/@Shared/@Utils/Array";
+import type { CriterionDto } from "@/Application/Dtos/Criterion.dto";
+import type { ProductCriterionValueDto } from "@/Application/Dtos/ProductCriteriaValue.dto";
 
 export function computeProductCriterionValueRankPts(
   criterionList: CriterionDto[],
@@ -14,10 +14,17 @@ export function computeProductCriterionValueRankPts(
     let lastValue: number | null = null;
     let lastPos = 0;
 
-    const values = productCriterionValueList.filter(v => v.criterionUuid === criterion.uuid);
+    const values = productCriterionValueList.filter(
+      v => v.criterionUuid === criterion.uuid
+    );
 
     values
-      .sort((v1, v2) => compareFn(criterion.beneficial ? SortByEnum.ASC : SortByEnum.DESC)(v1.value, v2.value))
+      .sort((v1, v2) =>
+        compareFn(criterion.beneficial ? SortByEnum.ASC : SortByEnum.DESC)(
+          v1.value,
+          v2.value
+        )
+      )
       .forEach(value => {
         if (value.value === null) {
           rankPtsMap.set(value.uuid, 0);
