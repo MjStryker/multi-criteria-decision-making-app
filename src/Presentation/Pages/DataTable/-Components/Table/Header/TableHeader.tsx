@@ -1,5 +1,5 @@
 import { AddIcon } from "@chakra-ui/icons";
-import { Icon, IconButton, Td, Text, Thead, Tr } from "@chakra-ui/react";
+import { Box, Icon, IconButton, Text, Thead, Tr } from "@chakra-ui/react";
 import { getDefaultStore, useAtom, useSetAtom } from "jotai";
 import { GiAnvil as AnvilIcon } from "react-icons/gi";
 
@@ -10,9 +10,12 @@ import { ProductCriterionValueListAtom } from "@/Application/Atoms/ProductCriter
 import { ProductListSplitAtom } from "@/Application/Atoms/ProductList.atom";
 import { ProductDto } from "@/Application/Dtos/Product.dto";
 import { ProductCriterionValueDto } from "@/Application/Dtos/ProductCriteriaValue.dto";
+import {
+  ADD_PRODUCT_CELL_WIDTH,
+  Cell,
+  CRITERION_WEIGHT_CELL_WIDTH
+} from "../Cell";
 import TableHeaderCell from "./TableHeaderCell";
-
-const ADD_PRODUCT_CELL_WIDTH = "64px";
 
 export default function TableHeader() {
   const [productListAtoms, dispatch] = useAtom(ProductListSplitAtom);
@@ -48,7 +51,7 @@ export default function TableHeader() {
         {/*
          * SORT BUTTON
          */}
-        <Td px={2}>
+        <Cell>
           {/* <ButtonGroup variant="outline" size="sm" color="gray.500" isAttached>
             <IconButton
               aria-label="Sort criteria by weight"
@@ -61,18 +64,24 @@ export default function TableHeader() {
               onClick={() => sortCriteriaByWeight(SortByEnum.ASC)}
             />
           </ButtonGroup> */}
-        </Td>
+        </Cell>
 
         {/*
-         * CRITERIONS - MIN/MAX WEIGHT INFO
+         * CRITERIA - WEIGHT INFO
          */}
-        <Td textAlign="center">
+        <Cell
+          textAlign="center"
+          w={CRITERION_WEIGHT_CELL_WIDTH}
+          minW={CRITERION_WEIGHT_CELL_WIDTH}
+          maxW={CRITERION_WEIGHT_CELL_WIDTH}
+          border="none"
+        >
           <Icon as={AnvilIcon} color="gray.400" fontSize="2xl" />
           <Text
             fontSize="xs"
             color="gray.400"
           >{`${CRITERION.WEIGHT.MIN} - ${CRITERION.WEIGHT.MAX}`}</Text>
-        </Td>
+        </Cell>
 
         {/*
          * PRODUCTS
@@ -88,22 +97,24 @@ export default function TableHeader() {
         {/*
          * PRODUCTS - ADD BUTTON
          */}
-        <Td
+        <Cell
           border="none"
           w={ADD_PRODUCT_CELL_WIDTH}
           minW={ADD_PRODUCT_CELL_WIDTH}
           maxW={ADD_PRODUCT_CELL_WIDTH}
         >
-          <IconButton
-            colorScheme={nbProductsRemaining > 0 ? "blue" : "gray"}
-            aria-label="Add product"
-            size="sm"
-            icon={<AddIcon />}
-            onClick={handleAddProduct}
-            boxShadow="base"
-            transition="background .2s"
-          />
-        </Td>
+          <Box p={2}>
+            <IconButton
+              colorScheme={nbProductsRemaining > 0 ? "blue" : "gray"}
+              aria-label="Add product"
+              size="sm"
+              icon={<AddIcon />}
+              onClick={handleAddProduct}
+              boxShadow="base"
+              transition="background .2s"
+            />
+          </Box>
+        </Cell>
       </Tr>
     </Thead>
   );

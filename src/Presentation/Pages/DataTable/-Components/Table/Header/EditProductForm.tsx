@@ -96,7 +96,7 @@ export default function EditProductForm({
 
   return (
     <form onSubmit={onSubmit}>
-      <Stack spacing={4}>
+      <Stack gap={4}>
         <TextInput
           label="Name"
           id="product-name"

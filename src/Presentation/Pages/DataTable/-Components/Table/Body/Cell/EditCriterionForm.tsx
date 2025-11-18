@@ -118,7 +118,7 @@ export default function EditCriterionForm({
 
   return (
     <form onSubmit={onSubmit}>
-      <Stack spacing={4}>
+      <Stack gap={4}>
         <TextInput
           label="Name"
           id="criterion-name"
@@ -135,7 +135,7 @@ export default function EditCriterionForm({
           onChange={onUnitChange}
         />
 
-        <FormControl as={VStack} spacing={0} alignItems="stretch">
+        <FormControl as={VStack} gap={0} alignItems="stretch">
           <FormLabel>Best value</FormLabel>
 
           <ButtonGroup

@@ -1,5 +1,5 @@
 import { AddIcon } from "@chakra-ui/icons";
-import { Button, Td, Tfoot, Tr } from "@chakra-ui/react";
+import { Box, Button, Tfoot, Tr } from "@chakra-ui/react";
 import { getDefaultStore, useAtom, useAtomValue, useSetAtom } from "jotai";
 
 import { CRITERIA_MAX_ITEMS } from "@/@Config/Criteria";
@@ -11,6 +11,7 @@ import {
 } from "@/Application/Atoms/ProductList.atom";
 import { CriterionDto } from "@/Application/Dtos/Criterion.dto";
 import { ProductCriterionValueDto } from "@/Application/Dtos/ProductCriteriaValue.dto";
+import { ADD_PRODUCT_CELL_WIDTH, Cell } from "../Cell";
 import TableFooterCell from "./TableFooterCell";
 
 export default function TableFooter() {
@@ -48,19 +49,21 @@ export default function TableFooter() {
         {/*
          * CRITERION - ADD BUTTON
          */}
-        <Td border="none" pl={1} pr={2} colSpan={2}>
-          <Button
-            w="full"
-            size="sm"
-            colorScheme={nbCriteriaRemaining > 0 ? "blue" : "gray"}
-            onClick={handleAddCriterion}
-            leftIcon={<AddIcon fontSize="xs" />}
-            boxShadow="base"
-            transition="background .2s"
-          >
-            Add
-          </Button>
-        </Td>
+        <Cell border="none" colSpan={2}>
+          <Box p={2}>
+            <Button
+              w="full"
+              size="sm"
+              colorScheme={nbCriteriaRemaining > 0 ? "blue" : "gray"}
+              onClick={handleAddCriterion}
+              leftIcon={<AddIcon fontSize="xs" />}
+              boxShadow="base"
+              transition="background .2s"
+            >
+              Add
+            </Button>
+          </Box>
+        </Cell>
 
         {/*
          * PRODUCTS - RANK
@@ -72,7 +75,12 @@ export default function TableFooter() {
         {/*
          * --------
          */}
-        <Td border="none" />
+        <Cell
+          border="none"
+          w={ADD_PRODUCT_CELL_WIDTH}
+          minW={ADD_PRODUCT_CELL_WIDTH}
+          maxW={ADD_PRODUCT_CELL_WIDTH}
+        />
       </Tr>
     </Tfoot>
   );

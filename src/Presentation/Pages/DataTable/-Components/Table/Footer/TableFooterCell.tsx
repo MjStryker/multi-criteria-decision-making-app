@@ -1,8 +1,8 @@
-import { HStack, Tag, Td, Text } from "@chakra-ui/react";
+import { HStack, Tag, Text } from "@chakra-ui/react";
 import { type PrimitiveAtom, useAtomValue } from "jotai";
 
-import { CELL_WIDTH } from "@/@Config/Table";
 import type { ProductDto } from "@/Application/Dtos/Product.dto";
+import { Cell } from "../Cell";
 
 type Props = {
   productAtom: PrimitiveAtom<ProductDto>;
@@ -12,20 +12,12 @@ export default function TableFooterCell({ productAtom }: Props) {
   const product = useAtomValue(productAtom);
 
   return (
-    <Td
-      textAlign="center"
-      px={2}
-      w={CELL_WIDTH}
-      minW={CELL_WIDTH}
-      maxW={CELL_WIDTH}
-      border="1px"
-      borderColor="gray.100"
-    >
+    <Cell textAlign="center">
       {product.rank === null ? null : (
         <HStack justifyContent="center">
           <Tag
             as={HStack}
-            spacing={1}
+            gap={1}
             size="md"
             justifyContent="space-between"
             variant="outline"
@@ -52,6 +44,6 @@ export default function TableFooterCell({ productAtom }: Props) {
           </Tag>
         </HStack>
       )}
-    </Td>
+    </Cell>
   );
 }

@@ -1,13 +1,11 @@
-import { Box, Flex, HStack, Progress, Td, Text } from "@chakra-ui/react";
+import { Box, Flex, HStack, Progress, Text } from "@chakra-ui/react";
 import { type PrimitiveAtom, useAtomValue } from "jotai";
 
-import { CELL_HEIGHT } from "@/@Config/Table";
 import { capitalize, isValidNotEmptyString } from "@/@Shared/@Utils/String";
 import type { CriterionDto } from "@/Application/Dtos/Criterion.dto";
 import { getCriterionWeightRelativeToMax } from "@/utils/criteria/criteria";
+import { CELL_HEIGHT, Cell, CRITERION_CELL_WIDTH } from "../../Cell";
 import EditCriterionButton from "./EditCriterionButton";
-
-const CRITERION_CELL_WIDTH = "240px";
 
 type Props = {
   criterionAtom: PrimitiveAtom<CriterionDto>;
@@ -23,33 +21,32 @@ export default function CriterionNameUnitCell({
   const criterion = useAtomValue(criterionAtom);
 
   return (
-    <Td
-      position="relative"
-      pl={2}
-      pr={1}
-      w={CRITERION_CELL_WIDTH}
-      h={CELL_HEIGHT}
-      border="1px"
-      borderColor="gray.100"
-    >
-      <Text position="absolute" top={0} left={0} fontSize="xs" opacity={0.5}>
-        {criterion.defaultRowIdx} - {criterion.uuid.slice(0, 8)}
-      </Text>
-
-      <HStack justifyContent="space-between">
+    <Cell>
+      <HStack
+        position="relative"
+        w={CRITERION_CELL_WIDTH}
+        h={CELL_HEIGHT}
+        px={2}
+        justifyContent="space-between"
+      >
         <Flex flex={1} alignItems="center" justifyContent="space-between">
           {/*
-           * -- Name
+           * -- Name / Uuid
            */}
-          <Text
-            whiteSpace="break-spaces"
-            wordBreak="break-word"
-            fontWeight="semibold"
-          >
-            {isValidNotEmptyString(criterion.name)
-              ? capitalize(criterion.name)
-              : capitalize(`criterion ${rowIdx + 1}`)}
-          </Text>
+          <Box>
+            <Text
+              whiteSpace="break-spaces"
+              wordBreak="break-word"
+              fontWeight="semibold"
+            >
+              {isValidNotEmptyString(criterion.name)
+                ? capitalize(criterion.name)
+                : capitalize(`criterion ${rowIdx + 1}`)}
+            </Text>
+            <Text fontSize="xs" opacity={0.5} mt={-1}>
+              {criterion.defaultRowIdx} - {criterion.uuid.slice(0, 8)}
+            </Text>
+          </Box>
 
           {/*
            * -- Unit
@@ -65,32 +62,48 @@ export default function CriterionNameUnitCell({
          * -- Edit
          */}
         <EditCriterionButton criterionAtom={criterionAtom} />
-      </HStack>
 
-      <Box
-        className="CriterionWeightBarWrapper"
-        position="absolute"
-        left={0}
-        bottom="-2.4px"
-        width="100%"
-        pl={2}
-        pr={1}
-        boxSizing="border-box"
-        zIndex="auto"
-      >
-        <Progress
-          size="xs"
-          borderRadius="base"
-          colorScheme={criterion.beneficial === false ? "orange" : "blue"}
-          value={getCriterionWeightRelativeToMax(criterion.weight, maxWeight)}
-          opacity={0.7}
-          sx={{
-            "& > div": {
-              transition: "width .5s ease-in-out"
-            }
-          }}
-        />
-      </Box>
-    </Td>
+        <Box
+          className="CriterionWeightBarWrapper"
+          position="absolute"
+          left={2}
+          right={2}
+          bottom={-0.5}
+          boxSizing="border-box"
+          zIndex="auto"
+        >
+          <CriterionWeightBar
+            beneficial={criterion.beneficial === true}
+            weight={criterion.weight || 0}
+            maxWeight={maxWeight}
+          />
+        </Box>
+      </HStack>
+    </Cell>
+  );
+}
+
+function CriterionWeightBar({
+  beneficial,
+  weight,
+  maxWeight
+}: {
+  beneficial: boolean;
+  weight: number;
+  maxWeight: number;
+}) {
+  return (
+    <Progress
+      size="xs"
+      borderRadius="base"
+      colorScheme={beneficial === false ? "orange" : "blue"}
+      value={getCriterionWeightRelativeToMax(weight, maxWeight)}
+      opacity={0.7}
+      sx={{
+        "& > div": {
+          transition: "width .5s ease-in-out"
+        }
+      }}
+    />
   );
 }

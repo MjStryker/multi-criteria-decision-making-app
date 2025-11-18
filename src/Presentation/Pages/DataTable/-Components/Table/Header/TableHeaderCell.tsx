@@ -1,9 +1,9 @@
-import { Box, SimpleGrid, Td, Text, VStack } from "@chakra-ui/react";
+import { Box, SimpleGrid, Text, VStack } from "@chakra-ui/react";
 import { type PrimitiveAtom, useAtom } from "jotai";
 
-import { CELL_WIDTH } from "@/@Config/Table";
 import { isValidNotEmptyString } from "@/@Shared/@Utils/String";
 import type { ProductDto } from "@/Application/Dtos/Product.dto";
+import { Cell, HEADER_CELL_HEIGHT } from "../Cell";
 import EditProductButton from "./EditProductButton";
 
 type Props = {
@@ -15,14 +15,7 @@ export default function TableHeaderCell({ columnIdx, productAtom }: Props) {
   const [product] = useAtom(productAtom);
 
   return (
-    <Td
-      position="relative"
-      minW={CELL_WIDTH}
-      maxW={CELL_WIDTH}
-      px={2}
-      border="1px"
-      borderColor="gray.100"
-    >
+    <Cell position="relative" h={HEADER_CELL_HEIGHT} minH={HEADER_CELL_HEIGHT}>
       <Text position="absolute" top={0} left={0} fontSize="xs" opacity={0.5}>
         {columnIdx} - {product.uuid.slice(0, 8)}
       </Text>
@@ -31,7 +24,8 @@ export default function TableHeaderCell({ columnIdx, productAtom }: Props) {
         className="CellContainer"
         alignItems="stretch"
         justifyContent="space-between"
-        minH="70px"
+        h="full"
+        p={2}
       >
         <SimpleGrid
           className="FirstRowContainer"
@@ -58,6 +52,6 @@ export default function TableHeaderCell({ columnIdx, productAtom }: Props) {
           {product.reference}
         </Text>
       </VStack>
-    </Td>
+    </Cell>
   );
 }

@@ -17,7 +17,7 @@ export default function DataTable() {
         overflow="auto"
         h="full"
       >
-        <Table w="auto">
+        <Table w="min-content">
           <TableHeader />
 
           <TableBody />

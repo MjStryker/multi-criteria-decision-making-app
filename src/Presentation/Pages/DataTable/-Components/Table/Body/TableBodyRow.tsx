@@ -1,11 +1,11 @@
-import { Td, Tr } from "@chakra-ui/react";
+import { Tr } from "@chakra-ui/react";
 import { atom, type PrimitiveAtom, useAtomValue } from "jotai";
 import { useMemo } from "react";
 
-import { CELL_HEIGHT, CELL_WIDTH } from "@/@Config/Table";
 import { ProductCriterionValueListAtom } from "@/Application/Atoms/ProductCriterionValueList.atom";
 import type { CriterionDto } from "@/Application/Dtos/Criterion.dto";
 import type { ProductCriterionValueDto } from "@/Application/Dtos/ProductCriteriaValue.dto";
+import { ADD_PRODUCT_CELL_WIDTH, Cell } from "../Cell";
 import CriterionNameUnitCell from "./Cell/CriterionNameUnitCell";
 import CriterionWeightCell from "./Cell/CriterionWeightCell";
 import CriterionProductValueCell from "./Cell/ProductCriterionValueCell";
@@ -91,14 +91,6 @@ export default function TableBodyRow({
        * PRODUCTS - CRITERION VALUES
        */}
       {productCriterionListValueAtoms.map(criterionProductValueAtom => {
-        // const criterionProductValue = productCriterionValueList.find(
-        //   ({ criterionUuid, productUuid }) => criterion.uuid === criterionUuid && product.uuid === productUuid
-        // );
-
-        // if (!criterionProductValue) {
-        //   return <Td key={product.uuid} />;
-        // }
-
         return (
           <CriterionProductValueCell
             key={`${criterionProductValueAtom}`}
@@ -110,7 +102,12 @@ export default function TableBodyRow({
       {/*
        * --------
        */}
-      <Td w={CELL_WIDTH} h={CELL_HEIGHT} border="none" />
+      <Cell
+        border="none"
+        w={ADD_PRODUCT_CELL_WIDTH}
+        minW={ADD_PRODUCT_CELL_WIDTH}
+        maxW={ADD_PRODUCT_CELL_WIDTH}
+      />
     </Tr>
   );
 }

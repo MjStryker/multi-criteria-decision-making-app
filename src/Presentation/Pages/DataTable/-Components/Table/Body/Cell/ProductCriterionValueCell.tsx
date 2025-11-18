@@ -3,15 +3,14 @@ import {
   EditableInput,
   EditablePreview,
   Input,
-  Td,
   Text
 } from "@chakra-ui/react";
 import { getDefaultStore, type PrimitiveAtom, useAtom } from "jotai";
 import { useState } from "react";
 
-import { CELL_HEIGHT, CELL_WIDTH } from "@/@Config/Table";
 import { isValidNotEmptyString } from "@/@Shared/@Utils/String";
 import type { ProductCriterionValueDto } from "@/Application/Dtos/ProductCriteriaValue.dto";
+import { Cell } from "../../Cell";
 
 type Props = {
   productCriterionValueAtom: PrimitiveAtom<ProductCriterionValueDto>;
@@ -56,22 +55,13 @@ export default function ProductCriterionValueCell({
   };
 
   return (
-    <Td
-      position="relative"
-      isNumeric
-      p={0}
-      w={CELL_WIDTH}
-      h={CELL_HEIGHT}
-      border="1px"
-      borderColor="gray.100"
-    >
+    <Cell isNumeric position="relative">
       <Text position="absolute" top={0} left={0} fontSize="xs" color="gray.500">
         {productCriterionValue.criterionRankPts}
       </Text>
 
       <Editable
         flex={1}
-        w={CELL_WIDTH}
         h="full"
         value={value?.toString()}
         onChange={onChange}
@@ -103,6 +93,6 @@ export default function ProductCriterionValueCell({
           h="full"
         />
       </Editable>
-    </Td>
+    </Cell>
   );
 }
