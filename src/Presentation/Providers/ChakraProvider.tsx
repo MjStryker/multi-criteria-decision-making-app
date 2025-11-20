@@ -5,6 +5,13 @@ const theme = extendTheme({
     heading: `'Roboto', sans-serif`,
     body: `'Roboto', sans-serif`,
     mono: `'Roboto Mono', monospace`
+  },
+  styles: {
+    global: {
+      body: {
+        bg: "gray.50"
+      }
+    }
   }
 });
 

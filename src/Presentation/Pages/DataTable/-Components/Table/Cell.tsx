@@ -22,7 +22,8 @@ export const Cell = forwardRef<HTMLTableCellElement, ComponentProps<typeof Td>>(
         minH={CELL_HEIGHT}
         // maxH={CELL_HEIGHT}
         border="1px solid"
-        borderColor="gray.100"
+        borderColor="gray.200"
+        // bg="white"
         p={0}
         {...props}
       >

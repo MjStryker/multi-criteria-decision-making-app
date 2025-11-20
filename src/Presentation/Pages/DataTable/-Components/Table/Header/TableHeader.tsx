@@ -51,7 +51,7 @@ export default function TableHeader() {
         {/*
          * SORT BUTTON
          */}
-        <Cell border="none">
+        <Cell border="none" bg="transparent">
           {/* <ButtonGroup variant="outline" size="sm" color="gray.500" isAttached>
             <IconButton
               aria-label="Sort criteria by weight"
@@ -75,6 +75,7 @@ export default function TableHeader() {
           minW={CRITERION_WEIGHT_CELL_WIDTH}
           maxW={CRITERION_WEIGHT_CELL_WIDTH}
           border="none"
+          bg="transparent"
         >
           <Icon as={AnvilIcon} color="gray.400" fontSize="2xl" />
           <Text
@@ -98,10 +99,11 @@ export default function TableHeader() {
          * PRODUCTS - ADD BUTTON
          */}
         <Cell
-          border="none"
           w={ADD_PRODUCT_CELL_WIDTH}
           minW={ADD_PRODUCT_CELL_WIDTH}
           maxW={ADD_PRODUCT_CELL_WIDTH}
+          border="none"
+          bg="transparent"
         >
           <Box p={2}>
             <IconButton

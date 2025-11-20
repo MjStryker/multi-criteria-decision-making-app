@@ -49,7 +49,7 @@ export default function TableFooter() {
         {/*
          * CRITERION - ADD BUTTON
          */}
-        <Cell border="none" colSpan={2}>
+        <Cell colSpan={2} border="none" bg="transparent">
           <Box p={2}>
             <Button
               w="full"
@@ -75,10 +75,11 @@ export default function TableFooter() {
          * --------
          */}
         <Cell
-          border="none"
           w={ADD_PRODUCT_CELL_WIDTH}
           minW={ADD_PRODUCT_CELL_WIDTH}
           maxW={ADD_PRODUCT_CELL_WIDTH}
+          border="none"
+          bg="transparent"
         />
       </Tr>
     </Tfoot>

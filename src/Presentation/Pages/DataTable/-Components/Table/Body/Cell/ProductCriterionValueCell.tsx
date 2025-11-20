@@ -75,12 +75,14 @@ export default function ProductCriterionValueCell({
           px={2}
           w="full"
           h="full"
-          bg={value !== null ? "white" : "gray.50"}
           borderRadius="sm"
           _hover={{
             border: "1px solid",
             borderColor: "gray.300"
           }}
+          {...(value === null && {
+            bg: "gray.100"
+          })}
         />
 
         <Input
