@@ -5,7 +5,7 @@ import TableBody from "./-Components/Table/Body/TableBody";
 import TableFooter from "./-Components/Table/Footer/TableFooter";
 import TableHeader from "./-Components/Table/Header/TableHeader";
 
-export default function DataTable() {
+export function DataTable() {
   return (
     <>
       <ComputingRanksIndicator />
@@ -14,6 +14,8 @@ export default function DataTable() {
         className="TableContainer"
         flex={1}
         display="flex"
+        justifyContent="center"
+        alignItems="center"
         overflow="auto"
         h="full"
       >
