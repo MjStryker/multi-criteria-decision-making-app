@@ -2,8 +2,7 @@ import {
   Editable,
   EditableInput,
   EditablePreview,
-  Input,
-  useColorModeValue
+  Input
 } from "@chakra-ui/react";
 import { type PrimitiveAtom, useAtom } from "jotai";
 import { useEffect, useState } from "react";
@@ -73,9 +72,10 @@ export default function CriterionWeightCell({ criterionAtom }: Props) {
           fontSize="md"
           fontWeight="semibold"
           borderRadius="sm"
+          transition="none"
           color={criterion.beneficial === false ? "orange.600" : "blue.600"}
           _hover={{
-            background: useColorModeValue("gray.100", "gray.700")
+            background: "gray.100"
           }}
         />
 

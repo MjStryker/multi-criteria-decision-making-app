@@ -1,7 +1,8 @@
 import { Box, SimpleGrid, Text, VStack } from "@chakra-ui/react";
-import { type PrimitiveAtom, useAtom } from "jotai";
+import { type PrimitiveAtom, useAtom, useAtomValue } from "jotai";
 
 import { isValidNotEmptyString } from "@/@Shared/@Utils/String";
+import { AppSettingsAtoms } from "@/Application/Atoms/AppSettings.atom";
 import type { ProductDto } from "@/Application/Dtos/Product.dto";
 import { Cell, HEADER_CELL_HEIGHT } from "../Cell";
 import EditProductButton from "./EditProductButton";
@@ -13,6 +14,8 @@ type Props = {
 
 export default function TableHeaderCell({ columnIdx, productAtom }: Props) {
   const [product] = useAtom(productAtom);
+
+  const advancedMode = useAtomValue(AppSettingsAtoms.advancedMode);
 
   return (
     <Cell h={HEADER_CELL_HEIGHT} minH={HEADER_CELL_HEIGHT}>
@@ -45,9 +48,11 @@ export default function TableHeaderCell({ columnIdx, productAtom }: Props) {
                 : `Item ${columnIdx + 1}`}
             </Text>
 
-            <Text fontSize="xs" opacity={0.5} mt={-1}>
-              {columnIdx} - {product.uuid.slice(0, 8)}
-            </Text>
+            {advancedMode ? (
+              <Text fontSize="xs" opacity={0.5} mt={-1}>
+                {columnIdx} - {product.uuid.slice(0, 8)}
+              </Text>
+            ) : null}
           </Box>
 
           <EditProductButton productAtom={productAtom} />

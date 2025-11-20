@@ -2,6 +2,7 @@ import { Box, Flex, HStack, Progress, Text } from "@chakra-ui/react";
 import { type PrimitiveAtom, useAtomValue } from "jotai";
 
 import { capitalize, isValidNotEmptyString } from "@/@Shared/@Utils/String";
+import { AppSettingsAtoms } from "@/Application/Atoms/AppSettings.atom";
 import type { CriterionDto } from "@/Application/Dtos/Criterion.dto";
 import { getCriterionWeightRelativeToMax } from "@/utils/criteria/criteria";
 import { CELL_HEIGHT, Cell, CRITERION_CELL_WIDTH } from "../../Cell";
@@ -19,6 +20,8 @@ export default function CriterionNameUnitCell({
   maxWeight
 }: Props) {
   const criterion = useAtomValue(criterionAtom);
+
+  const advancedMode = useAtomValue(AppSettingsAtoms.advancedMode);
 
   return (
     <Cell>
@@ -48,9 +51,12 @@ export default function CriterionNameUnitCell({
                 ? capitalize(criterion.name)
                 : capitalize(`criterion ${rowIdx + 1}`)}
             </Text>
-            <Text fontSize="xs" opacity={0.5} mt={-1}>
-              {criterion.defaultRowIdx} - {criterion.uuid.slice(0, 8)}
-            </Text>
+
+            {advancedMode ? (
+              <Text fontSize="xs" opacity={0.5} mt={-1}>
+                {criterion.defaultRowIdx} - {criterion.uuid.slice(0, 8)}
+              </Text>
+            ) : null}
           </Box>
 
           {/*

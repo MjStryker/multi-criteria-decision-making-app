@@ -4,7 +4,7 @@ import { type ComponentProps, forwardRef } from "react";
 export const HEADER_CELL_HEIGHT = "64px";
 
 export const CRITERION_CELL_WIDTH = "220px";
-export const CRITERION_WEIGHT_CELL_WIDTH = "100px";
+export const CRITERION_WEIGHT_CELL_WIDTH = "72px";
 export const ADD_PRODUCT_CELL_WIDTH = "64px";
 
 export const CELL_WIDTH = "180px";

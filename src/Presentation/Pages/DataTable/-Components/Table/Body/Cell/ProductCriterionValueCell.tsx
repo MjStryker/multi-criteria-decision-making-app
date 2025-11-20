@@ -5,10 +5,16 @@ import {
   Input,
   Text
 } from "@chakra-ui/react";
-import { getDefaultStore, type PrimitiveAtom, useAtom } from "jotai";
+import {
+  getDefaultStore,
+  type PrimitiveAtom,
+  useAtom,
+  useAtomValue
+} from "jotai";
 import { useState } from "react";
 
 import { isValidNotEmptyString } from "@/@Shared/@Utils/String";
+import { AppSettingsAtoms } from "@/Application/Atoms/AppSettings.atom";
 import type { ProductCriterionValueDto } from "@/Application/Dtos/ProductCriteriaValue.dto";
 import { Cell } from "../../Cell";
 
@@ -22,6 +28,8 @@ export default function ProductCriterionValueCell({
   const [productCriterionValue, setProductCriterionValue] = useAtom(
     productCriterionValueAtom
   );
+
+  const advancedMode = useAtomValue(AppSettingsAtoms.advancedMode);
 
   const [value, setValue] = useState<number | null>(
     productCriterionValue?.value ?? null
@@ -56,9 +64,17 @@ export default function ProductCriterionValueCell({
 
   return (
     <Cell isNumeric position="relative">
-      <Text position="absolute" top={0} left={0} fontSize="xs" color="gray.500">
-        {productCriterionValue.criterionRankPts}
-      </Text>
+      {advancedMode ? (
+        <Text
+          position="absolute"
+          top={0}
+          left={0}
+          fontSize="xs"
+          color="gray.500"
+        >
+          {productCriterionValue.criterionRankPts}
+        </Text>
+      ) : null}
 
       <Editable
         flex={1}
@@ -76,13 +92,13 @@ export default function ProductCriterionValueCell({
           w="full"
           h="full"
           borderRadius="sm"
+          transition="none"
           _hover={{
-            border: "1px solid",
-            borderColor: "gray.300"
+            background: "gray.100"
           }}
-          {...(value === null && {
-            bg: "gray.100"
-          })}
+          // {...(value === null && {
+          //   bg: "gray.100"
+          // })}
         />
 
         <Input
