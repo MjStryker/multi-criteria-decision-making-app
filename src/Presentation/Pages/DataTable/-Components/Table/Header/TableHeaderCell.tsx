@@ -15,11 +15,7 @@ export default function TableHeaderCell({ columnIdx, productAtom }: Props) {
   const [product] = useAtom(productAtom);
 
   return (
-    <Cell position="relative" h={HEADER_CELL_HEIGHT} minH={HEADER_CELL_HEIGHT}>
-      <Text position="absolute" top={0} left={0} fontSize="xs" opacity={0.5}>
-        {columnIdx} - {product.uuid.slice(0, 8)}
-      </Text>
-
+    <Cell h={HEADER_CELL_HEIGHT} minH={HEADER_CELL_HEIGHT}>
       <VStack
         className="CellContainer"
         alignItems="stretch"
@@ -33,19 +29,28 @@ export default function TableHeaderCell({ columnIdx, productAtom }: Props) {
           alignItems="center"
           gap={1}
         >
-          <Text
-            whiteSpace="break-spaces"
-            wordBreak="break-word"
-            fontWeight="semibold"
-          >
-            {isValidNotEmptyString(product.name)
-              ? product.name
-              : `Product ${columnIdx + 1}`}
-          </Text>
-
           <Box>
-            <EditProductButton productAtom={productAtom} />
+            <Text
+              whiteSpace="break-spaces"
+              wordBreak="break-word"
+              fontWeight="semibold"
+              {...(!isValidNotEmptyString(product.name) && {
+                fontStyle: "italic",
+                fontWeight: "medium",
+                color: "gray.600"
+              })}
+            >
+              {isValidNotEmptyString(product.name)
+                ? product.name
+                : `Item ${columnIdx + 1}`}
+            </Text>
+
+            <Text fontSize="xs" opacity={0.5} mt={-1}>
+              {columnIdx} - {product.uuid.slice(0, 8)}
+            </Text>
           </Box>
+
+          <EditProductButton productAtom={productAtom} />
         </SimpleGrid>
 
         <Text color="gray.500" fontSize="xs">

@@ -1,10 +1,11 @@
-import { Button, ChakraProvider, Flex } from "@chakra-ui/react";
+import { Button, Flex } from "@chakra-ui/react";
 
 import DataTable from "./Pages/DataTable";
+import { ChakraAppProvider } from "./Providers/ChakraProvider";
 
 export default function App() {
   return (
-    <ChakraProvider>
+    <ChakraAppProvider>
       <Flex className="AppContainer">
         <Button
           position="absolute"
@@ -21,6 +22,6 @@ export default function App() {
 
         <DataTable />
       </Flex>
-    </ChakraProvider>
+    </ChakraAppProvider>
   );
 }
