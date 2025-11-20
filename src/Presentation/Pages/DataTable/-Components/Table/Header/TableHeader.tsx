@@ -51,7 +51,7 @@ export default function TableHeader() {
         {/*
          * SORT BUTTON
          */}
-        <Cell>
+        <Cell border="none">
           {/* <ButtonGroup variant="outline" size="sm" color="gray.500" isAttached>
             <IconButton
               aria-label="Sort criteria by weight"
