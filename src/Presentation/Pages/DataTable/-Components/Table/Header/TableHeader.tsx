@@ -108,10 +108,9 @@ export default function TableHeader() {
               colorScheme={nbProductsRemaining > 0 ? "blue" : "gray"}
               aria-label="Add product"
               size="sm"
+              rounded="full"
               icon={<AddIcon />}
               onClick={handleAddProduct}
-              boxShadow="base"
-              transition="background .2s"
             />
           </Box>
         </Cell>

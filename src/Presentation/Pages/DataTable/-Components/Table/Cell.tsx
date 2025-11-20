@@ -1,7 +1,7 @@
 import { Td } from "@chakra-ui/react";
 import { type ComponentProps, forwardRef } from "react";
 
-export const HEADER_CELL_HEIGHT = "120px";
+export const HEADER_CELL_HEIGHT = "64px";
 
 export const CRITERION_CELL_WIDTH = "220px";
 export const CRITERION_WEIGHT_CELL_WIDTH = "100px";

@@ -52,10 +52,6 @@ export default function TableHeaderCell({ columnIdx, productAtom }: Props) {
 
           <EditProductButton productAtom={productAtom} />
         </SimpleGrid>
-
-        <Text color="gray.500" fontSize="xs">
-          {product.reference}
-        </Text>
       </VStack>
     </Cell>
   );

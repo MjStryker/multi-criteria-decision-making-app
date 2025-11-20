@@ -38,6 +38,11 @@ export default function CriterionNameUnitCell({
               whiteSpace="break-spaces"
               wordBreak="break-word"
               fontWeight="semibold"
+              {...(!isValidNotEmptyString(criterion.name) && {
+                fontStyle: "italic",
+                fontWeight: "medium",
+                color: "gray.600"
+              })}
             >
               {isValidNotEmptyString(criterion.name)
                 ? capitalize(criterion.name)
