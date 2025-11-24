@@ -13,8 +13,11 @@ import {
 } from "jotai";
 import { useState } from "react";
 
+import { computeProductCriterionValueRankPts } from "@/@Compute/ComputeProductCriterionValueRankPoints";
 import { isValidNotEmptyString } from "@/@Shared/@Utils/String";
 import { AppSettingsAtoms } from "@/Application/Atoms/AppSettings.atom";
+import { CriterionListAtom } from "@/Application/Atoms/CriterionList.atom";
+import { ProductCriterionValueListAtom } from "@/Application/Atoms/ProductCriterionValueList.atom";
 import type { ProductCriterionValueDto } from "@/Application/Dtos/ProductCriteriaValue.dto";
 import { Cell } from "../../Cell";
 
@@ -30,6 +33,7 @@ export default function ProductCriterionValueCell({
   );
 
   const advancedMode = useAtomValue(AppSettingsAtoms.advancedMode);
+  const autoRecompute = useAtomValue(AppSettingsAtoms.autoRecompute);
 
   const [value, setValue] = useState<number | null>(
     productCriterionValue?.value ?? null
@@ -48,18 +52,24 @@ export default function ProductCriterionValueCell({
   };
 
   const onSubmit = () => {
-    const _store = getDefaultStore();
+    const store = getDefaultStore();
+
     // Update value
     setProductCriterionValue({ ...productCriterionValue, value });
-    // // Recompute criterion rank points
-    // const criterion = store.get(CriterionListAtom).find(c => c.uuid === productCriterionValue.criterionUuid);
-    // if (criterion) {
-    //   const updatedRankPts = computeProductCriterionValueRankPts(
-    //     [criterion],
-    //     store.get(ProductCriterionValueListAtom)
-    //   );
-    //   store.set(ProductCriterionValueListAtom, updatedRankPts);
-    // }
+
+    if (autoRecompute) {
+      // Recompute criterion rank points
+      const criterion = store
+        .get(CriterionListAtom)
+        .find(c => c.uuid === productCriterionValue.criterionUuid);
+      if (criterion) {
+        const updatedRankPts = computeProductCriterionValueRankPts(
+          [criterion],
+          store.get(ProductCriterionValueListAtom)
+        );
+        store.set(ProductCriterionValueListAtom, updatedRankPts);
+      }
+    }
   };
 
   return (
