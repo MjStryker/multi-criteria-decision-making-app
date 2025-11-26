@@ -1,10 +1,13 @@
 import {
+  Center,
   Editable,
   EditableInput,
   EditablePreview,
+  Icon,
   Input,
   Text
 } from "@chakra-ui/react";
+import { IconMinus } from "@tabler/icons-react";
 import {
   getDefaultStore,
   type PrimitiveAtom,
@@ -86,6 +89,12 @@ export default function ProductCriterionValueCell({
         </Text>
       ) : null}
 
+      {value === null ? (
+        <Center position="absolute" top={0} bottom={0} right={2}>
+          <Icon as={IconMinus} boxSize={4} color="blackAlpha.300" />
+        </Center>
+      ) : null}
+
       <Editable
         flex={1}
         h="full"
@@ -119,6 +128,7 @@ export default function ProductCriterionValueCell({
           px={2}
           w="full"
           h="full"
+          bg="gray.50"
         />
       </Editable>
     </Cell>
