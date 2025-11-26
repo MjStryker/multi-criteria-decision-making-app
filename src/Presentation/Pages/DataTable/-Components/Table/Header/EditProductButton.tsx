@@ -1,5 +1,5 @@
-import { SmallCloseIcon as CloseIcon } from "@chakra-ui/icons";
 import {
+  Icon,
   IconButton,
   Popover,
   PopoverArrow,
@@ -7,9 +7,9 @@ import {
   PopoverContent,
   PopoverTrigger
 } from "@chakra-ui/react";
+import { IconPencil } from "@tabler/icons-react";
 import type { PrimitiveAtom } from "jotai";
 import { useState } from "react";
-import { MdEdit as EditIcon } from "react-icons/md";
 
 import type { ProductDto } from "@/Application/Dtos/Product.dto";
 import EditProductForm from "./EditProductForm";
@@ -38,9 +38,13 @@ export default function EditProductButton({ productAtom }: Props) {
         <IconButton
           aria-label="Edit product"
           size="sm"
-          variant="outline"
+          variant="ghost"
           color="gray.500"
-          icon={!isOpen ? <EditIcon /> : <CloseIcon />}
+          icon={
+            <Icon boxSize="20px">
+              <IconPencil />
+            </Icon>
+          }
         />
       </PopoverTrigger>
 

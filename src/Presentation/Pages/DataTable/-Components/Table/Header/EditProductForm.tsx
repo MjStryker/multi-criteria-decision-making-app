@@ -1,5 +1,5 @@
-import { DeleteIcon } from "@chakra-ui/icons";
-import { Button, HStack, IconButton, Stack } from "@chakra-ui/react";
+import { Button, HStack, Icon, IconButton, Stack } from "@chakra-ui/react";
+import { IconTrash } from "@tabler/icons-react";
 import { type PrimitiveAtom, useAtom, useSetAtom } from "jotai";
 import {
   type Dispatch,
@@ -116,7 +116,11 @@ export default function EditProductForm({
         <HStack>
           <IconButton
             colorScheme="red"
-            icon={<DeleteIcon />}
+            icon={
+              <Icon boxSize="20px">
+                <IconTrash />
+              </Icon>
+            }
             aria-label="Delete product"
             onClick={onDelete}
           />

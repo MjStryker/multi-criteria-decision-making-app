@@ -1,7 +1,6 @@
-import { AddIcon } from "@chakra-ui/icons";
 import { Box, Icon, IconButton, Text, Thead, Tr } from "@chakra-ui/react";
+import { IconPlus, IconWeight } from "@tabler/icons-react";
 import { getDefaultStore, useAtom, useSetAtom } from "jotai";
-import { GiAnvil as AnvilIcon } from "react-icons/gi";
 
 import { CRITERION } from "@/@Config/Criteria";
 import { PRODUCTS_MAX_ITEMS } from "@/@Config/Product";
@@ -77,11 +76,14 @@ export default function TableHeader() {
           border="none"
           bg="transparent"
         >
-          <Icon as={AnvilIcon} color="gray.400" fontSize="2xl" />
+          <Icon as={IconWeight} color="gray.400" fontSize="xl" />
           <Text
             fontSize="xs"
+            fontWeight="semibold"
+            fontFamily="monospace"
             color="gray.400"
-          >{`${CRITERION.WEIGHT.MIN} - ${CRITERION.WEIGHT.MAX}`}</Text>
+            mt={-1}
+          >{`${CRITERION.WEIGHT.MIN}-${CRITERION.WEIGHT.MAX}`}</Text>
         </Cell>
 
         {/*
@@ -111,7 +113,11 @@ export default function TableHeader() {
               aria-label="Add product"
               size="sm"
               rounded="full"
-              icon={<AddIcon />}
+              icon={
+                <Icon boxSize="20px">
+                  <IconPlus />
+                </Icon>
+              }
               onClick={handleAddProduct}
             />
           </Box>

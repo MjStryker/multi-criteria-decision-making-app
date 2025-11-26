@@ -1,14 +1,15 @@
-import { DeleteIcon, TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import {
   Button,
   ButtonGroup,
   FormControl,
   FormLabel,
   HStack,
+  Icon,
   IconButton,
   Stack,
   VStack
 } from "@chakra-ui/react";
+import { IconTrash } from "@tabler/icons-react";
 import { type PrimitiveAtom, useAtom, useSetAtom } from "jotai";
 import {
   type Dispatch,
@@ -146,9 +147,6 @@ export default function EditCriterionForm({
               flex={1}
               aria-label="Non beneficial"
               variant={beneficial === false ? "solid" : "outline"}
-              rightIcon={
-                beneficial === false ? <TriangleDownIcon /> : undefined
-              }
               onClick={toggleBeneficial}
             >
               Lowest
@@ -157,7 +155,6 @@ export default function EditCriterionForm({
               flex={1}
               aria-label="Beneficial"
               variant={beneficial === true ? "solid" : "outline"}
-              rightIcon={beneficial === true ? <TriangleUpIcon /> : undefined}
               onClick={toggleBeneficial}
             >
               Highest
@@ -168,7 +165,11 @@ export default function EditCriterionForm({
         <HStack>
           <IconButton
             colorScheme="red"
-            icon={<DeleteIcon />}
+            icon={
+              <Icon boxSize="20px">
+                <IconTrash />
+              </Icon>
+            }
             aria-label="Delete criterion"
             onClick={onDelete}
           />

@@ -1,5 +1,5 @@
-import { SmallCloseIcon as CloseIcon } from "@chakra-ui/icons";
 import {
+  Icon,
   IconButton,
   Popover,
   PopoverArrow,
@@ -7,9 +7,9 @@ import {
   PopoverContent,
   PopoverTrigger
 } from "@chakra-ui/react";
+import { IconPencil } from "@tabler/icons-react";
 import type { PrimitiveAtom } from "jotai";
 import { useState } from "react";
-import { MdEdit as EditIcon } from "react-icons/md";
 
 import type { CriterionDto } from "@/Application/Dtos/Criterion.dto";
 import EditCriterionForm from "./EditCriterionForm";
@@ -38,9 +38,13 @@ export default function EditCriterionButton({ criterionAtom }: Props) {
         <IconButton
           aria-label="Edit criterion"
           size="sm"
-          variant="outline"
+          variant="ghost"
           color="gray.500"
-          icon={!isOpen ? <EditIcon /> : <CloseIcon />}
+          icon={
+            <Icon boxSize="20px">
+              <IconPencil />
+            </Icon>
+          }
         />
       </PopoverTrigger>
 

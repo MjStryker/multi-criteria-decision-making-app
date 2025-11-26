@@ -1,5 +1,5 @@
-import { AddIcon } from "@chakra-ui/icons";
-import { Box, Button, Tfoot, Tr } from "@chakra-ui/react";
+import { Box, Icon, IconButton, Tfoot, Tr } from "@chakra-ui/react";
+import { IconPlus } from "@tabler/icons-react";
 import { getDefaultStore, useAtom, useAtomValue, useSetAtom } from "jotai";
 
 import { CRITERIA_MAX_ITEMS } from "@/@Config/Criteria";
@@ -51,16 +51,18 @@ export default function TableFooter() {
          */}
         <Cell colSpan={2} border="none" bg="transparent">
           <Box p={2}>
-            <Button
+            <IconButton
+              aria-label="Add criterion"
               w="full"
               size="sm"
               rounded="full"
               colorScheme={nbCriteriaRemaining > 0 ? "blue" : "gray"}
               onClick={handleAddCriterion}
-              leftIcon={<AddIcon fontSize="xs" />}
             >
-              Add
-            </Button>
+              <Icon boxSize="20px">
+                <IconPlus />
+              </Icon>
+            </IconButton>
           </Box>
         </Cell>
 
