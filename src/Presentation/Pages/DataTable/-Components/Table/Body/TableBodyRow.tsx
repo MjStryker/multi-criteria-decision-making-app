@@ -102,13 +102,7 @@ export default function TableBodyRow({
       {/*
        * --------
        */}
-      <Cell
-        w={ADD_PRODUCT_CELL_WIDTH}
-        minW={ADD_PRODUCT_CELL_WIDTH}
-        maxW={ADD_PRODUCT_CELL_WIDTH}
-        border="none"
-        bg="transparent"
-      />
+      <Cell minW={ADD_PRODUCT_CELL_WIDTH} border="none" bg="transparent" />
     </Tr>
   );
 }

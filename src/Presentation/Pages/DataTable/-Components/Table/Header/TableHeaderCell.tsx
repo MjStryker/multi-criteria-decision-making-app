@@ -4,7 +4,7 @@ import { type PrimitiveAtom, useAtom, useAtomValue } from "jotai";
 import { isValidNotEmptyString } from "@/@Shared/@Utils/String";
 import { AppSettingsAtoms } from "@/Application/Atoms/AppSettings.atom";
 import type { ProductDto } from "@/Application/Dtos/Product.dto";
-import { CELL_HEIGHT, Cell } from "../Cell";
+import { Cell } from "../Cell";
 import EditProductButton from "./EditProductButton";
 
 type Props = {
@@ -18,7 +18,7 @@ export default function TableHeaderCell({ columnIdx, productAtom }: Props) {
   const debugMode = useAtomValue(AppSettingsAtoms.debugMode);
 
   return (
-    <Cell minH={CELL_HEIGHT}>
+    <Cell>
       <VStack
         className="CellContainer"
         alignItems="stretch"

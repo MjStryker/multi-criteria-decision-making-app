@@ -100,13 +100,7 @@ export default function TableHeader() {
         {/*
          * PRODUCTS - ADD BUTTON
          */}
-        <Cell
-          w={ADD_PRODUCT_CELL_WIDTH}
-          minW={ADD_PRODUCT_CELL_WIDTH}
-          maxW={ADD_PRODUCT_CELL_WIDTH}
-          border="none"
-          bg="transparent"
-        >
+        <Cell minW={ADD_PRODUCT_CELL_WIDTH} border="none" bg="transparent">
           <Box p={2}>
             <IconButton
               colorScheme={nbProductsRemaining > 0 ? "blue" : "gray"}
