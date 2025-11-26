@@ -15,7 +15,7 @@ type Props = {
 export default function TableHeaderCell({ columnIdx, productAtom }: Props) {
   const [product] = useAtom(productAtom);
 
-  const advancedMode = useAtomValue(AppSettingsAtoms.advancedMode);
+  const debugMode = useAtomValue(AppSettingsAtoms.debugMode);
 
   return (
     <Cell h={HEADER_CELL_HEIGHT} minH={HEADER_CELL_HEIGHT}>
@@ -48,7 +48,7 @@ export default function TableHeaderCell({ columnIdx, productAtom }: Props) {
                 : `Item ${columnIdx + 1}`}
             </Text>
 
-            {advancedMode ? (
+            {debugMode ? (
               <Text fontSize="xs" opacity={0.5} mt={-1}>
                 {columnIdx} - {product.uuid.slice(0, 8)}
               </Text>

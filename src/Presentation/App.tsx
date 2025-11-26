@@ -32,7 +32,10 @@ export default function App() {
 }
 
 function SettingsMenu() {
-  const [advanced, setAdvanced] = useAtom(AppSettingsAtoms.advancedMode);
+  const [debug, setDebug] = useAtom(AppSettingsAtoms.debugMode);
+  // const [advancedMode, setAdvancedMode] = useAtom(
+  //   AppSettingsAtoms.advancedMode
+  // );
   const [autoRecompute, setAutoRecompute] = useAtom(
     AppSettingsAtoms.autoRecompute
   );
@@ -56,8 +59,11 @@ function SettingsMenu() {
           alignItems="center"
           justifyContent="space-between"
           onClick={() => {
-            localStorage.clear();
-            window.location.reload();
+            // confirm
+            if (window.confirm("Clear all data?")) {
+              localStorage.clear();
+              window.location.reload();
+            }
           }}
         >
           Clear data
@@ -72,11 +78,21 @@ function SettingsMenu() {
           display="flex"
           alignItems="center"
           justifyContent="space-between"
-          onClick={() => setAdvanced(prev => !prev)}
+          onClick={() => setDebug(prev => !prev)}
+        >
+          Debug Mode
+          <Switch isChecked={debug} pointerEvents="none" />
+        </MenuItem>
+
+        {/* <MenuItem
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          onClick={() => setAdvancedMode(prev => !prev)}
         >
           Advanced Mode
-          <Switch isChecked={advanced} pointerEvents="none" />
-        </MenuItem>
+          <Switch isChecked={advancedMode} pointerEvents="none" />
+        </MenuItem> */}
 
         <MenuItem
           display="flex"

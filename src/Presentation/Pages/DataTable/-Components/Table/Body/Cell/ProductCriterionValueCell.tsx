@@ -32,7 +32,7 @@ export default function ProductCriterionValueCell({
     productCriterionValueAtom
   );
 
-  const advancedMode = useAtomValue(AppSettingsAtoms.advancedMode);
+  const debugMode = useAtomValue(AppSettingsAtoms.debugMode);
   const autoRecompute = useAtomValue(AppSettingsAtoms.autoRecompute);
 
   const [value, setValue] = useState<number | null>(
@@ -74,7 +74,7 @@ export default function ProductCriterionValueCell({
 
   return (
     <Cell isNumeric position="relative">
-      {advancedMode ? (
+      {debugMode ? (
         <Text
           position="absolute"
           top={0}

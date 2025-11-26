@@ -21,7 +21,7 @@ export default function CriterionNameUnitCell({
 }: Props) {
   const criterion = useAtomValue(criterionAtom);
 
-  const advancedMode = useAtomValue(AppSettingsAtoms.advancedMode);
+  const debugMode = useAtomValue(AppSettingsAtoms.debugMode);
 
   return (
     <Cell>
@@ -52,7 +52,7 @@ export default function CriterionNameUnitCell({
                 : capitalize(`criterion ${rowIdx + 1}`)}
             </Text>
 
-            {advancedMode ? (
+            {debugMode ? (
               <Text fontSize="xs" opacity={0.5} mt={-1}>
                 {criterion.defaultRowIdx} - {criterion.uuid.slice(0, 8)}
               </Text>
