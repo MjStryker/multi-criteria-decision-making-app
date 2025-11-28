@@ -1,6 +1,15 @@
-import { type PrimitiveAtom, useAtom } from "jotai";
+import {
+  getDefaultStore,
+  type PrimitiveAtom,
+  useAtom,
+  useAtomValue,
+  useSetAtom
+} from "jotai";
 import { type FormEvent, useEffect, useState } from "react";
 
+import { computeProductCriterionValueRankPts } from "@/@Compute/ComputeProductCriterionValueRankPoints";
+import { AppSettingsAtoms } from "@/Application/Atoms/AppSettings.atom";
+import { ProductCriterionValueListAtom } from "@/Application/Atoms/ProductCriterionValueList.atom";
 import type { CriterionDto } from "@/Application/Dtos/Criterion.dto";
 import { useCriteria } from "./useCriteria";
 
@@ -15,6 +24,10 @@ export function useCriterionForm({
 }: UseCriterionFormProps) {
   const [criterion, setCriterion] = useAtom(criterionAtom);
   const { removeCriterion } = useCriteria();
+  const setProductCriterionValueList = useSetAtom(
+    ProductCriterionValueListAtom
+  );
+  const autoRecompute = useAtomValue(AppSettingsAtoms.autoRecompute);
 
   const [name, setName] = useState<string>(criterion.name || "");
   const [unit, setUnit] = useState<string>(criterion.unit || "");
@@ -58,7 +71,22 @@ export function useCriterionForm({
    * * Form actions
    */
   const onSave = () => {
+    const beneficialChanged = beneficial !== criterion.beneficial;
+
+    // Update criterion
     setCriterion(prev => ({ ...prev, name, unit, beneficial }));
+
+    // Recompute rank points if beneficial changed and auto-recompute is enabled
+    if (autoRecompute && beneficialChanged) {
+      const store = getDefaultStore();
+      const updatedCriterion = { ...criterion, name, unit, beneficial };
+      const updatedRankPts = computeProductCriterionValueRankPts(
+        [updatedCriterion],
+        store.get(ProductCriterionValueListAtom)
+      );
+      setProductCriterionValueList(updatedRankPts);
+    }
+
     onClose();
   };
 
