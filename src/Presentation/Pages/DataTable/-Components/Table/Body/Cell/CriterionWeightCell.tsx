@@ -7,10 +7,10 @@ import {
 import { type PrimitiveAtom, useAtom } from "jotai";
 import { useEffect, useState } from "react";
 
-import { isValidNumber } from "@/@Shared/@Utils/Number";
+import { CRITERION } from "@/@Config/Criteria";
+import { clamp, isValidNumber } from "@/@Shared/@Utils/Number";
 import { isDefined } from "@/@Shared/@Utils/Object";
 import type { CriterionDto } from "@/Application/Dtos/Criterion.dto";
-import { clampCriterionWeightValue } from "@/utils/criteria/criteria";
 import { Cell, CRITERION_WEIGHT_CELL_WIDTH } from "../../Cell";
 
 type Props = {
@@ -36,13 +36,15 @@ export default function CriterionWeightCell({ criterionAtom }: Props) {
     const newWeight = parseFloat(nextValue);
 
     setWeight(
-      isDefined(newWeight) ? clampCriterionWeightValue(newWeight) : null
+      isDefined(newWeight)
+        ? clamp(newWeight, CRITERION.WEIGHT.MIN, CRITERION.WEIGHT.MAX)
+        : null
     );
   };
 
   const onSubmit = () => {
     const newWeight = isValidNumber(weight)
-      ? clampCriterionWeightValue(weight)
+      ? clamp(weight, CRITERION.WEIGHT.MIN, CRITERION.WEIGHT.MAX)
       : 0;
     setCriterion(prev => ({ ...prev, weight: newWeight }));
   };

@@ -4,7 +4,6 @@ import { type PrimitiveAtom, useAtomValue } from "jotai";
 import { capitalize, isValidNotEmptyString } from "@/@Shared/@Utils/String";
 import { AppSettingsAtoms } from "@/Application/Atoms/AppSettings.atom";
 import type { CriterionDto } from "@/Application/Dtos/Criterion.dto";
-import { getCriterionWeightRelativeToMax } from "@/utils/criteria/criteria";
 import { CELL_HEIGHT, Cell, CRITERION_CELL_WIDTH } from "../../Cell";
 import EditCriterionButton from "./EditCriterionButton";
 
@@ -103,12 +102,14 @@ function CriterionWeightBar({
   weight: number;
   maxWeight: number;
 }) {
+  const percentage = maxWeight > 0 ? (weight / maxWeight) * 100 : 0;
+
   return (
     <Progress
       size="xs"
       borderRadius="base"
       colorScheme={beneficial === false ? "orange" : "blue"}
-      value={getCriterionWeightRelativeToMax(weight, maxWeight)}
+      value={percentage}
       opacity={0.7}
       sx={{
         "& > div": {
