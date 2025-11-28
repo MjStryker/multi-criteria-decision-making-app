@@ -90,7 +90,13 @@ export default function ProductCriterionValueCell({
       ) : null}
 
       {value === null ? (
-        <Center position="absolute" top={0} bottom={0} right={2}>
+        <Center
+          position="absolute"
+          top={0}
+          bottom={0}
+          right={2}
+          pointerEvents="none"
+        >
           <Icon as={IconMinus} boxSize={4} color="blackAlpha.300" />
         </Center>
       ) : null}
