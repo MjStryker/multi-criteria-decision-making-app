@@ -10,18 +10,11 @@ import {
   VStack
 } from "@chakra-ui/react";
 import { IconTrash } from "@tabler/icons-react";
-import { type PrimitiveAtom, useAtom, useSetAtom } from "jotai";
-import {
-  type Dispatch,
-  type FormEvent,
-  type SetStateAction,
-  useEffect,
-  useState
-} from "react";
+import type { PrimitiveAtom } from "jotai";
+import { type Dispatch, type SetStateAction, useEffect } from "react";
 
-import { CriterionListAtom } from "@/Application/Atoms/CriterionList.atom";
-import { ProductCriterionValueListAtom } from "@/Application/Atoms/ProductCriterionValueList.atom";
 import type { CriterionDto } from "@/Application/Dtos/Criterion.dto";
+import { useCriterionForm } from "@/Application/Hooks/useCriterionForm";
 import TextInput from "@/Presentation/Components/Form/TextInput";
 
 type Props = {
@@ -35,22 +28,17 @@ export default function EditCriterionForm({
   setParentIsDirty,
   onParentClose
 }: Props) {
-  const [criterion, setCriterion] = useAtom(criterionAtom);
-  const setCriterionList = useSetAtom(CriterionListAtom);
-  const setProductCriterionValueList = useSetAtom(
-    ProductCriterionValueListAtom
-  );
-
-  const [name, setName] = useState<string>(criterion.name || "");
-  const [unit, setUnit] = useState<string>(criterion.unit || "");
-  const [beneficial, setBeneficial] = useState<boolean | null>(
-    criterion.beneficial
-  );
-
-  const isDirty =
-    name !== criterion.name ||
-    unit !== criterion.unit ||
-    beneficial !== criterion.beneficial;
+  const {
+    name,
+    unit,
+    beneficial,
+    isDirty,
+    onNameChange,
+    onUnitChange,
+    toggleBeneficial,
+    onDelete,
+    onSubmit
+  } = useCriterionForm({ criterionAtom, onClose: onParentClose });
 
   /**
    * * Update parent props
@@ -58,64 +46,6 @@ export default function EditCriterionForm({
   useEffect(() => {
     setParentIsDirty(isDirty);
   }, [isDirty, setParentIsDirty]);
-
-  /**
-   * * Sync local state on props change
-   */
-  useEffect(() => {
-    setName(criterion.name || "");
-  }, [criterion.name]);
-
-  useEffect(() => {
-    setUnit(criterion.unit || "");
-  }, [criterion.unit]);
-
-  useEffect(() => {
-    setBeneficial(criterion.beneficial);
-  }, [criterion.beneficial]);
-
-  /**
-   * * Handle Inputs change
-   */
-  const onNameChange = (e: FormEvent<HTMLInputElement>) =>
-    setName(e.currentTarget.value);
-  const onUnitChange = (e: FormEvent<HTMLInputElement>) =>
-    setUnit(e.currentTarget.value);
-
-  const toggleBeneficial = () => {
-    setBeneficial(prev => !prev);
-  };
-
-  /**
-   * * Dialog actions
-   */
-  const onClose = () => {
-    onParentClose();
-  };
-
-  const onSave = () => {
-    setCriterion(prev => ({ ...prev, name, unit, beneficial }));
-    onClose();
-  };
-
-  const onDelete = () => {
-    // Remove criterion from list
-    setCriterionList(prev => prev.filter(c => c.uuid !== criterion.uuid));
-    // Remove product criterion values
-    setProductCriterionValueList(prev =>
-      prev.filter(p => p.criterionUuid !== criterion.uuid)
-    );
-    // Close dialog
-    onClose();
-  };
-
-  /**
-   * * Form
-   */
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    onSave();
-  };
 
   return (
     <form onSubmit={onSubmit}>
@@ -174,7 +104,7 @@ export default function EditCriterionForm({
             onClick={onDelete}
           />
 
-          <Button flex={1} variant="outline" onClick={onClose}>
+          <Button flex={1} variant="outline" onClick={onParentClose}>
             Cancel
           </Button>
 

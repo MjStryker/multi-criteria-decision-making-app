@@ -4,13 +4,11 @@ import {
   EditablePreview,
   Input
 } from "@chakra-ui/react";
-import { type PrimitiveAtom, useAtom } from "jotai";
-import { useEffect, useState } from "react";
+import type { PrimitiveAtom } from "jotai";
 
-import { CRITERION } from "@/@Config/Criteria";
-import { clamp, isValidNumber } from "@/@Shared/@Utils/Number";
-import { isDefined } from "@/@Shared/@Utils/Object";
+import { isValidNumber } from "@/@Shared/@Utils/Number";
 import type { CriterionDto } from "@/Application/Dtos/Criterion.dto";
+import { useCriterionWeight } from "@/Application/Hooks/useCriterionWeight";
 import { Cell, CRITERION_WEIGHT_CELL_WIDTH } from "../../Cell";
 
 type Props = {
@@ -18,36 +16,9 @@ type Props = {
 };
 
 export default function CriterionWeightCell({ criterionAtom }: Props) {
-  const [criterion, setCriterion] = useAtom(criterionAtom);
-
-  const [weight, setWeight] = useState<number | null>(criterion.weight || null);
-
-  /**
-   * * Sync local state on props change
-   */
-  useEffect(() => {
-    setWeight(criterion.weight ?? null);
-  }, [criterion.weight]);
-
-  /**
-   * * Handle Inputs change / validation
-   */
-  const onChange = (nextValue: string) => {
-    const newWeight = parseFloat(nextValue);
-
-    setWeight(
-      isDefined(newWeight)
-        ? clamp(newWeight, CRITERION.WEIGHT.MIN, CRITERION.WEIGHT.MAX)
-        : null
-    );
-  };
-
-  const onSubmit = () => {
-    const newWeight = isValidNumber(weight)
-      ? clamp(weight, CRITERION.WEIGHT.MIN, CRITERION.WEIGHT.MAX)
-      : 0;
-    setCriterion(prev => ({ ...prev, weight: newWeight }));
-  };
+  const { weight, beneficial, onChange, onSubmit } = useCriterionWeight({
+    criterionAtom
+  });
 
   return (
     <Cell
@@ -75,7 +46,7 @@ export default function CriterionWeightCell({ criterionAtom }: Props) {
           fontWeight="semibold"
           borderRadius="sm"
           transition="none"
-          color={criterion.beneficial === false ? "orange.600" : "blue.600"}
+          color={beneficial === false ? "orange.600" : "blue.600"}
           _hover={{
             background: "gray.100"
           }}

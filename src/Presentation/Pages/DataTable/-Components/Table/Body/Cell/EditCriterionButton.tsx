@@ -9,9 +9,9 @@ import {
 } from "@chakra-ui/react";
 import { IconPencil } from "@tabler/icons-react";
 import type { PrimitiveAtom } from "jotai";
-import { useState } from "react";
 
 import type { CriterionDto } from "@/Application/Dtos/Criterion.dto";
+import { useEditPopover } from "@/Application/Hooks/useEditPopover";
 import EditCriterionForm from "./EditCriterionForm";
 
 type Props = {
@@ -19,14 +19,14 @@ type Props = {
 };
 
 export default function EditCriterionButton({ criterionAtom }: Props) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isFormDirty, setIsFormDirty] = useState(false);
+  const { isOpen, isFormDirty, setIsFormDirty, onOpen, onClose } =
+    useEditPopover();
 
   return (
     <Popover
       isOpen={isOpen}
-      onOpen={() => setIsOpen(true)}
-      onClose={() => setIsOpen(false)}
+      onOpen={onOpen}
+      onClose={onClose}
       placement="right"
       closeOnBlur={!isFormDirty}
       closeOnEsc
@@ -55,7 +55,7 @@ export default function EditCriterionButton({ criterionAtom }: Props) {
         <EditCriterionForm
           criterionAtom={criterionAtom}
           setParentIsDirty={setIsFormDirty}
-          onParentClose={() => setIsOpen(false)}
+          onParentClose={onClose}
         />
       </PopoverContent>
     </Popover>

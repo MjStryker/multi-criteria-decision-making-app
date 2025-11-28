@@ -1,14 +1,9 @@
 import { Box, Icon, IconButton, Text, Thead, Tr } from "@chakra-ui/react";
 import { IconPlus, IconWeight } from "@tabler/icons-react";
-import { getDefaultStore, useAtom, useSetAtom } from "jotai";
 
 import { CRITERION } from "@/@Config/Criteria";
 import { PRODUCTS_MAX_ITEMS } from "@/@Config/Product";
-import { CriterionListAtom } from "@/Application/Atoms/CriterionList.atom";
-import { ProductCriterionValueListAtom } from "@/Application/Atoms/ProductCriterionValueList.atom";
-import { ProductListSplitAtom } from "@/Application/Atoms/ProductList.atom";
-import { ProductDto } from "@/Application/Dtos/Product.dto";
-import { ProductCriterionValueDto } from "@/Application/Dtos/ProductCriteriaValue.dto";
+import { useProducts } from "@/Application/Hooks/useProducts";
 import {
   ADD_PRODUCT_CELL_WIDTH,
   Cell,
@@ -17,32 +12,9 @@ import {
 import TableHeaderCell from "./TableHeaderCell";
 
 export default function TableHeader() {
-  const [productListAtoms, dispatch] = useAtom(ProductListSplitAtom);
-  const setProductCriterionValueList = useSetAtom(
-    ProductCriterionValueListAtom
-  );
+  const { productListAtoms, nbProducts, addProduct } = useProducts();
 
-  const nbProducts = productListAtoms.length;
   const nbProductsRemaining = PRODUCTS_MAX_ITEMS - nbProducts;
-
-  const handleAddProduct = () => {
-    const store = getDefaultStore();
-    const newProduct = ProductDto.newEmpty(nbProducts);
-    // Add product
-    dispatch({
-      type: "insert",
-      value: newProduct
-    });
-    // Add default product criterion values
-    setProductCriterionValueList(prev => [
-      ...prev,
-      ...store
-        .get(CriterionListAtom)
-        .map(criterion =>
-          ProductCriterionValueDto.newEmpty(newProduct.uuid, criterion.uuid)
-        )
-    ]);
-  };
 
   return (
     <Thead>
@@ -112,7 +84,7 @@ export default function TableHeader() {
                   <IconPlus />
                 </Icon>
               }
-              onClick={handleAddProduct}
+              onClick={addProduct}
             />
           </Box>
         </Cell>

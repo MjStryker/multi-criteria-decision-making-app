@@ -9,9 +9,9 @@ import {
 } from "@chakra-ui/react";
 import { IconPencil } from "@tabler/icons-react";
 import type { PrimitiveAtom } from "jotai";
-import { useState } from "react";
 
 import type { ProductDto } from "@/Application/Dtos/Product.dto";
+import { useEditPopover } from "@/Application/Hooks/useEditPopover";
 import EditProductForm from "./EditProductForm";
 
 type Props = {
@@ -19,14 +19,14 @@ type Props = {
 };
 
 export default function EditProductButton({ productAtom }: Props) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isFormDirty, setIsFormDirty] = useState(false);
+  const { isOpen, isFormDirty, setIsFormDirty, onOpen, onClose } =
+    useEditPopover();
 
   return (
     <Popover
       isOpen={isOpen}
-      onOpen={() => setIsOpen(true)}
-      onClose={() => setIsOpen(false)}
+      onOpen={onOpen}
+      onClose={onClose}
       placement="bottom"
       closeOnBlur={!isFormDirty}
       closeOnEsc
@@ -55,7 +55,7 @@ export default function EditProductButton({ productAtom }: Props) {
         <EditProductForm
           productAtom={productAtom}
           setParentIsDirty={setIsFormDirty}
-          onParentClose={() => setIsOpen(false)}
+          onParentClose={onClose}
         />
       </PopoverContent>
     </Popover>

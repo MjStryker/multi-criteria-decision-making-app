@@ -53,7 +53,7 @@ export default function CriterionNameUnitCell({
 
             {debugMode ? (
               <Text fontSize="xs" opacity={0.5} mt={-1}>
-                {criterion.defaultRowIdx} - {criterion.uuid.slice(0, 8)}
+                {rowIdx} - {criterion.uuid.slice(0, 8)}
               </Text>
             ) : null}
           </Box>
