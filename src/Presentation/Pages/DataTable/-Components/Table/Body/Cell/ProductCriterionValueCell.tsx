@@ -46,12 +46,9 @@ export default function ProductCriterionValueCell({
    * * Handle Input change / validation
    */
   const onChange = (stringValue: string) => {
-    setValue(prev => {
-      const newVal = isValidNotEmptyString(stringValue)
-        ? Number(stringValue)
-        : null;
-      return prev !== newVal ? newVal : prev;
-    });
+    setValue(() =>
+      isValidNotEmptyString(stringValue) ? Number(stringValue) : null
+    );
   };
 
   const onSubmit = () => {
@@ -85,7 +82,7 @@ export default function ProductCriterionValueCell({
           fontSize="xs"
           color="gray.500"
         >
-          {productCriterionValue.criterionRankPts}
+          {productCriterionValue.criterionRankPts} pts
         </Text>
       ) : null}
 

@@ -1,5 +1,6 @@
 import { Tr } from "@chakra-ui/react";
 import { atom, type PrimitiveAtom, useAtomValue } from "jotai";
+import { selectAtom } from "jotai/utils";
 import { useMemo } from "react";
 
 import { ProductCriterionValueListAtom } from "@/Application/Atoms/ProductCriterionValueList.atom";
@@ -22,53 +23,60 @@ export default function TableBodyRow({
   criterionMaxWeight
 }: Props) {
   const criterion = useAtomValue(criterionAtom);
-  const productCriterionValueList = useAtomValue(ProductCriterionValueListAtom);
 
-  const productCriterionListValueAtoms = useMemo(
+  // Create a stable atom that only updates when the UUIDs for this criterion change
+  const productCriterionUuidsAtom = useMemo(
     () =>
-      productCriterionValueList
-        .filter(({ criterionUuid }) => criterion.uuid === criterionUuid)
-        .map(productCriterionValue =>
-          atom(
-            get => {
-              const val = get(ProductCriterionValueListAtom).find(
-                v => v.uuid === productCriterionValue.uuid
-              );
-              if (!val) {
-                throw new Error(
-                  `ProductCriterionValue ${productCriterionValue.uuid} not found`
-                );
-              }
-              return val;
-            },
-            (
-              get,
-              set,
-              newValue:
-                | ProductCriterionValueDto
-                | ((prev: ProductCriterionValueDto) => ProductCriterionValueDto)
-            ) => {
-              const val = get(ProductCriterionValueListAtom).find(
-                v => v.uuid === productCriterionValue.uuid
-              );
-              if (!val) {
-                throw new Error(
-                  `ProductCriterionValue ${productCriterionValue.uuid} not found`
-                );
-              }
+      selectAtom(
+        ProductCriterionValueListAtom,
+        list =>
+          list
+            .filter(({ criterionUuid }) => criterionUuid === criterion.uuid)
+            .map(v => v.uuid),
+        (a, b) => a.length === b.length && a.every((uuid, i) => uuid === b[i])
+      ),
+    [criterion.uuid]
+  );
 
-              const updatedValue =
-                typeof newValue === "function" ? newValue(val) : newValue;
+  const productCriterionUuids = useAtomValue(productCriterionUuidsAtom);
 
-              set(ProductCriterionValueListAtom, prev =>
-                prev.map(v =>
-                  v.uuid === productCriterionValue.uuid ? updatedValue : v
-                )
-              );
+  const productCriterionValueAtoms = useMemo(
+    () =>
+      productCriterionUuids.map(uuid =>
+        atom(
+          get => {
+            const val = get(ProductCriterionValueListAtom).find(
+              v => v.uuid === uuid
+            );
+            if (!val) {
+              throw new Error(`ProductCriterionValue ${uuid} not found`);
             }
-          )
-        ),
-    [criterion.uuid, productCriterionValueList]
+            return val;
+          },
+          (
+            get,
+            set,
+            newValue:
+              | ProductCriterionValueDto
+              | ((prev: ProductCriterionValueDto) => ProductCriterionValueDto)
+          ) => {
+            const val = get(ProductCriterionValueListAtom).find(
+              v => v.uuid === uuid
+            );
+            if (!val) {
+              throw new Error(`ProductCriterionValue ${uuid} not found`);
+            }
+
+            const updatedValue =
+              typeof newValue === "function" ? newValue(val) : newValue;
+
+            set(ProductCriterionValueListAtom, prev =>
+              prev.map(v => (v.uuid === uuid ? updatedValue : v))
+            );
+          }
+        )
+      ),
+    [productCriterionUuids]
   );
 
   return (
@@ -90,7 +98,7 @@ export default function TableBodyRow({
       {/*
        * PRODUCTS - CRITERION VALUES
        */}
-      {productCriterionListValueAtoms.map(criterionProductValueAtom => {
+      {productCriterionValueAtoms.map(criterionProductValueAtom => {
         return (
           <CriterionProductValueCell
             key={`${criterionProductValueAtom}`}
