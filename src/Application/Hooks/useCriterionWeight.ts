@@ -1,9 +1,18 @@
-import { type PrimitiveAtom, useAtom } from "jotai";
+import {
+  getDefaultStore,
+  type PrimitiveAtom,
+  useAtom,
+  useAtomValue,
+  useSetAtom
+} from "jotai";
 import { useEffect, useState } from "react";
 
+import { computeProductCriterionValueRankPts } from "@/@Compute/ComputeProductCriterionValueRankPoints";
 import { CRITERION } from "@/@Config/Criteria";
 import { clamp, isValidNumber } from "@/@Shared/@Utils/Number";
 import { isDefined } from "@/@Shared/@Utils/Object";
+import { AppSettingsAtoms } from "@/Application/Atoms/AppSettings.atom";
+import { ProductCriterionValueListAtom } from "@/Application/Atoms/ProductCriterionValueList.atom";
 import type { CriterionDto } from "@/Application/Dtos/Criterion.dto";
 
 type UseCriterionWeightProps = {
@@ -12,6 +21,10 @@ type UseCriterionWeightProps = {
 
 export function useCriterionWeight({ criterionAtom }: UseCriterionWeightProps) {
   const [criterion, setCriterion] = useAtom(criterionAtom);
+  const setProductCriterionValueList = useSetAtom(
+    ProductCriterionValueListAtom
+  );
+  const autoRecompute = useAtomValue(AppSettingsAtoms.autoRecompute);
 
   const [weight, setWeight] = useState<number | null>(criterion.weight || null);
 
@@ -39,7 +52,20 @@ export function useCriterionWeight({ criterionAtom }: UseCriterionWeightProps) {
     const newWeight = isValidNumber(weight)
       ? clamp(weight, CRITERION.WEIGHT.MIN, CRITERION.WEIGHT.MAX)
       : 0;
+
+    // Update criterion weight
     setCriterion(prev => ({ ...prev, weight: newWeight }));
+
+    // Recompute rank points if auto-recompute is enabled
+    if (autoRecompute) {
+      const store = getDefaultStore();
+      const updatedCriterion = { ...criterion, weight: newWeight };
+      const updatedRankPts = computeProductCriterionValueRankPts(
+        [updatedCriterion],
+        store.get(ProductCriterionValueListAtom)
+      );
+      setProductCriterionValueList(updatedRankPts);
+    }
   };
 
   return {
