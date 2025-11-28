@@ -33,6 +33,7 @@ export default function EditProductButton({ productAtom }: Props) {
       returnFocusOnClose
       isLazy
       lazyBehavior="unmount"
+      strategy="fixed"
     >
       <PopoverTrigger>
         <IconButton

@@ -33,6 +33,7 @@ export default function EditCriterionButton({ criterionAtom }: Props) {
       returnFocusOnClose
       isLazy
       lazyBehavior="unmount"
+      strategy="fixed"
     >
       <PopoverTrigger>
         <IconButton
