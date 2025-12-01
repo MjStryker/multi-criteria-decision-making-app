@@ -7,12 +7,14 @@ import {
 } from "jotai";
 import { useEffect, useState } from "react";
 
-import { computeProductCriterionValueRankPts } from "@/@Compute/ComputeProductCriterionValueRankPoints";
+import { computeProductCriterionValueRankPts } from "@/@Compute/computeProductCriterionValueRankPoints";
+import { computeProductRanks } from "@/@Compute/computeProductRanks";
 import { CRITERION } from "@/@Config/Criteria";
 import { clamp, isValidNumber } from "@/@Shared/@Utils/Number";
 import { isDefined } from "@/@Shared/@Utils/Object";
 import { AppSettingsAtoms } from "@/Application/Atoms/AppSettings.atom";
 import { ProductCriterionValueListAtom } from "@/Application/Atoms/ProductCriterionValueList.atom";
+import { ProductListAtom } from "@/Application/Atoms/ProductList.atom";
 import type { CriterionDto } from "@/Application/Dtos/Criterion.dto";
 
 type UseCriterionWeightProps = {
@@ -24,6 +26,7 @@ export function useCriterionWeight({ criterionAtom }: UseCriterionWeightProps) {
   const setProductCriterionValueList = useSetAtom(
     ProductCriterionValueListAtom
   );
+  const setProductList = useSetAtom(ProductListAtom);
   const autoRecompute = useAtomValue(AppSettingsAtoms.autoRecompute);
 
   const [weight, setWeight] = useState<number | null>(criterion.weight || null);
@@ -65,6 +68,13 @@ export function useCriterionWeight({ criterionAtom }: UseCriterionWeightProps) {
         store.get(ProductCriterionValueListAtom)
       );
       setProductCriterionValueList(updatedRankPts);
+
+      // Compute overall product ranks
+      const rankedProducts = computeProductRanks(
+        store.get(ProductListAtom),
+        updatedRankPts
+      );
+      setProductList(rankedProducts);
     }
   };
 

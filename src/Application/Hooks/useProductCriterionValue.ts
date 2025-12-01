@@ -2,15 +2,18 @@ import {
   getDefaultStore,
   type PrimitiveAtom,
   useAtom,
-  useAtomValue
+  useAtomValue,
+  useSetAtom
 } from "jotai";
 import { useState } from "react";
 
-import { computeProductCriterionValueRankPts } from "@/@Compute/ComputeProductCriterionValueRankPoints";
+import { computeProductCriterionValueRankPts } from "@/@Compute/computeProductCriterionValueRankPoints";
+import { computeProductRanks } from "@/@Compute/computeProductRanks";
 import { isValidNotEmptyString } from "@/@Shared/@Utils/String";
 import { AppSettingsAtoms } from "@/Application/Atoms/AppSettings.atom";
 import { CriterionListAtom } from "@/Application/Atoms/CriterionList.atom";
 import { ProductCriterionValueListAtom } from "@/Application/Atoms/ProductCriterionValueList.atom";
+import { ProductListAtom } from "@/Application/Atoms/ProductList.atom";
 import type { ProductCriterionValueDto } from "@/Application/Dtos/ProductCriteriaValue.dto";
 
 type UseProductCriterionValueProps = {
@@ -24,8 +27,11 @@ export function useProductCriterionValue({
     productCriterionValueAtom
   );
 
-  const debugMode = useAtomValue(AppSettingsAtoms.debugMode);
   const autoRecompute = useAtomValue(AppSettingsAtoms.autoRecompute);
+  const setProductCriterionValueList = useSetAtom(
+    ProductCriterionValueListAtom
+  );
+  const setProductList = useSetAtom(ProductListAtom);
 
   const [value, setValue] = useState<number | null>(
     productCriterionValue?.value ?? null
@@ -43,8 +49,9 @@ export function useProductCriterionValue({
   const onSubmit = () => {
     const store = getDefaultStore();
 
-    // Update value
-    setProductCriterionValue({ ...productCriterionValue, value });
+    // Create updated product criterion value
+    const updatedValue = { ...productCriterionValue, value };
+    setProductCriterionValue(updatedValue);
 
     if (autoRecompute) {
       // Recompute criterion rank points
@@ -52,18 +59,30 @@ export function useProductCriterionValue({
         .get(CriterionListAtom)
         .find(c => c.uuid === productCriterionValue.criterionUuid);
       if (criterion) {
+        // Get current values and update the one we just changed
+        const currentValues = store.get(ProductCriterionValueListAtom);
+        const valuesWithUpdate = currentValues.map(pcv =>
+          pcv.uuid === updatedValue.uuid ? updatedValue : pcv
+        );
+
         const updatedRankPts = computeProductCriterionValueRankPts(
           [criterion],
-          store.get(ProductCriterionValueListAtom)
+          valuesWithUpdate
         );
-        store.set(ProductCriterionValueListAtom, updatedRankPts);
+        setProductCriterionValueList(updatedRankPts);
+
+        // Compute overall product ranks
+        const rankedProducts = computeProductRanks(
+          store.get(ProductListAtom),
+          updatedRankPts
+        );
+        setProductList(rankedProducts);
       }
     }
   };
 
   return {
     value,
-    debugMode,
     rankPoints: productCriterionValue.criterionRankPts,
     onChange,
     onSubmit

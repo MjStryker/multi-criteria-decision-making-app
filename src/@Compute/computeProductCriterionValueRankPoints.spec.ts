@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { Uuid } from "@/@Shared/@Utils/Uuid";
 import type { CriterionDto } from "@/Application/Dtos/Criterion.dto";
 import type { ProductCriterionValueDto } from "@/Application/Dtos/ProductCriteriaValue.dto";
-import { computeProductCriterionValueRankPts } from "./ComputeProductCriterionValueRankPoints";
+import { computeProductCriterionValueRankPts } from "./computeProductCriterionValueRankPoints";
 
 function criterionForTest(
   values: Pick<CriterionDto, "uuid" | "beneficial" | "weight">

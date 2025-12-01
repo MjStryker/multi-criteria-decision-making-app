@@ -1,6 +1,7 @@
 import { HStack, Tag, Text } from "@chakra-ui/react";
 import { type PrimitiveAtom, useAtomValue } from "jotai";
 
+import { AppSettingsAtoms } from "@/Application/Atoms/AppSettings.atom";
 import type { ProductDto } from "@/Application/Dtos/Product.dto";
 import { Cell } from "../Cell";
 
@@ -11,8 +12,22 @@ type Props = {
 export default function TableFooterCell({ productAtom }: Props) {
   const product = useAtomValue(productAtom);
 
+  const debugMode = useAtomValue(AppSettingsAtoms.debugMode);
+
   return (
-    <Cell textAlign="center">
+    <Cell textAlign="center" position="relative">
+      {debugMode ? (
+        <Text
+          position="absolute"
+          top={0}
+          left={0}
+          fontSize="xs"
+          color="gray.500"
+        >
+          {product.rankPts ?? 0} pts
+        </Text>
+      ) : null}
+
       {product.rank === null ? null : (
         <HStack justifyContent="center">
           <Tag

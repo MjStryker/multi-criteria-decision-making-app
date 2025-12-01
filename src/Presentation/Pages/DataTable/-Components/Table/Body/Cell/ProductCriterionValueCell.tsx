@@ -8,8 +8,9 @@ import {
   Text
 } from "@chakra-ui/react";
 import { IconMinus } from "@tabler/icons-react";
-import type { PrimitiveAtom } from "jotai";
+import { type PrimitiveAtom, useAtomValue } from "jotai";
 
+import { AppSettingsAtoms } from "@/Application/Atoms/AppSettings.atom";
 import type { ProductCriterionValueDto } from "@/Application/Dtos/ProductCriteriaValue.dto";
 import { useProductCriterionValue } from "@/Application/Hooks/useProductCriterionValue";
 import { Cell } from "../../Cell";
@@ -21,8 +22,11 @@ type Props = {
 export default function ProductCriterionValueCell({
   productCriterionValueAtom
 }: Props) {
-  const { value, debugMode, rankPoints, onChange, onSubmit } =
-    useProductCriterionValue({ productCriterionValueAtom });
+  const debugMode = useAtomValue(AppSettingsAtoms.debugMode);
+
+  const { value, rankPoints, onChange, onSubmit } = useProductCriterionValue({
+    productCriterionValueAtom
+  });
 
   return (
     <Cell isNumeric position="relative">

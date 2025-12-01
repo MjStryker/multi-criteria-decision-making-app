@@ -1,9 +1,8 @@
 import { useSetAtom } from "jotai";
 import { useCallback } from "react";
 
-import { computeProductCriterionValueRankPts } from "@/@Compute/ComputeProductCriterionValueRankPoints";
-import { SortByEnum } from "@/@Shared/@Enums/SortBy.enum";
-import { compareFn } from "@/@Shared/@Utils/Array";
+import { computeProductCriterionValueRankPts } from "@/@Compute/computeProductCriterionValueRankPoints";
+import { computeProductRanks } from "@/@Compute/computeProductRanks";
 import { ProductCriterionValueListAtom } from "@/Application/Atoms/ProductCriterionValueList.atom";
 import { ProductListAtom } from "@/Application/Atoms/ProductList.atom";
 import type { CriterionDto } from "@/Application/Dtos/Criterion.dto";
@@ -44,31 +43,10 @@ export function useComputeRanks() {
       products: ProductDto[],
       productCriterionValues: ProductCriterionValueDto[]
     ) => {
-      let lastRankPts: number | null = null;
-      let lastPos = 0;
-
-      // Calculate total rank points for each product
-      const productsWithRankPts = products.map(product => {
-        const rankPts = productCriterionValues
-          .filter(pcv => pcv.productUuid === product.uuid)
-          .reduce((total, pcv) => total + (pcv.criterionRankPts ?? 0), 0);
-
-        return { ...product, rankPts };
-      });
-
-      // Sort by rank points (descending - higher points = worse rank)
-      // Then assign ranks (ties get the same rank)
-      const rankedProducts = productsWithRankPts
-        .sort((p1, p2) => compareFn(SortByEnum.DESC)(p1.rankPts, p2.rankPts))
-        .map(product => {
-          const pos = product.rankPts !== lastRankPts ? lastPos + 1 : lastPos;
-
-          lastRankPts = product.rankPts;
-          lastPos = pos;
-
-          return { ...product, rank: pos };
-        });
-
+      const rankedProducts = computeProductRanks(
+        products,
+        productCriterionValues
+      );
       setProductList(rankedProducts);
       return rankedProducts;
     },

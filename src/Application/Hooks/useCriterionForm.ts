@@ -7,9 +7,11 @@ import {
 } from "jotai";
 import { type FormEvent, useEffect, useState } from "react";
 
-import { computeProductCriterionValueRankPts } from "@/@Compute/ComputeProductCriterionValueRankPoints";
+import { computeProductCriterionValueRankPts } from "@/@Compute/computeProductCriterionValueRankPoints";
+import { computeProductRanks } from "@/@Compute/computeProductRanks";
 import { AppSettingsAtoms } from "@/Application/Atoms/AppSettings.atom";
 import { ProductCriterionValueListAtom } from "@/Application/Atoms/ProductCriterionValueList.atom";
+import { ProductListAtom } from "@/Application/Atoms/ProductList.atom";
 import type { CriterionDto } from "@/Application/Dtos/Criterion.dto";
 import { useCriteria } from "./useCriteria";
 
@@ -27,6 +29,7 @@ export function useCriterionForm({
   const setProductCriterionValueList = useSetAtom(
     ProductCriterionValueListAtom
   );
+  const setProductList = useSetAtom(ProductListAtom);
   const autoRecompute = useAtomValue(AppSettingsAtoms.autoRecompute);
 
   const [name, setName] = useState<string>(criterion.name || "");
@@ -85,6 +88,13 @@ export function useCriterionForm({
         store.get(ProductCriterionValueListAtom)
       );
       setProductCriterionValueList(updatedRankPts);
+
+      // Compute overall product ranks
+      const rankedProducts = computeProductRanks(
+        store.get(ProductListAtom),
+        updatedRankPts
+      );
+      setProductList(rankedProducts);
     }
 
     onClose();
