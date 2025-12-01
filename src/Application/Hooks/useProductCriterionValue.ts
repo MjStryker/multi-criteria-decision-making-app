@@ -51,7 +51,6 @@ export function useProductCriterionValue({
 
     // Create updated product criterion value
     const updatedValue = { ...productCriterionValue, value };
-    setProductCriterionValue(updatedValue);
 
     if (autoRecompute) {
       // Recompute criterion rank points
@@ -78,6 +77,9 @@ export function useProductCriterionValue({
         );
         setProductList(rankedProducts);
       }
+    } else {
+      // If not auto-recomputing, just update the value directly
+      setProductCriterionValue(updatedValue);
     }
   };
 

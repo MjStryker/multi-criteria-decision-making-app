@@ -18,7 +18,8 @@ export function computeProductCriterionValueRankPts(
       v => v.criterionUuid === criterion.uuid
     );
 
-    values
+    // Sort a copy to determine rank positions without changing original order
+    [...values]
       .sort((v1, v2) =>
         compareFn(criterion.beneficial ? SortByEnum.ASC : SortByEnum.DESC)(
           v1.value,
