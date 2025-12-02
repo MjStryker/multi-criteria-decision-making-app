@@ -1,6 +1,12 @@
-import { getDefaultStore, useAtom, useSetAtom } from "jotai";
+import { getDefaultStore, useAtom, useAtomValue, useSetAtom } from "jotai";
 
-import { CriterionListSplitAtom } from "@/Application/Atoms/CriterionList.atom";
+import { computeProductCriterionValueRankPts } from "@/@Compute/computeProductCriterionValueRankPoints";
+import { computeProductRanks } from "@/@Compute/computeProductRanks";
+import { AppSettingsAtoms } from "@/Application/Atoms/AppSettings.atom";
+import {
+  CriterionListAtom,
+  CriterionListSplitAtom
+} from "@/Application/Atoms/CriterionList.atom";
 import { ProductCriterionValueListAtom } from "@/Application/Atoms/ProductCriterionValueList.atom";
 import { ProductListAtom } from "@/Application/Atoms/ProductList.atom";
 import { CriterionDto } from "@/Application/Dtos/Criterion.dto";
@@ -11,6 +17,8 @@ export function useCriteria() {
   const setProductCriterionValueList = useSetAtom(
     ProductCriterionValueListAtom
   );
+  const setProductList = useSetAtom(ProductListAtom);
+  const autoRecompute = useAtomValue(AppSettingsAtoms.autoRecompute);
 
   const nbCriteria = criterionListAtoms.length;
 
@@ -42,24 +50,60 @@ export function useCriteria() {
    * Remove a criterion and its associated product criterion values
    */
   const removeCriterion = (criterionUuid: string) => {
-    // Find the criterion atom
+    const store = getDefaultStore();
+
+    // Find the criterion atom and its current index
     const criterionAtom = criterionListAtoms.find(atom => {
-      const store = getDefaultStore();
       return store.get(atom).uuid === criterionUuid;
     });
 
     if (!criterionAtom) return;
 
-    // Remove criterion from list
+    // Find the index of the criterion being removed
+    const removedIndex = criterionListAtoms.findIndex(
+      atom => atom === criterionAtom
+    );
+
+    // First, re-index criteria that come after the removed one
+    criterionListAtoms.forEach((atom, index) => {
+      if (index > removedIndex) {
+        const criterion = store.get(atom);
+        // Decrement the index for criteria after the removed one
+        store.set(atom, { ...criterion, defaultRowIdx: index - 1 });
+      }
+    });
+
+    // Then remove the criterion from list
     dispatch({
       type: "remove",
       atom: criterionAtom
     });
 
     // Remove all product criterion values associated with this criterion
-    setProductCriterionValueList(prev =>
-      prev.filter(pcv => pcv.criterionUuid !== criterionUuid)
-    );
+    const updatedValues = store
+      .get(ProductCriterionValueListAtom)
+      .filter(pcv => pcv.criterionUuid !== criterionUuid);
+
+    setProductCriterionValueList(updatedValues);
+
+    // Recompute ranks if auto-recompute is enabled
+    if (autoRecompute) {
+      const updatedCriteria = store
+        .get(CriterionListAtom)
+        .filter(c => c.uuid !== criterionUuid);
+
+      const updatedRankPts = computeProductCriterionValueRankPts(
+        updatedCriteria,
+        updatedValues
+      );
+      setProductCriterionValueList(updatedRankPts);
+
+      const rankedProducts = computeProductRanks(
+        store.get(ProductListAtom),
+        updatedRankPts
+      );
+      setProductList(rankedProducts);
+    }
   };
 
   return {

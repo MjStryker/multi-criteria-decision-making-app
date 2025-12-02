@@ -65,7 +65,7 @@ export function useProductCriterionValue({
         );
 
         const updatedRankPts = computeProductCriterionValueRankPts(
-          [criterion],
+          store.get(CriterionListAtom),
           valuesWithUpdate
         );
         setProductCriterionValueList(updatedRankPts);

@@ -12,7 +12,7 @@ type Props = {
   productAtom: PrimitiveAtom<ProductDto>;
 };
 
-export default function TableHeaderCell({ columnIdx, productAtom }: Props) {
+export function ProductCell({ columnIdx, productAtom }: Props) {
   const [product] = useAtom(productAtom);
 
   const debugMode = useAtomValue(AppSettingsAtoms.debugMode);
@@ -50,7 +50,8 @@ export default function TableHeaderCell({ columnIdx, productAtom }: Props) {
 
             {debugMode ? (
               <Text fontSize="xs" opacity={0.5} mt={-1}>
-                {columnIdx} - {product.uuid.slice(0, 8)}
+                [{product.defaultColumnIdx}] {columnIdx} -{" "}
+                {product.uuid.slice(0, 8)}
               </Text>
             ) : null}
           </Box>

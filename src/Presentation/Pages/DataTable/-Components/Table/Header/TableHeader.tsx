@@ -9,7 +9,7 @@ import {
   Cell,
   CRITERION_WEIGHT_CELL_WIDTH
 } from "../Cell";
-import TableHeaderCell from "./TableHeaderCell";
+import { ProductCell } from "./ProductCell";
 
 export default function TableHeader() {
   const { productListAtoms, nbProducts, addProduct } = useProducts();
@@ -62,7 +62,7 @@ export default function TableHeader() {
          * PRODUCTS
          */}
         {productListAtoms.map((productAtom, idx) => (
-          <TableHeaderCell
+          <ProductCell
             key={`${productAtom}`}
             columnIdx={idx}
             productAtom={productAtom}
