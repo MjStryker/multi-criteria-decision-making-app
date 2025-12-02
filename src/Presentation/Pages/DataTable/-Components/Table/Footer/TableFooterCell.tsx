@@ -1,4 +1,4 @@
-import { HStack, Tag, Text } from "@chakra-ui/react";
+import { Center, HStack, Text } from "@chakra-ui/react";
 import { type PrimitiveAtom, useAtomValue } from "jotai";
 
 import { AppSettingsAtoms } from "@/Application/Atoms/AppSettings.atom";
@@ -14,49 +14,50 @@ export default function TableFooterCell({ productAtom }: Props) {
 
   const debugMode = useAtomValue(AppSettingsAtoms.debugMode);
 
+  const isItemTopRanked = product.rank
+    ? [1, 2, 3].includes(product.rank)
+    : false;
+
   return (
-    <Cell textAlign="center" position="relative">
+    <Cell textAlign="center" position="relative" border="none" bg="transparent">
       {debugMode ? (
-        <Text
-          position="absolute"
-          top={0}
-          left={0}
-          fontSize="xs"
-          color="gray.500"
-        >
-          {product.rankPts ?? 0} pts
-        </Text>
+        <Center position="absolute" top={0} bottom={0} left={4}>
+          <Text fontSize="xs" color="blackAlpha.600">
+            {product.rankPts ?? 0} pts
+          </Text>
+        </Center>
       ) : null}
 
       {product.rank === null ? null : (
-        <HStack justifyContent="center">
-          <Tag
-            as={HStack}
-            gap={1}
-            size="md"
-            justifyContent="space-between"
-            variant="outline"
-            colorScheme="black"
-            boxShadow="none"
-            {...([1, 2, 3].includes(product.rank)
+        <HStack h="full" justifyContent="center" px={0.5} py={1}>
+          <Center
+            w="full"
+            h="full"
+            bg="gray.50"
+            color="blackAlpha.600"
+            // border="1px solid"
+            // borderColor="blackAlpha.100"
+            rounded="full"
+            fontWeight="regular"
+            fontSize="md"
+            {...(isItemTopRanked
               ? {
-                  variant: "solid",
-                  colorScheme: "teal",
-                  boxShadow: "base",
-                  bgColor:
+                  color: "blackAlpha.700",
+                  fontWeight: "bold",
+                  fontSize: "xl",
+                  bg:
                     product.rank === 1
-                      ? "teal.600"
+                      ? "green.500"
                       : product.rank === 2
-                        ? "teal.500"
+                        ? "green.200"
                         : product.rank === 3
-                          ? "teal.400"
+                          ? "green.100"
                           : "inherit"
                 }
               : null)}
           >
-            <Text as="span">#</Text>
             <Text as="span">{product.rank}</Text>
-          </Tag>
+          </Center>
         </HStack>
       )}
     </Cell>
