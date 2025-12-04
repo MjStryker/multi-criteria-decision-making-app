@@ -59,37 +59,35 @@ export function ProductCell({ columnIdx, productAtom }: Props) {
         </HStack>
 
         {product.rank === null ? null : (
-          <HStack h="full" justifyContent="center" px={0.5} py={1}>
-            <Center
-              position="relative"
-              w="full"
-              h="full"
-              bg="gray.100"
-              color="gray.600"
-              fontSize="sm"
-              fontWeight="medium"
-              p={1}
-              rounded="lg"
-              {...(isItemTopRanked
-                ? {
-                    bg: "gray.200",
-                    color: "gray.700"
-                  }
-                : null)}
-            >
-              <Text as="span">#{product.rank}</Text>
+          <Center
+            position="relative"
+            w="full"
+            h="full"
+            bg="gray.100"
+            color="gray.600"
+            fontSize="sm"
+            fontWeight="medium"
+            p={1}
+            rounded="lg"
+            {...(isItemTopRanked
+              ? {
+                  bg: "gray.200",
+                  color: "gray.700"
+                }
+              : null)}
+          >
+            <Text as="span">#{product.rank}</Text>
 
-              <Text
-                as="span"
-                position="absolute"
-                right={2}
-                fontSize="xs"
-                color="gray.500"
-              >
-                ({product.rankPts ?? 0} pts)
-              </Text>
-            </Center>
-          </HStack>
+            <Text
+              as="span"
+              position="absolute"
+              right={2}
+              fontSize="xs"
+              color="gray.500"
+            >
+              ({product.rankPts ?? 0} pts)
+            </Text>
+          </Center>
         )}
       </VStack>
     </Cell>
