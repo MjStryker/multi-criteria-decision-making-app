@@ -60,9 +60,7 @@ export function useCriteria() {
     if (!criterionAtom) return;
 
     // Find the index of the criterion being removed
-    const removedIndex = criterionListAtoms.findIndex(
-      atom => atom === criterionAtom
-    );
+    const removedIndex = criterionListAtoms.indexOf(criterionAtom);
 
     // First, re-index criteria that come after the removed one
     criterionListAtoms.forEach((atom, index) => {

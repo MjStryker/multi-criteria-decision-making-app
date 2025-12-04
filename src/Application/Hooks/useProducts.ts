@@ -60,11 +60,9 @@ export function useProducts() {
     if (!productAtom) return;
 
     // Find the index of the product being removed
-    const removedIndex = productListAtoms.findIndex(
-      atom => atom === productAtom
-    );
+    const removedIndex = productListAtoms.indexOf(productAtom);
 
-    // First, reindex products that come after the removed one
+    // First, re-index products that come after the removed one
     productListAtoms.forEach((atom, index) => {
       if (index > removedIndex) {
         const product = store.get(atom);
