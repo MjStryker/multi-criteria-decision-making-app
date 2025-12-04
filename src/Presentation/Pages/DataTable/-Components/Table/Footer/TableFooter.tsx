@@ -6,7 +6,6 @@ import { CRITERIA_MAX_ITEMS } from "@/@Config/Criteria";
 import { ProductListSplitAtom } from "@/Application/Atoms/ProductList.atom";
 import { useCriteria } from "@/Application/Hooks/useCriteria";
 import { ADD_PRODUCT_CELL_WIDTH, Cell } from "../Cell";
-import TableFooterCell from "./TableFooterCell";
 
 export default function TableFooter() {
   const productListAtoms = useAtomValue(ProductListSplitAtom);
@@ -40,8 +39,15 @@ export default function TableFooter() {
         {/*
          * PRODUCTS - RANK
          */}
-        {productListAtoms.map(productAtom => (
-          <TableFooterCell key={`${productAtom}`} productAtom={productAtom} />
+        {productListAtoms.map((_, idx) => (
+          <Cell
+            key={`product-${
+              // biome-ignore lint/suspicious/noArrayIndexKey: Test
+              idx
+            }`}
+            border="none"
+            bg="transparent"
+          />
         ))}
 
         {/*

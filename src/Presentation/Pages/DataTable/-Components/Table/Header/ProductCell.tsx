@@ -1,4 +1,4 @@
-import { Box, SimpleGrid, Text, VStack } from "@chakra-ui/react";
+import { Box, Center, HStack, Text, VStack } from "@chakra-ui/react";
 import { type PrimitiveAtom, useAtom, useAtomValue } from "jotai";
 
 import { isValidNotEmptyString } from "@/@Shared/@Utils/String";
@@ -17,22 +17,21 @@ export function ProductCell({ columnIdx, productAtom }: Props) {
 
   const debugMode = useAtomValue(AppSettingsAtoms.debugMode);
 
+  const isItemTopRanked = product.rank
+    ? [1, 2, 3].includes(product.rank)
+    : false;
+
   return (
     <Cell>
       <VStack
         className="CellContainer"
         alignItems="stretch"
-        justifyContent="center"
+        justifyContent="flex-start"
         h="full"
-        px={2}
+        p={2}
       >
-        <SimpleGrid
-          className="FirstRowContainer"
-          templateColumns="1fr auto"
-          alignItems="center"
-          gap={1}
-        >
-          <Box>
+        <HStack>
+          <Box flex={1}>
             <Text
               whiteSpace="break-spaces"
               wordBreak="break-word"
@@ -57,7 +56,41 @@ export function ProductCell({ columnIdx, productAtom }: Props) {
           </Box>
 
           <EditProductButton productAtom={productAtom} />
-        </SimpleGrid>
+        </HStack>
+
+        {product.rank === null ? null : (
+          <HStack h="full" justifyContent="center" px={0.5} py={1}>
+            <Center
+              position="relative"
+              w="full"
+              h="full"
+              bg="gray.100"
+              color="gray.600"
+              fontSize="sm"
+              fontWeight="medium"
+              p={1}
+              rounded="lg"
+              {...(isItemTopRanked
+                ? {
+                    bg: "gray.200",
+                    color: "gray.700"
+                  }
+                : null)}
+            >
+              <Text as="span">#{product.rank}</Text>
+
+              <Text
+                as="span"
+                position="absolute"
+                right={2}
+                fontSize="xs"
+                color="gray.500"
+              >
+                ({product.rankPts ?? 0} pts)
+              </Text>
+            </Center>
+          </HStack>
+        )}
       </VStack>
     </Cell>
   );
